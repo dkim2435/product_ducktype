@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "DuckType",
+    "tagline": "Type like a duck to water"
+  },
+  "test": {
+    "startTyping": "Start typing to begin the test",
+    "clickToFocus": "Click here or press any key to focus",
+    "restart": "Restart",
+    "restartHint": "Tab + Enter to restart",
+    "nextTest": "Next test"
+  },
+  "mode": {
+    "time": "time",
+    "words": "words",
+    "seconds": "s"
+  },
+  "stats": {
+    "wpm": "wpm",
+    "rawWpm": "raw",
+    "accuracy": "acc",
+    "consistency": "consistency",
+    "characters": "characters",
+    "correct": "correct",
+    "incorrect": "incorrect",
+    "extra": "extra",
+    "missed": "missed",
+    "time": "time",
+    "cpm": "cpm",
+    "testType": "test type",
+    "personalBest": "personal best!"
+  },
+  "results": {
+    "title": "Results",
+    "share": "Share",
+    "copyImage": "Copy image",
+    "download": "Download image",
+    "copied": "Copied!",
+    "tryAgain": "Try again"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "uiLanguage": "UI Language",
+    "font": "Font",
+    "fontSize": "Font size",
+    "caretStyle": "Caret style",
+    "smoothCaret": "Smooth caret",
+    "sound": "Sound",
+    "soundVolume": "Volume",
+    "liveWpm": "Live WPM",
+    "liveAccuracy": "Live accuracy",
+    "showTimer": "Show timer",
+    "punctuation": "Punctuation",
+    "numbers": "Numbers",
+    "difficulty": "Difficulty",
+    "freedomMode": "Freedom mode",
+    "freedomModeDesc": "Allow going back to previous words",
+    "normal": "Normal",
+    "expert": "Expert",
+    "master": "Master",
+    "on": "On",
+    "off": "Off"
+  },
+  "footer": {
+    "contact": "contact",
+    "github": "github",
+    "privacy": "privacy"
+  },
+  "language": {
+    "en": "English",
+    "ko": "Korean",
+    "zh": "Chinese",
+    "ja": "Japanese"
+  }
+}

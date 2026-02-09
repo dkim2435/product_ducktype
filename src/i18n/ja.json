@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "DuckType",
+    "tagline": "水を得たアヒルのようにタイピング"
+  },
+  "test": {
+    "startTyping": "タイピングを始めるとテストが開始されます",
+    "clickToFocus": "ここをクリックするかキーを押してフォーカス",
+    "restart": "やり直す",
+    "restartHint": "Tab + Enterでやり直し",
+    "nextTest": "次のテスト"
+  },
+  "mode": {
+    "time": "時間",
+    "words": "単語",
+    "seconds": "秒"
+  },
+  "stats": {
+    "wpm": "WPM",
+    "rawWpm": "生WPM",
+    "accuracy": "正確率",
+    "consistency": "一貫性",
+    "characters": "文字",
+    "correct": "正確",
+    "incorrect": "不正確",
+    "extra": "余分",
+    "missed": "未入力",
+    "time": "時間",
+    "cpm": "文字/分",
+    "testType": "テストタイプ",
+    "personalBest": "自己ベスト！"
+  },
+  "results": {
+    "title": "結果",
+    "share": "共有",
+    "copyImage": "画像をコピー",
+    "download": "画像をダウンロード",
+    "copied": "コピーしました！",
+    "tryAgain": "もう一度"
+  },
+  "settings": {
+    "title": "設定",
+    "theme": "テーマ",
+    "language": "言語",
+    "uiLanguage": "UI言語",
+    "font": "フォント",
+    "fontSize": "フォントサイズ",
+    "caretStyle": "キャレットスタイル",
+    "smoothCaret": "スムーズキャレット",
+    "sound": "サウンド",
+    "soundVolume": "音量",
+    "liveWpm": "リアルタイムWPM",
+    "liveAccuracy": "リアルタイム正確率",
+    "showTimer": "タイマー表示",
+    "punctuation": "句読点",
+    "numbers": "数字",
+    "difficulty": "難易度",
+    "freedomMode": "フリーモード",
+    "freedomModeDesc": "前の単語に戻ることができます",
+    "normal": "通常",
+    "expert": "エキスパート",
+    "master": "マスター",
+    "on": "オン",
+    "off": "オフ"
+  },
+  "footer": {
+    "contact": "お問い合わせ",
+    "github": "GitHub",
+    "privacy": "プライバシー"
+  },
+  "language": {
+    "en": "英語",
+    "ko": "韓国語",
+    "zh": "中国語",
+    "ja": "日本語"
+  }
+}

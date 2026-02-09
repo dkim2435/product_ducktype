@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "DuckType",
+    "tagline": "물 만난 오리처럼 타이핑하세요"
+  },
+  "test": {
+    "startTyping": "타이핑을 시작하면 테스트가 시작됩니다",
+    "clickToFocus": "여기를 클릭하거나 아무 키나 눌러 포커스하세요",
+    "restart": "다시 시작",
+    "restartHint": "Tab + Enter로 다시 시작",
+    "nextTest": "다음 테스트"
+  },
+  "mode": {
+    "time": "시간",
+    "words": "단어",
+    "seconds": "초"
+  },
+  "stats": {
+    "wpm": "타수",
+    "rawWpm": "순타수",
+    "accuracy": "정확도",
+    "consistency": "일관성",
+    "characters": "글자",
+    "correct": "정확",
+    "incorrect": "오타",
+    "extra": "추가",
+    "missed": "누락",
+    "time": "시간",
+    "cpm": "분당 글자",
+    "testType": "테스트 유형",
+    "personalBest": "개인 최고 기록!"
+  },
+  "results": {
+    "title": "결과",
+    "share": "공유",
+    "copyImage": "이미지 복사",
+    "download": "이미지 다운로드",
+    "copied": "복사됨!",
+    "tryAgain": "다시 시도"
+  },
+  "settings": {
+    "title": "설정",
+    "theme": "테마",
+    "language": "언어",
+    "uiLanguage": "UI 언어",
+    "font": "폰트",
+    "fontSize": "폰트 크기",
+    "caretStyle": "커서 스타일",
+    "smoothCaret": "부드러운 커서",
+    "sound": "소리",
+    "soundVolume": "볼륨",
+    "liveWpm": "실시간 WPM",
+    "liveAccuracy": "실시간 정확도",
+    "showTimer": "타이머 표시",
+    "punctuation": "구두점",
+    "numbers": "숫자",
+    "difficulty": "난이도",
+    "freedomMode": "자유 모드",
+    "freedomModeDesc": "이전 단어로 돌아갈 수 있습니다",
+    "normal": "보통",
+    "expert": "전문가",
+    "master": "마스터",
+    "on": "켜기",
+    "off": "끄기"
+  },
+  "footer": {
+    "contact": "문의",
+    "github": "깃허브",
+    "privacy": "개인정보"
+  },
+  "language": {
+    "en": "영어",
+    "ko": "한국어",
+    "zh": "중국어",
+    "ja": "일본어"
+  }
+}

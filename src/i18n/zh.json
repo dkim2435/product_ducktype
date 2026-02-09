@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "DuckType",
+    "tagline": "像鸭子入水般打字"
+  },
+  "test": {
+    "startTyping": "开始打字以启动测试",
+    "clickToFocus": "点击此处或按任意键聚焦",
+    "restart": "重新开始",
+    "restartHint": "Tab + Enter 重新开始",
+    "nextTest": "下一个测试"
+  },
+  "mode": {
+    "time": "时间",
+    "words": "字数",
+    "seconds": "秒"
+  },
+  "stats": {
+    "wpm": "词/分",
+    "rawWpm": "原始",
+    "accuracy": "准确率",
+    "consistency": "一致性",
+    "characters": "字符",
+    "correct": "正确",
+    "incorrect": "错误",
+    "extra": "多余",
+    "missed": "遗漏",
+    "time": "时间",
+    "cpm": "字/分",
+    "testType": "测试类型",
+    "personalBest": "个人最佳！"
+  },
+  "results": {
+    "title": "结果",
+    "share": "分享",
+    "copyImage": "复制图片",
+    "download": "下载图片",
+    "copied": "已复制！",
+    "tryAgain": "再试一次"
+  },
+  "settings": {
+    "title": "设置",
+    "theme": "主题",
+    "language": "语言",
+    "uiLanguage": "界面语言",
+    "font": "字体",
+    "fontSize": "字号",
+    "caretStyle": "光标样式",
+    "smoothCaret": "平滑光标",
+    "sound": "声音",
+    "soundVolume": "音量",
+    "liveWpm": "实时WPM",
+    "liveAccuracy": "实时准确率",
+    "showTimer": "显示计时器",
+    "punctuation": "标点",
+    "numbers": "数字",
+    "difficulty": "难度",
+    "freedomMode": "自由模式",
+    "freedomModeDesc": "允许返回之前的词",
+    "normal": "普通",
+    "expert": "专家",
+    "master": "大师",
+    "on": "开",
+    "off": "关"
+  },
+  "footer": {
+    "contact": "联系",
+    "github": "GitHub",
+    "privacy": "隐私"
+  },
+  "language": {
+    "en": "英语",
+    "ko": "韩语",
+    "zh": "中文",
+    "ja": "日语"
+  }
+}
