@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { KeyStatsMap } from '../../types/gamification';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 interface KeyboardHeatmapProps {
   keyStats: KeyStatsMap;
@@ -28,7 +29,12 @@ function getHeatColor(errorRate: number): string {
 
 export function KeyboardHeatmap({ keyStats }: KeyboardHeatmapProps) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+
+  const keySize = isMobile ? 28 : 38;
+  const keyGap = isMobile ? 3 : 4;
+  const rowOffsets = isMobile ? [0, 14, 28] : ROW_OFFSETS;
 
   const hasData = Object.keys(keyStats).length > 0;
 
@@ -50,7 +56,7 @@ export function KeyboardHeatmap({ keyStats }: KeyboardHeatmapProps) {
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '4px',
+        gap: `${keyGap}px`,
         alignItems: 'center',
       }}>
         {ROWS.map((row, rowIdx) => (
@@ -58,8 +64,8 @@ export function KeyboardHeatmap({ keyStats }: KeyboardHeatmapProps) {
             key={rowIdx}
             style={{
               display: 'flex',
-              gap: '4px',
-              paddingLeft: `${ROW_OFFSETS[rowIdx]}px`,
+              gap: `${keyGap}px`,
+              paddingLeft: `${rowOffsets[rowIdx]}px`,
             }}
           >
             {row.map(key => {
@@ -76,8 +82,8 @@ export function KeyboardHeatmap({ keyStats }: KeyboardHeatmapProps) {
                   onMouseEnter={() => setHoveredKey(key)}
                   onMouseLeave={() => setHoveredKey(null)}
                   style={{
-                    width: '38px',
-                    height: '38px',
+                    width: `${keySize}px`,
+                    height: `${keySize}px`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

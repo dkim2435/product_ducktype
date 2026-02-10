@@ -235,7 +235,7 @@ function App() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: isContentPage ? 'center' : 'flex-start',
-        padding: '0 32px',
+        padding: '0 var(--page-padding)',
       }}>
         {screen === 'test' && (
           <>

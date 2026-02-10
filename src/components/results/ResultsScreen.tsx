@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { TestResult, PersonalBest } from '../../types/stats';
 import type { XpGain, KeyStats } from '../../types/gamification';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { StatCard } from './StatCard';
 import { WpmChart } from './WpmChart';
 import { ShareButton } from './ShareButton';
@@ -23,6 +24,7 @@ interface ResultsScreenProps {
 
 export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm }: ResultsScreenProps) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
 
   const isNewPb = personalBest && personalBest.wpm === result.wpm && personalBest.timestamp === result.timestamp;
   const topPercent = getWpmPercentile(result.wpm);
@@ -94,8 +96,8 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       {/* Main stats row */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'auto 1fr',
-        gap: '24px',
+        gridTemplateColumns: isMobile ? '1fr' : 'auto 1fr',
+        gap: isMobile ? '16px' : '24px',
         marginBottom: '24px',
         alignItems: 'start',
       }}>
@@ -118,7 +120,7 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       {/* Secondary stats row */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+        gridTemplateColumns: `repeat(auto-fit, minmax(${isMobile ? '100px' : '120px'}, 1fr))`,
         gap: '16px',
         marginBottom: '24px',
       }}>

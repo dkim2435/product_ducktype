@@ -1,4 +1,5 @@
 import type { ToastNotification } from '../../types/gamification';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { Toast } from './Toast';
 
 interface ToastContainerProps {
@@ -7,15 +8,21 @@ interface ToastContainerProps {
 }
 
 export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
+  const isMobile = useIsMobile();
+
   if (toasts.length === 0) return null;
 
   return (
     <div style={{
       position: 'fixed',
       bottom: '24px',
-      right: '24px',
+      ...(isMobile
+        ? { left: '12px', right: '12px' }
+        : { right: '24px' }
+      ),
       display: 'flex',
       flexDirection: 'column',
+      alignItems: isMobile ? 'center' : 'flex-end',
       gap: '8px',
       zIndex: 1000,
       pointerEvents: 'none',

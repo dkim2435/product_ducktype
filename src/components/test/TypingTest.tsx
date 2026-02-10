@@ -7,6 +7,7 @@ import { useKeyboard } from '../../hooks/useKeyboard';
 import { useTimer } from '../../hooks/useTimer';
 import { useCaret } from '../../hooks/useCaret';
 import { useSound } from '../../hooks/useSound';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { HiddenInput } from './HiddenInput';
 import { WordDisplay } from './WordDisplay';
 import { Caret } from './Caret';
@@ -24,12 +25,14 @@ interface TypingTestProps {
 
 export function TypingTest({ settings, onSettingChange, onFinish, customWords, hideModeSwitcher }: TypingTestProps) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [isFocused, setIsFocused] = useState(true);
   const [liveWpm, setLiveWpm] = useState(0);
   const [scrollOffset, setScrollOffset] = useState(0);
   const isTypingRef = useRef(false);
   const lineHeight = Math.round(settings.fontSize * 1.65);
   const lineStride = lineHeight + 4; // includes word margin-bottom (4px)
+  const visibleLines = isMobile ? 3 : 4;
 
   const {
     state,
@@ -106,9 +109,9 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
       const wordTop = currentWordEl.offsetTop;
 
-      // Start scrolling only after the current word passes line 2
-      // (i.e. keep 2 completed lines visible, scroll when entering line 3+)
-      const scrollThreshold = lineStride * 2;
+      // Start scrolling only after the current word passes a threshold
+      // (keep completed lines visible, scroll when entering next line)
+      const scrollThreshold = lineStride * (isMobile ? 1 : 2);
       if (wordTop >= scrollThreshold + scrollOffset) {
         setScrollOffset(wordTop - scrollThreshold);
       }
@@ -277,7 +280,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
           lineHeight: '1.65',
           cursor: 'text',
           overflow: 'hidden',
-          height: `${lineStride * 4}px`,
+          height: `${lineStride * visibleLines}px`,
         }}
       >
         <FocusWarning
@@ -293,7 +296,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
               top: 0,
               left: 0,
               right: 0,
-              height: `${lineStride * 2}px`,
+              height: `${lineStride * (isMobile ? 1 : 2)}px`,
               background: 'linear-gradient(to bottom, var(--bg-color) 0%, transparent 100%)',
               zIndex: 2,
               pointerEvents: 'none',

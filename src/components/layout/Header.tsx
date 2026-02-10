@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { PlayerProfile, StreakState } from '../../types/gamification';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { XpBar } from './XpBar';
 import { StreakBadge } from './StreakBadge';
 
@@ -12,13 +13,17 @@ interface HeaderProps {
 
 export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderProps) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
+
+  const iconSize = isMobile ? 22 : 18;
+  const settingsIconSize = isMobile ? 22 : 20;
 
   return (
     <header style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '16px 32px',
+      padding: 'var(--header-padding)',
       flexShrink: 0,
     }}>
       <div style={{
@@ -30,7 +35,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
         onClick={() => onNavigate('test')}
       >
         {/* Cute duck icon */}
-        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+        <svg width={isMobile ? 26 : 32} height={isMobile ? 26 : 32} viewBox="0 0 100 100" fill="none">
           {/* Body */}
           <ellipse cx="50" cy="62" rx="32" ry="26" fill="var(--main-color)" />
           {/* Head */}
@@ -50,7 +55,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
           <circle cx="62" cy="36" r="3" fill="#ff8c42" opacity="0.3" />
         </svg>
         <span style={{
-          fontSize: '22px',
+          fontSize: isMobile ? '18px' : '22px',
           fontWeight: 700,
           color: 'var(--main-color)',
           letterSpacing: '0.5px',
@@ -70,8 +75,8 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
       </div>
 
       <nav style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        {/* XP Bar */}
-        {profile && (
+        {/* XP Bar - hidden on mobile */}
+        {profile && !isMobile && (
           <div
             style={{ cursor: 'pointer' }}
             onClick={() => onNavigate('profile')}
@@ -89,7 +94,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
         <button
           onClick={() => onNavigate('profile')}
           style={{
-            padding: '6px',
+            padding: 'var(--nav-icon-padding)',
             color: 'var(--sub-color)',
             display: 'flex',
             alignItems: 'center',
@@ -97,7 +102,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
           title={t('nav.profile')}
         >
           {/* User icon */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
             <circle cx="12" cy="7" r="4" />
           </svg>
@@ -106,7 +111,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
         <button
           onClick={() => onNavigate('achievements')}
           style={{
-            padding: '6px',
+            padding: 'var(--nav-icon-padding)',
             color: 'var(--sub-color)',
             display: 'flex',
             alignItems: 'center',
@@ -114,7 +119,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
           title={t('nav.achievements')}
         >
           {/* Trophy icon */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
             <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
             <path d="M4 22h16" />
@@ -127,7 +132,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
         <button
           onClick={() => onNavigate('daily-challenge')}
           style={{
-            padding: '6px',
+            padding: 'var(--nav-icon-padding)',
             color: 'var(--sub-color)',
             display: 'flex',
             alignItems: 'center',
@@ -135,7 +140,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
           title={t('nav.daily')}
         >
           {/* Calendar icon */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
             <line x1="16" x2="16" y1="2" y2="6" />
             <line x1="8" x2="8" y1="2" y2="6" />
@@ -147,7 +152,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
         <button
           onClick={() => onNavigate('practice')}
           style={{
-            padding: '6px',
+            padding: 'var(--nav-icon-padding)',
             color: 'var(--sub-color)',
             display: 'flex',
             alignItems: 'center',
@@ -155,7 +160,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
           title={t('nav.practice')}
         >
           {/* Book icon */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
           </svg>
@@ -164,14 +169,14 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
         <button
           onClick={onSettingsClick}
           style={{
-            padding: '6px',
+            padding: 'var(--nav-icon-padding)',
             color: 'var(--sub-color)',
             display: 'flex',
             alignItems: 'center',
           }}
           title="Settings"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width={settingsIconSize} height={settingsIconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
             <circle cx="12" cy="12" r="3" />
           </svg>

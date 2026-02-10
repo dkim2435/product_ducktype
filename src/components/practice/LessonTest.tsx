@@ -60,7 +60,7 @@ export function LessonTest({
         width: '100%',
         maxWidth: '500px',
         margin: '0 auto',
-        padding: '40px 0',
+        padding: 'var(--page-vertical-padding) 0',
         textAlign: 'center',
       }}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎉</div>

@@ -20,8 +20,8 @@ export function Footer({ onNavigate }: FooterProps) {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      gap: '16px',
-      padding: '16px 32px',
+      gap: 'var(--footer-gap)',
+      padding: 'var(--header-padding)',
       flexShrink: 0,
       flexWrap: 'wrap',
     }}>

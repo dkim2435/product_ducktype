@@ -25,7 +25,7 @@ export function ModeSelector({
 
   const btnStyle = (active: boolean): React.CSSProperties => ({
     padding: '4px 12px',
-    fontSize: '14px',
+    fontSize: 'var(--mode-selector-font)',
     color: active ? 'var(--main-color)' : 'var(--sub-color)',
     cursor: disabled ? 'default' : 'pointer',
     opacity: disabled ? 0.5 : 1,

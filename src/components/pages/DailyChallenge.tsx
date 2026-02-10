@@ -70,7 +70,7 @@ export function DailyChallenge({
       width: '100%',
       maxWidth: '600px',
       margin: '0 auto',
-      padding: '40px 0',
+      padding: 'var(--page-vertical-padding) 0',
     }}>
       {/* Back button */}
       <button

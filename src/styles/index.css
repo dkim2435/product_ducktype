@@ -16,6 +16,28 @@
   --font-size: 24px;
   --border-radius: 8px;
   --transition-speed: 0.15s;
+
+  --page-padding: 32px;
+  --header-padding: 16px 32px;
+  --footer-gap: 16px;
+  --stat-value-large: 56px;
+  --stat-value-normal: 32px;
+  --mode-selector-font: 14px;
+  --nav-icon-padding: 10px;
+  --page-vertical-padding: 40px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding: 12px;
+    --header-padding: 12px 12px;
+    --footer-gap: 10px;
+    --stat-value-large: 40px;
+    --stat-value-normal: 24px;
+    --mode-selector-font: 12px;
+    --nav-icon-padding: 10px;
+    --page-vertical-padding: 20px;
+  }
 }
 
 * {

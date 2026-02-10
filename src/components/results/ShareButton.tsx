@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TestResult } from '../../types/stats';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { copyResultImage, downloadResultImage } from '../../utils/share';
 import { getWpmPercentile } from '../../utils/percentile';
 
@@ -21,6 +22,7 @@ function getShareUrl(result: TestResult): string {
 
 export function ShareButton({ result }: ShareButtonProps) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -188,11 +190,41 @@ export function ShareButton({ result }: ShareButtonProps) {
         {t('results.share')}
       </button>
 
-      {/* Dropdown menu */}
+      {/* Backdrop overlay for mobile modal */}
+      {menuOpen && isMobile && (
+        <div
+          onClick={() => setMenuOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            zIndex: 99,
+          }}
+        />
+      )}
+
+      {/* Dropdown menu / mobile modal */}
       {menuOpen && (
         <div
           className="fade-in"
-          style={{
+          style={isMobile ? {
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 'calc(100vw - 48px)',
+            maxWidth: '320px',
+            maxHeight: '80vh',
+            overflowY: 'auto',
+            backgroundColor: 'var(--sub-alt-color)',
+            borderRadius: 'var(--border-radius)',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+            padding: '6px',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
+          } : {
             position: 'absolute',
             bottom: '100%',
             right: 0,

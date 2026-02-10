@@ -69,7 +69,7 @@ export function StatCard({ label, value, unit, large, color, tooltip }: StatCard
         )}
       </div>
       <div style={{
-        fontSize: large ? '56px' : '32px',
+        fontSize: large ? 'var(--stat-value-large)' : 'var(--stat-value-normal)',
         fontWeight: 300,
         color: color || 'var(--main-color)',
         lineHeight: 1.1,
