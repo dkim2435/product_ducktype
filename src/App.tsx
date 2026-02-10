@@ -218,7 +218,7 @@ function App() {
 
   const isCjk = ['ko', 'zh', 'ja'].includes(settings.language);
 
-  const isCenteredPage = screen === 'results' || (screen === 'test' && isTypingActive);
+  const isCenteredPage = screen === 'results';
 
   return (
     <div style={{
@@ -246,6 +246,14 @@ function App() {
       }}>
         {screen === 'test' && (
           <>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: 'calc(100vh - 120px)',
+              width: '100%',
+            }}>
             <button
               onClick={() => !dailyChallenge.hasCompletedToday && handleNavigate('daily-challenge')}
               style={{
@@ -338,6 +346,7 @@ function App() {
               onFinish={handleTestFinish}
               onTypingStateChange={setIsTypingActive}
             />
+            </div>
             <TypingInfo hidden={isTypingActive} />
           </>
         )}

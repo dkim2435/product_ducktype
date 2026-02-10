@@ -15,7 +15,7 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         width: '100%',
         maxWidth: '900px',
         margin: '0 auto',
-        marginTop: '80vh',
+        marginTop: hidden ? 0 : '40vh',
         padding: isMobile ? '32px 0 24px' : '48px 0 32px',
         opacity: hidden ? 0 : 1,
         maxHeight: hidden ? 0 : '2000px',
