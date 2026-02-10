@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
@@ -8,9 +9,25 @@ interface TypingInfoProps {
 export function TypingInfo({ hidden }: TypingInfoProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.intersectionRatio > 0.3),
+      { threshold: [0, 0.3] }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const showMask = !hidden && !isInView;
 
   return (
     <section
+      ref={sectionRef}
       style={{
         width: '100%',
         display: 'flex',
@@ -22,9 +39,8 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         overflow: 'hidden',
         transition: 'opacity 0.4s ease, max-height 0.4s ease, padding 0.4s ease',
         pointerEvents: hidden ? 'none' : 'auto',
-        // Fade-in from top: content fades in as user scrolls down
-        maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%)',
+        maskImage: showMask ? 'linear-gradient(to bottom, transparent 0%, black 20%)' : 'none',
+        WebkitMaskImage: showMask ? 'linear-gradient(to bottom, transparent 0%, black 20%)' : 'none',
       }}
     >
       <div style={{
