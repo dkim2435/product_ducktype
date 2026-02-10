@@ -29,6 +29,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   const [scrollOffset, setScrollOffset] = useState(0);
   const isTypingRef = useRef(false);
   const lineHeight = Math.round(settings.fontSize * 1.65);
+  const lineStride = lineHeight + 4; // includes word margin-bottom (4px)
 
   const {
     state,
@@ -107,12 +108,12 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
       // Start scrolling only after the current word passes line 2
       // (i.e. keep 2 completed lines visible, scroll when entering line 3+)
-      const scrollThreshold = lineHeight * 2;
+      const scrollThreshold = lineStride * 2;
       if (wordTop >= scrollThreshold + scrollOffset) {
         setScrollOffset(wordTop - scrollThreshold);
       }
     });
-  }, [state.currentWordIndex, wordsContainerRef, scrollOffset, lineHeight]);
+  }, [state.currentWordIndex, wordsContainerRef, scrollOffset, lineStride]);
 
   // Reset scroll on restart
   useEffect(() => {
@@ -276,7 +277,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
           lineHeight: '1.65',
           cursor: 'text',
           overflow: 'hidden',
-          height: `${lineHeight * 4}px`,
+          height: `${lineStride * 4}px`,
         }}
       >
         <FocusWarning
@@ -292,7 +293,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
               top: 0,
               left: 0,
               right: 0,
-              height: `${lineHeight * 2}px`,
+              height: `${lineStride * 2}px`,
               background: 'linear-gradient(to bottom, var(--bg-color) 0%, transparent 100%)',
               zIndex: 2,
               pointerEvents: 'none',
