@@ -123,7 +123,9 @@
     "comeBack": "明日また新しいチャレンジが待っています！",
     "yourResult": "あなたの結果",
     "streak": "デイリー連続",
-    "recentActivity": "最近の活動"
+    "recentActivity": "最近の活動",
+    "reminderTitle": "今日のチャレンジが待っています！",
+    "reminderMessage": "ストリークを続けましょう — 今日のチャレンジの準備ができました"
   },
   "practice": {
     "title": "練習",

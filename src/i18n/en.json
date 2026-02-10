@@ -123,7 +123,9 @@
     "comeBack": "Come back tomorrow for a new challenge!",
     "yourResult": "Your Result",
     "streak": "Daily Streak",
-    "recentActivity": "Recent Activity"
+    "recentActivity": "Recent Activity",
+    "reminderTitle": "Daily Challenge awaits!",
+    "reminderMessage": "Keep your streak alive — today's challenge is ready"
   },
   "practice": {
     "title": "Practice",

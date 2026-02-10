@@ -123,7 +123,9 @@
     "comeBack": "明天再来迎接新挑战！",
     "yourResult": "你的成绩",
     "streak": "每日连续",
-    "recentActivity": "近期活动"
+    "recentActivity": "近期活动",
+    "reminderTitle": "今日挑战等着你！",
+    "reminderMessage": "保持连续记录吧 — 今天的挑战已准备好"
   },
   "practice": {
     "title": "练习",

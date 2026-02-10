@@ -33,7 +33,7 @@ type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
 
 function App() {
   const { settings, updateSetting } = useSettings();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [screen, setScreen] = useState<Screen>('test');
   const [showSettings, setShowSettings] = useState(false);
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
@@ -49,6 +49,25 @@ function App() {
 
   // Store last test state for key analysis
   const lastTestStateRef = useRef<TestState | null>(null);
+
+  // Daily challenge reminder for returning users (once per session)
+  useEffect(() => {
+    if (sessionStorage.getItem('daily_reminder_shown')) return;
+    if (!gamification.profile || gamification.profile.testsCompleted < 1) return;
+    if (dailyChallenge.hasCompletedToday) return;
+
+    const timer = setTimeout(() => {
+      addToast({
+        type: 'info',
+        title: t('daily.reminderTitle'),
+        message: t('daily.reminderMessage'),
+        icon: '📅',
+      });
+      sessionStorage.setItem('daily_reminder_shown', '1');
+    }, 2000);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Sync UI language
   useEffect(() => {
