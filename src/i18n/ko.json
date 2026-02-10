@@ -34,9 +34,11 @@
     "title": "결과",
     "share": "공유",
     "copyImage": "이미지 복사",
+    "copyLink": "링크 및 결과 복사",
     "download": "이미지 다운로드",
     "copied": "복사됨!",
-    "tryAgain": "다시 시도"
+    "tryAgain": "다시 시도",
+    "moreOptions": "더 보기..."
   },
   "settings": {
     "title": "설정",

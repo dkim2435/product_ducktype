@@ -34,9 +34,11 @@
     "title": "结果",
     "share": "分享",
     "copyImage": "复制图片",
+    "copyLink": "复制链接和结果",
     "download": "下载图片",
     "copied": "已复制！",
-    "tryAgain": "再试一次"
+    "tryAgain": "再试一次",
+    "moreOptions": "更多选项..."
   },
   "settings": {
     "title": "设置",

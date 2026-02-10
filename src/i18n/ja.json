@@ -34,9 +34,11 @@
     "title": "結果",
     "share": "共有",
     "copyImage": "画像をコピー",
+    "copyLink": "リンクと結果をコピー",
     "download": "画像をダウンロード",
     "copied": "コピーしました！",
-    "tryAgain": "もう一度"
+    "tryAgain": "もう一度",
+    "moreOptions": "その他..."
   },
   "settings": {
     "title": "設定",

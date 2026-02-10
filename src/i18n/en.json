@@ -34,9 +34,11 @@
     "title": "Results",
     "share": "Share",
     "copyImage": "Copy image",
+    "copyLink": "Copy link & result",
     "download": "Download image",
     "copied": "Copied!",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "moreOptions": "More options..."
   },
   "settings": {
     "title": "Settings",
