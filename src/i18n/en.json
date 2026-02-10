@@ -162,5 +162,30 @@
     "achievements": "Achievements",
     "daily": "Daily",
     "practice": "Practice"
+  },
+  "info": {
+    "speedTitle": "Measure Your Speed",
+    "speedDesc": "Take a quick typing test and instantly see your WPM, accuracy, and percentile ranking among typists worldwide.",
+    "trackTitle": "Track Your Progress",
+    "trackDesc": "Earn XP, level up through 10 ranks, unlock achievements, and maintain daily streaks as you improve.",
+    "langTitle": "9 Languages",
+    "langDesc": "Practice in English, Korean, Chinese, Japanese, Spanish, French, German, Portuguese, or Russian.",
+    "tipsTitle": "Tips to Type Faster",
+    "tip1": "Focus on accuracy first — speed follows naturally once you build muscle memory. Aim for 95%+ accuracy.",
+    "tip2": "Use proper home row placement (ASDF JKL;) and reach for keys without looking at the keyboard.",
+    "tip3": "Practice 10–15 minutes daily. Short, consistent sessions beat occasional long ones.",
+    "tip4": "Use the keyboard heatmap and weak key lessons to target your specific problem areas.",
+    "benchmarkTitle": "Typing Speed Benchmarks",
+    "beginner": "Beginner",
+    "average": "Average",
+    "aboveAvg": "Above Avg",
+    "fast": "Fast",
+    "pro": "Professional",
+    "expert": "Expert",
+    "benchmarkNote": "The average office worker types around 40 WPM. With regular practice on DuckType, most people reach 80+ WPM within a few months.",
+    "howWpmTitle": "How WPM is Calculated",
+    "howWpmDesc": "WPM (Words Per Minute) is the standard measure of typing speed. Each \"word\" is standardized to 5 characters including spaces, ensuring fair comparison across languages and word lengths.",
+    "improveTitle": "Want to improve?",
+    "improveDesc": "Try our structured typing lessons or practice your weak keys to boost your speed and accuracy."
   }
 }

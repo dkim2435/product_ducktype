@@ -28,6 +28,7 @@ import { Achievements } from './components/pages/Achievements';
 import { DailyChallenge } from './components/pages/DailyChallenge';
 import { Practice } from './components/pages/Practice';
 import { LessonTest } from './components/practice/LessonTest';
+import { TypingInfo } from './components/content/TypingInfo';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson';
@@ -217,7 +218,7 @@ function App() {
 
   const isCjk = ['ko', 'zh', 'ja'].includes(settings.language);
 
-  const isContentPage = screen === 'test' || screen === 'results';
+  const isCenteredPage = screen === 'results' || (screen === 'test' && isTypingActive);
 
   return (
     <div style={{
@@ -240,7 +241,7 @@ function App() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: isContentPage ? 'center' : 'flex-start',
+        justifyContent: isCenteredPage ? 'center' : 'flex-start',
         padding: '0 var(--page-padding)',
       }}>
         {screen === 'test' && (
@@ -337,6 +338,7 @@ function App() {
               onFinish={handleTestFinish}
               onTypingStateChange={setIsTypingActive}
             />
+            <TypingInfo hidden={isTypingActive} />
           </>
         )}
 

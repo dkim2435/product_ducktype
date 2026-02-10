@@ -192,9 +192,66 @@
   </head>
   <body>
     <noscript>
-      <div style="padding:40px;text-align:center;font-family:sans-serif;">
-        <h1>DuckType - Online Typing Test</h1>
-        <p>DuckType is a free online typing speed test supporting 9 languages. See your WPM percentile, challenge friends, and improve with daily streaks. Please enable JavaScript to use this application.</p>
+      <div style="max-width:800px;margin:0 auto;padding:40px 24px;font-family:'Segoe UI',Roboto,sans-serif;color:#e8e2d6;background:#1a1b2e;line-height:1.8;">
+        <h1 style="color:#ffb347;font-size:28px;margin-bottom:8px;">DuckType - Free Online Typing Speed Test</h1>
+        <p style="font-size:16px;margin-bottom:24px;">How fast can you type? DuckType is a free, open-source typing test that measures your WPM (words per minute), accuracy, and consistency. No sign-up required — start typing and see where you rank among millions of typists worldwide.</p>
+
+        <h2 style="color:#ffb347;font-size:20px;margin-bottom:12px;">Features</h2>
+        <ul style="padding-left:20px;margin-bottom:24px;">
+          <li><strong>9 Languages:</strong> English, Korean, Chinese, Japanese, Spanish, French, German, Portuguese, and Russian with full IME support.</li>
+          <li><strong>Multiple Test Modes:</strong> Timed tests (15s, 30s, 60s, 120s) or word count tests (10, 25, 50, 100 words). Add punctuation and numbers for extra challenge.</li>
+          <li><strong>WPM Percentile Ranking:</strong> See how you compare to other typists. Are you in the top 10%? Top 1%?</li>
+          <li><strong>Detailed Statistics:</strong> WPM, raw WPM, accuracy, consistency, character breakdown, and a real-time performance chart.</li>
+          <li><strong>Gamification:</strong> Earn XP, level up through 10 duck ranks (Egg to Duck King), unlock 30 achievements, and maintain daily streaks.</li>
+          <li><strong>Daily Challenges:</strong> A new challenge every day with the same words for all users. Compete and maintain your streak.</li>
+          <li><strong>Typing Lessons:</strong> Structured lessons from home row (ASDF JKL;) to full keyboard mastery, plus weak key analysis.</li>
+          <li><strong>Keyboard Heatmap:</strong> Visual analysis of error rates per key so you know exactly which keys need more practice.</li>
+          <li><strong>17+ Themes:</strong> DuckType Dark, Duck Pond, Dracula, Nord, Tokyo Night, Solarized, and more.</li>
+          <li><strong>Challenge Friends:</strong> Share a link with your WPM score and challenge friends to beat it.</li>
+          <li><strong>100% Private:</strong> All data stored locally in your browser. Nothing is ever sent to a server.</li>
+        </ul>
+
+        <h2 style="color:#ffb347;font-size:20px;margin-bottom:12px;">How WPM is Calculated</h2>
+        <p style="margin-bottom:8px;">WPM (Words Per Minute) is the standard measurement of typing speed. DuckType uses the universally accepted formula:</p>
+        <p style="background:#141525;padding:12px 16px;border-radius:6px;font-family:monospace;color:#ffb347;margin-bottom:12px;">WPM = (correct characters / 5) / (elapsed time in minutes)</p>
+        <p style="margin-bottom:24px;">Each "word" is standardized to 5 characters including spaces, ensuring fair comparison across languages and word lengths. Raw WPM includes all typed characters (correct and incorrect), while net WPM counts only correct characters.</p>
+
+        <h2 style="color:#ffb347;font-size:20px;margin-bottom:12px;">What is a Good Typing Speed?</h2>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:14px;">
+          <tr style="background:#141525;"><td style="padding:8px 12px;">Beginner</td><td style="padding:8px 12px;color:#ffb347;">&#60; 30 WPM</td></tr>
+          <tr><td style="padding:8px 12px;">Average</td><td style="padding:8px 12px;color:#ffb347;">40–50 WPM</td></tr>
+          <tr style="background:#141525;"><td style="padding:8px 12px;">Above Average</td><td style="padding:8px 12px;color:#ffb347;">60–75 WPM</td></tr>
+          <tr><td style="padding:8px 12px;">Fast</td><td style="padding:8px 12px;color:#ffb347;">80–100 WPM</td></tr>
+          <tr style="background:#141525;"><td style="padding:8px 12px;">Professional</td><td style="padding:8px 12px;color:#ffb347;">100–130 WPM</td></tr>
+          <tr><td style="padding:8px 12px;">Expert</td><td style="padding:8px 12px;color:#ffb347;">130+ WPM</td></tr>
+        </table>
+        <p style="margin-bottom:24px;">The average office worker types around 40 WPM. With regular practice (10–15 minutes daily), most people can reach 80+ WPM within a few months.</p>
+
+        <h2 style="color:#ffb347;font-size:20px;margin-bottom:12px;">Tips to Improve Your Typing Speed</h2>
+        <ol style="padding-left:20px;margin-bottom:24px;">
+          <li><strong>Focus on accuracy first.</strong> Speed naturally follows once you build muscle memory. Aim for 95%+ accuracy before pushing speed.</li>
+          <li><strong>Use proper finger placement.</strong> Keep your fingers on the home row (ASDF JKL;) and reach for other keys without looking at the keyboard.</li>
+          <li><strong>Practice daily.</strong> Short, consistent 10–15 minute sessions are far more effective than occasional long sessions.</li>
+          <li><strong>Never look at the keyboard.</strong> Train yourself to type by touch. Cover your hands if needed.</li>
+          <li><strong>Target weak keys.</strong> Use DuckType's keyboard heatmap and weak key lessons to focus on your problem areas.</li>
+        </ol>
+
+        <h2 style="color:#ffb347;font-size:20px;margin-bottom:12px;">Frequently Asked Questions</h2>
+        <dl style="margin-bottom:24px;">
+          <dt style="font-weight:bold;margin-bottom:4px;">Is DuckType free?</dt>
+          <dd style="margin-bottom:12px;margin-left:0;">Yes, DuckType is 100% free and open source. No account or sign-up is required.</dd>
+          <dt style="font-weight:bold;margin-bottom:4px;">Does DuckType store my data on a server?</dt>
+          <dd style="margin-bottom:12px;margin-left:0;">No. All your progress, test history, and settings are saved locally in your browser using localStorage. Nothing is ever sent to any server.</dd>
+          <dt style="font-weight:bold;margin-bottom:4px;">What languages does DuckType support?</dt>
+          <dd style="margin-bottom:12px;margin-left:0;">DuckType supports 9 typing languages: English, Korean, Chinese, Japanese, Spanish, French, German, Portuguese, and Russian. The UI is available in English, Korean, Chinese, and Japanese.</dd>
+          <dt style="font-weight:bold;margin-bottom:4px;">How do I improve my weak keys?</dt>
+          <dd style="margin-bottom:12px;margin-left:0;">Go to Practice, then select Weak Keys. DuckType analyzes your typing data and generates exercises targeting your most error-prone keys.</dd>
+          <dt style="font-weight:bold;margin-bottom:4px;">What are the daily challenges?</dt>
+          <dd style="margin-bottom:12px;margin-left:0;">Every day, all DuckType users receive the same set of words to type. Complete the challenge daily to maintain your streak and earn bonus XP.</dd>
+        </dl>
+
+        <p style="text-align:center;font-size:14px;color:#6b6893;margin-top:32px;">Please enable JavaScript to use the DuckType typing test application.</p>
+        <p style="text-align:center;font-size:12px;color:#6b6893;"><a href="https://ducktype.xyz/about" style="color:#ffb347;">About</a> · <a href="https://ducktype.xyz/privacy" style="color:#ffb347;">Privacy Policy</a> · <a href="https://ducktype.xyz/terms" style="color:#ffb347;">Terms of Service</a> · <a href="https://ducktype.xyz/contact" style="color:#ffb347;">Contact</a></p>
       </div>
     </noscript>
     <div id="root"></div>

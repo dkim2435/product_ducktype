@@ -22,6 +22,22 @@ interface ResultsScreenProps {
   challengeWpm?: number | null;
 }
 
+function TipItem({ text }: { text: string }) {
+  return (
+    <div style={{
+      display: 'flex',
+      gap: '8px',
+      alignItems: 'flex-start',
+      fontSize: '12px',
+      color: 'var(--sub-color)',
+      lineHeight: 1.5,
+    }}>
+      <span style={{ color: 'var(--main-color)', flexShrink: 0, marginTop: '1px' }}>•</span>
+      <span>{text}</span>
+    </div>
+  );
+}
+
 export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm }: ResultsScreenProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -307,6 +323,41 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           {t('test.nextTest')}
         </button>
         <ShareButton result={result} />
+      </div>
+
+      {/* Typing improvement tips */}
+      <div style={{
+        marginTop: '32px',
+        padding: isMobile ? '20px 16px' : '24px 28px',
+        backgroundColor: 'var(--sub-alt-color)',
+        borderRadius: 'var(--border-radius)',
+      }}>
+        <h3 style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'var(--main-color)',
+          marginBottom: '12px',
+        }}>
+          {t('info.improveTitle')}
+        </h3>
+        <p style={{
+          fontSize: '13px',
+          color: 'var(--sub-color)',
+          lineHeight: 1.6,
+          marginBottom: '12px',
+        }}>
+          {t('info.improveDesc')}
+        </p>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: '8px',
+        }}>
+          <TipItem text={t('info.tip1')} />
+          <TipItem text={t('info.tip2')} />
+          <TipItem text={t('info.tip3')} />
+          <TipItem text={t('info.tip4')} />
+        </div>
       </div>
     </div>
   );
