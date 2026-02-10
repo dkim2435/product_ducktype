@@ -32,10 +32,6 @@ export function Footer({ onNavigate }: FooterProps) {
       <button style={linkStyle} onClick={() => onNavigate('privacy')}>privacy policy</button>
       <span style={sepStyle}>|</span>
       <button style={linkStyle} onClick={() => onNavigate('terms')}>terms of service</button>
-      <span style={sepStyle}>|</span>
-      <span style={{ color: '#4caf50', fontSize: '11px' }}>
-        v{__APP_VERSION__}
-      </span>
     </footer>
   );
 }
