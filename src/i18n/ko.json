@@ -28,7 +28,13 @@
     "time": "시간",
     "cpm": "분당 글자",
     "testType": "테스트 유형",
-    "personalBest": "개인 최고 기록!"
+    "personalBest": "개인 최고 기록!",
+    "wpmDesc": "분당 단어 수 — 정확하게 입력한 글자 기반 타이핑 속도",
+    "rawWpmDesc": "순수 타수 — 오타를 포함한 전체 타이핑 속도",
+    "accuracyDesc": "정확하게 입력한 글자의 비율",
+    "consistencyDesc": "테스트 동안 타이핑 속도가 얼마나 일정했는지",
+    "cpmDesc": "분당 글자 수 — 글자 기반 타이핑 속도",
+    "charactersDesc": "정확 / 오타 / 추가 / 누락"
   },
   "results": {
     "title": "결과",

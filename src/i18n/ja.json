@@ -28,7 +28,13 @@
     "time": "時間",
     "cpm": "文字/分",
     "testType": "テストタイプ",
-    "personalBest": "自己ベスト！"
+    "personalBest": "自己ベスト！",
+    "wpmDesc": "1分あたりの単語数 — 正確な文字に基づくタイピング速度",
+    "rawWpmDesc": "生WPM — エラーを含む総タイピング速度",
+    "accuracyDesc": "正しく入力された文字の割合",
+    "consistencyDesc": "テスト中のタイピング速度の安定性",
+    "cpmDesc": "1分あたりの文字数 — 文字ベースのタイピング速度",
+    "charactersDesc": "正確 / 不正確 / 余分 / 未入力"
   },
   "results": {
     "title": "結果",

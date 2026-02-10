@@ -28,7 +28,13 @@
     "time": "time",
     "cpm": "cpm",
     "testType": "test type",
-    "personalBest": "personal best!"
+    "personalBest": "personal best!",
+    "wpmDesc": "Words Per Minute — typing speed based on correct characters",
+    "rawWpmDesc": "Raw WPM — total typing speed including errors",
+    "accuracyDesc": "Percentage of correctly typed characters",
+    "consistencyDesc": "How stable your typing speed was throughout the test",
+    "cpmDesc": "Characters Per Minute — character-based typing speed",
+    "charactersDesc": "correct / incorrect / extra / missed"
   },
   "results": {
     "title": "Results",

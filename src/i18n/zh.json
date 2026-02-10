@@ -28,7 +28,13 @@
     "time": "时间",
     "cpm": "字/分",
     "testType": "测试类型",
-    "personalBest": "个人最佳！"
+    "personalBest": "个人最佳！",
+    "wpmDesc": "每分钟单词数 — 基于正确字符的打字速度",
+    "rawWpmDesc": "原始WPM — 包含错误的总打字速度",
+    "accuracyDesc": "正确输入字符的比例",
+    "consistencyDesc": "测试中打字速度的稳定程度",
+    "cpmDesc": "每分钟字符数 — 基于字符的打字速度",
+    "charactersDesc": "正确 / 错误 / 多余 / 遗漏"
   },
   "results": {
     "title": "结果",

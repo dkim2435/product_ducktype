@@ -6,6 +6,7 @@ import { WpmChart } from './WpmChart';
 import { ShareButton } from './ShareButton';
 import { XpGainDisplay } from './XpGainDisplay';
 import { AchievementUnlock } from './AchievementUnlock';
+import { HelpBadge } from './HelpBadge';
 
 interface ResultsScreenProps {
   result: TestResult;
@@ -57,8 +58,8 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       }}>
         {/* Left: WPM + accuracy */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <StatCard label={t('stats.wpm')} value={result.wpm} large />
-          <StatCard label={t('stats.accuracy')} value={`${result.accuracy}%`} />
+          <StatCard label={t('stats.wpm')} value={result.wpm} large tooltip={t('stats.wpmDesc')} />
+          <StatCard label={t('stats.accuracy')} value={`${result.accuracy}%`} tooltip={t('stats.accuracyDesc')} />
         </div>
 
         {/* Right: Chart */}
@@ -79,13 +80,14 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         marginBottom: '24px',
       }}>
         <StatCard label={t('stats.testType')} value={`${result.mode} ${result.modeValue}`} />
-        <StatCard label={t('stats.rawWpm')} value={result.rawWpm} />
-        <StatCard label={t('stats.consistency')} value={`${result.consistency}%`} />
+        <StatCard label={t('stats.rawWpm')} value={result.rawWpm} tooltip={t('stats.rawWpmDesc')} />
+        <StatCard label={t('stats.consistency')} value={`${result.consistency}%`} tooltip={t('stats.consistencyDesc')} />
         <StatCard label={t('stats.time')} value={`${elapsed}s`} />
         {isCjk && (
           <StatCard
             label={t('stats.cpm')}
             value={Math.round(result.correctChars / (elapsed / 60) || 0)}
+            tooltip={t('stats.cpmDesc')}
           />
         )}
       </div>
@@ -94,6 +96,7 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       <div style={{
         display: 'flex',
         justifyContent: 'center',
+        alignItems: 'center',
         gap: '4px',
         fontSize: '14px',
         color: 'var(--sub-color)',
@@ -104,6 +107,7 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         <span style={{ color: 'var(--error-color)' }}>{result.incorrectChars}</span>/
         <span style={{ color: 'var(--error-extra-color)' }}>{result.extraChars}</span>/
         <span>{result.missedChars}</span>
+        <HelpBadge tooltip={t('stats.charactersDesc')} />
       </div>
 
       {/* XP Gain Display */}
