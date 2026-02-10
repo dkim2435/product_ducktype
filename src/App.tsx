@@ -183,12 +183,47 @@ function App() {
         padding: '0 32px',
       }}>
         {screen === 'test' && (
-          <TypingTest
-            key={`${settings.language}-${settings.mode}-${settings.timeLimit}-${settings.wordCount}-${settings.punctuation}-${settings.numbers}`}
-            settings={settings}
-            onSettingChange={handleSettingChange}
-            onFinish={handleTestFinish}
-          />
+          <>
+            <button
+              onClick={() => !dailyChallenge.hasCompletedToday && handleNavigate('daily-challenge')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 14px',
+                marginBottom: '16px',
+                border: `1.5px solid ${dailyChallenge.hasCompletedToday ? 'var(--sub-alt-color)' : 'var(--main-color)'}`,
+                borderRadius: '999px',
+                background: 'transparent',
+                color: dailyChallenge.hasCompletedToday ? 'var(--sub-color)' : 'var(--main-color)',
+                fontSize: '13px',
+                cursor: dailyChallenge.hasCompletedToday ? 'default' : 'pointer',
+                opacity: dailyChallenge.hasCompletedToday ? 0.7 : 1,
+                transition: 'opacity 0.15s, border-color 0.15s',
+              }}
+            >
+              <span style={{ fontSize: '15px' }}>
+                {dailyChallenge.hasCompletedToday ? '✓' : '📅'}
+              </span>
+              {dailyChallenge.hasCompletedToday
+                ? "Today's challenge completed"
+                : 'Daily Challenge'}
+              {dailyChallenge.dailyChallengeState.currentStreak > 0 && (
+                <span style={{
+                  fontSize: '12px',
+                  opacity: 0.8,
+                }}>
+                  🔥 {dailyChallenge.dailyChallengeState.currentStreak}
+                </span>
+              )}
+            </button>
+            <TypingTest
+              key={`${settings.language}-${settings.mode}-${settings.timeLimit}-${settings.wordCount}-${settings.punctuation}-${settings.numbers}`}
+              settings={settings}
+              onSettingChange={handleSettingChange}
+              onFinish={handleTestFinish}
+            />
+          </>
         )}
 
         {screen === 'results' && lastResult && (
