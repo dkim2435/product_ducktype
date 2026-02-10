@@ -97,23 +97,22 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     const container = wordsContainerRef.current;
     if (!container) return;
 
-    // Wait for DOM to settle
     requestAnimationFrame(() => {
       const currentWordEl = container.querySelector(
         `[data-word="${state.currentWordIndex}"]`
       ) as HTMLElement;
       if (!currentWordEl) return;
 
-      // offsetTop is NOT affected by CSS margin-top on the parent.
-      // It gives the layout position relative to offsetParent (wordsContainerRef).
       const wordTop = currentWordEl.offsetTop;
 
-      // Scroll so the current word's line is at the top
-      if (wordTop > scrollOffset) {
-        setScrollOffset(wordTop);
+      // Start scrolling only after the current word passes line 2
+      // (i.e. keep 2 completed lines visible, scroll when entering line 3+)
+      const scrollThreshold = lineHeight * 2;
+      if (wordTop >= scrollThreshold + scrollOffset) {
+        setScrollOffset(wordTop - scrollThreshold);
       }
     });
-  }, [state.currentWordIndex, wordsContainerRef, scrollOffset]);
+  }, [state.currentWordIndex, wordsContainerRef, scrollOffset, lineHeight]);
 
   // Reset scroll on restart
   useEffect(() => {
@@ -268,7 +267,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
       </div>
 
       {/* ===== WORDS AREA ===== */}
-      {/* Outer clip container: fixed 3-line height, overflow hidden */}
+      {/* Outer clip container: fixed 4-line height, overflow hidden */}
       <div
         onClick={handleContainerClick}
         style={{
@@ -277,7 +276,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
           lineHeight: '1.65',
           cursor: 'text',
           overflow: 'hidden',
-          height: `${lineHeight * 3}px`,
+          height: `${lineHeight * 4}px`,
         }}
       >
         <FocusWarning
@@ -285,13 +284,29 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
           onClick={handleContainerClick}
         />
 
+        {/* Top fade gradient for completed lines */}
+        {scrollOffset > 0 && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: `${lineHeight * 2}px`,
+              background: 'linear-gradient(to bottom, var(--bg-color) 0%, transparent 100%)',
+              zIndex: 2,
+              pointerEvents: 'none',
+            }}
+          />
+        )}
+
         {/* Inner scrolling div: margin-top scrolls, caret is inside here */}
         <div
           ref={wordsContainerRef}
           style={{
             position: 'relative',
             marginTop: `-${scrollOffset}px`,
-            transition: 'margin-top 0.15s ease-out',
+            transition: 'margin-top 0.2s ease-out',
             filter: !isFocused && isRunning ? 'blur(4px)' : 'none',
           }}
         >
