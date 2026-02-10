@@ -1,8 +1,9 @@
 interface HeaderProps {
   onSettingsClick: () => void;
+  onNavigate: (page: string) => void;
 }
 
-export function Header({ onSettingsClick }: HeaderProps) {
+export function Header({ onSettingsClick, onNavigate }: HeaderProps) {
   return (
     <header style={{
       display: 'flex',
@@ -17,7 +18,7 @@ export function Header({ onSettingsClick }: HeaderProps) {
         gap: '10px',
         cursor: 'pointer',
       }}
-        onClick={() => window.location.reload()}
+        onClick={() => onNavigate('test')}
       >
         {/* Cute duck icon */}
         <svg width="32" height="32" viewBox="0 0 100 100" fill="none">

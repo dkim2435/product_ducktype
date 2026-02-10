@@ -11,8 +11,12 @@ import { Footer } from './components/layout/Footer';
 import { TypingTest } from './components/test/TypingTest';
 import { ResultsScreen } from './components/results/ResultsScreen';
 import { SettingsModal } from './components/settings/SettingsModal';
+import { About } from './components/pages/About';
+import { Contact } from './components/pages/Contact';
+import { PrivacyPolicy } from './components/pages/PrivacyPolicy';
+import { TermsOfService } from './components/pages/TermsOfService';
 
-type Screen = 'test' | 'results';
+type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms';
 
 function App() {
   const { settings, updateSetting } = useSettings();
@@ -57,6 +61,16 @@ function App() {
     setLastResult(null);
   }, []);
 
+  const handleNavigate = useCallback((page: string) => {
+    if (page === 'test') {
+      setScreen('test');
+      setLastResult(null);
+    } else {
+      setScreen(page as Screen);
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleSettingChange = useCallback(<K extends keyof Settings>(key: K, value: Settings[K]) => {
     updateSetting(key, value);
     if (key === 'language' || key === 'mode' || key === 'timeLimit' || key === 'wordCount' ||
@@ -74,14 +88,14 @@ function App() {
       flexDirection: 'column',
       minHeight: '100vh',
     }}>
-      <Header onSettingsClick={() => setShowSettings(true)} />
+      <Header onSettingsClick={() => setShowSettings(true)} onNavigate={handleNavigate} />
 
       <main style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: screen === 'test' || screen === 'results' ? 'center' : 'flex-start',
         padding: '0 32px',
       }}>
         {screen === 'test' && (
@@ -105,9 +119,14 @@ function App() {
             isCjk={isCjk}
           />
         )}
+
+        {screen === 'about' && <About onBack={() => handleNavigate('test')} />}
+        {screen === 'contact' && <Contact onBack={() => handleNavigate('test')} />}
+        {screen === 'privacy' && <PrivacyPolicy onBack={() => handleNavigate('test')} />}
+        {screen === 'terms' && <TermsOfService onBack={() => handleNavigate('test')} />}
       </main>
 
-      <Footer />
+      <Footer onNavigate={handleNavigate} />
 
       <SettingsModal
         settings={settings}

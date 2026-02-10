@@ -1,33 +1,46 @@
-import { useTranslation } from 'react-i18next';
+interface FooterProps {
+  onNavigate: (page: string) => void;
+}
 
-export function Footer() {
-  const { t } = useTranslation();
+export function Footer({ onNavigate }: FooterProps) {
+  const linkStyle: React.CSSProperties = {
+    color: 'var(--sub-color)',
+    cursor: 'pointer',
+    fontSize: '12px',
+    transition: 'color 0.15s',
+  };
+
+  const sepStyle: React.CSSProperties = {
+    color: 'var(--sub-alt-color)',
+    fontSize: '12px',
+  };
 
   return (
     <footer style={{
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      gap: '24px',
+      gap: '16px',
       padding: '16px 32px',
       flexShrink: 0,
-      fontSize: '12px',
+      flexWrap: 'wrap',
     }}>
-      <span style={{ color: 'var(--sub-color)' }}>
-        {t('footer.contact')}
-      </span>
-      <span style={{ color: 'var(--sub-alt-color)' }}>|</span>
-      <span style={{ color: 'var(--sub-color)' }}>
-        {t('footer.github')}
-      </span>
-      <span style={{ color: 'var(--sub-alt-color)' }}>|</span>
-      <span style={{ color: 'var(--sub-color)' }}>
-        {t('footer.privacy')}
-      </span>
-      <span style={{ color: 'var(--sub-alt-color)' }}>|</span>
-      <span style={{ color: 'var(--sub-color)', opacity: 0.5 }}>
-        Tab + Enter = restart
-      </span>
+      <button style={linkStyle} onClick={() => onNavigate('about')}>about</button>
+      <span style={sepStyle}>|</span>
+      <button style={linkStyle} onClick={() => onNavigate('contact')}>contact</button>
+      <span style={sepStyle}>|</span>
+      <button style={linkStyle} onClick={() => onNavigate('privacy')}>privacy policy</button>
+      <span style={sepStyle}>|</span>
+      <button style={linkStyle} onClick={() => onNavigate('terms')}>terms of service</button>
+      <span style={sepStyle}>|</span>
+      <a
+        href="https://github.com/dkim2435/product_ducktype"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={linkStyle}
+      >
+        github
+      </a>
     </footer>
   );
 }
