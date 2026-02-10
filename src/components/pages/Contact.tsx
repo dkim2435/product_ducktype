@@ -32,32 +32,14 @@ export function Contact({ onBack }: ContactProps) {
           marginBottom: '24px',
         }}>
           <h2 style={{ fontSize: '16px', color: 'var(--main-color)', marginBottom: '16px' }}>
-            Email
+            Feedback Widget
           </h2>
           <p>
-            <span style={{ color: 'var(--main-color)', fontSize: '16px' }}>
-              ducktype.contact@gmail.com
-            </span>
+            Click the feedback button at the bottom-right corner of the screen to send us
+            your questions, bug reports, or suggestions. No email or sign-up required.
           </p>
           <p style={{ color: 'var(--sub-color)', fontSize: '13px', marginTop: '8px' }}>
-            We typically respond within 1-2 business days.
-          </p>
-        </div>
-
-        <div style={{
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: '12px',
-          padding: '24px',
-          marginBottom: '24px',
-        }}>
-          <h2 style={{ fontSize: '16px', color: 'var(--main-color)', marginBottom: '16px' }}>
-            GitHub
-          </h2>
-          <p>
-            Found a bug or have a feature request? Open an issue on our GitHub repository.
-          </p>
-          <p style={{ color: 'var(--sub-color)', fontSize: '13px', marginTop: '8px' }}>
-            github.com/dkim2435/product_ducktype
+            Powered by Userback — your feedback is completely anonymous.
           </p>
         </div>
       </section>

@@ -214,8 +214,8 @@ export function About({ onBack }: AboutProps) {
       <section>
         <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>Contact</h2>
         <p>
-          Have feedback or suggestions? Reach out to us
-          at <span style={{ color: 'var(--main-color)' }}>ducktype.contact@gmail.com</span>.
+          Have feedback or suggestions? Use the feedback widget at the bottom-right corner
+          of the screen to send us a message anytime.
         </p>
       </section>
     </article>

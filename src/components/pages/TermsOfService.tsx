@@ -97,8 +97,8 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
       <section style={{ marginBottom: '28px' }}>
         <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>9. Contact</h2>
         <p>
-          For questions about these Terms, contact us
-          at <span style={{ color: 'var(--main-color)' }}>ducktype.contact@gmail.com</span>.
+          For questions about these Terms, please use the feedback widget at the
+          bottom-right corner of the screen to contact us.
         </p>
       </section>
     </article>

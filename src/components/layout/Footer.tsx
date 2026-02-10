@@ -32,15 +32,6 @@ export function Footer({ onNavigate }: FooterProps) {
       <button style={linkStyle} onClick={() => onNavigate('privacy')}>privacy policy</button>
       <span style={sepStyle}>|</span>
       <button style={linkStyle} onClick={() => onNavigate('terms')}>terms of service</button>
-      <span style={sepStyle}>|</span>
-      <a
-        href="https://github.com/dkim2435/product_ducktype"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={linkStyle}
-      >
-        github
-      </a>
     </footer>
   );
 }

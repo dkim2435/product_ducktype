@@ -106,8 +106,8 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       <section style={{ marginBottom: '28px' }}>
         <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>8. Contact Us</h2>
         <p>
-          If you have any questions about this Privacy Policy, please contact us
-          at <span style={{ color: 'var(--main-color)' }}>ducktype.contact@gmail.com</span>.
+          If you have any questions about this Privacy Policy, please use the feedback
+          widget at the bottom-right corner of the screen to contact us.
         </p>
       </section>
     </article>
