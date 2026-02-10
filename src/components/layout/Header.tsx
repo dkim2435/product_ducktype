@@ -57,16 +57,15 @@ export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderP
         }}>
           duck
           <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>type</span>
-        </span>
-        <span style={{
-          fontSize: '10px',
-          color: '#4caf50',
-          fontWeight: 500,
-          alignSelf: 'flex-end',
-          marginBottom: '2px',
-          opacity: 0.8,
-        }}>
-          v{__APP_VERSION__}
+          <sup style={{
+            fontSize: '9px',
+            color: '#4caf50',
+            fontWeight: 500,
+            opacity: 0.85,
+            marginLeft: '2px',
+          }}>
+            v{__APP_VERSION__}
+          </sup>
         </span>
       </div>
 
