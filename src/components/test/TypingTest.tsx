@@ -251,8 +251,13 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
             <span style={{
               fontSize: '28px',
               fontWeight: 300,
-              color: 'var(--main-color)',
+              color: settings.mode === 'time' && timer.time <= 5
+                ? 'var(--error-color)'
+                : settings.mode === 'time' && timer.time <= 10
+                  ? '#ff8c00'
+                  : 'var(--main-color)',
               fontVariantNumeric: 'tabular-nums',
+              transition: 'color 0.3s',
             }}>
               {timer.time}
             </span>
