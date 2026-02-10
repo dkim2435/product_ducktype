@@ -251,7 +251,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: 'calc(100vh - 120px)',
+              minHeight: 'calc(100vh - 240px)',
               width: '100%',
             }}>
             <button

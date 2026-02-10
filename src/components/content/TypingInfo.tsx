@@ -13,12 +13,19 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
     <section
       style={{
         width: '100%',
-        display: hidden ? 'none' : 'flex',
+        display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '100vh',
-        padding: isMobile ? '32px 16px 24px' : '48px 24px 32px',
+        minHeight: hidden ? 0 : '100vh',
+        padding: hidden ? 0 : (isMobile ? '32px 16px 24px' : '48px 24px 32px'),
+        opacity: hidden ? 0 : 1,
+        overflow: 'hidden',
+        transition: 'opacity 0.4s ease, min-height 0.4s ease, padding 0.4s ease',
+        pointerEvents: hidden ? 'none' : 'auto',
+        // Fade-in from top: content fades in as user scrolls down
+        maskImage: 'linear-gradient(to bottom, transparent 0%, black 12%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 12%)',
       }}
     >
       <div style={{
