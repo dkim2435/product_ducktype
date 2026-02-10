@@ -176,6 +176,7 @@
     "errorInvalidEmail": "Please enter a valid email address",
     "errorPasswordShort": "Password must be at least 6 characters",
     "errorGeneric": "An error occurred. Please try again.",
+    "syncedToCloud": "Synced to cloud",
     "savePromptTitle": "Keep your progress across devices",
     "savePromptDesc": "Sign up to save your stats, achievements, and streaks to the cloud. Access them from any device."
   },

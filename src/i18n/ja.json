@@ -176,6 +176,7 @@
     "errorInvalidEmail": "有効なメールアドレスを入力してください",
     "errorPasswordShort": "パスワードは6文字以上必要です",
     "errorGeneric": "エラーが発生しました。もう一度お試しください。",
+    "syncedToCloud": "クラウドに同期済み",
     "savePromptTitle": "どのデバイスでも記録を引き継ぎ",
     "savePromptDesc": "登録すると、統計、実績、ストリークがクラウドに保存され、どこからでもアクセスできます。"
   },

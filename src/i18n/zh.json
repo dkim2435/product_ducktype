@@ -176,6 +176,7 @@
     "errorInvalidEmail": "请输入有效的邮箱地址",
     "errorPasswordShort": "密码至少需要6个字符",
     "errorGeneric": "发生错误，请重试。",
+    "syncedToCloud": "已同步到云端",
     "savePromptTitle": "跨设备保存你的进度",
     "savePromptDesc": "注册后，统计数据、成就和连续记录将保存到云端，随时随地访问。"
   },

@@ -404,6 +404,10 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             streak={gamification.streak}
             keyStats={gamification.keyStats}
             onBack={() => handleNavigate('test')}
+            user={user}
+            isSupabaseConfigured={isSupabaseConfigured}
+            onLoginClick={onLoginClick}
+            onLogout={onLogout}
           />
         )}
 

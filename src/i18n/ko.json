@@ -176,6 +176,7 @@
     "errorInvalidEmail": "올바른 이메일 주소를 입력해주세요",
     "errorPasswordShort": "비밀번호는 최소 6자 이상이어야 합니다",
     "errorGeneric": "오류가 발생했습니다. 다시 시도해주세요.",
+    "syncedToCloud": "클라우드에 동기화됨",
     "savePromptTitle": "다른 기기에서도 기록을 이어가세요",
     "savePromptDesc": "회원가입하면 통계, 업적, 스트릭이 클라우드에 저장됩니다. 어디서든 접속할 수 있어요."
   },

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import type { User } from '@supabase/supabase-js';
 import type { PlayerProfile, StreakState, KeyStatsMap } from '../../types/gamification';
 import { xpToNextLevel, getRank } from '../../constants/gamification';
 import { KeyboardHeatmap } from '../profile/KeyboardHeatmap';
@@ -9,6 +10,10 @@ interface ProfileProps {
   streak: StreakState;
   keyStats: KeyStatsMap;
   onBack: () => void;
+  user?: User | null;
+  isSupabaseConfigured?: boolean;
+  onLoginClick?: () => void;
+  onLogout?: () => void;
 }
 
 function formatTime(seconds: number): string {
@@ -22,7 +27,7 @@ function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString();
 }
 
-export function Profile({ profile, streak, keyStats, onBack }: ProfileProps) {
+export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseConfigured, onLoginClick, onLogout }: ProfileProps) {
   const { t } = useTranslation();
   const rank = getRank(profile.level);
   const { current, needed, progress } = xpToNextLevel(profile.totalXp);
@@ -51,6 +56,96 @@ export function Profile({ profile, streak, keyStats, onBack }: ProfileProps) {
         </svg>
         {t('profile.title')}
       </button>
+
+      {/* Account section */}
+      {isSupabaseConfigured && (
+        <div style={{
+          marginBottom: '24px',
+          padding: '16px 20px',
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '12px',
+        }}>
+          {user ? (
+            <>
+              <div style={{ minWidth: 0 }}>
+                <div style={{
+                  fontSize: '12px',
+                  color: 'var(--sub-color)',
+                  marginBottom: '2px',
+                }}>
+                  {t('auth.syncedToCloud')}
+                </div>
+                <div style={{
+                  fontSize: '13px',
+                  color: 'var(--text-color)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}>
+                  {user.email}
+                </div>
+              </div>
+              <button
+                onClick={onLogout}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--sub-alt-color)',
+                  background: 'none',
+                  color: 'var(--sub-color)',
+                  fontSize: '12px',
+                  fontFamily: 'inherit',
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                }}
+              >
+                {t('auth.logout')}
+              </button>
+            </>
+          ) : (
+            <>
+              <div>
+                <div style={{
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: 'var(--text-color)',
+                  marginBottom: '2px',
+                }}>
+                  {t('auth.savePromptTitle')}
+                </div>
+                <div style={{
+                  fontSize: '12px',
+                  color: 'var(--sub-color)',
+                }}>
+                  {t('auth.savePromptDesc')}
+                </div>
+              </div>
+              <button
+                onClick={onLoginClick}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  backgroundColor: 'var(--main-color)',
+                  color: 'var(--bg-color)',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {t('auth.login')}
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Level + Rank header */}
       <div style={{
