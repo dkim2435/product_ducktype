@@ -69,15 +69,8 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }:
         }}>
           duck
           <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>type</span>
-          <sup style={{
-            fontSize: '9px',
-            color: '#4caf50',
-            fontWeight: 500,
-            opacity: 0.85,
-            marginLeft: '2px',
-          }}>
-            v{__APP_VERSION__}
-          </sup>
+          <span style={{ color: 'var(--main-color)' }}>.</span>
+          <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>xyz</span>
         </span>
       </div>
 
