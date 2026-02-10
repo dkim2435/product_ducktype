@@ -16,16 +16,15 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: hidden ? 0 : '100vh',
-        padding: hidden ? 0 : (isMobile ? '32px 16px 24px' : '48px 24px 32px'),
+        padding: hidden ? 0 : (isMobile ? '0 16px 40px' : '0 24px 48px'),
         opacity: hidden ? 0 : 1,
+        maxHeight: hidden ? 0 : '9999px',
         overflow: 'hidden',
-        transition: 'opacity 0.4s ease, min-height 0.4s ease, padding 0.4s ease',
+        transition: 'opacity 0.4s ease, max-height 0.4s ease, padding 0.4s ease',
         pointerEvents: hidden ? 'none' : 'auto',
         // Fade-in from top: content fades in as user scrolls down
-        maskImage: 'linear-gradient(to bottom, transparent 0%, black 12%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 12%)',
+        maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%)',
       }}
     >
       <div style={{
