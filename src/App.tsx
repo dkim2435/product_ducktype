@@ -39,6 +39,7 @@ function App() {
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
   const [activeLessonId, setActiveLessonId] = useState<LessonId | null>(null);
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
+  const [challengeWpm, setChallengeWpm] = useState<number | null>(null);
 
   useTheme(settings.theme);
   const { saveResult, getPersonalBest } = useStats();
@@ -67,6 +68,17 @@ function App() {
     }, 2000);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Parse challenge URL hash on mount (e.g. #c=85-97)
+  useEffect(() => {
+    const hash = window.location.hash;
+    const match = hash.match(/^#c=(\d+)-(\d+)$/);
+    if (match) {
+      setChallengeWpm(parseInt(match[1], 10));
+      // Clear hash without triggering navigation
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
   }, []);
 
   // Sync UI language
@@ -260,6 +272,25 @@ function App() {
                 </span>
               )}
             </button>
+            {challengeWpm && (
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 18px',
+                marginBottom: '16px',
+                backgroundColor: 'var(--sub-alt-color)',
+                border: '1.5px solid var(--main-color)',
+                borderRadius: 'var(--border-radius)',
+                fontSize: '14px',
+                color: 'var(--text-color)',
+              }}>
+                <span style={{ fontSize: '16px' }}>⚔️</span>
+                <span>
+                  {t('challenge.beatFriend', { wpm: challengeWpm })}
+                </span>
+              </div>
+            )}
             <TypingTest
               key={`${settings.language}-${settings.mode}-${settings.timeLimit}-${settings.wordCount}-${settings.punctuation}-${settings.numbers}`}
               settings={settings}
@@ -283,6 +314,7 @@ function App() {
             newAchievements={gamification.lastNewAchievements}
             weakKeys={lastWeakKeys}
             onNavigate={handleNavigate}
+            challengeWpm={challengeWpm}
           />
         )}
 

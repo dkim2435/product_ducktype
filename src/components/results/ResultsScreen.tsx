@@ -7,6 +7,7 @@ import { ShareButton } from './ShareButton';
 import { XpGainDisplay } from './XpGainDisplay';
 import { AchievementUnlock } from './AchievementUnlock';
 import { HelpBadge } from './HelpBadge';
+import { getWpmPercentile } from '../../utils/percentile';
 
 interface ResultsScreenProps {
   result: TestResult;
@@ -17,12 +18,14 @@ interface ResultsScreenProps {
   newAchievements?: string[];
   weakKeys?: KeyStats[];
   onNavigate?: (page: string) => void;
+  challengeWpm?: number | null;
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm }: ResultsScreenProps) {
   const { t } = useTranslation();
 
   const isNewPb = personalBest && personalBest.wpm === result.wpm && personalBest.timestamp === result.timestamp;
+  const topPercent = getWpmPercentile(result.wpm);
 
   const elapsed = result.wpmHistory.length > 0
     ? result.wpmHistory[result.wpmHistory.length - 1].time
@@ -47,6 +50,46 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           {t('stats.personalBest')}
         </div>
       )}
+
+      {/* Challenge result */}
+      {challengeWpm && (
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '12px',
+          padding: '10px 20px',
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+          border: `1.5px solid ${result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)'}`,
+        }}>
+          <span style={{
+            fontSize: '16px',
+            fontWeight: 700,
+            color: result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)',
+          }}>
+            {result.wpm >= challengeWpm
+              ? t('challenge.won', { wpm: challengeWpm })
+              : t('challenge.lost', { wpm: challengeWpm })}
+          </span>
+        </div>
+      )}
+
+      {/* Percentile badge */}
+      <div style={{
+        textAlign: 'center',
+        marginBottom: '12px',
+      }}>
+        <span style={{
+          display: 'inline-block',
+          padding: '4px 14px',
+          borderRadius: '999px',
+          fontSize: '13px',
+          fontWeight: 600,
+          backgroundColor: topPercent <= 10 ? 'var(--main-color)' : 'var(--sub-alt-color)',
+          color: topPercent <= 10 ? 'var(--bg-color)' : 'var(--sub-color)',
+        }}>
+          {t('stats.topPercent', { percent: topPercent })}
+        </span>
+      </div>
 
       {/* Main stats row */}
       <div style={{

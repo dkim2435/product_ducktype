@@ -34,7 +34,8 @@
     "accuracyDesc": "정확하게 입력한 글자의 비율",
     "consistencyDesc": "테스트 동안 타이핑 속도가 얼마나 일정했는지",
     "cpmDesc": "분당 글자 수 — 글자 기반 타이핑 속도",
-    "charactersDesc": "정확 / 오타 / 추가 / 누락"
+    "charactersDesc": "정확 / 오타 / 추가 / 누락",
+    "topPercent": "상위 {{percent}}%"
   },
   "results": {
     "title": "결과",
@@ -148,6 +149,11 @@
     "heatmapDesc": "키별 오타율 (녹색 = 좋음, 빨강 = 연습 필요)",
     "streakCalendar": "활동 캘린더",
     "noKeyData": "키보드 히트맵을 보려면 테스트를 완료하세요"
+  },
+  "challenge": {
+    "beatFriend": "친구가 {{wpm}} WPM을 기록했어요. 이길 수 있나요?",
+    "won": "친구의 {{wpm}} WPM을 이겼어요!",
+    "lost": "친구가 {{wpm}} WPM을 기록했어요. 다시 도전!"
   },
   "nav": {
     "profile": "프로필",

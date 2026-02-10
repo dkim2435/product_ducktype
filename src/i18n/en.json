@@ -34,7 +34,8 @@
     "accuracyDesc": "Percentage of correctly typed characters",
     "consistencyDesc": "How stable your typing speed was throughout the test",
     "cpmDesc": "Characters Per Minute — character-based typing speed",
-    "charactersDesc": "correct / incorrect / extra / missed"
+    "charactersDesc": "correct / incorrect / extra / missed",
+    "topPercent": "Top {{percent}}%"
   },
   "results": {
     "title": "Results",
@@ -148,6 +149,11 @@
     "heatmapDesc": "Error rate by key (green = good, red = needs practice)",
     "streakCalendar": "Activity Calendar",
     "noKeyData": "Complete some tests to see your keyboard heatmap"
+  },
+  "challenge": {
+    "beatFriend": "Your friend typed {{wpm}} WPM. Can you beat them?",
+    "won": "You beat your friend's {{wpm}} WPM!",
+    "lost": "Your friend typed {{wpm}} WPM. Try again!"
   },
   "nav": {
     "profile": "Profile",

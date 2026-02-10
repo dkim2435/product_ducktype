@@ -34,7 +34,8 @@
     "accuracyDesc": "正确输入字符的比例",
     "consistencyDesc": "测试中打字速度的稳定程度",
     "cpmDesc": "每分钟字符数 — 基于字符的打字速度",
-    "charactersDesc": "正确 / 错误 / 多余 / 遗漏"
+    "charactersDesc": "正确 / 错误 / 多余 / 遗漏",
+    "topPercent": "前 {{percent}}%"
   },
   "results": {
     "title": "结果",
@@ -148,6 +149,11 @@
     "heatmapDesc": "按键错误率（绿色=好，红色=需要练习）",
     "streakCalendar": "活动日历",
     "noKeyData": "完成一些测试后查看键盘热力图"
+  },
+  "challenge": {
+    "beatFriend": "你的朋友打了 {{wpm}} WPM，你能超过吗？",
+    "won": "你超过了朋友的 {{wpm}} WPM！",
+    "lost": "朋友打了 {{wpm}} WPM，再试一次！"
   },
   "nav": {
     "profile": "资料",

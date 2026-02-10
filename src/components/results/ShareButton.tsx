@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TestResult } from '../../types/stats';
 import { copyResultImage, downloadResultImage } from '../../utils/share';
+import { getWpmPercentile } from '../../utils/percentile';
 
 interface ShareButtonProps {
   result: TestResult;
@@ -10,11 +11,12 @@ interface ShareButtonProps {
 const SITE_URL = 'https://ducktype.xyz';
 
 function getShareText(result: TestResult): string {
-  return `I just typed ${result.wpm} WPM with ${result.accuracy}% accuracy on DuckType! Can you beat my score?`;
+  const topPercent = getWpmPercentile(result.wpm);
+  return `I just typed ${result.wpm} WPM (Top ${topPercent}%) with ${result.accuracy}% accuracy on DuckType! Think you can beat me?`;
 }
 
-function getShareUrl(): string {
-  return SITE_URL;
+function getShareUrl(result: TestResult): string {
+  return `${SITE_URL}/#c=${result.wpm}-${result.accuracy}`;
 }
 
 export function ShareButton({ result }: ShareButtonProps) {
@@ -37,7 +39,7 @@ export function ShareButton({ result }: ShareButtonProps) {
   }, [menuOpen]);
 
   const shareText = getShareText(result);
-  const shareUrl = getShareUrl();
+  const shareUrl = getShareUrl(result);
   const encodedText = encodeURIComponent(shareText);
   const encodedUrl = encodeURIComponent(shareUrl);
 

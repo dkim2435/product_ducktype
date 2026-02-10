@@ -34,7 +34,8 @@
     "accuracyDesc": "正しく入力された文字の割合",
     "consistencyDesc": "テスト中のタイピング速度の安定性",
     "cpmDesc": "1分あたりの文字数 — 文字ベースのタイピング速度",
-    "charactersDesc": "正確 / 不正確 / 余分 / 未入力"
+    "charactersDesc": "正確 / 不正確 / 余分 / 未入力",
+    "topPercent": "上位 {{percent}}%"
   },
   "results": {
     "title": "結果",
@@ -148,6 +149,11 @@
     "heatmapDesc": "キー別エラー率（緑=良好、赤=練習が必要）",
     "streakCalendar": "アクティビティカレンダー",
     "noKeyData": "キーボードヒートマップを表示するにはテストを完了してください"
+  },
+  "challenge": {
+    "beatFriend": "友達が {{wpm}} WPM を記録しました。勝てますか？",
+    "won": "友達の {{wpm}} WPM に勝ちました！",
+    "lost": "友達は {{wpm}} WPM でした。もう一度挑戦！"
   },
   "nav": {
     "profile": "プロフィール",
