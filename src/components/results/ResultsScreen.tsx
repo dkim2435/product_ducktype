@@ -20,6 +20,9 @@ interface ResultsScreenProps {
   weakKeys?: KeyStats[];
   onNavigate?: (page: string) => void;
   challengeWpm?: number | null;
+  isLoggedIn?: boolean;
+  isSupabaseConfigured?: boolean;
+  onLoginClick?: () => void;
 }
 
 function TipItem({ text }: { text: string }) {
@@ -38,7 +41,7 @@ function TipItem({ text }: { text: string }) {
   );
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick }: ResultsScreenProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
@@ -324,6 +327,57 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         </button>
         <ShareButton result={result} />
       </div>
+
+      {/* Cloud save prompt for non-logged-in users */}
+      {isSupabaseConfigured && !isLoggedIn && (
+        <div style={{
+          marginTop: '24px',
+          padding: isMobile ? '16px' : '14px 20px',
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+          border: '1px solid var(--main-color)',
+          display: 'flex',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? '12px' : '16px',
+        }}>
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--text-color)',
+              marginBottom: '4px',
+            }}>
+              {t('auth.savePromptTitle')}
+            </div>
+            <div style={{
+              fontSize: '12px',
+              color: 'var(--sub-color)',
+              lineHeight: 1.5,
+            }}>
+              {t('auth.savePromptDesc')}
+            </div>
+          </div>
+          <button
+            onClick={onLoginClick}
+            style={{
+              padding: '8px 20px',
+              borderRadius: '6px',
+              border: 'none',
+              backgroundColor: 'var(--main-color)',
+              color: 'var(--bg-color)',
+              fontSize: '13px',
+              fontWeight: 600,
+              fontFamily: 'inherit',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+            }}
+          >
+            {t('auth.login')} / {t('auth.signup')}
+          </button>
+        </div>
+      )}
 
       {/* Typing improvement tips */}
       <div style={{

@@ -1,4 +1,6 @@
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { User } from '@supabase/supabase-js';
 import type { PlayerProfile, StreakState } from '../../types/gamification';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { XpBar } from './XpBar';
@@ -10,11 +12,28 @@ interface HeaderProps {
   profile?: PlayerProfile;
   streak?: StreakState;
   hidden?: boolean;
+  user?: User | null;
+  onLoginClick?: () => void;
+  onLogout?: () => void;
+  isSupabaseConfigured?: boolean;
 }
 
-export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }: HeaderProps) {
+export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, user, onLoginClick, onLogout, isSupabaseConfigured }: HeaderProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showUserMenu) return;
+    const handleClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowUserMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showUserMenu]);
 
   const iconSize = isMobile ? 22 : 18;
   const settingsIconSize = isMobile ? 22 : 20;
@@ -22,6 +41,14 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }:
   const mobileHidden = isMobile && hidden;
 
   const hasGamification = profile || (streak && streak.currentStreak > 0);
+
+  const handleProfileClick = () => {
+    if (isSupabaseConfigured && !user) {
+      onLoginClick?.();
+    } else {
+      onNavigate('profile');
+    }
+  };
 
   return (
     <header style={{
@@ -42,7 +69,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }:
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: isMobile ? '100%' : undefined,
+        width: '100%',
       }}>
         <div style={{
           display: 'flex',
@@ -126,23 +153,111 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }:
             <StreakBadge streak={streak} />
           )}
 
-          {/* Nav icons */}
-          <button
-            onClick={() => onNavigate('profile')}
-            style={{
-              padding: 'var(--nav-icon-padding)',
-              color: 'var(--sub-color)',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            title={t('nav.profile')}
-          >
-            {/* User icon */}
-            <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </button>
+          {/* Profile / Login — unified icon */}
+          {isSupabaseConfigured && user ? (
+            // Logged in: avatar with dropdown
+            <div ref={menuRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowUserMenu((v) => !v)}
+                style={{
+                  width: isMobile ? 28 : 26,
+                  height: isMobile ? 28 : 26,
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--main-color)',
+                  color: 'var(--bg-color)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  fontFamily: 'inherit',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                title={user.email ?? ''}
+              >
+                {(user.email ?? '?')[0].toUpperCase()}
+              </button>
+              {showUserMenu && (
+                <div style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: '110%',
+                  backgroundColor: 'var(--bg-color)',
+                  border: '1px solid var(--sub-alt-color)',
+                  borderRadius: '8px',
+                  padding: '8px 0',
+                  minWidth: '180px',
+                  zIndex: 200,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                }}>
+                  <div style={{
+                    padding: '8px 14px',
+                    fontSize: '12px',
+                    color: 'var(--sub-color)',
+                    borderBottom: '1px solid var(--sub-alt-color)',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}>
+                    {user.email}
+                  </div>
+                  <button
+                    onClick={() => { setShowUserMenu(false); onNavigate('profile'); }}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '8px 14px',
+                      border: 'none',
+                      background: 'none',
+                      color: 'var(--text-color)',
+                      fontSize: '13px',
+                      fontFamily: 'inherit',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {t('nav.profile')}
+                  </button>
+                  <button
+                    onClick={() => { setShowUserMenu(false); onLogout?.(); }}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '8px 14px',
+                      border: 'none',
+                      background: 'none',
+                      color: 'var(--text-color)',
+                      fontSize: '13px',
+                      fontFamily: 'inherit',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {t('auth.logout')}
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            // Not logged in (or supabase not configured): profile icon
+            <button
+              onClick={handleProfileClick}
+              style={{
+                padding: 'var(--nav-icon-padding)',
+                color: 'var(--sub-color)',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title={t('nav.profile')}
+            >
+              {/* User icon */}
+              <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </button>
+          )}
 
           <button
             onClick={() => onNavigate('achievements')}

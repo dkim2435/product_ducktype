@@ -163,6 +163,22 @@
     "daily": "Daily",
     "practice": "Practice"
   },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "continueWithGoogle": "Continue with Google",
+    "or": "or",
+    "logout": "Log Out",
+    "loggingIn": "Logging in...",
+    "signingUp": "Signing up...",
+    "errorInvalidEmail": "Please enter a valid email address",
+    "errorPasswordShort": "Password must be at least 6 characters",
+    "errorGeneric": "An error occurred. Please try again.",
+    "savePromptTitle": "Keep your progress across devices",
+    "savePromptDesc": "Sign up to save your stats, achievements, and streaks to the cloud. Access them from any device."
+  },
   "info": {
     "speedTitle": "Measure Your Speed",
     "speedDesc": "Take a quick typing test and instantly see your WPM, accuracy, and percentile ranking among typists worldwide.",

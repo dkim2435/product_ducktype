@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { User } from '@supabase/supabase-js';
 import type { TestState } from './types/test';
 import type { TestResult } from './types/stats';
 import type { Settings } from './types/settings';
@@ -13,12 +14,15 @@ import { useToast } from './hooks/useToast';
 import { useDailyChallenge } from './hooks/useDailyChallenge';
 import { useLessons } from './hooks/useLessons';
 import { useIsMobile } from './hooks/useIsMobile';
+import { useAuth } from './hooks/useAuth';
+import { useCloudSync } from './hooks/useCloudSync';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ToastContainer } from './components/layout/ToastContainer';
 import { TypingTest } from './components/test/TypingTest';
 import { ResultsScreen } from './components/results/ResultsScreen';
 import { SettingsModal } from './components/settings/SettingsModal';
+import { AuthModal } from './components/auth/AuthModal';
 import { About } from './components/pages/About';
 import { Contact } from './components/pages/Contact';
 import { PrivacyPolicy } from './components/pages/PrivacyPolicy';
@@ -33,7 +37,15 @@ import { TypingInfo } from './components/content/TypingInfo';
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson';
 
-function App() {
+interface AppContentProps {
+  user: User | null;
+  onLoginClick: () => void;
+  onLogout: () => void;
+  isSupabaseConfigured: boolean;
+  requestSync: (userId: string) => void;
+}
+
+function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync }: AppContentProps) {
   const { settings, updateSetting } = useSettings();
   const { t, i18n } = useTranslation();
   const [screen, setScreen] = useState<Screen>('test');
@@ -107,6 +119,10 @@ function App() {
     );
   }, [settings.fontFamily]);
 
+  const triggerSync = useCallback(() => {
+    if (user?.id) requestSync(user.id);
+  }, [user, requestSync]);
+
   const handleTestFinish = useCallback((testState: TestState) => {
     const result = saveResult(testState, settings);
     lastTestStateRef.current = testState;
@@ -130,7 +146,9 @@ function App() {
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
     );
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress]);
+
+    triggerSync();
+  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress, triggerSync]);
 
   const handleDailyChallengeFinish = useCallback((testState: TestState) => {
     const result = saveResult(testState, settings);
@@ -157,7 +175,9 @@ function App() {
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
     );
-  }, [settings, saveResult, gamification, addToast, dailyChallenge, lessons.lessonProgress]);
+
+    triggerSync();
+  }, [settings, saveResult, gamification, addToast, dailyChallenge, lessons.lessonProgress, triggerSync]);
 
   const handleLessonFinish = useCallback((testState: TestState, lessonId: LessonId) => {
     const result = saveResult(testState, settings);
@@ -185,7 +205,8 @@ function App() {
     );
 
     setScreen('results');
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons]);
+    triggerSync();
+  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons, triggerSync]);
 
   const handleRestart = useCallback(() => {
     setScreen('test');
@@ -214,7 +235,8 @@ function App() {
       setScreen('test');
       setLastResult(null);
     }
-  }, [updateSetting]);
+    triggerSync();
+  }, [updateSetting, triggerSync]);
 
   const isCjk = ['ko', 'zh', 'ja'].includes(settings.language);
 
@@ -234,6 +256,10 @@ function App() {
         profile={gamification.profile}
         streak={gamification.streak}
         hidden={isTypingActive}
+        user={user}
+        onLoginClick={onLoginClick}
+        onLogout={onLogout}
+        isSupabaseConfigured={isSupabaseConfigured}
       />
 
       <main style={{
@@ -366,6 +392,9 @@ function App() {
             weakKeys={lastWeakKeys}
             onNavigate={handleNavigate}
             challengeWpm={challengeWpm}
+            isLoggedIn={!!user}
+            isSupabaseConfigured={isSupabaseConfigured}
+            onLoginClick={onLoginClick}
           />
         )}
 
@@ -437,6 +466,61 @@ function App() {
 
       <ToastContainer toasts={toasts} onDismiss={removeToast} />
     </div>
+  );
+}
+
+function App() {
+  const { user, loading, signUp, signIn, signInWithGoogle, signOut, isSupabaseConfigured } = useAuth();
+  const { loadFromCloud, requestSync, cancelSync } = useCloudSync();
+  const [syncKey, setSyncKey] = useState(0);
+  const [showAuth, setShowAuth] = useState(false);
+  const prevUserIdRef = useRef<string | null>(null);
+
+  // When user changes (login/logout), load cloud data
+  useEffect(() => {
+    if (loading) return;
+    const userId = user?.id ?? null;
+
+    if (userId === prevUserIdRef.current) return;
+    prevUserIdRef.current = userId;
+
+    if (!userId) {
+      cancelSync();
+      return;
+    }
+
+    loadFromCloud(userId).then((shouldReload) => {
+      if (shouldReload) {
+        setSyncKey((k) => k + 1);
+      }
+    });
+  }, [user, loading, loadFromCloud, cancelSync]);
+
+  const handleLogout = useCallback(async () => {
+    cancelSync();
+    await signOut();
+  }, [signOut, cancelSync]);
+
+  if (loading) return null;
+
+  return (
+    <>
+      <AppContent
+        key={syncKey}
+        user={user}
+        onLoginClick={() => setShowAuth(true)}
+        onLogout={handleLogout}
+        isSupabaseConfigured={isSupabaseConfigured}
+        requestSync={requestSync}
+      />
+      <AuthModal
+        visible={showAuth}
+        onClose={() => setShowAuth(false)}
+        onSignUp={signUp}
+        onSignIn={signIn}
+        onGoogleSignIn={signInWithGoogle}
+      />
+    </>
   );
 }
 

@@ -163,6 +163,22 @@
     "daily": "デイリー",
     "practice": "練習"
   },
+  "auth": {
+    "login": "ログイン",
+    "signup": "新規登録",
+    "email": "メール",
+    "password": "パスワード",
+    "continueWithGoogle": "Googleで続ける",
+    "or": "または",
+    "logout": "ログアウト",
+    "loggingIn": "ログイン中...",
+    "signingUp": "登録中...",
+    "errorInvalidEmail": "有効なメールアドレスを入力してください",
+    "errorPasswordShort": "パスワードは6文字以上必要です",
+    "errorGeneric": "エラーが発生しました。もう一度お試しください。",
+    "savePromptTitle": "どのデバイスでも記録を引き継ぎ",
+    "savePromptDesc": "登録すると、統計、実績、ストリークがクラウドに保存され、どこからでもアクセスできます。"
+  },
   "info": {
     "speedTitle": "タイピング速度を測定",
     "speedDesc": "クイックテストでWPM、正確率、世界ランキングパーセンタイルを即座に確認できます。",

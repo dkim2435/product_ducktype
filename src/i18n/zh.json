@@ -163,6 +163,22 @@
     "daily": "每日",
     "practice": "练习"
   },
+  "auth": {
+    "login": "登录",
+    "signup": "注册",
+    "email": "邮箱",
+    "password": "密码",
+    "continueWithGoogle": "使用 Google 继续",
+    "or": "或",
+    "logout": "退出",
+    "loggingIn": "登录中...",
+    "signingUp": "注册中...",
+    "errorInvalidEmail": "请输入有效的邮箱地址",
+    "errorPasswordShort": "密码至少需要6个字符",
+    "errorGeneric": "发生错误，请重试。",
+    "savePromptTitle": "跨设备保存你的进度",
+    "savePromptDesc": "注册后，统计数据、成就和连续记录将保存到云端，随时随地访问。"
+  },
   "info": {
     "speedTitle": "测量打字速度",
     "speedDesc": "快速进行打字测试，即时查看WPM、准确率和全球排名百分位。",
