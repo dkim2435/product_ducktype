@@ -13,10 +13,11 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
     <section
       style={{
         width: '100%',
-        maxWidth: '900px',
+        maxWidth: '700px',
         margin: '0 auto',
         marginTop: hidden ? 0 : '40vh',
-        padding: isMobile ? '32px 0 24px' : '48px 0 32px',
+        padding: isMobile ? '32px 16px 24px' : '48px 24px 32px',
+        textAlign: 'center' as const,
         opacity: hidden ? 0 : 1,
         maxHeight: hidden ? 0 : '2000px',
         overflow: 'hidden',
@@ -54,12 +55,14 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         borderRadius: 'var(--border-radius)',
         padding: isMobile ? '20px 16px' : '24px 28px',
         marginBottom: '24px',
+        textAlign: 'left',
       }}>
         <h2 style={{
           fontSize: '16px',
           fontWeight: 600,
           color: 'var(--main-color)',
           marginBottom: '16px',
+          textAlign: 'center',
         }}>
           {t('info.tipsTitle')}
         </h2>
@@ -81,12 +84,14 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         borderRadius: 'var(--border-radius)',
         padding: isMobile ? '20px 16px' : '24px 28px',
         marginBottom: '24px',
+        textAlign: 'left',
       }}>
         <h2 style={{
           fontSize: '16px',
           fontWeight: 600,
           color: 'var(--main-color)',
           marginBottom: '16px',
+          textAlign: 'center',
         }}>
           {t('info.benchmarkTitle')}
         </h2>
@@ -131,12 +136,14 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         backgroundColor: 'var(--sub-alt-color)',
         borderRadius: 'var(--border-radius)',
         padding: isMobile ? '20px 16px' : '24px 28px',
+        textAlign: 'left',
       }}>
         <h2 style={{
           fontSize: '16px',
           fontWeight: 600,
           color: 'var(--main-color)',
           marginBottom: '12px',
+          textAlign: 'center',
         }}>
           {t('info.howWpmTitle')}
         </h2>
