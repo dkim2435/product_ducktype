@@ -13,18 +13,19 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
     <section
       style={{
         width: '100%',
-        maxWidth: '700px',
-        margin: '0 auto',
-        marginTop: hidden ? 0 : '40vh',
+        display: hidden ? 'none' : 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
         padding: isMobile ? '32px 16px 24px' : '48px 24px 32px',
-        textAlign: 'center' as const,
-        opacity: hidden ? 0 : 1,
-        maxHeight: hidden ? 0 : '2000px',
-        overflow: 'hidden',
-        transition: 'opacity 0.3s ease, max-height 0.3s ease',
-        pointerEvents: hidden ? 'none' : 'auto',
       }}
     >
+      <div style={{
+        width: '100%',
+        maxWidth: '700px',
+        textAlign: 'center' as const,
+      }}>
       {/* Feature highlights */}
       <div style={{
         display: 'grid',
@@ -165,6 +166,7 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         }}>
           WPM = (correct characters / 5) / (time in minutes)
         </div>
+      </div>
       </div>
     </section>
   );
