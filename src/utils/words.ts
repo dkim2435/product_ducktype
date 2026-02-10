@@ -22,6 +22,21 @@ export async function loadWordList(language: string): Promise<string[]> {
       case 'ja':
         module = await import('../data/words-ja.json');
         break;
+      case 'es':
+        module = await import('../data/words-es.json');
+        break;
+      case 'fr':
+        module = await import('../data/words-fr.json');
+        break;
+      case 'de':
+        module = await import('../data/words-de.json');
+        break;
+      case 'pt':
+        module = await import('../data/words-pt.json');
+        break;
+      case 'ru':
+        module = await import('../data/words-ru.json');
+        break;
       default:
         module = await import('../data/words-en.json');
     }

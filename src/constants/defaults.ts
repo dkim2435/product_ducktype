@@ -27,6 +27,11 @@ export const WORD_OPTIONS = [10, 25, 50, 100];
 
 export const LANGUAGE_OPTIONS = [
   { value: 'en', label: 'English' },
+  { value: 'es', label: 'Español' },
+  { value: 'fr', label: 'Français' },
+  { value: 'de', label: 'Deutsch' },
+  { value: 'pt', label: 'Português' },
+  { value: 'ru', label: 'Русский' },
   { value: 'ko', label: '한국어' },
   { value: 'zh', label: '中文' },
   { value: 'ja', label: '日本語' },
