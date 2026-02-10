@@ -62,7 +62,7 @@ export async function generateResultImage(result: TestResult): Promise<Blob | nu
   // Branding
   ctx.fillStyle = subColor;
   ctx.font = '14px "Roboto Mono", monospace';
-  ctx.fillText('ducktype.io', 40, 380);
+  ctx.fillText('ducktype.xyz', 40, 380);
 
   return new Promise(resolve => {
     canvas.toBlob(blob => resolve(blob), 'image/png');

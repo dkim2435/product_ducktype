@@ -2,14 +2,152 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DuckType - Typing Test</title>
-    <meta name="description" content="DuckType - A minimalist typing test. Test your typing speed in English, Korean, Chinese, and Japanese." />
-    <meta property="og:title" content="DuckType - Typing Test" />
-    <meta property="og:description" content="Test your typing speed with DuckType. Supports English, Korean, Chinese, and Japanese." />
+
+    <!-- Primary Meta Tags -->
+    <title>DuckType - Free Online Typing Test | Check Your Typing Speed (WPM)</title>
+    <meta name="description" content="Test and improve your typing speed with DuckType. Free online typing test with WPM tracking, accuracy analysis, daily challenges, and typing lessons. Supports English, Korean, Chinese, and Japanese. No sign-up required." />
+    <meta name="keywords" content="typing test, typing speed test, WPM test, words per minute, typing practice, touch typing, keyboard test, free typing test, online typing test, 타이핑 테스트, タイピングテスト, 打字测试" />
+    <meta name="author" content="DuckType" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://ducktype.xyz/" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ducktype.xyz/" />
+    <meta property="og:title" content="DuckType - Free Online Typing Test | Check Your Typing Speed" />
+    <meta property="og:description" content="Test and improve your typing speed with DuckType. Free WPM test with accuracy analysis, daily challenges, typing lessons, and gamification. Supports 4 languages." />
+    <meta property="og:image" content="https://ducktype.xyz/og-image.svg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="DuckType - Free online typing speed test" />
+    <meta property="og:site_name" content="DuckType" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ko_KR" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DuckType - Free Online Typing Test | Check Your Typing Speed" />
+    <meta name="twitter:description" content="Test and improve your typing speed with DuckType. Free WPM test with accuracy analysis, daily challenges, and gamification." />
+    <meta name="twitter:image" content="https://ducktype.xyz/og-image.svg" />
+    <meta name="twitter:image:alt" content="DuckType - Free online typing speed test" />
+
+    <!-- Naver -->
+    <meta name="naver-site-verification" content="" />
+
+    <!-- Theme & PWA -->
     <meta name="theme-color" content="#1a1b2e" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="DuckType" />
+    <meta name="application-name" content="DuckType" />
+
+    <!-- Alternate language hints -->
+    <link rel="alternate" hreflang="en" href="https://ducktype.xyz/" />
+    <link rel="alternate" hreflang="ko" href="https://ducktype.xyz/" />
+    <link rel="alternate" hreflang="zh" href="https://ducktype.xyz/" />
+    <link rel="alternate" hreflang="ja" href="https://ducktype.xyz/" />
+    <link rel="alternate" hreflang="x-default" href="https://ducktype.xyz/" />
+
+    <!-- Structured Data: WebApplication (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "DuckType",
+      "url": "https://ducktype.xyz",
+      "description": "Free online typing test to measure and improve your typing speed (WPM). Features daily challenges, typing lessons, achievements, and keyboard heatmap analysis. Supports English, Korean, Chinese, and Japanese.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "softwareVersion": "1.0",
+      "author": {
+        "@type": "Organization",
+        "name": "DuckType",
+        "url": "https://ducktype.xyz"
+      },
+      "inLanguage": ["en", "ko", "zh", "ja"],
+      "keywords": "typing test, WPM, typing speed, typing practice, touch typing"
+    }
+    </script>
+
+    <!-- Structured Data: FAQPage for GEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a good typing speed (WPM)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The average typing speed is around 40 WPM (words per minute). A speed of 60-75 WPM is considered above average, 80-100 WPM is fast, and over 100 WPM is professional level. Touch typists who practice regularly often reach 80+ WPM."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is WPM (Words Per Minute) calculated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "WPM is calculated using the standard formula: (correct characters / 5) / (elapsed time in minutes). Each 'word' is standardized to 5 characters, including spaces, to ensure fair comparison across different languages and word lengths."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I improve my typing speed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Focus on accuracy first (aim for 95%+), use proper home row finger placement (ASDF JKL;), practice 10-15 minutes daily, avoid looking at the keyboard, and use all ten fingers. DuckType offers structured lessons from home row to full keyboard, plus weak key analysis to target your specific problem areas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is DuckType free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, DuckType is completely free and open source. No sign-up or account is required. All your progress, including test history, personal bests, achievements, and lesson progress, is saved locally on your device using your browser's localStorage."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What languages does DuckType support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DuckType supports 4 languages for typing tests: English, Korean (한국어), Chinese (中文), and Japanese (日本語). The user interface is also available in all 4 languages. Full IME (Input Method Editor) support is provided for CJK languages."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://ducktype.xyz/" },
+        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://ducktype.xyz/about" },
+        { "@type": "ListItem", "position": 3, "name": "Practice", "item": "https://ducktype.xyz/practice" },
+        { "@type": "ListItem", "position": 4, "name": "Daily Challenge", "item": "https://ducktype.xyz/daily-challenge" }
+      ]
+    }
+    </script>
+
+    <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-7280155441452276" />
 
     <!-- Google tag (gtag.js) -->
@@ -34,6 +172,12 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7280155441452276" crossorigin="anonymous"></script>
   </head>
   <body>
+    <noscript>
+      <div style="padding:40px;text-align:center;font-family:sans-serif;">
+        <h1>DuckType - Online Typing Test</h1>
+        <p>DuckType is a free online typing speed test supporting English, Korean, Chinese, and Japanese. Please enable JavaScript to use this application.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

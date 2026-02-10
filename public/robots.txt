@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow:
+
+# Naver
+User-agent: Yeti
+Allow: /
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://ducktype.xyz/sitemap.xml
