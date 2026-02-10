@@ -38,7 +38,9 @@
     "download": "Download image",
     "copied": "Copied!",
     "tryAgain": "Try again",
-    "moreOptions": "More options..."
+    "moreOptions": "More options...",
+    "weakKeys": "Weak keys in this test",
+    "practiceWeakKeys": "How about practicing these keys?"
   },
   "settings": {
     "title": "Settings",

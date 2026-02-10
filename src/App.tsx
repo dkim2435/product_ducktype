@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import type { TestState } from './types/test';
 import type { TestResult } from './types/stats';
 import type { Settings } from './types/settings';
-import type { LessonId } from './types/gamification';
+import type { LessonId, KeyStats } from './types/gamification';
+import { extractKeyStats } from './utils/keyAnalysis';
 import { useSettings } from './hooks/useSettings';
 import { useTheme } from './hooks/useTheme';
 import { useStats } from './hooks/useStats';
@@ -37,6 +38,7 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
   const [activeLessonId, setActiveLessonId] = useState<LessonId | null>(null);
+  const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
 
   useTheme(settings.theme);
   const { saveResult, getPersonalBest } = useStats();
@@ -76,6 +78,14 @@ function App() {
     setLastResult(result);
     setScreen('results');
 
+    // Extract weak keys from this test (any key with errors, min 1 attempt)
+    const testKeyStats = extractKeyStats(testState);
+    const weak = Object.values(testKeyStats)
+      .filter(s => s.errors > 0)
+      .sort((a, b) => b.errorRate - a.errorRate || b.errors - a.errors)
+      .slice(0, 8);
+    setLastWeakKeys(weak);
+
     // Process gamification
     gamification.processTestResult(
       result,
@@ -92,6 +102,13 @@ function App() {
     lastTestStateRef.current = testState;
     setLastResult(result);
     setScreen('results');
+
+    const testKeyStats = extractKeyStats(testState);
+    const weak = Object.values(testKeyStats)
+      .filter(s => s.errors > 0)
+      .sort((a, b) => b.errorRate - a.errorRate || b.errors - a.errors)
+      .slice(0, 8);
+    setLastWeakKeys(weak);
 
     // Save daily challenge result
     dailyChallenge.saveDailyChallengeResult(result.wpm, result.accuracy);
@@ -111,6 +128,13 @@ function App() {
     const result = saveResult(testState, settings);
     lastTestStateRef.current = testState;
     setLastResult(result);
+
+    const testKeyStats = extractKeyStats(testState);
+    const weak = Object.values(testKeyStats)
+      .filter(s => s.errors > 0)
+      .sort((a, b) => b.errorRate - a.errorRate || b.errors - a.errors)
+      .slice(0, 8);
+    setLastWeakKeys(weak);
 
     // Save lesson result
     lessons.saveLessonResult(lessonId, result.wpm, result.accuracy);
@@ -238,6 +262,8 @@ function App() {
             isCjk={isCjk}
             xpGain={gamification.lastXpGain}
             newAchievements={gamification.lastNewAchievements}
+            weakKeys={lastWeakKeys}
+            onNavigate={handleNavigate}
           />
         )}
 

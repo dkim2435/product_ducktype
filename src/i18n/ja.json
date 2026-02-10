@@ -38,7 +38,9 @@
     "download": "画像をダウンロード",
     "copied": "コピーしました！",
     "tryAgain": "もう一度",
-    "moreOptions": "その他..."
+    "moreOptions": "その他...",
+    "weakKeys": "このテストで苦手なキー",
+    "practiceWeakKeys": "これらのキーを練習してみませんか？"
   },
   "settings": {
     "title": "設定",

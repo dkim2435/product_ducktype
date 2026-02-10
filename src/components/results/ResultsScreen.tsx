@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { TestResult, PersonalBest } from '../../types/stats';
-import type { XpGain } from '../../types/gamification';
+import type { XpGain, KeyStats } from '../../types/gamification';
 import { StatCard } from './StatCard';
 import { WpmChart } from './WpmChart';
 import { ShareButton } from './ShareButton';
@@ -14,9 +14,11 @@ interface ResultsScreenProps {
   isCjk: boolean;
   xpGain?: XpGain | null;
   newAchievements?: string[];
+  weakKeys?: KeyStats[];
+  onNavigate?: (page: string) => void;
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate }: ResultsScreenProps) {
   const { t } = useTranslation();
 
   const isNewPb = personalBest && personalBest.wpm === result.wpm && personalBest.timestamp === result.timestamp;
@@ -115,6 +117,78 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       {newAchievements && newAchievements.length > 0 && (
         <div style={{ marginBottom: '16px' }}>
           <AchievementUnlock achievementIds={newAchievements} />
+        </div>
+      )}
+
+      {/* Weak Keys */}
+      {weakKeys && weakKeys.length > 0 && (
+        <div style={{
+          marginBottom: '24px',
+          padding: '16px 20px',
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            marginBottom: '12px',
+            fontSize: '13px',
+            color: 'var(--sub-color)',
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 9v4M12 17h.01" />
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            </svg>
+            {t('results.weakKeys')}
+          </div>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '8px',
+            marginBottom: '12px',
+          }}>
+            {weakKeys.map(k => (
+              <span key={k.key} style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px 10px',
+                borderRadius: '6px',
+                backgroundColor: 'var(--bg-color)',
+                border: '1px solid var(--error-color)',
+                fontSize: '13px',
+              }}>
+                <span style={{
+                  fontWeight: 700,
+                  color: 'var(--error-color)',
+                  fontFamily: 'monospace',
+                  textTransform: 'uppercase',
+                }}>
+                  {k.key}
+                </span>
+                <span style={{
+                  fontSize: '11px',
+                  color: 'var(--sub-color)',
+                }}>
+                  {k.errors}/{k.totalAttempts}
+                </span>
+              </span>
+            ))}
+          </div>
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('practice')}
+              style={{
+                fontSize: '12px',
+                color: 'var(--main-color)',
+                cursor: 'pointer',
+                padding: 0,
+              }}
+            >
+              {t('results.practiceWeakKeys')} →
+            </button>
+          )}
         </div>
       )}
 
