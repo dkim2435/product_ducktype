@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { TIME_OPTIONS, WORD_OPTIONS } from '../../constants/defaults';
 import type { Settings } from '../../types/settings';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 interface ModeSelectorProps {
   settings: Settings;
@@ -22,36 +23,43 @@ export function ModeSelector({
   disabled,
 }: ModeSelectorProps) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
 
   const btnStyle = (active: boolean): React.CSSProperties => ({
-    padding: '4px 12px',
+    padding: isMobile ? '10px 14px' : '4px 12px',
+    minHeight: isMobile ? '44px' : undefined,
     fontSize: 'var(--mode-selector-font)',
     color: active ? 'var(--main-color)' : 'var(--sub-color)',
     cursor: disabled ? 'default' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     transition: 'color 0.15s',
     fontFamily: 'inherit',
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
   });
 
   const separatorStyle: React.CSSProperties = {
     width: '2px',
     height: '16px',
-    backgroundColor: 'var(--sub-alt-color)',
+    backgroundColor: isMobile ? 'var(--sub-color)' : 'var(--sub-alt-color)',
     margin: '0 4px',
     alignSelf: 'center',
+    flexShrink: 0,
   };
 
   return (
     <div
+      className={isMobile ? 'hide-scrollbar' : undefined}
       style={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: isMobile ? 'flex-start' : 'center',
         gap: '2px',
         padding: '8px 16px',
         backgroundColor: 'var(--sub-alt-color)',
         borderRadius: 'var(--border-radius)',
-        flexWrap: 'wrap',
+        flexWrap: isMobile ? 'nowrap' : 'wrap',
+        overflowX: isMobile ? 'auto' : undefined,
       }}
     >
       {/* Punctuation & Numbers */}

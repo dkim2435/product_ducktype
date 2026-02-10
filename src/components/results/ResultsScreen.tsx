@@ -58,20 +58,60 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         <div style={{
           textAlign: 'center',
           marginBottom: '12px',
-          padding: '10px 20px',
+          padding: isMobile ? '16px' : '10px 20px',
           backgroundColor: 'var(--sub-alt-color)',
           borderRadius: 'var(--border-radius)',
           border: `1.5px solid ${result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)'}`,
         }}>
-          <span style={{
-            fontSize: '16px',
-            fontWeight: 700,
+          {isMobile ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginBottom: '4px' }}>
+                  {t('stats.wpm')}
+                </div>
+                <div style={{
+                  fontSize: '32px',
+                  fontWeight: 700,
+                  color: result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)',
+                }}>
+                  {result.wpm}
+                </div>
+              </div>
+              <span style={{ fontSize: '20px', color: 'var(--sub-color)', fontWeight: 300 }}>vs</span>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginBottom: '4px' }}>
+                  {t('challenge.beatFriend', { wpm: '' }).split('{{wpm}}')[0].trim() || 'Friend'}
+                </div>
+                <div style={{
+                  fontSize: '32px',
+                  fontWeight: 700,
+                  color: 'var(--sub-color)',
+                }}>
+                  {challengeWpm}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <span style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              color: result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)',
+            }}>
+              {result.wpm >= challengeWpm
+                ? t('challenge.won', { wpm: challengeWpm })
+                : t('challenge.lost', { wpm: challengeWpm })}
+            </span>
+          )}
+          <div style={{
+            marginTop: '8px',
+            fontSize: '14px',
+            fontWeight: 600,
             color: result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)',
           }}>
             {result.wpm >= challengeWpm
               ? t('challenge.won', { wpm: challengeWpm })
               : t('challenge.lost', { wpm: challengeWpm })}
-          </span>
+          </div>
         </div>
       )}
 

@@ -12,6 +12,7 @@ import { useGamification } from './hooks/useGamification';
 import { useToast } from './hooks/useToast';
 import { useDailyChallenge } from './hooks/useDailyChallenge';
 import { useLessons } from './hooks/useLessons';
+import { useIsMobile } from './hooks/useIsMobile';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ToastContainer } from './components/layout/ToastContainer';
@@ -40,7 +41,9 @@ function App() {
   const [activeLessonId, setActiveLessonId] = useState<LessonId | null>(null);
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
   const [challengeWpm, setChallengeWpm] = useState<number | null>(null);
+  const [isTypingActive, setIsTypingActive] = useState(false);
 
+  const isMobile = useIsMobile();
   useTheme(settings.theme);
   const { saveResult, getPersonalBest } = useStats();
   const { toasts, addToast, removeToast } = useToast();
@@ -227,6 +230,7 @@ function App() {
         onNavigate={handleNavigate}
         profile={gamification.profile}
         streak={gamification.streak}
+        hidden={isTypingActive}
       />
 
       <main style={{
@@ -273,29 +277,63 @@ function App() {
               )}
             </button>
             {challengeWpm && (
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                marginBottom: '16px',
-                backgroundColor: 'var(--sub-alt-color)',
-                border: '1.5px solid var(--main-color)',
-                borderRadius: 'var(--border-radius)',
-                fontSize: '14px',
-                color: 'var(--text-color)',
-              }}>
-                <span style={{ fontSize: '16px' }}>⚔️</span>
-                <span>
-                  {t('challenge.beatFriend', { wpm: challengeWpm })}
-                </span>
-              </div>
+              isMobile ? (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '16px 24px',
+                  marginBottom: '16px',
+                  backgroundColor: 'var(--sub-alt-color)',
+                  border: '2px solid var(--main-color)',
+                  borderRadius: 'var(--border-radius)',
+                  width: '100%',
+                  maxWidth: '340px',
+                }}>
+                  <span style={{ fontSize: '24px' }}>⚔️</span>
+                  <span style={{
+                    fontSize: '36px',
+                    fontWeight: 700,
+                    color: 'var(--main-color)',
+                    fontVariantNumeric: 'tabular-nums',
+                  }}>
+                    {challengeWpm} <span style={{ fontSize: '16px', fontWeight: 400, color: 'var(--sub-color)' }}>WPM</span>
+                  </span>
+                  <span style={{
+                    fontSize: '14px',
+                    color: 'var(--text-color)',
+                    textAlign: 'center',
+                  }}>
+                    {t('challenge.beatFriend', { wpm: challengeWpm })}
+                  </span>
+                </div>
+              ) : (
+                <div style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 18px',
+                  marginBottom: '16px',
+                  backgroundColor: 'var(--sub-alt-color)',
+                  border: '1.5px solid var(--main-color)',
+                  borderRadius: 'var(--border-radius)',
+                  fontSize: '14px',
+                  color: 'var(--text-color)',
+                }}>
+                  <span style={{ fontSize: '16px' }}>⚔️</span>
+                  <span>
+                    {t('challenge.beatFriend', { wpm: challengeWpm })}
+                  </span>
+                </div>
+              )
             )}
             <TypingTest
               key={`${settings.language}-${settings.mode}-${settings.timeLimit}-${settings.wordCount}-${settings.punctuation}-${settings.numbers}`}
               settings={settings}
               onSettingChange={handleSettingChange}
               onFinish={handleTestFinish}
+              onTypingStateChange={setIsTypingActive}
             />
           </>
         )}
@@ -375,7 +413,7 @@ function App() {
         {screen === 'terms' && <TermsOfService onBack={() => handleNavigate('test')} />}
       </main>
 
-      <Footer onNavigate={handleNavigate} />
+      <Footer onNavigate={handleNavigate} hidden={isTypingActive} />
 
       <SettingsModal
         settings={settings}

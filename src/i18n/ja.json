@@ -8,7 +8,9 @@
     "clickToFocus": "ここをクリックするかキーを押してフォーカス",
     "restart": "やり直す",
     "restartHint": "Tab + Enterでやり直し",
-    "nextTest": "次のテスト"
+    "nextTest": "次のテスト",
+    "tapToStart": "タップして開始",
+    "tapToResume": "タップして続ける"
   },
   "mode": {
     "time": "時間",

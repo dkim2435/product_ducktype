@@ -8,7 +8,9 @@
     "clickToFocus": "여기를 클릭하거나 아무 키나 눌러 포커스하세요",
     "restart": "다시 시작",
     "restartHint": "Tab + Enter로 다시 시작",
-    "nextTest": "다음 테스트"
+    "nextTest": "다음 테스트",
+    "tapToStart": "탭하여 시작",
+    "tapToResume": "탭하여 계속"
   },
   "mode": {
     "time": "시간",

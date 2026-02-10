@@ -8,7 +8,9 @@
     "clickToFocus": "Click here or press any key to focus",
     "restart": "Restart",
     "restartHint": "Tab + Enter to restart",
-    "nextTest": "Next test"
+    "nextTest": "Next test",
+    "tapToStart": "Tap to start",
+    "tapToResume": "Tap to continue"
   },
   "mode": {
     "time": "time",

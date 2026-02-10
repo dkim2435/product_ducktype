@@ -9,22 +9,29 @@ interface HeaderProps {
   onNavigate: (page: string) => void;
   profile?: PlayerProfile;
   streak?: StreakState;
+  hidden?: boolean;
 }
 
-export function Header({ onSettingsClick, onNavigate, profile, streak }: HeaderProps) {
+export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }: HeaderProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
   const iconSize = isMobile ? 22 : 18;
   const settingsIconSize = isMobile ? 22 : 20;
 
+  const mobileHidden = isMobile && hidden;
+
   return (
     <header style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: 'var(--header-padding)',
+      padding: mobileHidden ? '0 12px' : 'var(--header-padding)',
       flexShrink: 0,
+      maxHeight: mobileHidden ? 0 : '200px',
+      overflow: mobileHidden ? 'hidden' : undefined,
+      opacity: mobileHidden ? 0 : 1,
+      transition: 'max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease',
     }}>
       <div style={{
         display: 'flex',

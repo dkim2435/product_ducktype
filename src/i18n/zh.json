@@ -8,7 +8,9 @@
     "clickToFocus": "点击此处或按任意键聚焦",
     "restart": "重新开始",
     "restartHint": "Tab + Enter 重新开始",
-    "nextTest": "下一个测试"
+    "nextTest": "下一个测试",
+    "tapToStart": "点击开始",
+    "tapToResume": "点击继续"
   },
   "mode": {
     "time": "时间",
