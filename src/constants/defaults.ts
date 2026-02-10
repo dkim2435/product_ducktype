@@ -4,7 +4,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'ducktype-dark',
   language: 'en',
   mode: 'time',
-  timeLimit: 30,
+  timeLimit: 45,
   wordCount: 25,
   fontFamily: 'default',
   fontSize: 24,
@@ -22,7 +22,7 @@ export const DEFAULT_SETTINGS: Settings = {
   uiLanguage: 'en',
 };
 
-export const TIME_OPTIONS = [15, 30, 60, 120];
+export const TIME_OPTIONS = [15, 30, 45, 60, 120];
 export const WORD_OPTIONS = [10, 25, 50, 100];
 
 export const LANGUAGE_OPTIONS = [
