@@ -81,7 +81,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }:
         </span>
       </div>
 
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '4px' : '12px' }}>
         {/* XP Bar - hidden on mobile */}
         {profile && !isMobile && (
           <div

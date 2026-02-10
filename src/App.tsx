@@ -224,6 +224,8 @@ function App() {
       display: 'flex',
       flexDirection: 'column',
       minHeight: '100vh',
+      maxWidth: '100vw',
+      overflowX: 'hidden',
     }}>
       <Header
         onSettingsClick={() => setShowSettings(true)}
