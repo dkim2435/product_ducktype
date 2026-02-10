@@ -26,6 +26,45 @@
   80% { transform: translateX(2px); }
 }
 
+/* Gamification Animations */
+
+@keyframes xpFill {
+  from { width: 0%; }
+}
+
+@keyframes xpCountUp {
+  from { opacity: 0; transform: scale(0.5); }
+  50% { transform: scale(1.1); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes achievementPop {
+  0% { opacity: 0; transform: scale(0.3) rotate(-10deg); }
+  50% { transform: scale(1.1) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastSlideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes levelUpGlow {
+  0%, 100% { box-shadow: 0 0 5px var(--main-color); }
+  50% { box-shadow: 0 0 20px var(--main-color), 0 0 40px var(--main-color); }
+}
+
+@keyframes streakFlame {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1) rotate(-5deg); }
+  75% { transform: scale(1.1) rotate(5deg); }
+}
+
 .caret-blink {
   animation: caretBlink 1s ease-in-out infinite;
 }
@@ -36,4 +75,29 @@
 
 .slide-up {
   animation: slideUp 0.4s ease-out;
+}
+
+.xp-fill {
+  animation: xpFill 0.8s ease-out;
+}
+
+.xp-count-up {
+  animation: xpCountUp 0.5s ease-out;
+}
+
+.achievement-pop {
+  animation: achievementPop 0.5s ease-out;
+}
+
+.toast-slide-in {
+  animation: toastSlideIn 0.3s ease-out;
+}
+
+.level-up-glow {
+  animation: levelUpGlow 1.5s ease-in-out 3;
+}
+
+.streak-flame {
+  animation: streakFlame 0.6s ease-in-out infinite;
+  display: inline-block;
 }

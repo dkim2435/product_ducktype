@@ -73,5 +73,74 @@
     "ko": "Korean",
     "zh": "Chinese",
     "ja": "Japanese"
+  },
+  "gamification": {
+    "xpBase": "base",
+    "xpAccuracy": "accuracy",
+    "xpLength": "length",
+    "xpStreak": "streak",
+    "xpDaily": "daily",
+    "achievementUnlocked": "Achievement Unlocked!",
+    "level": "Level",
+    "rank": "Rank",
+    "totalXp": "Total XP",
+    "testsCompleted": "Tests Completed",
+    "totalTime": "Total Time",
+    "joined": "Joined",
+    "streak": "Streak",
+    "currentStreak": "Current Streak",
+    "longestStreak": "Longest Streak",
+    "days": "days",
+    "noStreak": "No streak yet"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "all": "All",
+    "speed": "Speed",
+    "accuracy": "Accuracy",
+    "consistency": "Consistency",
+    "volume": "Volume",
+    "streak": "Streak",
+    "special": "Special",
+    "locked": "Locked",
+    "unlocked": "Unlocked"
+  },
+  "daily": {
+    "title": "Daily Challenge",
+    "description": "A new challenge every day. 60 seconds, English, with punctuation.",
+    "start": "Start Challenge",
+    "completed": "Challenge Complete!",
+    "comeBack": "Come back tomorrow for a new challenge!",
+    "yourResult": "Your Result",
+    "streak": "Daily Streak",
+    "recentActivity": "Recent Activity"
+  },
+  "practice": {
+    "title": "Practice",
+    "lessons": "Lessons",
+    "weakKeys": "Weak Keys Practice",
+    "weakKeysDesc": "Practice your weakest keys based on your typing data",
+    "noData": "Complete some tests first to identify your weak keys",
+    "locked": "Complete previous lesson to unlock",
+    "bestWpm": "Best WPM",
+    "attempts": "Attempts",
+    "startLesson": "Start",
+    "nextLesson": "Next Lesson",
+    "targetKeys": "Target Keys",
+    "lessonComplete": "Lesson Complete!",
+    "backToLessons": "Back to Lessons"
+  },
+  "profile": {
+    "title": "Profile",
+    "keyboardHeatmap": "Keyboard Heatmap",
+    "heatmapDesc": "Error rate by key (green = good, red = needs practice)",
+    "streakCalendar": "Activity Calendar",
+    "noKeyData": "Complete some tests to see your keyboard heatmap"
+  },
+  "nav": {
+    "profile": "Profile",
+    "achievements": "Achievements",
+    "daily": "Daily",
+    "practice": "Practice"
   }
 }

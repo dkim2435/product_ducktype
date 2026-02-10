@@ -73,5 +73,74 @@
     "ko": "韓国語",
     "zh": "中国語",
     "ja": "日本語"
+  },
+  "gamification": {
+    "xpBase": "基本",
+    "xpAccuracy": "正確率",
+    "xpLength": "時間",
+    "xpStreak": "連続",
+    "xpDaily": "デイリー",
+    "achievementUnlocked": "実績解除！",
+    "level": "レベル",
+    "rank": "ランク",
+    "totalXp": "総XP",
+    "testsCompleted": "完了テスト数",
+    "totalTime": "総時間",
+    "joined": "登録日",
+    "streak": "連続",
+    "currentStreak": "現在の連続",
+    "longestStreak": "最長連続",
+    "days": "日",
+    "noStreak": "まだ連続記録がありません"
+  },
+  "achievements": {
+    "title": "実績",
+    "all": "すべて",
+    "speed": "速度",
+    "accuracy": "正確率",
+    "consistency": "一貫性",
+    "volume": "回数",
+    "streak": "連続",
+    "special": "特別",
+    "locked": "未解除",
+    "unlocked": "解除済み"
+  },
+  "daily": {
+    "title": "デイリーチャレンジ",
+    "description": "毎日新しいチャレンジ。60秒、英語、句読点あり。",
+    "start": "チャレンジ開始",
+    "completed": "チャレンジ完了！",
+    "comeBack": "明日また新しいチャレンジが待っています！",
+    "yourResult": "あなたの結果",
+    "streak": "デイリー連続",
+    "recentActivity": "最近の活動"
+  },
+  "practice": {
+    "title": "練習",
+    "lessons": "レッスン",
+    "weakKeys": "弱いキーの練習",
+    "weakKeysDesc": "タイピングデータに基づく弱いキーの練習",
+    "noData": "弱いキーを分析するにはまずテストを完了してください",
+    "locked": "前のレッスンを完了するとロック解除",
+    "bestWpm": "最高WPM",
+    "attempts": "試行回数",
+    "startLesson": "開始",
+    "nextLesson": "次のレッスン",
+    "targetKeys": "対象キー",
+    "lessonComplete": "レッスン完了！",
+    "backToLessons": "レッスン一覧へ"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "keyboardHeatmap": "キーボードヒートマップ",
+    "heatmapDesc": "キー別エラー率（緑=良好、赤=練習が必要）",
+    "streakCalendar": "アクティビティカレンダー",
+    "noKeyData": "キーボードヒートマップを表示するにはテストを完了してください"
+  },
+  "nav": {
+    "profile": "プロフィール",
+    "achievements": "実績",
+    "daily": "デイリー",
+    "practice": "練習"
   }
 }

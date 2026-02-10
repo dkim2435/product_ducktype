@@ -73,5 +73,74 @@
     "ko": "韩语",
     "zh": "中文",
     "ja": "日语"
+  },
+  "gamification": {
+    "xpBase": "基础",
+    "xpAccuracy": "准确率",
+    "xpLength": "时长",
+    "xpStreak": "连续",
+    "xpDaily": "每日",
+    "achievementUnlocked": "成就解锁！",
+    "level": "等级",
+    "rank": "段位",
+    "totalXp": "总经验",
+    "testsCompleted": "完成测试",
+    "totalTime": "总时间",
+    "joined": "加入日期",
+    "streak": "连续",
+    "currentStreak": "当前连续",
+    "longestStreak": "最长连续",
+    "days": "天",
+    "noStreak": "还没有连续记录"
+  },
+  "achievements": {
+    "title": "成就",
+    "all": "全部",
+    "speed": "速度",
+    "accuracy": "准确率",
+    "consistency": "一致性",
+    "volume": "次数",
+    "streak": "连续",
+    "special": "特殊",
+    "locked": "未解锁",
+    "unlocked": "已解锁"
+  },
+  "daily": {
+    "title": "每日挑战",
+    "description": "每天全新挑战。60秒，英语，含标点。",
+    "start": "开始挑战",
+    "completed": "挑战完成！",
+    "comeBack": "明天再来迎接新挑战！",
+    "yourResult": "你的成绩",
+    "streak": "每日连续",
+    "recentActivity": "近期活动"
+  },
+  "practice": {
+    "title": "练习",
+    "lessons": "课程",
+    "weakKeys": "弱键练习",
+    "weakKeysDesc": "根据打字数据练习最薄弱的按键",
+    "noData": "先完成一些测试来分析你的弱键",
+    "locked": "完成上一课程后解锁",
+    "bestWpm": "最佳WPM",
+    "attempts": "尝试次数",
+    "startLesson": "开始",
+    "nextLesson": "下一课",
+    "targetKeys": "目标按键",
+    "lessonComplete": "课程完成！",
+    "backToLessons": "返回课程列表"
+  },
+  "profile": {
+    "title": "个人资料",
+    "keyboardHeatmap": "键盘热力图",
+    "heatmapDesc": "按键错误率（绿色=好，红色=需要练习）",
+    "streakCalendar": "活动日历",
+    "noKeyData": "完成一些测试后查看键盘热力图"
+  },
+  "nav": {
+    "profile": "资料",
+    "achievements": "成就",
+    "daily": "每日",
+    "practice": "练习"
   }
 }

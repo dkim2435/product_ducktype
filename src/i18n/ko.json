@@ -73,5 +73,74 @@
     "ko": "한국어",
     "zh": "중국어",
     "ja": "일본어"
+  },
+  "gamification": {
+    "xpBase": "기본",
+    "xpAccuracy": "정확도",
+    "xpLength": "길이",
+    "xpStreak": "스트릭",
+    "xpDaily": "일일",
+    "achievementUnlocked": "업적 달성!",
+    "level": "레벨",
+    "rank": "랭크",
+    "totalXp": "총 XP",
+    "testsCompleted": "완료한 테스트",
+    "totalTime": "총 시간",
+    "joined": "가입일",
+    "streak": "스트릭",
+    "currentStreak": "현재 스트릭",
+    "longestStreak": "최장 스트릭",
+    "days": "일",
+    "noStreak": "아직 스트릭이 없습니다"
+  },
+  "achievements": {
+    "title": "업적",
+    "all": "전체",
+    "speed": "속도",
+    "accuracy": "정확도",
+    "consistency": "일관성",
+    "volume": "횟수",
+    "streak": "스트릭",
+    "special": "특별",
+    "locked": "잠김",
+    "unlocked": "해금됨"
+  },
+  "daily": {
+    "title": "일일 챌린지",
+    "description": "매일 새로운 챌린지. 60초, 영어, 구두점 포함.",
+    "start": "챌린지 시작",
+    "completed": "챌린지 완료!",
+    "comeBack": "내일 새로운 챌린지가 기다립니다!",
+    "yourResult": "결과",
+    "streak": "일일 스트릭",
+    "recentActivity": "최근 활동"
+  },
+  "practice": {
+    "title": "연습",
+    "lessons": "레슨",
+    "weakKeys": "약한 키 연습",
+    "weakKeysDesc": "타이핑 데이터 기반 약한 키 연습",
+    "noData": "약한 키를 분석하려면 먼저 테스트를 완료하세요",
+    "locked": "이전 레슨을 완료하면 잠금 해제됩니다",
+    "bestWpm": "최고 WPM",
+    "attempts": "시도 횟수",
+    "startLesson": "시작",
+    "nextLesson": "다음 레슨",
+    "targetKeys": "타겟 키",
+    "lessonComplete": "레슨 완료!",
+    "backToLessons": "레슨 목록으로"
+  },
+  "profile": {
+    "title": "프로필",
+    "keyboardHeatmap": "키보드 히트맵",
+    "heatmapDesc": "키별 오타율 (녹색 = 좋음, 빨강 = 연습 필요)",
+    "streakCalendar": "활동 캘린더",
+    "noKeyData": "키보드 히트맵을 보려면 테스트를 완료하세요"
+  },
+  "nav": {
+    "profile": "프로필",
+    "achievements": "업적",
+    "daily": "일일",
+    "practice": "연습"
   }
 }

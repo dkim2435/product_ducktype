@@ -41,13 +41,14 @@ function createInitialState(words: string[]): TestState {
 interface UseTypingTestOptions {
   settings: Settings;
   onFinish?: (state: TestState) => void;
+  customWords?: string[];
 }
 
-export function useTypingTest({ settings, onFinish }: UseTypingTestOptions) {
+export function useTypingTest({ settings, onFinish, customWords }: UseTypingTestOptions) {
   const isTimeMode = settings.mode === 'time';
   const wordCount = isTimeMode ? 100 : settings.wordCount;
   const [words, setWords] = useState<string[]>(() =>
-    generateWords(settings.language, wordCount, {
+    customWords || generateWords(settings.language, wordCount, {
       punctuation: settings.punctuation,
       numbers: settings.numbers,
     })

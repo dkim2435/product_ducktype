@@ -1,17 +1,22 @@
 import { useTranslation } from 'react-i18next';
 import type { TestResult, PersonalBest } from '../../types/stats';
+import type { XpGain } from '../../types/gamification';
 import { StatCard } from './StatCard';
 import { WpmChart } from './WpmChart';
 import { ShareButton } from './ShareButton';
+import { XpGainDisplay } from './XpGainDisplay';
+import { AchievementUnlock } from './AchievementUnlock';
 
 interface ResultsScreenProps {
   result: TestResult;
   personalBest: PersonalBest | null;
   onRestart: () => void;
   isCjk: boolean;
+  xpGain?: XpGain | null;
+  newAchievements?: string[];
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements }: ResultsScreenProps) {
   const { t } = useTranslation();
 
   const isNewPb = personalBest && personalBest.wpm === result.wpm && personalBest.timestamp === result.timestamp;
@@ -98,6 +103,20 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk }: Result
         <span style={{ color: 'var(--error-extra-color)' }}>{result.extraChars}</span>/
         <span>{result.missedChars}</span>
       </div>
+
+      {/* XP Gain Display */}
+      {xpGain && (
+        <div style={{ marginBottom: '16px' }}>
+          <XpGainDisplay xpGain={xpGain} />
+        </div>
+      )}
+
+      {/* Achievement Unlocks */}
+      {newAchievements && newAchievements.length > 0 && (
+        <div style={{ marginBottom: '16px' }}>
+          <AchievementUnlock achievementIds={newAchievements} />
+        </div>
+      )}
 
       {/* Actions */}
       <div style={{

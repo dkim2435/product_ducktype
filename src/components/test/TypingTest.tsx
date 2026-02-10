@@ -18,9 +18,11 @@ interface TypingTestProps {
   settings: Settings;
   onSettingChange: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
   onFinish: (state: TestState) => void;
+  customWords?: string[];
+  hideModeSwitcher?: boolean;
 }
 
-export function TypingTest({ settings, onSettingChange, onFinish }: TypingTestProps) {
+export function TypingTest({ settings, onSettingChange, onFinish, customWords, hideModeSwitcher }: TypingTestProps) {
   const { t } = useTranslation();
   const [isFocused, setIsFocused] = useState(true);
   const [liveWpm, setLiveWpm] = useState(0);
@@ -40,6 +42,7 @@ export function TypingTest({ settings, onSettingChange, onFinish }: TypingTestPr
   } = useTypingTest({
     settings,
     onFinish,
+    customWords,
   });
 
   const { playClick, playError } = useSound({
@@ -193,40 +196,44 @@ export function TypingTest({ settings, onSettingChange, onFinish }: TypingTestPr
   return (
     <div style={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
       {/* Mode selector - fades out while typing (Monkeytype) */}
-      <div style={{
-        marginBottom: '24px',
-        opacity: showControls ? 1 : 0,
-        pointerEvents: showControls ? 'auto' : 'none',
-        transition: 'opacity 0.25s ease',
-      }}>
-        <ModeSelector
-          settings={settings}
-          onModeChange={(mode) => { onSettingChange('mode', mode); handleRestart(); }}
-          onTimeLimitChange={(time) => { onSettingChange('timeLimit', time); handleRestart(); }}
-          onWordCountChange={(count) => { onSettingChange('wordCount', count); handleRestart(); }}
-          onPunctuationToggle={() => { onSettingChange('punctuation', !settings.punctuation); handleRestart(); }}
-          onNumbersToggle={() => { onSettingChange('numbers', !settings.numbers); handleRestart(); }}
-          disabled={false}
-        />
-      </div>
+      {!hideModeSwitcher && (
+        <div style={{
+          marginBottom: '24px',
+          opacity: showControls ? 1 : 0,
+          pointerEvents: showControls ? 'auto' : 'none',
+          transition: 'opacity 0.25s ease',
+        }}>
+          <ModeSelector
+            settings={settings}
+            onModeChange={(mode) => { onSettingChange('mode', mode); handleRestart(); }}
+            onTimeLimitChange={(time) => { onSettingChange('timeLimit', time); handleRestart(); }}
+            onWordCountChange={(count) => { onSettingChange('wordCount', count); handleRestart(); }}
+            onPunctuationToggle={() => { onSettingChange('punctuation', !settings.punctuation); handleRestart(); }}
+            onNumbersToggle={() => { onSettingChange('numbers', !settings.numbers); handleRestart(); }}
+            disabled={false}
+          />
+        </div>
+      )}
 
       {/* Language selector - fades out */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '8px',
-        opacity: showControls ? 1 : 0,
-        pointerEvents: showControls ? 'auto' : 'none',
-        transition: 'opacity 0.25s ease',
-        minHeight: '32px',
-      }}>
-        <LanguageSelector
-          currentLanguage={settings.language}
-          onChange={(lang) => { onSettingChange('language', lang); }}
-          disabled={false}
-        />
-      </div>
+      {!hideModeSwitcher && (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '8px',
+          opacity: showControls ? 1 : 0,
+          pointerEvents: showControls ? 'auto' : 'none',
+          transition: 'opacity 0.25s ease',
+          minHeight: '32px',
+        }}>
+          <LanguageSelector
+            currentLanguage={settings.language}
+            onChange={(lang) => { onSettingChange('language', lang); }}
+            disabled={false}
+          />
+        </div>
+      )}
 
       {/* Live counter - Monkeytype style: single number above words */}
       <div style={{
