@@ -101,7 +101,8 @@ export function ShareButton({ result }: ShareButtonProps) {
     setMenuOpen(false);
   };
 
-  const handleKakao = () => {
+  const handleKakao = async () => {
+    // Try Kakao SDK first
     const w = window as typeof window & { Kakao?: { isInitialized: () => boolean; Share: { sendDefault: (params: Record<string, unknown>) => void } } };
     if (w.Kakao && w.Kakao.isInitialized()) {
       w.Kakao.Share.sendDefault({
@@ -119,9 +120,31 @@ export function ShareButton({ result }: ShareButtonProps) {
           },
         ],
       });
-    } else {
-      // Fallback: open Kakao share URL scheme or copy text
-      handleCopyLink();
+      setMenuOpen(false);
+      return;
+    }
+    // Fallback: use native share sheet (shows KakaoTalk on mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `DuckType - ${result.wpm} WPM`,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch {
+        // user cancelled
+      }
+      setMenuOpen(false);
+      return;
+    }
+    // Last resort: copy link with feedback
+    const textWithLink = `${shareText}\n${shareUrl}`;
+    try {
+      await navigator.clipboard.writeText(textWithLink);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch {
+      // ignore
     }
     setMenuOpen(false);
   };
