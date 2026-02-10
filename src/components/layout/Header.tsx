@@ -61,26 +61,42 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden }:
           <circle cx="38" cy="36" r="3" fill="#ff8c42" opacity="0.3" />
           <circle cx="62" cy="36" r="3" fill="#ff8c42" opacity="0.3" />
         </svg>
-        <span style={{
-          fontSize: isMobile ? '18px' : '22px',
-          fontWeight: 700,
-          color: 'var(--main-color)',
-          letterSpacing: '0.5px',
-        }}>
-          duck
-          <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>type</span>
-          <span style={{ color: 'var(--main-color)' }}>.</span>
-          <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>xyz</span>
-          <sup style={{
-            fontSize: '9px',
-            color: '#4caf50',
-            fontWeight: 500,
-            opacity: 0.85,
-            marginLeft: '2px',
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <span style={{
+            fontSize: isMobile ? '16px' : '22px',
+            fontWeight: 700,
+            color: 'var(--main-color)',
+            letterSpacing: '0.5px',
+            lineHeight: 1,
           }}>
-            v{__APP_VERSION__}
-          </sup>
-        </span>
+            duck
+            <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>type</span>
+            <span style={{ color: 'var(--main-color)' }}>.</span>
+            <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>xyz</span>
+            {!isMobile && (
+              <sup style={{
+                fontSize: '9px',
+                color: '#4caf50',
+                fontWeight: 500,
+                opacity: 0.85,
+                marginLeft: '2px',
+              }}>
+                v{__APP_VERSION__}
+              </sup>
+            )}
+          </span>
+          {isMobile && (
+            <span style={{
+              fontSize: '9px',
+              color: '#4caf50',
+              fontWeight: 500,
+              opacity: 0.85,
+              marginTop: '2px',
+            }}>
+              v{__APP_VERSION__}
+            </span>
+          )}
+        </div>
       </div>
 
       <nav style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '4px' : '12px' }}>
