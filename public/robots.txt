@@ -2,10 +2,6 @@ User-agent: *
 Allow: /
 Disallow:
 
-# Naver
-User-agent: Yeti
-Allow: /
-
 # Google
 User-agent: Googlebot
 Allow: /
