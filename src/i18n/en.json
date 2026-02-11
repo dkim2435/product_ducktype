@@ -296,10 +296,11 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
-    "v230": {
-      "title": "What's New in v2.3.0",
-      "item1": "Exclusive Games — Some arcade games now require login. It's free!",
-      "item2": "Feature Guide — First-time visitors get a tour of all DuckType features."
+    "v240": {
+      "title": "What's New in v2.4.0",
+      "item1": "Arcade Upgrades — HOT & NEW badges, plus a catchy tagline to get you playing!",
+      "item2": "Login-Only Games — Some games now require a free account to play.",
+      "item3": "Feature Guide — First-time visitors get a tour of everything DuckType offers."
     },
     "v220": {
       "title": "What's New in v2.2.0",
