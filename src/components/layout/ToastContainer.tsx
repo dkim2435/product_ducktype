@@ -15,14 +15,12 @@ export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   return (
     <div style={{
       position: 'fixed',
-      bottom: '24px',
-      ...(isMobile
-        ? { left: '12px', right: '12px' }
-        : { right: '24px' }
-      ),
+      top: '70px',
+      left: '50%',
+      transform: 'translateX(-50%)',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: isMobile ? 'center' : 'flex-end',
+      alignItems: 'center',
       gap: '8px',
       zIndex: 1000,
       pointerEvents: 'none',
