@@ -123,6 +123,10 @@ export function LessonTest({
       width: '100%',
       maxWidth: '900px',
       margin: '0 auto',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      minHeight: 'calc(100vh - 240px)',
     }}>
       {/* Lesson header */}
       <div style={{

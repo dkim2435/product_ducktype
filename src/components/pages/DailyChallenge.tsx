@@ -49,6 +49,7 @@ export function DailyChallenge({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        minHeight: 'calc(100vh - 240px)',
       }}>
         <TypingTest
           key="daily-challenge"
