@@ -36,6 +36,7 @@ import { Leaderboard } from './components/pages/Leaderboard';
 import { Arcade } from './components/pages/Arcade';
 import { DuckHuntGame } from './components/arcade/DuckHuntGame';
 import { DuckRaceGame } from './components/arcade/DuckRaceGame';
+import { AdventurePage } from './components/adventure/AdventurePage';
 import { WhatsNewModal } from './components/layout/WhatsNewModal';
 import { OnboardingModal } from './components/layout/OnboardingModal';
 import { TypingInfo } from './components/content/TypingInfo';
@@ -46,7 +47,7 @@ import type { DuckRaceHighScore, DuckRaceResult } from './types/duckRace';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard'
-  | 'arcade' | 'duck-hunt' | 'duck-race';
+  | 'arcade' | 'duck-hunt' | 'duck-race' | 'adventure';
 
 interface AppContentProps {
   user: User | null;
@@ -404,6 +405,38 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
               width: '100%',
             }}>
             <button
+              onClick={() => handleNavigate('adventure')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '8px 18px',
+                marginBottom: '12px',
+                border: '2px solid var(--main-color)',
+                borderRadius: '999px',
+                background: 'transparent',
+                color: 'var(--main-color)',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'opacity 0.15s, background-color 0.15s',
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>⚔️</span>
+              Adventure
+              <span style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                backgroundColor: 'var(--main-color)',
+                color: 'var(--bg-color)',
+                padding: '1px 6px',
+                borderRadius: '999px',
+                letterSpacing: '0.5px',
+              }}>
+                NEW
+              </span>
+            </button>
+            <button
               onClick={() => handleNavigate('daily-challenge')}
               style={{
                 display: 'inline-flex',
@@ -625,6 +658,17 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             isLoggedIn={!!user}
             isSupabaseConfigured={isSupabaseConfigured}
             onLoginClick={handleLoginClick}
+          />
+        )}
+
+        {screen === 'adventure' && (
+          <AdventurePage
+            settings={settings}
+            onBack={() => handleNavigate('test')}
+            addXp={gamification.addXp}
+            addToast={addToast}
+            unlockAchievements={gamification.unlockAchievements}
+            triggerSync={triggerSync}
           />
         )}
 

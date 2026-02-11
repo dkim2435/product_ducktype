@@ -44,6 +44,13 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { id: 'level-100', name: 'Max Level', description: 'Reach level 100', icon: '💫', category: 'special' },
   { id: 'all-lessons', name: 'Graduate', description: 'Complete all lessons', icon: '🎓', category: 'special' },
   { id: 'first-share', name: 'Social Butterfly', description: 'Share your results for the first time', icon: '📢', category: 'special' },
+
+  // Adventure
+  { id: 'adventure-first-clear', name: 'Brave Duck', description: 'Clear your first adventure stage', icon: '⚔️', category: 'special' },
+  { id: 'adventure-world-1', name: 'Village Hero', description: 'Complete World 1: Duck Village', icon: '🏰', category: 'special' },
+  { id: 'adventure-boss-slayer', name: 'Boss Slayer', description: 'Defeat the Shadow Wolf', icon: '🐺', category: 'special' },
+  { id: 'adventure-perfect-stage', name: 'Three Stars', description: 'Earn 3 stars on any adventure stage', icon: '⭐', category: 'special' },
+  { id: 'adventure-combo-master', name: 'Combo Master', description: 'Reach a 15-hit combo in adventure', icon: '💥', category: 'special' },
 ];
 
 export function getAchievementDef(id: string): AchievementDef | undefined {

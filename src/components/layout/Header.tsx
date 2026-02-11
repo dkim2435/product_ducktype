@@ -316,6 +316,38 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           </button>
 
           <button
+            onClick={() => onNavigate('adventure')}
+            style={{
+              padding: 'var(--nav-icon-padding)',
+              color: 'var(--sub-color)',
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+            }}
+            title={t('nav.adventure')}
+          >
+            <sup style={{
+              position: 'absolute',
+              top: isMobile ? -4 : -3,
+              right: isMobile ? -8 : -6,
+              fontSize: '9px',
+              fontWeight: 700,
+              color: '#ff5722',
+              letterSpacing: '0.3px',
+              pointerEvents: 'none',
+            }}>
+              NEW
+            </sup>
+            {/* Sword icon */}
+            <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14.5 17.5L3 6V3h3l11.5 11.5" />
+              <path d="M13 19l6-6" />
+              <path d="M16 16l4 4" />
+              <path d="M19 21l2-2" />
+            </svg>
+          </button>
+
+          <button
             onClick={() => onNavigate('arcade')}
             style={{
               padding: 'var(--nav-icon-padding)',

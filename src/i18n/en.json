@@ -171,7 +171,8 @@
     "achievements": "Achievements",
     "daily": "Daily",
     "practice": "Practice",
-    "arcade": "Arcade"
+    "arcade": "Arcade",
+    "adventure": "Adventure"
   },
   "arcade": {
     "title": "Arcade",
@@ -297,6 +298,12 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v200": {
+      "title": "What's New in v2.0.0",
+      "item1": "Adventure Mode — A typing RPG! Defend Duck Village from wolves by typing words to attack. 5 stages with a boss battle!",
+      "item2": "New Achievements — 5 new adventure-related achievements to unlock.",
+      "item3": "World Map — Navigate through stages, earn stars, and track your progress."
+    },
     "v252": {
       "title": "What's New in v2.5.2",
       "item1": "Unique Usernames — Usernames are now unique. No more duplicates on the leaderboard!",
@@ -325,6 +332,29 @@
       "item1": "Duck Race — Race against AI ducks! Type fast to swim across the pond.",
       "item2": "What's New — Now you can see what changed in each update (like this!)."
     }
+  },
+  "adventure": {
+    "back": "Back",
+    "worldName": "Duck Village",
+    "worldDesc": "Wolves are invading the duck village! Defend your home with the power of typing.",
+    "player": "Player",
+    "fight": "Fight!",
+    "wave": "Wave",
+    "waveClear": "Wave Clear!",
+    "waitingForWords": "Get ready...",
+    "typeToAttack": "type to attack...",
+    "victory": "Victory!",
+    "cleared": "cleared!",
+    "defeat": "Defeat",
+    "defeatMsg": "The duck warrior has fallen... Try again!",
+    "wpm": "WPM",
+    "accuracy": "Accuracy",
+    "maxCombo": "Max Combo",
+    "hpLeft": "HP Left",
+    "time": "Time",
+    "toMap": "World Map",
+    "retry": "Retry",
+    "nextStage": "Next Stage"
   },
   "duckRace": {
     "title": "Duck Race",

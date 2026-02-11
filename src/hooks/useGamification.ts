@@ -256,6 +256,37 @@ export function useGamification() {
     setItem(PROFILE_KEY, newProfile);
   }, [profile]);
 
+  const unlockAchievements = useCallback((
+    ids: string[],
+    addToast: (toast: Omit<ToastNotification, 'id'>) => void,
+  ) => {
+    const unlockedIds = new Set(achievements.unlocked.map(a => a.id));
+    const newIds = ids.filter(id => !unlockedIds.has(id));
+    if (newIds.length === 0) return;
+
+    const newAchievementsState: AchievementsState = {
+      unlocked: [
+        ...achievements.unlocked,
+        ...newIds.map(id => ({ id, unlockedAt: Date.now() })),
+      ],
+    };
+
+    setAchievements(newAchievementsState);
+    setItem(ACHIEVEMENTS_KEY, newAchievementsState);
+
+    for (const achId of newIds) {
+      const def = getAchievementDef(achId);
+      if (def) {
+        addToast({
+          type: 'achievement',
+          title: 'Achievement Unlocked!',
+          message: `${def.icon} ${def.name}`,
+          icon: def.icon,
+        });
+      }
+    }
+  }, [achievements]);
+
   return {
     profile,
     achievements,
@@ -266,5 +297,6 @@ export function useGamification() {
     processTestResult,
     awardShareBonus,
     addXp,
+    unlockAchievements,
   };
 }

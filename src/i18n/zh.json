@@ -171,7 +171,8 @@
     "achievements": "成就",
     "daily": "每日",
     "practice": "练习",
-    "arcade": "街机"
+    "arcade": "街机",
+    "adventure": "冒险"
   },
   "arcade": {
     "title": "街机",
@@ -297,6 +298,12 @@
   "whatsNew": {
     "title": "更新内容",
     "gotIt": "知道了!",
+    "v200": {
+      "title": "v2.0.0 更新",
+      "item1": "冒险模式 — 打字RPG！输入单词攻击狼群，保卫鸭子村庄。包含Boss战的5个关卡！",
+      "item2": "新成就 — 5个与冒险相关的新成就等你解锁。",
+      "item3": "世界地图 — 探索关卡，收集星星，追踪你的进度。"
+    },
     "v252": {
       "title": "v2.5.2 更新",
       "item1": "用户名唯一性 — 用户名现在是唯一的，排行榜上不会再有重复名称！",
@@ -352,5 +359,28 @@
     "tutorialGhostsDesc": "每只幽灵鸭子都有自己的打字速度和个性。有些起步慢，有些最后冲刺。选择你想要对抗的对手数量。",
     "tutorialXp": "获得经验值和奖励",
     "tutorialXpDesc": "根据WPM获得经验值加排名奖励：第1名 +100 XP，第2名 +50 XP，第3名 +25 XP。超越你的个人最佳！"
+  },
+  "adventure": {
+    "back": "返回",
+    "worldName": "鸭子村庄",
+    "worldDesc": "狼群入侵了鸭子村庄！用打字的力量保卫家园。",
+    "player": "玩家",
+    "fight": "战斗！",
+    "wave": "波次",
+    "waveClear": "波次通过！",
+    "waitingForWords": "准备好...",
+    "typeToAttack": "输入来攻击...",
+    "victory": "胜利！",
+    "cleared": "通关！",
+    "defeat": "失败",
+    "defeatMsg": "鸭子勇士倒下了...再试一次吧！",
+    "wpm": "WPM",
+    "accuracy": "准确率",
+    "maxCombo": "最大连击",
+    "hpLeft": "剩余HP",
+    "time": "时间",
+    "toMap": "世界地图",
+    "retry": "重试",
+    "nextStage": "下一关"
   }
 }
