@@ -299,6 +299,10 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v251": {
+      "title": "What's New in v2.5.1",
+      "item1": "Change Username — You can now edit your display name from the Profile page. Your leaderboard name updates instantly!"
+    },
     "v250": {
       "title": "What's New in v2.5.0",
       "item1": "Progress Saved Permanently — Your XP, level, streak, and achievements now persist even after closing the browser. No more starting over!",
