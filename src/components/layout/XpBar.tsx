@@ -1,13 +1,16 @@
 import type { PlayerProfile } from '../../types/gamification';
 import { xpToNextLevel, getRank } from '../../constants/gamification';
+import { isAdminUser } from '../../utils/admin';
 
 interface XpBarProps {
   profile: PlayerProfile;
+  userId?: string | null;
 }
 
-export function XpBar({ profile }: XpBarProps) {
+export function XpBar({ profile, userId }: XpBarProps) {
   const { progress } = xpToNextLevel(profile.totalXp);
-  const rank = getRank(profile.level);
+  const isAdmin = isAdminUser(userId);
+  const rank = getRank(profile.level, isAdmin);
 
   return (
     <div
@@ -17,7 +20,7 @@ export function XpBar({ profile }: XpBarProps) {
         gap: '8px',
         cursor: 'default',
       }}
-      title={`${rank.name} - Level ${profile.level} - ${profile.totalXp} XP`}
+      title={`${rank.name} - ${isAdmin ? 'MAX' : `Level ${profile.level}`} - ${profile.totalXp} XP`}
     >
       <span style={{ fontSize: '16px' }}>{rank.emoji}</span>
       <span style={{
@@ -26,7 +29,7 @@ export function XpBar({ profile }: XpBarProps) {
         color: 'var(--main-color)',
         minWidth: '20px',
       }}>
-        {profile.level}
+        {isAdmin ? 'MAX' : profile.level}
       </span>
       <div style={{
         width: '80px',
@@ -38,7 +41,7 @@ export function XpBar({ profile }: XpBarProps) {
         <div
           className="xp-fill"
           style={{
-            width: `${Math.round(progress * 100)}%`,
+            width: isAdmin ? '100%' : `${Math.round(progress * 100)}%`,
             height: '100%',
             backgroundColor: 'var(--main-color)',
             borderRadius: '3px',

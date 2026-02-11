@@ -144,7 +144,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
               style={{ cursor: 'pointer' }}
               onClick={() => onNavigate('profile')}
             >
-              <XpBar profile={profile} />
+              <XpBar profile={profile} userId={user?.id} />
             </div>
           )}
 
@@ -377,7 +377,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           }}
           onClick={() => profile && onNavigate('profile')}
         >
-          {profile && <XpBar profile={profile} />}
+          {profile && <XpBar profile={profile} userId={user?.id} />}
           {streak && <StreakBadge streak={streak} />}
         </div>
       )}
