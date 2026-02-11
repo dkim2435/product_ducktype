@@ -242,8 +242,8 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
             fontWeight: 700,
             padding: '2px 8px',
             borderRadius: '999px',
-            backgroundColor: 'var(--main-color)',
-            color: 'var(--bg-color)',
+            backgroundColor: '#4caf50',
+            color: '#fff',
             zIndex: 2,
           }}>
             ✨ NEW
