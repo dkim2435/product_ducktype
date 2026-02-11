@@ -435,6 +435,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onBack={() => handleNavigate('test')}
             currentUserId={user?.id}
             currentUsername={currentUsername}
+            currentUserLevel={gamification.profile.level}
           />
         )}
 

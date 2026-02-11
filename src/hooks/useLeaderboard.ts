@@ -8,6 +8,7 @@ export interface LeaderboardEntry {
   accuracy: number;
   user_id?: string;
   is_dummy?: boolean;
+  level?: number;
 }
 
 export function useLeaderboard() {
@@ -44,6 +45,7 @@ export function useLeaderboard() {
     const dummies = getDummyLeaderboard(modeValue).map((d) => ({
       ...d,
       is_dummy: true,
+      level: d.level,
     }));
 
     // Combine and sort by WPM descending

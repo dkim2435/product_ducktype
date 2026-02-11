@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { getRank } from '../../constants/gamification';
 import type { LeaderboardEntry } from '../../hooks/useLeaderboard';
 
 const TIME_OPTIONS = [15, 30, 45, 60, 120];
@@ -16,9 +17,10 @@ interface LeaderboardProps {
   onBack: () => void;
   currentUserId?: string | null;
   currentUsername?: string | null;
+  currentUserLevel?: number;
 }
 
-export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, currentUsername }: LeaderboardProps) {
+export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, currentUsername, currentUserLevel }: LeaderboardProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [selectedTime, setSelectedTime] = useState(45);
@@ -48,6 +50,16 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
     }, 40);
     return () => clearInterval(timer);
   }, [entries, loading]);
+
+  // Get rank emoji for an entry
+  const getEntryRankEmoji = (entry: LeaderboardEntry) => {
+    const isUser = currentUserId
+      ? entry.user_id === currentUserId
+      : entry.username === currentUsername;
+    const level = isUser ? currentUserLevel : entry.level;
+    if (!level) return null;
+    return getRank(level).emoji;
+  };
 
   // Find current user's rank
   const userRank = currentUserId
@@ -195,8 +207,15 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                       whiteSpace: 'nowrap',
                       maxWidth: '100%',
                       textAlign: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '3px',
                     }}>
-                      {entry.username}
+                      {getEntryRankEmoji(entry) && (
+                        <span style={{ fontSize: isMobile ? '10px' : '12px' }}>{getEntryRankEmoji(entry)}</span>
+                      )}
+                      <span>{entry.username}</span>
                     </div>
 
                     {/* Podium block */}
@@ -280,7 +299,13 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                   fontSize: '14px',
                   fontWeight: 600,
                   color: 'var(--text-color)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
                 }}>
+                  {currentUserLevel && (
+                    <span style={{ fontSize: '14px' }}>{getRank(currentUserLevel).emoji}</span>
+                  )}
                   {effectiveEntry.username}
                 </div>
                 <div style={{
@@ -374,8 +399,14 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '3px',
                     }}>
-                      {entry.username}
+                      {getEntryRankEmoji(entry) && (
+                        <span style={{ fontSize: '11px', flexShrink: 0 }}>{getEntryRankEmoji(entry)}</span>
+                      )}
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{entry.username}</span>
                       {isCurrentUser && (
                         <span style={{
                           marginLeft: '6px',
@@ -471,12 +502,19 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '3px',
                     }}>
-                      {effectiveEntry.username}
+                      {currentUserLevel && (
+                        <span style={{ fontSize: '11px', flexShrink: 0 }}>{getRank(currentUserLevel).emoji}</span>
+                      )}
+                      <span>{effectiveEntry.username}</span>
                       <span style={{
-                        marginLeft: '6px',
+                        marginLeft: '3px',
                         fontSize: '10px',
                         fontWeight: 600,
+                        flexShrink: 0,
                       }}>
                         ({t('leaderboard.you')})
                       </span>
