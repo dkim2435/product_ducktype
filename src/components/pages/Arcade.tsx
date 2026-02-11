@@ -187,7 +187,7 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
               fontSize: '28px',
               flexShrink: 0,
             }}>
-              🏁
+              🏎️
             </div>
             <div style={{ flex: 1 }}>
               <div style={{
