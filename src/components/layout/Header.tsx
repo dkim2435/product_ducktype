@@ -260,6 +260,24 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           )}
 
           <button
+            onClick={() => onNavigate('leaderboard')}
+            style={{
+              padding: 'var(--nav-icon-padding)',
+              color: 'var(--sub-color)',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            title={t('leaderboard.title')}
+          >
+            {/* Leaderboard / bar-chart icon */}
+            <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="12" width="4" height="9" rx="1" />
+              <rect x="10" y="3" width="4" height="18" rx="1" />
+              <rect x="17" y="8" width="4" height="13" rx="1" />
+            </svg>
+          </button>
+
+          <button
             onClick={() => onNavigate('achievements')}
             style={{
               padding: 'var(--nav-icon-padding)',

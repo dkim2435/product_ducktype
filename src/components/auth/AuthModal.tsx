@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 interface AuthModalProps {
   visible: boolean;
   onClose: () => void;
-  onSignUp: (email: string, password: string) => Promise<void>;
+  onSignUp: (email: string, password: string, username: string) => Promise<void>;
   onSignIn: (email: string, password: string) => Promise<void>;
   onGoogleSignIn: () => Promise<void>;
 }
@@ -14,6 +14,7 @@ type Tab = 'login' | 'signup';
 export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn }: AuthModalProps) {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('login');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,6 +25,7 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
   useEffect(() => {
     if (visible) {
       setTab('login');
+      setUsername('');
       setEmail('');
       setPassword('');
       setError('');
@@ -49,6 +51,17 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
     e.preventDefault();
     setError('');
 
+    if (tab === 'signup') {
+      const trimmed = username.trim();
+      if (trimmed.length < 3 || trimmed.length > 16) {
+        setError(t('auth.errorUsernameLength'));
+        return;
+      }
+      if (!/^[a-zA-Z0-9_]+$/.test(trimmed)) {
+        setError(t('auth.errorUsernameChars'));
+        return;
+      }
+    }
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       setError(t('auth.errorInvalidEmail'));
       return;
@@ -61,7 +74,7 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
     setLoading(true);
     try {
       if (tab === 'signup') {
-        await onSignUp(email, password);
+        await onSignUp(email, password, username.trim());
       } else {
         await onSignIn(email, password);
       }
@@ -210,6 +223,27 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
 
         {/* Email/Password form */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {tab === 'signup' && (
+            <div>
+              <input
+                type="text"
+                placeholder={t('auth.username')}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                maxLength={16}
+                style={inputStyle}
+              />
+              <div style={{
+                fontSize: '11px',
+                color: 'var(--sub-color)',
+                marginTop: '4px',
+                paddingLeft: '2px',
+              }}>
+                {t('auth.usernameHint')}
+              </div>
+            </div>
+          )}
           <input
             ref={emailRef}
             type="email"

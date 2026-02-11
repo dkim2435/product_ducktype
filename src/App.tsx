@@ -32,10 +32,12 @@ import { Achievements } from './components/pages/Achievements';
 import { DailyChallenge } from './components/pages/DailyChallenge';
 import { Practice } from './components/pages/Practice';
 import { LessonTest } from './components/practice/LessonTest';
+import { Leaderboard } from './components/pages/Leaderboard';
 import { TypingInfo } from './components/content/TypingInfo';
+import { useLeaderboard } from './hooks/useLeaderboard';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
-  | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson';
+  | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard';
 
 interface AppContentProps {
   user: User | null;
@@ -43,9 +45,10 @@ interface AppContentProps {
   onLogout: () => void;
   isSupabaseConfigured: boolean;
   requestSync: (userId: string) => void;
+  currentUsername: string | null;
 }
 
-function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync }: AppContentProps) {
+function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync, currentUsername }: AppContentProps) {
   const { settings, updateSetting } = useSettings();
   const { t, i18n } = useTranslation();
   const [screen, setScreen] = useState<Screen>('test');
@@ -63,6 +66,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const gamification = useGamification();
   const dailyChallenge = useDailyChallenge();
   const lessons = useLessons();
+  const leaderboard = useLeaderboard();
 
   // Store last test state for key analysis
   const lastTestStateRef = useRef<TestState | null>(null);
@@ -148,7 +152,12 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     );
 
     triggerSync();
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress, triggerSync]);
+
+    // Auto-submit to leaderboard for logged-in users (time mode only)
+    if (user?.id && currentUsername && settings.mode === 'time') {
+      leaderboard.submitScore(user.id, currentUsername, result.wpm, result.accuracy, 'time', settings.timeLimit);
+    }
+  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress, triggerSync, user, currentUsername, leaderboard]);
 
   const handleDailyChallengeFinish = useCallback((testState: TestState) => {
     const result = saveResult(testState, settings);
@@ -411,6 +420,17 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
           />
         )}
 
+        {screen === 'leaderboard' && (
+          <Leaderboard
+            entries={leaderboard.entries}
+            loading={leaderboard.loading}
+            onFetch={leaderboard.fetchLeaderboard}
+            onBack={() => handleNavigate('test')}
+            currentUserId={user?.id}
+            currentUsername={currentUsername}
+          />
+        )}
+
         {screen === 'achievements' && (
           <Achievements
             achievements={gamification.achievements}
@@ -505,6 +525,11 @@ function App() {
     await signOut();
   }, [signOut, cancelSync]);
 
+  // Derive username from user metadata (set during signUp) or email prefix for Google users
+  const currentUsername = user
+    ? (user.user_metadata?.display_name as string) || user.email?.split('@')[0] || null
+    : null;
+
   if (loading) return null;
 
   return (
@@ -516,6 +541,7 @@ function App() {
         onLogout={handleLogout}
         isSupabaseConfigured={isSupabaseConfigured}
         requestSync={requestSync}
+        currentUsername={currentUsername}
       />
       <AuthModal
         visible={showAuth}

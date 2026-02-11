@@ -29,9 +29,13 @@ export function useAuth() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string) => {
+  const signUp = useCallback(async (email: string, password: string, username: string) => {
     if (!supabase) throw new Error('Supabase not configured');
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { display_name: username } },
+    });
     if (error) throw error;
   }, []);
 

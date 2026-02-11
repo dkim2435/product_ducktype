@@ -178,7 +178,21 @@
     "errorGeneric": "エラーが発生しました。もう一度お試しください。",
     "syncedToCloud": "クラウドに同期済み",
     "savePromptTitle": "どのデバイスでも記録を引き継ぎ",
-    "savePromptDesc": "登録すると、統計、実績、ストリークがクラウドに保存され、どこからでもアクセスできます。"
+    "savePromptDesc": "登録すると、統計、実績、ストリークがクラウドに保存され、どこからでもアクセスできます。",
+    "username": "ユーザー名",
+    "usernameHint": "この名前がリーダーボードに表示されます",
+    "errorUsernameLength": "ユーザー名は3〜16文字にしてください",
+    "errorUsernameChars": "ユーザー名には英数字とアンダースコアのみ使用できます"
+  },
+  "leaderboard": {
+    "title": "リーダーボード",
+    "yourRank": "あなたの順位",
+    "name": "名前",
+    "loading": "リーダーボード読み込み中...",
+    "empty": "まだ記録がありません。最初の一人になりましょう！",
+    "you": "あなた",
+    "topPercent": "上位 {{percent}}%",
+    "checkRank": "あなたは何位？リーダーボードを確認"
   },
   "info": {
     "speedTitle": "タイピング速度を測定",

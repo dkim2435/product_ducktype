@@ -300,6 +300,42 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         </div>
       )}
 
+      {/* Leaderboard CTA */}
+      {result.mode === 'time' && onNavigate && (
+        <button
+          onClick={() => onNavigate('leaderboard')}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '6px',
+            margin: '0 auto 24px',
+            padding: '14px 28px',
+            backgroundColor: 'var(--sub-alt-color)',
+            border: '1px solid var(--sub-alt-color)',
+            borderRadius: 'var(--border-radius)',
+            cursor: 'pointer',
+            transition: 'border-color 0.2s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--main-color)')}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--sub-alt-color)')}
+        >
+          {/* Bar chart icon */}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--main-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="12" width="4" height="9" rx="1" />
+            <rect x="10" y="3" width="4" height="18" rx="1" />
+            <rect x="17" y="8" width="4" height="13" rx="1" />
+          </svg>
+          <span style={{
+            fontSize: '13px',
+            color: 'var(--text-color)',
+            fontWeight: 500,
+          }}>
+            {t('leaderboard.checkRank')}
+          </span>
+        </button>
+      )}
+
       {/* Actions */}
       <div style={{
         display: 'flex',

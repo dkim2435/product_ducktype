@@ -178,7 +178,21 @@
     "errorGeneric": "An error occurred. Please try again.",
     "syncedToCloud": "Synced to cloud",
     "savePromptTitle": "Keep your progress across devices",
-    "savePromptDesc": "Sign up to save your stats, achievements, and streaks to the cloud. Access them from any device."
+    "savePromptDesc": "Sign up to save your stats, achievements, and streaks to the cloud. Access them from any device.",
+    "username": "Username",
+    "usernameHint": "This name will appear on the leaderboard",
+    "errorUsernameLength": "Username must be 3-16 characters",
+    "errorUsernameChars": "Username can only contain letters, numbers, and underscores"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "yourRank": "Your rank",
+    "name": "name",
+    "loading": "Loading leaderboard...",
+    "empty": "No entries yet. Be the first!",
+    "you": "you",
+    "topPercent": "Top {{percent}}%",
+    "checkRank": "Where do you rank? Check the leaderboard"
   },
   "info": {
     "speedTitle": "Measure Your Speed",

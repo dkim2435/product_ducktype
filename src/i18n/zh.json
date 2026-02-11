@@ -178,7 +178,21 @@
     "errorGeneric": "发生错误，请重试。",
     "syncedToCloud": "已同步到云端",
     "savePromptTitle": "跨设备保存你的进度",
-    "savePromptDesc": "注册后，统计数据、成就和连续记录将保存到云端，随时随地访问。"
+    "savePromptDesc": "注册后，统计数据、成就和连续记录将保存到云端，随时随地访问。",
+    "username": "用户名",
+    "usernameHint": "此名称将显示在排行榜上",
+    "errorUsernameLength": "用户名需要3到16个字符",
+    "errorUsernameChars": "用户名只能包含字母、数字和下划线"
+  },
+  "leaderboard": {
+    "title": "排行榜",
+    "yourRank": "你的排名",
+    "name": "名称",
+    "loading": "加载排行榜中...",
+    "empty": "暂无记录，成为第一个吧！",
+    "you": "你",
+    "topPercent": "前 {{percent}}%",
+    "checkRank": "你排第几？查看排行榜"
   },
   "info": {
     "speedTitle": "测量打字速度",
