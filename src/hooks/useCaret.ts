@@ -20,21 +20,20 @@ export function useCaret(
     const container = wordsContainerRef.current;
     if (!container) return;
 
-    const wordElements = container.querySelectorAll('[data-word]');
-    const currentWordEl = wordElements[currentWordIndex] as HTMLElement;
+    const currentWordEl = container.querySelector(`[data-word="${currentWordIndex}"]`) as HTMLElement;
     if (!currentWordEl) return;
 
-    const letterElements = currentWordEl.querySelectorAll('[data-letter]');
-    // Use container's getBoundingClientRect as reference
     const containerRect = container.getBoundingClientRect();
+    const children = currentWordEl.children;
+    const letterCount = children.length;
 
     let targetEl: Element | null = null;
     let isAfterLetter = false;
 
-    if (currentLetterIndex < letterElements.length) {
-      targetEl = letterElements[currentLetterIndex];
-    } else if (letterElements.length > 0) {
-      targetEl = letterElements[letterElements.length - 1];
+    if (currentLetterIndex < letterCount) {
+      targetEl = children[currentLetterIndex];
+    } else if (letterCount > 0) {
+      targetEl = children[letterCount - 1];
       isAfterLetter = true;
     } else {
       const wordRect = currentWordEl.getBoundingClientRect();

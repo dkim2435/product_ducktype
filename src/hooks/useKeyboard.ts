@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface UseKeyboardOptions {
   onChar: (char: string) => void;
@@ -19,7 +19,7 @@ export function useKeyboard({
   onEscape,
   enabled,
 }: UseKeyboardOptions) {
-  const [isComposing, setIsComposing] = useState(false);
+  const isComposingRef = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const tabPressedRef = useRef(false);
 
@@ -51,7 +51,7 @@ export function useKeyboard({
       // IME guard - keyCode 229 is the generic IME key
       if (e.keyCode === 229) return;
 
-      if (isComposing) return;
+      if (isComposingRef.current) return;
 
       if (e.key === 'Tab') {
         e.preventDefault();
@@ -99,7 +99,7 @@ export function useKeyboard({
     };
 
     const handleCompositionStart = () => {
-      setIsComposing(true);
+      isComposingRef.current = true;
     };
 
     const handleCompositionUpdate = () => {
@@ -107,7 +107,7 @@ export function useKeyboard({
     };
 
     const handleCompositionEnd = (e: CompositionEvent) => {
-      setIsComposing(false);
+      isComposingRef.current = false;
       const text = e.data;
       if (text) {
         onCjkInputRef.current(text);
@@ -140,7 +140,7 @@ export function useKeyboard({
       textarea.removeEventListener('compositionend', handleCompositionEnd);
       textarea.removeEventListener('input', handleInput);
     };
-  }, [enabled, isComposing]);
+  }, [enabled]);
 
-  return { inputRef, focusInput, isComposing };
+  return { inputRef, focusInput, isComposing: isComposingRef.current };
 }

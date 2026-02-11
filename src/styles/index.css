@@ -110,6 +110,13 @@ button:hover {
   background: var(--text-color);
 }
 
+/* Letter state colors (typing test) */
+.letter { color: var(--sub-color); }
+.letter--correct { color: var(--text-color); }
+.letter--incorrect { color: var(--error-color); }
+.letter--extra { color: var(--error-extra-color); }
+.letter--pending { color: var(--sub-color); }
+
 /* Hide scrollbar utility */
 .hide-scrollbar {
   -ms-overflow-style: none;

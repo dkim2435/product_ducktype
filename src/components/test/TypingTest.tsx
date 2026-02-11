@@ -143,7 +143,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     requestAnimationFrame(() => {
       requestAnimationFrame(updatePosition);
     });
-  }, [scrollOffset, state.currentWordIndex, state.currentLetterIndex, state.words, updatePosition]);
+  }, [scrollOffset, updatePosition]);
 
   const triggerParticle = useCallback(() => {
     if (!leaderboardRank || leaderboardRank > 20) return;
@@ -164,7 +164,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     if (word && letterIdx < word.letters.length) {
       if (char === word.letters[letterIdx].char) {
         playClick();
-        triggerParticle();
+        requestAnimationFrame(triggerParticle);
       } else {
         playError();
       }
