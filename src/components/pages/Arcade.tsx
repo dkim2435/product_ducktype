@@ -50,6 +50,7 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
       {/* Duck Hunt card */}
       <div
         style={{
+          position: 'relative',
           padding: '24px',
           backgroundColor: 'var(--sub-alt-color)',
           borderRadius: 'var(--border-radius)',
@@ -64,6 +65,19 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
         onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--main-color)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
       >
+        <span style={{
+          position: 'absolute',
+          top: '8px',
+          right: '8px',
+          fontSize: '10px',
+          fontWeight: 700,
+          padding: '2px 8px',
+          borderRadius: '999px',
+          backgroundColor: '#ff4d4f',
+          color: '#fff',
+        }}>
+          🔥 HOT
+        </span>
         <div style={{
           width: '56px',
           height: '56px',
@@ -124,6 +138,7 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
       {/* Duck Race card */}
       <div
         style={{
+          position: 'relative',
           marginTop: '16px',
           padding: '24px',
           backgroundColor: 'var(--sub-alt-color)',
@@ -139,6 +154,19 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
         onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--main-color)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
       >
+        <span style={{
+          position: 'absolute',
+          top: '8px',
+          right: '8px',
+          fontSize: '10px',
+          fontWeight: 700,
+          padding: '2px 8px',
+          borderRadius: '999px',
+          backgroundColor: 'var(--main-color)',
+          color: 'var(--bg-color)',
+        }}>
+          ✨ NEW
+        </span>
         <div style={{
           width: '56px',
           height: '56px',
