@@ -336,7 +336,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
               letterSpacing: '0.3px',
               pointerEvents: 'none',
             }}>
-              free games
+              free
             </sup>
             {/* Gamepad icon */}
             <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
