@@ -26,9 +26,10 @@ function collectLocalData(): Record<string, unknown> {
 function writeLocalData(dbRow: Record<string, unknown>) {
   for (const [storageKey, dbColumn] of Object.entries(STORAGE_TO_DB)) {
     const value = dbRow[dbColumn];
-    if (value !== undefined && value !== null) {
-      setItem(storageKey, value);
-    }
+    if (value === undefined || value === null) continue;
+    // Skip empty objects — let hooks use their built-in defaults
+    if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value as Record<string, unknown>).length === 0) continue;
+    setItem(storageKey, value);
   }
 }
 

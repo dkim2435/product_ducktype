@@ -10,9 +10,11 @@ function createDefaultState(): DailyChallengeState {
 }
 
 export function useDailyChallenge() {
-  const [state, setState] = useState<DailyChallengeState>(() =>
-    getItem<DailyChallengeState>(DAILY_KEY, createDefaultState())
-  );
+  const [state, setState] = useState<DailyChallengeState>(() => {
+    const stored = getItem<DailyChallengeState>(DAILY_KEY, createDefaultState());
+    if (!Array.isArray(stored.results)) return createDefaultState();
+    return stored;
+  });
 
   const today = getTodayDateString();
   const todayResult = state.results.find(r => r.date === today);

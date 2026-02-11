@@ -26,9 +26,11 @@ export function useGamification() {
   const [profile, setProfile] = useState<PlayerProfile>(() =>
     getItem<PlayerProfile>(PROFILE_KEY, createDefaultProfile())
   );
-  const [achievements, setAchievements] = useState<AchievementsState>(() =>
-    getItem<AchievementsState>(ACHIEVEMENTS_KEY, { unlocked: [] })
-  );
+  const [achievements, setAchievements] = useState<AchievementsState>(() => {
+    const stored = getItem<AchievementsState>(ACHIEVEMENTS_KEY, { unlocked: [] });
+    if (!Array.isArray(stored.unlocked)) return { unlocked: [] };
+    return stored;
+  });
   const [streak, setStreak] = useState<StreakState>(() =>
     getItem<StreakState>(STREAK_KEY, createDefaultStreak())
   );

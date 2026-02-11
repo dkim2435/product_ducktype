@@ -9,9 +9,10 @@ import { calculateConsistency } from '../utils/consistency';
 import { MAX_HISTORY } from '../constants/defaults';
 
 export function useStats() {
-  const [history, setHistory] = useState<TestResult[]>(() =>
-    getItem<TestResult[]>('history', [])
-  );
+  const [history, setHistory] = useState<TestResult[]>(() => {
+    const stored = getItem<TestResult[]>('history', []);
+    return Array.isArray(stored) ? stored : [];
+  });
   const [personalBests, setPersonalBests] = useState<PersonalBests>(() =>
     getItem<PersonalBests>('pb', {})
   );
