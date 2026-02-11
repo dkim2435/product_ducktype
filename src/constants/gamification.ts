@@ -7,6 +7,7 @@ export const XP_ACCURACY_BONUS_MULTIPLIER = 0.5; // +50% of base
 export const XP_STREAK_BONUS_PER_DAY = 0.05; // 5% per streak day
 export const XP_STREAK_BONUS_MAX = 0.5; // max 50%
 export const XP_DAILY_CHALLENGE_BONUS = 50;
+export const XP_SHARE_BONUS = 50;
 
 // Length bonus: 15s = 1x, 120s = 2x (linear interpolation)
 export const XP_LENGTH_MIN_SECONDS = 15;

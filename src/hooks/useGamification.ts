@@ -10,7 +10,7 @@ import type {
   ToastNotification,
 } from '../types/gamification';
 import { getItem, setItem } from '../utils/storage';
-import { createDefaultProfile, levelFromXp, getRank } from '../constants/gamification';
+import { createDefaultProfile, levelFromXp, getRank, XP_SHARE_BONUS } from '../constants/gamification';
 import { getAchievementDef } from '../constants/achievements';
 import { calculateXpGain } from '../utils/xp';
 import { checkNewAchievements } from '../utils/achievements';
@@ -21,6 +21,7 @@ const PROFILE_KEY = 'profile';
 const ACHIEVEMENTS_KEY = 'achievements';
 const STREAK_KEY = 'streak';
 const KEY_STATS_KEY = 'key_stats';
+const LAST_SHARE_DATE_KEY = 'ducktype_last_share_date';
 
 export function useGamification() {
   const [profile, setProfile] = useState<PlayerProfile>(() =>
@@ -145,6 +146,106 @@ export function useGamification() {
     return { xpGain, newAchievementIds, newLevel, oldLevel };
   }, [profile, achievements, streak, keyStats]);
 
+  const awardShareBonus = useCallback((
+    addToast: (toast: Omit<ToastNotification, 'id'>) => void,
+  ): boolean => {
+    // Daily limit: check if already awarded today
+    const now = new Date();
+    const today = now.toISOString().slice(0, 10); // YYYY-MM-DD
+    const lastShareDate = localStorage.getItem(LAST_SHARE_DATE_KEY);
+    if (lastShareDate === today) {
+      // Calculate hours until midnight
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      const hoursLeft = Math.ceil((midnight.getTime() - now.getTime()) / (1000 * 60 * 60));
+      addToast({
+        type: 'info',
+        title: 'Share Bonus Claimed',
+        message: hoursLeft <= 1
+          ? 'Resets in less than 1 hour!'
+          : `Resets in ~${hoursLeft} hours`,
+        icon: '⏳',
+      });
+      return false;
+    }
+
+    // Award XP
+    const newTotalXp = profile.totalXp + XP_SHARE_BONUS;
+    const oldLevel = profile.level;
+    const newLevel = levelFromXp(newTotalXp);
+
+    const newProfile: PlayerProfile = {
+      ...profile,
+      totalXp: newTotalXp,
+      level: newLevel,
+    };
+
+    // Save share date
+    localStorage.setItem(LAST_SHARE_DATE_KEY, today);
+
+    // Check "first-share" achievement
+    const unlockedIds = new Set(achievements.unlocked.map(a => a.id));
+    const newAchievementIds: string[] = [];
+    if (!unlockedIds.has('first-share')) {
+      newAchievementIds.push('first-share');
+    }
+
+    const newAchievementsState: AchievementsState = {
+      unlocked: [
+        ...achievements.unlocked,
+        ...newAchievementIds.map(id => ({ id, unlockedAt: Date.now() })),
+      ],
+    };
+
+    // Update state
+    setProfile(newProfile);
+    setAchievements(newAchievementsState);
+    setItem(PROFILE_KEY, newProfile);
+    setItem(ACHIEVEMENTS_KEY, newAchievementsState);
+
+    // Update lastXpGain to reflect share bonus
+    if (lastXpGain) {
+      const updatedXpGain = {
+        ...lastXpGain,
+        shareBonus: XP_SHARE_BONUS,
+        total: lastXpGain.total + XP_SHARE_BONUS,
+      };
+      setLastXpGain(updatedXpGain);
+    }
+
+    // Toasts
+    addToast({
+      type: 'xp',
+      title: `+${XP_SHARE_BONUS} XP`,
+      message: 'Share Bonus!',
+      icon: '📢',
+    });
+
+    if (newLevel > oldLevel) {
+      const rank = getRank(newLevel);
+      addToast({
+        type: 'levelup',
+        title: `Level ${newLevel}!`,
+        message: `${rank.emoji} ${rank.name}`,
+        icon: rank.emoji,
+      });
+    }
+
+    for (const achId of newAchievementIds) {
+      const def = getAchievementDef(achId);
+      if (def) {
+        addToast({
+          type: 'achievement',
+          title: 'Achievement Unlocked!',
+          message: `${def.icon} ${def.name}`,
+          icon: def.icon,
+        });
+      }
+    }
+
+    return true;
+  }, [profile, achievements, lastXpGain]);
+
   return {
     profile,
     achievements,
@@ -153,5 +254,6 @@ export function useGamification() {
     lastXpGain,
     lastNewAchievements,
     processTestResult,
+    awardShareBonus,
   };
 }

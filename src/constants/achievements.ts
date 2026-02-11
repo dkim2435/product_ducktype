@@ -43,6 +43,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { id: 'level-50', name: 'Half Way There', description: 'Reach level 50', icon: '🥇', category: 'special' },
   { id: 'level-100', name: 'Max Level', description: 'Reach level 100', icon: '💫', category: 'special' },
   { id: 'all-lessons', name: 'Graduate', description: 'Complete all lessons', icon: '🎓', category: 'special' },
+  { id: 'first-share', name: 'Social Butterfly', description: 'Share your results for the first time', icon: '📢', category: 'special' },
 ];
 
 export function getAchievementDef(id: string): AchievementDef | undefined {

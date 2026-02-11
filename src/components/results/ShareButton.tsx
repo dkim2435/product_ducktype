@@ -7,6 +7,7 @@ import { getWpmPercentile } from '../../utils/percentile';
 
 interface ShareButtonProps {
   result: TestResult;
+  onShareClick?: () => void;
 }
 
 const SITE_URL = 'https://ducktype.xyz';
@@ -20,7 +21,7 @@ function getShareUrl(result: TestResult): string {
   return `${SITE_URL}/#c=${result.wpm}-${result.accuracy}`;
 }
 
-export function ShareButton({ result }: ShareButtonProps) {
+export function ShareButton({ result, onShareClick }: ShareButtonProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [copied, setCopied] = useState(false);
@@ -89,6 +90,7 @@ export function ShareButton({ result }: ShareButtonProps) {
       '_blank',
       'width=550,height=420'
     );
+    onShareClick?.();
     setMenuOpen(false);
   };
 
@@ -98,6 +100,7 @@ export function ShareButton({ result }: ShareButtonProps) {
       '_blank',
       'width=550,height=420'
     );
+    onShareClick?.();
     setMenuOpen(false);
   };
 
@@ -120,6 +123,7 @@ export function ShareButton({ result }: ShareButtonProps) {
           },
         ],
       });
+      onShareClick?.();
       setMenuOpen(false);
       return;
     }
@@ -134,6 +138,7 @@ export function ShareButton({ result }: ShareButtonProps) {
       } catch {
         // user cancelled
       }
+      onShareClick?.();
       setMenuOpen(false);
       return;
     }
@@ -146,6 +151,7 @@ export function ShareButton({ result }: ShareButtonProps) {
     } catch {
       // ignore
     }
+    onShareClick?.();
     setMenuOpen(false);
   };
 
@@ -154,6 +160,7 @@ export function ShareButton({ result }: ShareButtonProps) {
       `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodeURIComponent(`I typed ${result.wpm} WPM on DuckType!`)}`,
       '_blank'
     );
+    onShareClick?.();
     setMenuOpen(false);
   };
 
@@ -163,6 +170,7 @@ export function ShareButton({ result }: ShareButtonProps) {
       '_blank',
       'width=550,height=420'
     );
+    onShareClick?.();
     setMenuOpen(false);
   };
 
@@ -171,6 +179,7 @@ export function ShareButton({ result }: ShareButtonProps) {
       `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`,
       '_blank'
     );
+    onShareClick?.();
     setMenuOpen(false);
   };
 

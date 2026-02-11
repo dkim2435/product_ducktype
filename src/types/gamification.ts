@@ -14,6 +14,7 @@ export interface XpGain {
   lengthBonus: number;
   streakBonus: number;
   dailyChallengeBonus: number;
+  shareBonus: number;
   total: number;
 }
 

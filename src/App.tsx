@@ -412,6 +412,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             isLoggedIn={!!user}
             isSupabaseConfigured={isSupabaseConfigured}
             onLoginClick={onLoginClick}
+            onShareClick={() => gamification.awardShareBonus(addToast)}
           />
         )}
 

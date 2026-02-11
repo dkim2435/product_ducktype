@@ -42,5 +42,5 @@ export function calculateXpGain(
 
   const total = base + accuracyBonus + lengthBonus + streakBonus + dailyChallengeBonus;
 
-  return { base, accuracyBonus, lengthBonus, streakBonus, dailyChallengeBonus, total };
+  return { base, accuracyBonus, lengthBonus, streakBonus, dailyChallengeBonus, shareBonus: 0, total };
 }

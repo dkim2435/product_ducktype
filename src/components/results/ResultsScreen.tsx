@@ -24,6 +24,7 @@ interface ResultsScreenProps {
   isLoggedIn?: boolean;
   isSupabaseConfigured?: boolean;
   onLoginClick?: () => void;
+  onShareClick?: () => void;
 }
 
 function TipItem({ text }: { text: string }) {
@@ -42,7 +43,7 @@ function TipItem({ text }: { text: string }) {
   );
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick, onShareClick }: ResultsScreenProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
@@ -362,7 +363,7 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           </svg>
           {t('test.nextTest')}
         </button>
-        <ShareButton result={result} />
+        <ShareButton result={result} onShareClick={onShareClick} />
         {isLoggedIn && (
           <EmailReportButton result={result} xpGain={xpGain} weakKeys={weakKeys} />
         )}

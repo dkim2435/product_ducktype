@@ -10,6 +10,7 @@ interface CheckContext {
   dailyChallenge: DailyChallengeState;
   lessonProgress: LessonProgressMap;
   allLanguages: Set<string>;
+  hasShared?: boolean;
 }
 
 function checkAchievement(id: string, ctx: CheckContext): boolean {
@@ -71,6 +72,7 @@ function checkAchievement(id: string, ctx: CheckContext): boolean {
       const mainLessons = LESSONS.filter(l => l.id !== 'weak-keys');
       return mainLessons.every(l => lessonProgress[l.id]?.completedAt != null);
     }
+    case 'first-share': return !!ctx.hasShared;
 
     default: return false;
   }
