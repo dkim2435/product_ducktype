@@ -50,10 +50,7 @@
     "moreOptions": "더 보기...",
     "weakKeys": "이번 테스트에서 약한 키",
     "practiceWeakKeys": "이 키들을 연습해 보는 건 어떨까요?",
-    "emailReport": "이메일 리포트",
-    "emailSending": "전송 중...",
-    "emailSent": "전송 완료!",
-    "emailError": "전송 실패"
+    "emailReport": "이메일 리포트"
   },
   "settings": {
     "title": "설정",
@@ -236,7 +233,8 @@
     "username": "사용자 이름",
     "usernameHint": "이 이름이 리더보드에 표시됩니다",
     "errorUsernameLength": "사용자 이름은 3~16자여야 합니다",
-    "errorUsernameChars": "사용자 이름은 영문, 숫자, 밑줄만 사용할 수 있습니다"
+    "errorUsernameChars": "사용자 이름은 영문, 숫자, 밑줄만 사용할 수 있습니다",
+    "errorUsernameTaken": "이미 사용 중인 사용자 이름입니다"
   },
   "leaderboard": {
     "title": "리더보드",
@@ -299,6 +297,12 @@
   "whatsNew": {
     "title": "새로운 소식",
     "gotIt": "확인!",
+    "v252": {
+      "title": "v2.5.2 업데이트",
+      "item1": "유저네임 중복 방지 — 이제 사용자 이름이 고유합니다. 리더보드에 같은 이름이 없어요!",
+      "item2": "DEV 뱃지 — 개발자에게 리더보드에서 특별한 DEV 뱃지가 표시됩니다.",
+      "item3": "Creator 랭크 — 개발자 프로필에 특별한 Creator 랭크가 표시됩니다."
+    },
     "v251": {
       "title": "v2.5.1 업데이트",
       "item1": "사용자 이름 변경 — 프로필 페이지에서 표시 이름을 변경할 수 있습니다. 리더보드 이름도 즉시 반영돼요!"

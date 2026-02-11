@@ -656,7 +656,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
 }
 
 function App() {
-  const { user, loading, signUp, signIn, signInWithGoogle, signOut, updateUsername, isSupabaseConfigured } = useAuth();
+  const { user, loading, signUp, signIn, signInWithGoogle, signOut, updateUsername, checkUsernameAvailable, isSupabaseConfigured } = useAuth();
   const { loadFromCloud, requestSync, cancelSync } = useCloudSync();
   const [syncKey, setSyncKey] = useState(0);
   const [showAuth, setShowAuth] = useState(false);
@@ -731,6 +731,7 @@ function App() {
         onSignUp={signUp}
         onSignIn={signIn}
         onGoogleSignIn={signInWithGoogle}
+        onCheckUsername={checkUsernameAvailable}
       />
       <WhatsNewModal
         visible={showWhatsNew}

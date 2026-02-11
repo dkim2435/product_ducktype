@@ -50,10 +50,7 @@
     "moreOptions": "その他...",
     "weakKeys": "このテストで苦手なキー",
     "practiceWeakKeys": "これらのキーを練習してみませんか？",
-    "emailReport": "メールレポート",
-    "emailSending": "送信中...",
-    "emailSent": "送信完了！",
-    "emailError": "送信失敗"
+    "emailReport": "メールレポート"
   },
   "settings": {
     "title": "設定",
@@ -236,7 +233,8 @@
     "username": "ユーザー名",
     "usernameHint": "この名前がリーダーボードに表示されます",
     "errorUsernameLength": "ユーザー名は3〜16文字にしてください",
-    "errorUsernameChars": "ユーザー名には英数字とアンダースコアのみ使用できます"
+    "errorUsernameChars": "ユーザー名には英数字とアンダースコアのみ使用できます",
+    "errorUsernameTaken": "このユーザー名は既に使われています"
   },
   "leaderboard": {
     "title": "リーダーボード",
@@ -299,6 +297,12 @@
   "whatsNew": {
     "title": "新機能のお知らせ",
     "gotIt": "OK!",
+    "v252": {
+      "title": "v2.5.2 アップデート",
+      "item1": "ユーザー名の一意性 — ユーザー名が一意になりました。リーダーボードに重複はもうありません！",
+      "item2": "DEVバッジ — 開発者にはリーダーボードで特別なDEVバッジが表示されます。",
+      "item3": "Creatorランク — 開発者のプロフィールに特別なCreatorランクが表示されます。"
+    },
     "v251": {
       "title": "v2.5.1 アップデート",
       "item1": "ユーザー名変更 — プロフィールページから表示名を変更できるようになりました。リーダーボードの名前も即座に反映されます！"

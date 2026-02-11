@@ -50,10 +50,7 @@
     "moreOptions": "More options...",
     "weakKeys": "Weak keys in this test",
     "practiceWeakKeys": "How about practicing these keys?",
-    "emailReport": "Email report",
-    "emailSending": "Sending...",
-    "emailSent": "Sent!",
-    "emailError": "Failed to send"
+    "emailReport": "Email report"
   },
   "settings": {
     "title": "Settings",
@@ -236,7 +233,8 @@
     "username": "Username",
     "usernameHint": "This name will appear on the leaderboard",
     "errorUsernameLength": "Username must be 3-16 characters",
-    "errorUsernameChars": "Username can only contain letters, numbers, and underscores"
+    "errorUsernameChars": "Username can only contain letters, numbers, and underscores",
+    "errorUsernameTaken": "This username is already taken"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -299,6 +297,12 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v252": {
+      "title": "What's New in v2.5.2",
+      "item1": "Unique Usernames — Usernames are now unique. No more duplicates on the leaderboard!",
+      "item2": "DEV Badge — The developer gets a special DEV badge on the leaderboard.",
+      "item3": "Creator Rank — A special Creator rank appears on the developer's profile."
+    },
     "v251": {
       "title": "What's New in v2.5.1",
       "item1": "Change Username — You can now edit your display name from the Profile page. Your leaderboard name updates instantly!"

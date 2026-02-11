@@ -50,10 +50,7 @@
     "moreOptions": "更多选项...",
     "weakKeys": "本次测试中的薄弱按键",
     "practiceWeakKeys": "要不要练习一下这些按键？",
-    "emailReport": "邮件报告",
-    "emailSending": "发送中...",
-    "emailSent": "已发送！",
-    "emailError": "发送失败"
+    "emailReport": "邮件报告"
   },
   "settings": {
     "title": "设置",
@@ -236,7 +233,8 @@
     "username": "用户名",
     "usernameHint": "此名称将显示在排行榜上",
     "errorUsernameLength": "用户名需要3到16个字符",
-    "errorUsernameChars": "用户名只能包含字母、数字和下划线"
+    "errorUsernameChars": "用户名只能包含字母、数字和下划线",
+    "errorUsernameTaken": "该用户名已被使用"
   },
   "leaderboard": {
     "title": "排行榜",
@@ -299,6 +297,12 @@
   "whatsNew": {
     "title": "更新内容",
     "gotIt": "知道了!",
+    "v252": {
+      "title": "v2.5.2 更新",
+      "item1": "用户名唯一性 — 用户名现在是唯一的，排行榜上不会再有重复名称！",
+      "item2": "DEV徽章 — 开发者在排行榜上会显示特殊的DEV徽章。",
+      "item3": "Creator段位 — 开发者的个人资料上会显示特殊的Creator段位。"
+    },
     "v251": {
       "title": "v2.5.1 更新",
       "item1": "修改用户名 — 现在可以在个人资料页面修改显示名称了。排行榜名称会立即更新！"

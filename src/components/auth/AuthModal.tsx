@@ -7,11 +7,12 @@ interface AuthModalProps {
   onSignUp: (email: string, password: string, username: string) => Promise<void>;
   onSignIn: (email: string, password: string) => Promise<void>;
   onGoogleSignIn: () => Promise<void>;
+  onCheckUsername?: (username: string) => Promise<boolean>;
 }
 
 type Tab = 'login' | 'signup';
 
-export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn }: AuthModalProps) {
+export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn, onCheckUsername }: AuthModalProps) {
   const { t } = useTranslation();
   const [tab, setTab] = useState<Tab>('login');
   const [username, setUsername] = useState('');
@@ -74,6 +75,14 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
     setLoading(true);
     try {
       if (tab === 'signup') {
+        if (onCheckUsername) {
+          const available = await onCheckUsername(username.trim());
+          if (!available) {
+            setError(t('auth.errorUsernameTaken'));
+            setLoading(false);
+            return;
+          }
+        }
         await onSignUp(email, password, username.trim());
       } else {
         await onSignIn(email, password);

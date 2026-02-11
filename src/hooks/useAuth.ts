@@ -59,8 +59,25 @@ export function useAuth() {
     await supabase.auth.signOut();
   }, []);
 
+  const checkUsernameAvailable = useCallback(async (username: string, excludeUserId?: string): Promise<boolean> => {
+    if (!supabase) return true;
+    const { data } = await supabase
+      .from('leaderboard')
+      .select('user_id')
+      .ilike('username', username)
+      .limit(1);
+    if (!data || data.length === 0) return true;
+    // If the only match is the current user, it's still available
+    if (excludeUserId && data.length === 1 && data[0].user_id === excludeUserId) return true;
+    return false;
+  }, []);
+
   const updateUsername = useCallback(async (newUsername: string) => {
     if (!supabase) throw new Error('Supabase not configured');
+    // Check uniqueness first
+    const currentUserId = user?.id;
+    const available = await checkUsernameAvailable(newUsername, currentUserId);
+    if (!available) throw new Error('USERNAME_TAKEN');
     const { data, error } = await supabase.auth.updateUser({
       data: { display_name: newUsername },
     });
@@ -75,7 +92,7 @@ export function useAuth() {
         .update({ username: newUsername })
         .eq('user_id', userId);
     }
-  }, []);
+  }, [user?.id, checkUsernameAvailable]);
 
-  return { user, loading, signUp, signIn, signInWithGoogle, signOut, updateUsername, isSupabaseConfigured };
+  return { user, loading, signUp, signIn, signInWithGoogle, signOut, updateUsername, checkUsernameAvailable, isSupabaseConfigured };
 }

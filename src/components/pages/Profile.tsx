@@ -2,7 +2,8 @@ import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { User } from '@supabase/supabase-js';
 import type { PlayerProfile, StreakState, KeyStatsMap } from '../../types/gamification';
-import { xpToNextLevel, getRank, RANKS } from '../../constants/gamification';
+import { xpToNextLevel, getRank, RANKS, CREATOR_RANK } from '../../constants/gamification';
+import { isAdminUser } from '../../utils/admin';
 import { KeyboardHeatmap } from '../profile/KeyboardHeatmap';
 import { StreakCalendar } from '../profile/StreakCalendar';
 
@@ -32,7 +33,8 @@ function formatDate(timestamp: number): string {
 
 export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseConfigured, onLoginClick, onLogout, currentUsername, onUpdateUsername }: ProfileProps) {
   const { t } = useTranslation();
-  const rank = getRank(profile.level);
+  const isAdmin = isAdminUser(user?.id);
+  const rank = getRank(profile.level, isAdmin);
   const { current, needed, progress } = xpToNextLevel(profile.totalXp);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editName, setEditName] = useState('');
@@ -63,8 +65,11 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
     try {
       await onUpdateUsername?.(trimmed);
       setIsEditingName(false);
-    } catch {
-      setNameError(t('auth.errorGeneric'));
+    } catch (err) {
+      const msg = err instanceof Error && err.message === 'USERNAME_TAKEN'
+        ? t('auth.errorUsernameTaken')
+        : t('auth.errorGeneric');
+      setNameError(msg);
     } finally {
       setNameSaving(false);
     }
@@ -427,7 +432,7 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
             opacity: 0.3,
           }} />
 
-          {RANKS.map((r, i) => {
+          {(isAdmin ? [...RANKS, CREATOR_RANK] : RANKS).map((r, i) => {
             const isCurrent = rank.name === r.name;
             const isPast = profile.level >= r.minLevel && !isCurrent;
             const isFuture = profile.level < r.minLevel;

@@ -5,7 +5,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { StatCard } from './StatCard';
 import { WpmChart } from './WpmChart';
 import { ShareButton } from './ShareButton';
-import { EmailReportButton } from './EmailReportButton';
+import { XP_SHARE_BONUS } from '../../constants/gamification';
 import { XpGainDisplay } from './XpGainDisplay';
 import { AchievementUnlock } from './AchievementUnlock';
 import { HelpBadge } from './HelpBadge';
@@ -363,10 +363,19 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           </svg>
           {t('test.nextTest')}
         </button>
-        <ShareButton result={result} onShareClick={onShareClick} />
-        {isLoggedIn && (
-          <EmailReportButton result={result} xpGain={xpGain} weakKeys={weakKeys} />
-        )}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+          <ShareButton result={result} onShareClick={onShareClick} />
+          {(!xpGain || xpGain.shareBonus === 0) && (
+            <span style={{
+              fontSize: '11px',
+              color: 'var(--main-color)',
+              fontWeight: 600,
+              opacity: 0.8,
+            }}>
+              +{XP_SHARE_BONUS} XP
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Cloud save prompt for non-logged-in users */}

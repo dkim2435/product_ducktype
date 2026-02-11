@@ -29,7 +29,8 @@ export type DuckRank =
   | 'Golden Duck'
   | 'Diamond Duck'
   | 'Legendary Duck'
-  | 'Duck King';
+  | 'Duck King'
+  | 'Creator';
 
 // ---- Achievements ----
 export type AchievementCategory =

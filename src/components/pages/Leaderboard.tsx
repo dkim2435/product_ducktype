@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { getRank } from '../../constants/gamification';
+import { isAdminUser } from '../../utils/admin';
 import type { LeaderboardEntry } from '../../hooks/useLeaderboard';
 
 const TIME_OPTIONS = [15, 30, 45, 60, 120];
@@ -9,6 +10,17 @@ const TIME_OPTIONS = [15, 30, 45, 60, 120];
 const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
 const PODIUM_HEIGHTS = [120, 90, 70];
 const PODIUM_HEIGHTS_MOBILE = [90, 68, 54];
+
+const devBadgeStyle: React.CSSProperties = {
+  fontSize: '9px',
+  fontWeight: 700,
+  padding: '1px 4px',
+  borderRadius: '3px',
+  backgroundColor: 'var(--main-color)',
+  color: 'var(--bg-color)',
+  lineHeight: 1.2,
+  flexShrink: 0,
+};
 
 interface LeaderboardProps {
   entries: LeaderboardEntry[];
@@ -216,6 +228,7 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                         <span style={{ fontSize: isMobile ? '10px' : '12px' }}>{getEntryRankEmoji(entry)}</span>
                       )}
                       <span>{entry.username}</span>
+                      {isAdminUser(entry.user_id) && <span style={devBadgeStyle}>DEV</span>}
                     </div>
 
                     {/* Podium block */}
@@ -307,6 +320,7 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                     <span style={{ fontSize: '14px' }}>{getRank(currentUserLevel).emoji}</span>
                   )}
                   {effectiveEntry.username}
+                  {isAdminUser(currentUserId) && <span style={{ ...devBadgeStyle, marginLeft: '6px' }}>DEV</span>}
                 </div>
                 <div style={{
                   fontSize: '12px',
@@ -407,6 +421,7 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                         <span style={{ fontSize: '11px', flexShrink: 0 }}>{getEntryRankEmoji(entry)}</span>
                       )}
                       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{entry.username}</span>
+                      {isAdminUser(entry.user_id) && <span style={devBadgeStyle}>DEV</span>}
                       {isCurrentUser && (
                         <span style={{
                           marginLeft: '6px',

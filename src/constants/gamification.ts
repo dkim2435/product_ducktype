@@ -7,7 +7,7 @@ export const XP_ACCURACY_BONUS_MULTIPLIER = 0.5; // +50% of base
 export const XP_STREAK_BONUS_PER_DAY = 0.05; // 5% per streak day
 export const XP_STREAK_BONUS_MAX = 0.5; // max 50%
 export const XP_DAILY_CHALLENGE_BONUS = 50;
-export const XP_SHARE_BONUS = 50;
+export const XP_SHARE_BONUS = 35;
 
 // Length bonus: 15s = 1x, 120s = 2x (linear interpolation)
 export const XP_LENGTH_MIN_SECONDS = 15;
@@ -60,7 +60,10 @@ export const RANKS: RankDef[] = [
   { name: 'Duck King', emoji: '👑', minLevel: 95 },
 ];
 
-export function getRank(level: number): { name: DuckRank; emoji: string } {
+export const CREATOR_RANK: RankDef = { name: 'Creator', emoji: '🛠️', minLevel: 0 };
+
+export function getRank(level: number, isAdmin?: boolean): { name: DuckRank; emoji: string } {
+  if (isAdmin) return { name: CREATOR_RANK.name, emoji: CREATOR_RANK.emoji };
   let rank = RANKS[0];
   for (const r of RANKS) {
     if (level >= r.minLevel) rank = r;
