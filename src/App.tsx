@@ -100,11 +100,13 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   // Store last test state for key analysis
   const lastTestStateRef = useRef<TestState | null>(null);
 
-  // Auto-show onboarding for first-time non-logged-in visitors
+  // Auto-show onboarding for first-time non-logged-in visitors (skip if already typing)
   useEffect(() => {
     if (user) return;
     if (localStorage.getItem('ducktype_onboarding_seen')) return;
-    const timer = setTimeout(() => setShowOnboarding(true), 2000);
+    const timer = setTimeout(() => {
+      if (!isTypingActive) setShowOnboarding(true);
+    }, 2000);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
