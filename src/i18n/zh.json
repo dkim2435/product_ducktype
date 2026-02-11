@@ -261,5 +261,41 @@
     "howWpmDesc": "WPM（每分钟单词数）是打字速度的标准衡量单位。每个「单词」标准化为含空格的5个字符，确保不同语言和单词长度之间的公平比较。",
     "improveTitle": "想要提高吗？",
     "improveDesc": "尝试我们的系统打字课程或弱键练习来提升速度和准确率。"
+  },
+  "whatsNew": {
+    "title": "更新内容",
+    "gotIt": "知道了!",
+    "v220": {
+      "title": "v2.2.0 更新",
+      "item1": "鸭子赛跑 — 与AI鸭子赛跑！快速打字游过池塘。",
+      "item2": "更新内容 — 现在你可以查看每次更新的内容了（就像这样！）。"
+    }
+  },
+  "duckRace": {
+    "title": "鸭子赛跑",
+    "description": "与幽灵鸭子赛跑！快速打字游过池塘。与AI对手展开打字竞速。",
+    "start": "开始比赛",
+    "settings": "比赛设置",
+    "mode": "模式",
+    "opponents": "对手数量",
+    "raceOver": "比赛结束！",
+    "rankings": "排名",
+    "playAgain": "再赛一次",
+    "backToArcade": "返回",
+    "newBest": "新最佳WPM！",
+    "typeToSwim": "点击聚焦，打字游泳！",
+    "howToRace": "赛跑规则",
+    "1st": "第1",
+    "2nd": "第2",
+    "3rd": "第3",
+    "position": "名次",
+    "dnf": "未完赛",
+    "yourDuck": "你",
+    "tutorialRace": "打字赛跑！",
+    "tutorialRaceDesc": "尽可能快地输入单词 — 打字越快鸭子游得越快！与幽灵鸭子竞速到达终点线。",
+    "tutorialGhosts": "幽灵对手",
+    "tutorialGhostsDesc": "每只幽灵鸭子都有自己的打字速度和个性。有些起步慢，有些最后冲刺。选择你想要对抗的对手数量。",
+    "tutorialXp": "获得经验值和奖励",
+    "tutorialXpDesc": "根据WPM获得经验值加排名奖励：第1名 +100 XP，第2名 +50 XP，第3名 +25 XP。超越你的个人最佳！"
   }
 }

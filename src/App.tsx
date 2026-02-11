@@ -35,14 +35,17 @@ import { LessonTest } from './components/practice/LessonTest';
 import { Leaderboard } from './components/pages/Leaderboard';
 import { Arcade } from './components/pages/Arcade';
 import { DuckHuntGame } from './components/arcade/DuckHuntGame';
+import { DuckRaceGame } from './components/arcade/DuckRaceGame';
+import { WhatsNewModal } from './components/layout/WhatsNewModal';
 import { TypingInfo } from './components/content/TypingInfo';
 import { useLeaderboard } from './hooks/useLeaderboard';
 import { setPersistProgress, clearProgressData, getItem, setItem } from './utils/storage';
 import type { DuckHuntHighScore, DuckHuntResult } from './types/arcade';
+import type { DuckRaceHighScore, DuckRaceResult } from './types/duckRace';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard'
-  | 'arcade' | 'duck-hunt';
+  | 'arcade' | 'duck-hunt' | 'duck-race';
 
 interface AppContentProps {
   user: User | null;
@@ -65,6 +68,9 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const [isTypingActive, setIsTypingActive] = useState(false);
   const [duckHuntHighScore, setDuckHuntHighScore] = useState<DuckHuntHighScore | null>(
     () => getItem<DuckHuntHighScore | null>('duck_hunt_high_score', null)
+  );
+  const [duckRaceHighScore, setDuckRaceHighScore] = useState<DuckRaceHighScore | null>(
+    () => getItem<DuckRaceHighScore | null>('duck_race_high_score', null)
   );
 
   const isMobile = useIsMobile();
@@ -278,6 +284,37 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     });
     triggerSync();
   }, [duckHuntHighScore, gamification, addToast, t, triggerSync]);
+
+  const handleDuckRaceGameOver = useCallback((result: DuckRaceResult) => {
+    // Update high score
+    const prev = duckRaceHighScore;
+    const isNewBestWpm = !prev || result.playerWpm > prev.bestWpm;
+    const isNewBestPlace = !prev || result.placement < prev.bestPlacement;
+    const newHS: DuckRaceHighScore = {
+      bestPlacement: isNewBestPlace ? result.placement : (prev?.bestPlacement ?? result.placement),
+      bestWpm: isNewBestWpm ? result.playerWpm : (prev?.bestWpm ?? result.playerWpm),
+      racesCompleted: (prev?.racesCompleted ?? 0) + 1,
+      winsCount: (prev?.winsCount ?? 0) + (result.placement === 1 ? 1 : 0),
+      timestamp: Date.now(),
+    };
+    setDuckRaceHighScore(newHS);
+    setItem('duck_race_high_score', newHS);
+
+    // XP: base (WPM * 0.5) + placement bonus (1st: +100, 2nd: +50, 3rd: +25)
+    const baseXp = Math.max(1, Math.floor(result.playerWpm * 0.5));
+    const placeBonus = result.placement === 1 ? 100 : result.placement === 2 ? 50 : result.placement === 3 ? 25 : 0;
+    const xpAmount = baseXp + placeBonus;
+    if (gamification.profile) {
+      gamification.addXp(xpAmount);
+    }
+    addToast({
+      type: 'xp',
+      title: t('duckRace.raceOver'),
+      message: `+${xpAmount} XP`,
+      icon: '\uD83C\uDFC1',
+    });
+    triggerSync();
+  }, [duckRaceHighScore, gamification, addToast, t, triggerSync]);
 
   const handleSettingChange = useCallback(<K extends keyof Settings>(key: K, value: Settings[K]) => {
     updateSetting(key, value);
@@ -522,7 +559,9 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
           <Arcade
             onBack={() => handleNavigate('test')}
             onPlayDuckHunt={() => handleNavigate('duck-hunt')}
+            onPlayDuckRace={() => handleNavigate('duck-race')}
             duckHuntHighScore={duckHuntHighScore}
+            duckRaceHighScore={duckRaceHighScore}
           />
         )}
 
@@ -532,6 +571,18 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onBack={() => handleNavigate('arcade')}
             onGameOver={handleDuckHuntGameOver}
             highScore={duckHuntHighScore}
+            isLoggedIn={!!user}
+            isSupabaseConfigured={isSupabaseConfigured}
+            onLoginClick={onLoginClick}
+          />
+        )}
+
+        {screen === 'duck-race' && (
+          <DuckRaceGame
+            settings={settings}
+            onBack={() => handleNavigate('arcade')}
+            onGameOver={handleDuckRaceGameOver}
+            highScore={duckRaceHighScore}
             isLoggedIn={!!user}
             isSupabaseConfigured={isSupabaseConfigured}
             onLoginClick={onLoginClick}
@@ -564,6 +615,7 @@ function App() {
   const { loadFromCloud, requestSync, cancelSync } = useCloudSync();
   const [syncKey, setSyncKey] = useState(0);
   const [showAuth, setShowAuth] = useState(false);
+  const [showWhatsNew, setShowWhatsNew] = useState(false);
   const prevUserIdRef = useRef<string | null>(null);
 
   // When user changes (login/logout), load cloud data
@@ -588,6 +640,19 @@ function App() {
       }
     });
   }, [user, loading, loadFromCloud, cancelSync]);
+
+  // Show "What's New" modal if user hasn't seen this version
+  useEffect(() => {
+    const seen = localStorage.getItem('ducktype_whats_new_seen');
+    if (seen === __APP_VERSION__) return;
+    const timer = setTimeout(() => setShowWhatsNew(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleWhatsNewClose = useCallback(() => {
+    setShowWhatsNew(false);
+    localStorage.setItem('ducktype_whats_new_seen', __APP_VERSION__);
+  }, []);
 
   const handleLogout = useCallback(async () => {
     cancelSync();
@@ -620,6 +685,10 @@ function App() {
         onSignUp={signUp}
         onSignIn={signIn}
         onGoogleSignIn={signInWithGoogle}
+      />
+      <WhatsNewModal
+        visible={showWhatsNew}
+        onClose={handleWhatsNewClose}
       />
     </>
   );

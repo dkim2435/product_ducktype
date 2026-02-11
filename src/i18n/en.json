@@ -261,5 +261,41 @@
     "howWpmDesc": "WPM (Words Per Minute) is the standard measure of typing speed. Each \"word\" is standardized to 5 characters including spaces, ensuring fair comparison across languages and word lengths.",
     "improveTitle": "Want to improve?",
     "improveDesc": "Try our structured typing lessons or practice your weak keys to boost your speed and accuracy."
+  },
+  "whatsNew": {
+    "title": "What's New",
+    "gotIt": "Got it!",
+    "v220": {
+      "title": "What's New in v2.2.0",
+      "item1": "Duck Race — Race against AI ducks! Type fast to swim across the pond.",
+      "item2": "What's New — Now you can see what changed in each update (like this!)."
+    }
+  },
+  "duckRace": {
+    "title": "Duck Race",
+    "description": "Race against ghost ducks! Type fast to swim across the pond. Compete with AI opponents in this typing race.",
+    "start": "Start Race",
+    "settings": "Race Settings",
+    "mode": "Mode",
+    "opponents": "Opponents",
+    "raceOver": "Race Over!",
+    "rankings": "Rankings",
+    "playAgain": "Race Again",
+    "backToArcade": "Back",
+    "newBest": "New Best WPM!",
+    "typeToSwim": "Click to focus and type to swim!",
+    "howToRace": "How to Race",
+    "1st": "1st",
+    "2nd": "2nd",
+    "3rd": "3rd",
+    "position": "Position",
+    "dnf": "DNF",
+    "yourDuck": "You",
+    "tutorialRace": "Type to Race!",
+    "tutorialRaceDesc": "Type the words as fast as you can — your duck swims faster the faster you type! Race against ghost ducks to the finish line.",
+    "tutorialGhosts": "Ghost Opponents",
+    "tutorialGhostsDesc": "Each ghost duck has its own typing speed and personality. Some are slow starters, others sprint at the end. Choose the number of opponents to race against.",
+    "tutorialXp": "Earn XP & Rewards",
+    "tutorialXpDesc": "Earn XP based on your WPM plus bonus for placement: 1st place +100 XP, 2nd +50 XP, 3rd +25 XP. Beat your personal best!"
   }
 }
