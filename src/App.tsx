@@ -37,6 +37,7 @@ import { Arcade } from './components/pages/Arcade';
 import { DuckHuntGame } from './components/arcade/DuckHuntGame';
 import { DuckRaceGame } from './components/arcade/DuckRaceGame';
 import { WhatsNewModal } from './components/layout/WhatsNewModal';
+import { OnboardingModal } from './components/layout/OnboardingModal';
 import { TypingInfo } from './components/content/TypingInfo';
 import { useLeaderboard } from './hooks/useLeaderboard';
 import { setPersistProgress, clearProgressData, getItem, setItem } from './utils/storage';
@@ -61,6 +62,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const { t, i18n } = useTranslation();
   const [screen, setScreen] = useState<Screen>('test');
   const [showSettings, setShowSettings] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
   const [activeLessonId, setActiveLessonId] = useState<LessonId | null>(null);
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
@@ -339,7 +341,13 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       overflowX: 'hidden',
     }}>
       <Header
-        onSettingsClick={() => setShowSettings(true)}
+        onSettingsClick={() => {
+          if (!user && !localStorage.getItem('ducktype_onboarding_seen')) {
+            setShowOnboarding(true);
+          } else {
+            setShowSettings(true);
+          }
+        }}
         onNavigate={handleNavigate}
         profile={gamification.profile}
         streak={gamification.streak}
@@ -605,6 +613,15 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
         onClose={() => setShowSettings(false)}
         visible={showSettings}
         playerLevel={gamification.profile.level}
+      />
+
+      <OnboardingModal
+        visible={showOnboarding}
+        onClose={() => {
+          setShowOnboarding(false);
+          localStorage.setItem('ducktype_onboarding_seen', '1');
+          setShowSettings(true);
+        }}
       />
 
       <ToastContainer toasts={toasts} onDismiss={removeToast} />

@@ -270,9 +270,37 @@
     "improveTitle": "想要提高吗？",
     "improveDesc": "尝试我们的系统打字课程或弱键练习来提升速度和准确率。"
   },
+  "onboarding": {
+    "title": "欢迎来到 DuckType！",
+    "subtitle": "这里是你可以做的一切",
+    "featuresTitle": "主要功能",
+    "featTyping": "打字测试",
+    "featTypingDesc": "测量WPM和准确率，追踪你的进步",
+    "featDaily": "每日挑战",
+    "featDailyDesc": "每天全新挑战 — 保持你的连续记录！",
+    "featLessons": "练习课程",
+    "featLessonsDesc": "从基准行到全键盘的8阶段课程",
+    "featArcade": "街机游戏",
+    "featArcadeDesc": "有趣的打字游戏，赚取经验值",
+    "levelTitle": "升级 & 解锁",
+    "rankEvolution": "升级后你的鸭子会进化！",
+    "soundUnlocks": "升级解锁音效主题",
+    "loginTitle": "注册享受更多",
+    "loginFree": "完全免费 — 无需信用卡",
+    "loginPerk1": "进度云端保存",
+    "loginPerk2": "在排行榜上竞争",
+    "loginPerk3": "解锁全部街机游戏",
+    "loginPerk4": "全设备同步",
+    "gotIt": "开始吧！"
+  },
   "whatsNew": {
     "title": "更新内容",
     "gotIt": "知道了!",
+    "v230": {
+      "title": "v2.3.0 更新",
+      "item1": "专属游戏 — 部分街机游戏需要登录。完全免费！",
+      "item2": "功能指南 — 首次访问时为你介绍DuckType的所有功能。"
+    },
     "v220": {
       "title": "v2.2.0 更新",
       "item1": "鸭子赛跑 — 与AI鸭子赛跑！快速打字游过池塘。",

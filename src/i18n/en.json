@@ -270,9 +270,37 @@
     "improveTitle": "Want to improve?",
     "improveDesc": "Try our structured typing lessons or practice your weak keys to boost your speed and accuracy."
   },
+  "onboarding": {
+    "title": "Welcome to DuckType!",
+    "subtitle": "Here's everything you can do",
+    "featuresTitle": "Features",
+    "featTyping": "Typing Test",
+    "featTypingDesc": "Measure your WPM, accuracy, and track your progress",
+    "featDaily": "Daily Challenge",
+    "featDailyDesc": "A new challenge every day — build your streak!",
+    "featLessons": "Practice Lessons",
+    "featLessonsDesc": "8 structured lessons from home row to full keyboard",
+    "featArcade": "Arcade Games",
+    "featArcadeDesc": "Fun typing games to earn XP and compete",
+    "levelTitle": "Level Up & Unlock",
+    "rankEvolution": "Your duck evolves as you level up!",
+    "soundUnlocks": "Unlock sound themes by leveling up",
+    "loginTitle": "Even more with an account",
+    "loginFree": "100% free — no credit card needed",
+    "loginPerk1": "Save progress to the cloud",
+    "loginPerk2": "Compete on the leaderboard",
+    "loginPerk3": "Unlock exclusive arcade games",
+    "loginPerk4": "Sync across all your devices",
+    "gotIt": "Let's go!"
+  },
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v230": {
+      "title": "What's New in v2.3.0",
+      "item1": "Exclusive Games — Some arcade games now require login. It's free!",
+      "item2": "Feature Guide — First-time visitors get a tour of all DuckType features."
+    },
     "v220": {
       "title": "What's New in v2.2.0",
       "item1": "Duck Race — Race against AI ducks! Type fast to swim across the pond.",

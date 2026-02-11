@@ -270,9 +270,37 @@
     "improveTitle": "실력을 키우고 싶으신가요?",
     "improveDesc": "체계적인 타이핑 레슨이나 약한 키 연습으로 속도와 정확도를 높여보세요."
   },
+  "onboarding": {
+    "title": "DuckType에 오신 걸 환영해요!",
+    "subtitle": "이런 것들을 할 수 있어요",
+    "featuresTitle": "주요 기능",
+    "featTyping": "타이핑 테스트",
+    "featTypingDesc": "WPM, 정확도를 측정하고 성장을 추적해요",
+    "featDaily": "일일 챌린지",
+    "featDailyDesc": "매일 새로운 도전 — 스트릭을 이어가세요!",
+    "featLessons": "연습 레슨",
+    "featLessonsDesc": "홈 로우부터 전체 키보드까지 8단계 레슨",
+    "featArcade": "아케이드 게임",
+    "featArcadeDesc": "재미있는 타이핑 게임으로 XP를 모으세요",
+    "levelTitle": "레벨업 & 해금",
+    "rankEvolution": "레벨이 오르면 오리가 진화해요!",
+    "soundUnlocks": "레벨업하면 사운드 테마가 해금돼요",
+    "loginTitle": "계정이 있으면 더 많은 혜택",
+    "loginFree": "완전 무료 — 카드 등록 같은 거 없어요",
+    "loginPerk1": "진행 상황 클라우드 저장",
+    "loginPerk2": "리더보드에서 경쟁",
+    "loginPerk3": "아케이드 게임 전부 해금",
+    "loginPerk4": "모든 기기에서 동기화",
+    "gotIt": "시작할게요!"
+  },
   "whatsNew": {
     "title": "새로운 소식",
     "gotIt": "확인!",
+    "v230": {
+      "title": "v2.3.0 업데이트",
+      "item1": "전용 게임 — 일부 아케이드 게임은 로그인이 필요해요. 무료예요!",
+      "item2": "기능 가이드 — 처음 방문하면 DuckType의 모든 기능을 안내해드려요."
+    },
     "v220": {
       "title": "v2.2.0 업데이트",
       "item1": "오리 레이스 — AI 오리들과 경주하세요! 빠르게 타이핑해서 연못을 건너세요.",
