@@ -159,7 +159,10 @@
     "noKeyData": "키보드 히트맵을 보려면 테스트를 완료하세요",
     "rankRoadmap": "덕 랭크 로드맵",
     "currentRank": "현재",
-    "rankUnlocksAt": "레벨을 올려 새로운 랭크를 해금하세요"
+    "rankUnlocksAt": "레벨을 올려 새로운 랭크를 해금하세요",
+    "editUsername": "사용자 이름 변경",
+    "save": "저장",
+    "cancel": "취소"
   },
   "challenge": {
     "beatFriend": "친구가 {{wpm}} WPM을 기록했어요. 이길 수 있나요?",

@@ -59,5 +59,23 @@ export function useAuth() {
     await supabase.auth.signOut();
   }, []);
 
-  return { user, loading, signUp, signIn, signInWithGoogle, signOut, isSupabaseConfigured };
+  const updateUsername = useCallback(async (newUsername: string) => {
+    if (!supabase) throw new Error('Supabase not configured');
+    const { data, error } = await supabase.auth.updateUser({
+      data: { display_name: newUsername },
+    });
+    if (error) throw error;
+    // Update local user state immediately
+    if (data.user) setUser(data.user);
+    // Update leaderboard entries for this user
+    const userId = data.user?.id;
+    if (userId) {
+      await supabase
+        .from('leaderboard')
+        .update({ username: newUsername })
+        .eq('user_id', userId);
+    }
+  }, []);
+
+  return { user, loading, signUp, signIn, signInWithGoogle, signOut, updateUsername, isSupabaseConfigured };
 }

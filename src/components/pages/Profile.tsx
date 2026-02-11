@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { User } from '@supabase/supabase-js';
 import type { PlayerProfile, StreakState, KeyStatsMap } from '../../types/gamification';
@@ -14,6 +15,8 @@ interface ProfileProps {
   isSupabaseConfigured?: boolean;
   onLoginClick?: () => void;
   onLogout?: () => void;
+  currentUsername?: string | null;
+  onUpdateUsername?: (newUsername: string) => Promise<void>;
 }
 
 function formatTime(seconds: number): string {
@@ -27,10 +30,45 @@ function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString();
 }
 
-export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseConfigured, onLoginClick, onLogout }: ProfileProps) {
+export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseConfigured, onLoginClick, onLogout, currentUsername, onUpdateUsername }: ProfileProps) {
   const { t } = useTranslation();
   const rank = getRank(profile.level);
   const { current, needed, progress } = xpToNextLevel(profile.totalXp);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [nameError, setNameError] = useState('');
+  const [nameSaving, setNameSaving] = useState(false);
+
+  const handleStartEdit = useCallback(() => {
+    setEditName(currentUsername || '');
+    setNameError('');
+    setIsEditingName(true);
+  }, [currentUsername]);
+
+  const handleSaveName = useCallback(async () => {
+    const trimmed = editName.trim();
+    if (trimmed.length < 3 || trimmed.length > 16) {
+      setNameError(t('auth.errorUsernameLength'));
+      return;
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(trimmed)) {
+      setNameError(t('auth.errorUsernameChars'));
+      return;
+    }
+    if (trimmed === currentUsername) {
+      setIsEditingName(false);
+      return;
+    }
+    setNameSaving(true);
+    try {
+      await onUpdateUsername?.(trimmed);
+      setIsEditingName(false);
+    } catch {
+      setNameError(t('auth.errorGeneric'));
+    } finally {
+      setNameSaving(false);
+    }
+  }, [editName, currentUsername, onUpdateUsername, t]);
 
   return (
     <div className="fade-in" style={{
@@ -71,7 +109,7 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
         }}>
           {user ? (
             <>
-              <div style={{ minWidth: 0 }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
                 <div style={{
                   fontSize: '12px',
                   color: 'var(--sub-color)',
@@ -85,9 +123,106 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
+                  marginBottom: '6px',
                 }}>
                   {user.email}
                 </div>
+
+                {/* Username display / edit */}
+                {isEditingName ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <input
+                        type="text"
+                        value={editName}
+                        onChange={e => { setEditName(e.target.value); setNameError(''); }}
+                        onKeyDown={e => { if (e.key === 'Enter') handleSaveName(); if (e.key === 'Escape') setIsEditingName(false); }}
+                        autoFocus
+                        maxLength={16}
+                        style={{
+                          padding: '4px 8px',
+                          fontSize: '13px',
+                          fontWeight: 600,
+                          fontFamily: 'inherit',
+                          color: 'var(--text-color)',
+                          backgroundColor: 'var(--bg-color)',
+                          border: `1.5px solid ${nameError ? 'var(--error-color)' : 'var(--main-color)'}`,
+                          borderRadius: '4px',
+                          outline: 'none',
+                          width: '140px',
+                        }}
+                      />
+                      <button
+                        onClick={handleSaveName}
+                        disabled={nameSaving}
+                        style={{
+                          padding: '4px 10px',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          fontFamily: 'inherit',
+                          color: 'var(--bg-color)',
+                          backgroundColor: 'var(--main-color)',
+                          borderRadius: '4px',
+                          cursor: nameSaving ? 'default' : 'pointer',
+                          opacity: nameSaving ? 0.6 : 1,
+                        }}
+                      >
+                        {nameSaving ? '...' : t('profile.save')}
+                      </button>
+                      <button
+                        onClick={() => setIsEditingName(false)}
+                        style={{
+                          padding: '4px 8px',
+                          fontSize: '11px',
+                          fontFamily: 'inherit',
+                          color: 'var(--sub-color)',
+                          background: 'none',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {t('profile.cancel')}
+                      </button>
+                    </div>
+                    {nameError && (
+                      <div style={{ fontSize: '11px', color: 'var(--error-color)' }}>
+                        {nameError}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      color: 'var(--main-color)',
+                    }}>
+                      {currentUsername || user.email?.split('@')[0]}
+                    </span>
+                    {onUpdateUsername && (
+                      <button
+                        onClick={handleStartEdit}
+                        title={t('profile.editUsername')}
+                        style={{
+                          padding: '2px',
+                          background: 'none',
+                          color: 'var(--sub-color)',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          opacity: 0.6,
+                          transition: 'opacity 0.15s',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+                        onMouseLeave={e => (e.currentTarget.style.opacity = '0.6')}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
               <button
                 onClick={onLogout}
@@ -101,6 +236,7 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
                   fontFamily: 'inherit',
                   cursor: 'pointer',
                   flexShrink: 0,
+                  alignSelf: 'flex-start',
                 }}
               >
                 {t('auth.logout')}

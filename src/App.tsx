@@ -55,9 +55,10 @@ interface AppContentProps {
   isSupabaseConfigured: boolean;
   requestSync: (userId: string) => void;
   currentUsername: string | null;
+  onUpdateUsername: (newUsername: string) => Promise<void>;
 }
 
-function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync, currentUsername }: AppContentProps) {
+function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync, currentUsername, onUpdateUsername }: AppContentProps) {
   const { settings, updateSetting } = useSettings();
   const { t, i18n } = useTranslation();
   const [screen, setScreen] = useState<Screen>(() => {
@@ -529,6 +530,8 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             isSupabaseConfigured={isSupabaseConfigured}
             onLoginClick={handleLoginClick}
             onLogout={onLogout}
+            currentUsername={currentUsername}
+            onUpdateUsername={onUpdateUsername}
           />
         )}
 
@@ -653,7 +656,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
 }
 
 function App() {
-  const { user, loading, signUp, signIn, signInWithGoogle, signOut, isSupabaseConfigured } = useAuth();
+  const { user, loading, signUp, signIn, signInWithGoogle, signOut, updateUsername, isSupabaseConfigured } = useAuth();
   const { loadFromCloud, requestSync, cancelSync } = useCloudSync();
   const [syncKey, setSyncKey] = useState(0);
   const [showAuth, setShowAuth] = useState(false);
@@ -720,6 +723,7 @@ function App() {
         isSupabaseConfigured={isSupabaseConfigured}
         requestSync={requestSync}
         currentUsername={currentUsername}
+        onUpdateUsername={updateUsername}
       />
       <AuthModal
         visible={showAuth}

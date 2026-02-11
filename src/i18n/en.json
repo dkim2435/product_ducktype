@@ -159,7 +159,10 @@
     "noKeyData": "Complete some tests to see your keyboard heatmap",
     "rankRoadmap": "Duck Rank Roadmap",
     "currentRank": "Current",
-    "rankUnlocksAt": "Level up to unlock new ranks"
+    "rankUnlocksAt": "Level up to unlock new ranks",
+    "editUsername": "Edit username",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "challenge": {
     "beatFriend": "Your friend typed {{wpm}} WPM. Can you beat them?",

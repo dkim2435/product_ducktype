@@ -159,7 +159,10 @@
     "noKeyData": "キーボードヒートマップを表示するにはテストを完了してください",
     "rankRoadmap": "ダックランクロードマップ",
     "currentRank": "現在",
-    "rankUnlocksAt": "レベルアップして新しいランクを解除しよう"
+    "rankUnlocksAt": "レベルアップして新しいランクを解除しよう",
+    "editUsername": "ユーザー名を変更",
+    "save": "保存",
+    "cancel": "キャンセル"
   },
   "challenge": {
     "beatFriend": "友達が {{wpm}} WPM を記録しました。勝てますか？",
