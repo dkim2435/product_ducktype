@@ -540,17 +540,6 @@ function App() {
     setSyncKey((k) => k + 1);
   }, [signOut, cancelSync]);
 
-  // Show AuthModal once per browser session for non-logged-in visitors
-  useEffect(() => {
-    if (loading || user || !isSupabaseConfigured) return;
-    if (sessionStorage.getItem('auth_modal_shown')) return;
-    const timer = setTimeout(() => {
-      setShowAuth(true);
-      sessionStorage.setItem('auth_modal_shown', '1');
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [loading, user, isSupabaseConfigured]);
-
   // Derive username from user metadata (set during signUp) or email prefix for Google users
   const currentUsername = user
     ? (user.user_metadata?.display_name as string) || user.email?.split('@')[0] || null
