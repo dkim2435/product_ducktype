@@ -56,7 +56,7 @@ export function Contact({ onBack }: ContactProps) {
           },
           {
             q: 'Do I need to create an account?',
-            a: 'No. All your settings and typing history are stored locally in your browser. No registration required.',
+            a: 'No, but creating a free account lets you save your progress and sync it across devices.',
           },
           {
             q: 'Which browsers are supported?',
@@ -64,7 +64,7 @@ export function Contact({ onBack }: ContactProps) {
           },
           {
             q: 'How is my data stored?',
-            a: 'All data is stored in your browser\'s localStorage. Nothing is sent to any server. Clearing your browser data will reset your settings and history.',
+            a: 'Settings (theme, language) are stored locally in your browser. If you have an account, your progress is securely synced to the cloud.',
           },
           {
             q: 'Can I use DuckType on mobile?',

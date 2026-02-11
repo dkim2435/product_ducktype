@@ -36,11 +36,24 @@ function writeLocalData(dbRow: Record<string, unknown>) {
 export function useCloudSync() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingSyncRef = useRef<string | null>(null);
+  const accessTokenRef = useRef<string | null>(null);
+
+  // Cache the auth token so flushSync can use it synchronously
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      accessTokenRef.current = session?.access_token ?? null;
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      accessTokenRef.current = session?.access_token ?? null;
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   const flushSync = useCallback(() => {
-    const client = supabase;
     const userId = pendingSyncRef.current;
-    if (!client || !userId) return;
+    const token = accessTokenRef.current;
+    if (!supabase || !userId || !token) return;
 
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -49,15 +62,18 @@ export function useCloudSync() {
     pendingSyncRef.current = null;
 
     const localData = collectLocalData();
-    // Use sendBeacon-friendly synchronous approach for beforeunload
-    const blob = new Blob(
-      [JSON.stringify({ id: userId, ...localData })],
-      { type: 'application/json' }
-    );
-    navigator.sendBeacon?.(
-      `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_data?on_conflict=id`,
-      blob
-    );
+    const apiKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+    fetch(`${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_data?on_conflict=id`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': apiKey,
+        'Authorization': `Bearer ${token}`,
+        'Prefer': 'resolution=merge-duplicates',
+      },
+      body: JSON.stringify({ id: userId, ...localData }),
+      keepalive: true,
+    }).catch(() => {});
   }, []);
 
   // Flush pending sync on tab close

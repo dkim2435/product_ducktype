@@ -34,10 +34,10 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       <section style={{ marginBottom: '28px' }}>
         <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>2. Information We Collect</h2>
         <p style={{ marginBottom: '12px' }}>
-          <strong style={{ color: 'var(--text-color)' }}>Local Storage Data:</strong> We store your
-          preferences (theme, language, font settings) and typing test history locally on your
-          device using browser localStorage. This data never leaves your device and is not
-          transmitted to any server.
+          <strong style={{ color: 'var(--text-color)' }}>Local Data:</strong> We store your
+          preferences (theme, language, font settings) locally on your device. If you create an
+          account, your typing progress (history, achievements, level) is securely synced to our
+          cloud servers to enable cross-device access.
         </p>
         <p>
           <strong style={{ color: 'var(--text-color)' }}>Cookies & Analytics:</strong> We use Google
@@ -80,9 +80,9 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       <section style={{ marginBottom: '28px' }}>
         <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>5. Data Retention</h2>
         <p>
-          All typing data and preferences are stored locally in your browser. You can clear this
-          data at any time through your browser settings or by clearing localStorage. We do not
-          maintain any server-side databases of user data.
+          Settings are stored locally in your browser. If you have an account, your typing progress
+          is stored on our secure cloud servers and can be deleted by contacting us. You can clear
+          local settings at any time through your browser settings.
         </p>
       </section>
 
@@ -90,8 +90,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>6. Children's Privacy</h2>
         <p>
           Our service is available to users of all ages. We do not knowingly collect personal
-          information from children. Since all data is stored locally and we do not require account
-          creation, no personal data is transmitted to our servers.
+          information from children. Account creation is optional and only requires an email address.
         </p>
       </section>
 

@@ -27,8 +27,8 @@ export function About({ onBack }: AboutProps) {
           or train with daily challenges, DuckType provides a clean, distraction-free environment with no sign-up required.
         </p>
         <p>
-          All your progress — test history, personal bests, achievements, and lesson progress — is saved
-          locally on your device using your browser's localStorage. Your data never leaves your computer.
+          When you create a free account, your progress — test history, personal bests, achievements, and
+          lesson progress — is securely synced to the cloud so you can pick up where you left off on any device.
         </p>
       </section>
 
@@ -175,7 +175,7 @@ export function About({ onBack }: AboutProps) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {[
             { q: 'Is DuckType free?', a: 'Yes, DuckType is 100% free and open source. No account or sign-up needed.' },
-            { q: 'Does DuckType store my data on a server?', a: 'No. All data is saved locally in your browser using localStorage. Nothing is sent to any server.' },
+            { q: 'Does DuckType store my data on a server?', a: 'If you create an account, your progress is securely synced to the cloud. Settings like theme and language are always saved locally in your browser.' },
             { q: 'What languages are supported?', a: 'English, Korean (한국어), Chinese (中文), and Japanese (日本語) with full IME support.' },
             { q: 'How do I improve my weak keys?', a: 'Go to Practice > Weak Keys. DuckType analyzes your typing data to generate exercises focusing on your most error-prone keys.' },
             { q: 'What are the daily challenges?', a: 'Every day, all DuckType users get the same set of words. Complete it to maintain your daily streak and earn bonus XP.' },
