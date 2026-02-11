@@ -35,6 +35,7 @@ import { LessonTest } from './components/practice/LessonTest';
 import { Leaderboard } from './components/pages/Leaderboard';
 import { TypingInfo } from './components/content/TypingInfo';
 import { useLeaderboard } from './hooks/useLeaderboard';
+import { setPersistProgress, clearProgressData } from './utils/storage';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard';
@@ -514,6 +515,9 @@ function App() {
     if (loading) return;
     const userId = user?.id ?? null;
 
+    // Enable/disable progress data persistence based on login state
+    setPersistProgress(!!userId);
+
     if (userId === prevUserIdRef.current) return;
     prevUserIdRef.current = userId;
 
@@ -532,7 +536,16 @@ function App() {
   const handleLogout = useCallback(async () => {
     cancelSync();
     await signOut();
+    clearProgressData();
+    setSyncKey((k) => k + 1);
   }, [signOut, cancelSync]);
+
+  // Show AuthModal automatically for first-time visitors (after 1s delay)
+  useEffect(() => {
+    if (loading || user || !isSupabaseConfigured) return;
+    const timer = setTimeout(() => setShowAuth(true), 1000);
+    return () => clearTimeout(timer);
+  }, [loading, user, isSupabaseConfigured]);
 
   // Derive username from user metadata (set during signUp) or email prefix for Google users
   const currentUsername = user
