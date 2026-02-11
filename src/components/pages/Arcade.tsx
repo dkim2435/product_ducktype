@@ -38,6 +38,15 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
         {t('arcade.title')}
       </button>
 
+      {/* Tagline */}
+      <div style={{
+        fontSize: '14px',
+        color: 'var(--sub-color)',
+        marginBottom: '20px',
+      }}>
+        {t('arcade.tagline')}
+      </div>
+
       {/* Duck Hunt card */}
       <div
         style={{
