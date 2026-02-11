@@ -70,7 +70,7 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
       : entry.username === currentUsername;
     const level = isUser ? currentUserLevel : entry.level;
     if (!level) return null;
-    return getRank(level).emoji;
+    return getRank(level, isAdminUser(entry.user_id)).emoji;
   };
 
   // Find current user's rank
@@ -317,7 +317,7 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                   gap: '4px',
                 }}>
                   {currentUserLevel && (
-                    <span style={{ fontSize: '14px' }}>{getRank(currentUserLevel).emoji}</span>
+                    <span style={{ fontSize: '14px' }}>{getRank(currentUserLevel, isAdminUser(currentUserId)).emoji}</span>
                   )}
                   {effectiveEntry.username}
                   {isAdminUser(currentUserId) && <span style={{ ...devBadgeStyle, marginLeft: '6px' }}>DEV</span>}
