@@ -13,6 +13,7 @@ const STORAGE_TO_DB: Record<string, string> = {
   daily_challenge: 'daily_challenge',
   lesson_progress: 'lesson_progress',
   duck_hunt_high_score: 'duck_hunt_high_score',
+  duck_race_high_score: 'duck_race_high_score',
 };
 
 function collectLocalData(): Record<string, unknown> {
