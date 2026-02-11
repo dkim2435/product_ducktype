@@ -170,7 +170,40 @@
     "profile": "资料",
     "achievements": "成就",
     "daily": "每日",
-    "practice": "练习"
+    "practice": "练习",
+    "arcade": "街机"
+  },
+  "arcade": {
+    "title": "街机",
+    "play": "开始",
+    "highScore": "最高分",
+    "comingSoon": "更多游戏即将推出..."
+  },
+  "duckHunt": {
+    "title": "猎鸭",
+    "description": "鸭子在屏幕上飞来飞去 — 输入鸭子上的单词来击落它们！别让它们逃跑！",
+    "start": "开始",
+    "gameOver": "游戏结束！",
+    "score": "分数",
+    "ducksShot": "击落鸭子",
+    "accuracy": "准确率",
+    "maxCombo": "最大连击",
+    "duration": "游戏时间",
+    "playAgain": "再来一次",
+    "backToArcade": "返回",
+    "newHighScore": "新最高分！",
+    "typeHere": "输入来射击...",
+    "howToPlay": "玩法说明",
+    "tutorialNext": "下一步",
+    "tutorialGotIt": "知道了！",
+    "tutorialAim": "瞄准鸭子！",
+    "tutorialAimDesc": "鸭子会飞过屏幕，每只都带着一个单词。在鸭子逃跑之前输入单词来击落它！",
+    "tutorialType": "输入来射击！",
+    "tutorialTypeDesc": "开始输入单词，匹配的鸭子会高亮显示。完成单词即可击落鸭子。用退格键修改错误。",
+    "tutorialCombo": "积累连击！",
+    "tutorialComboDesc": "连续击落鸭子可以提升连击倍数（最高3倍）。鸭子逃跑或打错字会重置连击。",
+    "tutorialLives": "保护生命！",
+    "tutorialLivesDesc": "你有3条命。每只逃跑的鸭子扣一条命。游戏难度会逐渐提升 — 鸭子飞得更快，单词也更长！"
   },
   "auth": {
     "login": "登录",

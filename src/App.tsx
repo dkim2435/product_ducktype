@@ -33,12 +33,16 @@ import { DailyChallenge } from './components/pages/DailyChallenge';
 import { Practice } from './components/pages/Practice';
 import { LessonTest } from './components/practice/LessonTest';
 import { Leaderboard } from './components/pages/Leaderboard';
+import { Arcade } from './components/pages/Arcade';
+import { DuckHuntGame } from './components/arcade/DuckHuntGame';
 import { TypingInfo } from './components/content/TypingInfo';
 import { useLeaderboard } from './hooks/useLeaderboard';
 import { setPersistProgress, clearProgressData } from './utils/storage';
+import type { DuckHuntHighScore, DuckHuntResult } from './types/arcade';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
-  | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard';
+  | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard'
+  | 'arcade' | 'duck-hunt';
 
 interface AppContentProps {
   user: User | null;
@@ -59,6 +63,12 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
   const [challengeWpm, setChallengeWpm] = useState<number | null>(null);
   const [isTypingActive, setIsTypingActive] = useState(false);
+  const [duckHuntHighScore, setDuckHuntHighScore] = useState<DuckHuntHighScore | null>(() => {
+    try {
+      const raw = localStorage.getItem('ducktype_duck_hunt_high_score');
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  });
 
   const isMobile = useIsMobile();
   useTheme(settings.theme);
@@ -243,6 +253,34 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     setActiveLessonId(lessonId);
     setScreen('lesson');
   }, []);
+
+  const handleDuckHuntGameOver = useCallback((result: DuckHuntResult) => {
+    // Save high score
+    const isNew = !duckHuntHighScore || result.score > duckHuntHighScore.score;
+    if (isNew) {
+      const newHS: DuckHuntHighScore = {
+        score: result.score,
+        ducksShot: result.ducksShot,
+        maxCombo: result.maxCombo,
+        timestamp: Date.now(),
+      };
+      setDuckHuntHighScore(newHS);
+      try { localStorage.setItem('ducktype_duck_hunt_high_score', JSON.stringify(newHS)); } catch {}
+    }
+
+    // XP reward: score / 25 (balanced for arcade)
+    const xpAmount = Math.max(1, Math.floor(result.score / 25));
+    if (gamification.profile) {
+      gamification.addXp(xpAmount);
+    }
+    addToast({
+      type: 'xp',
+      title: t('duckHunt.gameOver'),
+      message: `+${xpAmount} XP`,
+      icon: '🦆',
+    });
+    triggerSync();
+  }, [duckHuntHighScore, gamification, addToast, t, triggerSync]);
 
   const handleSettingChange = useCallback(<K extends keyof Settings>(key: K, value: Settings[K]) => {
     updateSetting(key, value);
@@ -480,6 +518,23 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onBack={() => handleNavigate('practice')}
             getNextLesson={lessons.getNextLesson}
             onStartLesson={handleStartLesson}
+          />
+        )}
+
+        {screen === 'arcade' && (
+          <Arcade
+            onBack={() => handleNavigate('test')}
+            onPlayDuckHunt={() => handleNavigate('duck-hunt')}
+            duckHuntHighScore={duckHuntHighScore}
+          />
+        )}
+
+        {screen === 'duck-hunt' && (
+          <DuckHuntGame
+            settings={settings}
+            onBack={() => handleNavigate('arcade')}
+            onGameOver={handleDuckHuntGameOver}
+            highScore={duckHuntHighScore}
           />
         )}
 

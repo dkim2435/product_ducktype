@@ -170,7 +170,40 @@
     "profile": "Profile",
     "achievements": "Achievements",
     "daily": "Daily",
-    "practice": "Practice"
+    "practice": "Practice",
+    "arcade": "Arcade"
+  },
+  "arcade": {
+    "title": "Arcade",
+    "play": "Play",
+    "highScore": "High Score",
+    "comingSoon": "More games coming soon..."
+  },
+  "duckHunt": {
+    "title": "Duck Hunt",
+    "description": "Ducks fly across the screen — type the word on each duck to shoot it down! Don't let them escape!",
+    "start": "Start",
+    "gameOver": "Game Over!",
+    "score": "Score",
+    "ducksShot": "Ducks Shot",
+    "accuracy": "Accuracy",
+    "maxCombo": "Max Combo",
+    "duration": "Duration",
+    "playAgain": "Play Again",
+    "backToArcade": "Back",
+    "newHighScore": "New High Score!",
+    "typeHere": "type to shoot...",
+    "howToPlay": "How to Play",
+    "tutorialNext": "Next",
+    "tutorialGotIt": "Got it!",
+    "tutorialAim": "Aim at the Ducks",
+    "tutorialAimDesc": "Ducks will fly across the screen, each carrying a word. Type the word to shoot the duck before it escapes!",
+    "tutorialType": "Type to Shoot",
+    "tutorialTypeDesc": "Start typing a word — the matching duck will be highlighted. Complete the word to shoot it down. Backspace to correct mistakes.",
+    "tutorialCombo": "Build Combos",
+    "tutorialComboDesc": "Shoot ducks consecutively to build a combo multiplier (up to 3x). Combos reset when a duck escapes or you mistype.",
+    "tutorialLives": "Watch Your Lives",
+    "tutorialLivesDesc": "You have 3 lives. Each escaped duck costs one life. The game gets harder as you progress — ducks fly faster and words get longer!"
   },
   "auth": {
     "login": "Log In",

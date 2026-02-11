@@ -170,7 +170,40 @@
     "profile": "프로필",
     "achievements": "업적",
     "daily": "일일",
-    "practice": "연습"
+    "practice": "연습",
+    "arcade": "아케이드"
+  },
+  "arcade": {
+    "title": "아케이드",
+    "play": "플레이",
+    "highScore": "최고 점수",
+    "comingSoon": "더 많은 게임이 곧 추가됩니다..."
+  },
+  "duckHunt": {
+    "title": "오리 사냥",
+    "description": "오리가 화면을 날아다닙니다 — 오리에 붙은 단어를 타이핑해서 사냥하세요! 놓치지 마세요!",
+    "start": "시작",
+    "gameOver": "게임 오버!",
+    "score": "점수",
+    "ducksShot": "사냥한 오리",
+    "accuracy": "정확도",
+    "maxCombo": "최대 콤보",
+    "duration": "플레이 시간",
+    "playAgain": "다시 하기",
+    "backToArcade": "돌아가기",
+    "newHighScore": "새로운 최고 기록!",
+    "typeHere": "타이핑으로 사냥...",
+    "howToPlay": "게임 방법",
+    "tutorialNext": "다음",
+    "tutorialGotIt": "알겠어요!",
+    "tutorialAim": "오리를 노려라!",
+    "tutorialAimDesc": "오리가 화면을 날아다니며 각각 단어를 달고 있습니다. 오리가 도망가기 전에 단어를 타이핑해서 사냥하세요!",
+    "tutorialType": "타이핑으로 사냥!",
+    "tutorialTypeDesc": "단어를 타이핑하면 매칭되는 오리가 하이라이트됩니다. 단어를 완성하면 오리가 사냥됩니다. 백스페이스로 수정할 수 있습니다.",
+    "tutorialCombo": "콤보를 쌓아라!",
+    "tutorialComboDesc": "연속으로 오리를 사냥하면 콤보 배율이 올라갑니다 (최대 3배). 오리가 탈출하거나 오타를 내면 콤보가 초기화됩니다.",
+    "tutorialLives": "라이프를 지켜라!",
+    "tutorialLivesDesc": "라이프 3개로 시작합니다. 오리가 탈출할 때마다 라이프가 하나 줄어듭니다. 게임이 진행될수록 오리가 더 빨라지고 단어도 길어집니다!"
   },
   "auth": {
     "login": "로그인",

@@ -246,6 +246,14 @@ export function useGamification() {
     return true;
   }, [profile, achievements, lastXpGain]);
 
+  const addXp = useCallback((amount: number) => {
+    const newTotalXp = profile.totalXp + amount;
+    const newLevel = levelFromXp(newTotalXp);
+    const newProfile: PlayerProfile = { ...profile, totalXp: newTotalXp, level: newLevel };
+    setProfile(newProfile);
+    setItem(PROFILE_KEY, newProfile);
+  }, [profile]);
+
   return {
     profile,
     achievements,
@@ -255,5 +263,6 @@ export function useGamification() {
     lastNewAchievements,
     processTestResult,
     awardShareBonus,
+    addXp,
   };
 }

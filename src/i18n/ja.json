@@ -170,7 +170,40 @@
     "profile": "プロフィール",
     "achievements": "実績",
     "daily": "デイリー",
-    "practice": "練習"
+    "practice": "練習",
+    "arcade": "アーケード"
+  },
+  "arcade": {
+    "title": "アーケード",
+    "play": "プレイ",
+    "highScore": "ハイスコア",
+    "comingSoon": "もっとゲームが近日登場..."
+  },
+  "duckHunt": {
+    "title": "ダックハント",
+    "description": "アヒルが画面を飛び回ります — アヒルの単語をタイピングして撃ち落としましょう！逃がさないで！",
+    "start": "スタート",
+    "gameOver": "ゲームオーバー！",
+    "score": "スコア",
+    "ducksShot": "撃ったアヒル",
+    "accuracy": "正確率",
+    "maxCombo": "最大コンボ",
+    "duration": "プレイ時間",
+    "playAgain": "もう一度",
+    "backToArcade": "戻る",
+    "newHighScore": "新ハイスコア！",
+    "typeHere": "タイプして撃つ...",
+    "howToPlay": "遊び方",
+    "tutorialNext": "次へ",
+    "tutorialGotIt": "わかった！",
+    "tutorialAim": "アヒルを狙え！",
+    "tutorialAimDesc": "アヒルが画面を飛び回り、それぞれ単語がついています。アヒルが逃げる前に単語をタイプして撃ち落としましょう！",
+    "tutorialType": "タイプして撃つ！",
+    "tutorialTypeDesc": "単語をタイプし始めると、マッチするアヒルがハイライトされます。単語を完成させてアヒルを撃ち落としましょう。バックスペースで修正できます。",
+    "tutorialCombo": "コンボを稼げ！",
+    "tutorialComboDesc": "連続で撃ち落とすとコンボ倍率が上がります（最大3倍）。アヒルが逃げたりミスタイプするとコンボがリセットされます。",
+    "tutorialLives": "ライフを守れ！",
+    "tutorialLivesDesc": "ライフは3つです。アヒルが逃げるたびにライフが1つ減ります。ゲームが進むとアヒルは速くなり、単語も長くなります！"
   },
   "auth": {
     "login": "ログイン",
