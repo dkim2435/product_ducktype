@@ -15,6 +15,9 @@ dist-ssr
 # Claude Code
 .claude/
 
+# Supabase SQL (contains secrets)
+supabase-*.sql
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
