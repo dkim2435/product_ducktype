@@ -60,7 +60,14 @@ interface AppContentProps {
 function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync, currentUsername }: AppContentProps) {
   const { settings, updateSetting } = useSettings();
   const { t, i18n } = useTranslation();
-  const [screen, setScreen] = useState<Screen>('test');
+  const [screen, setScreen] = useState<Screen>(() => {
+    const saved = sessionStorage.getItem('ducktype_return_screen');
+    if (saved) {
+      sessionStorage.removeItem('ducktype_return_screen');
+      return saved as Screen;
+    }
+    return 'test';
+  });
   const [showSettings, setShowSettings] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
@@ -330,6 +337,11 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
 
   const isCjk = ['ko', 'zh', 'ja'].includes(settings.language);
 
+  const handleLoginClick = useCallback(() => {
+    sessionStorage.setItem('ducktype_return_screen', screen);
+    onLoginClick();
+  }, [screen, onLoginClick]);
+
   const isCenteredPage = screen === 'results';
 
   return (
@@ -353,7 +365,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
         streak={gamification.streak}
         hidden={isTypingActive}
         user={user}
-        onLoginClick={onLoginClick}
+        onLoginClick={handleLoginClick}
         onLogout={onLogout}
         isSupabaseConfigured={isSupabaseConfigured}
       />
@@ -491,7 +503,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             challengeWpm={challengeWpm}
             isLoggedIn={!!user}
             isSupabaseConfigured={isSupabaseConfigured}
-            onLoginClick={onLoginClick}
+            onLoginClick={handleLoginClick}
             onShareClick={() => gamification.awardShareBonus(addToast)}
           />
         )}
@@ -504,7 +516,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onBack={() => handleNavigate('test')}
             user={user}
             isSupabaseConfigured={isSupabaseConfigured}
-            onLoginClick={onLoginClick}
+            onLoginClick={handleLoginClick}
             onLogout={onLogout}
           />
         )}
@@ -571,7 +583,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             duckHuntHighScore={duckHuntHighScore}
             duckRaceHighScore={duckRaceHighScore}
             isLoggedIn={!!user}
-            onLoginClick={onLoginClick}
+            onLoginClick={handleLoginClick}
           />
         )}
 
@@ -583,7 +595,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             highScore={duckHuntHighScore}
             isLoggedIn={!!user}
             isSupabaseConfigured={isSupabaseConfigured}
-            onLoginClick={onLoginClick}
+            onLoginClick={handleLoginClick}
           />
         )}
 
@@ -595,7 +607,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             highScore={duckRaceHighScore}
             isLoggedIn={!!user}
             isSupabaseConfigured={isSupabaseConfigured}
-            onLoginClick={onLoginClick}
+            onLoginClick={handleLoginClick}
           />
         )}
 
