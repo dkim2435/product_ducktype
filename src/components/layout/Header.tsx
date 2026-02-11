@@ -328,9 +328,9 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           >
             <sup style={{
               position: 'absolute',
-              top: isMobile ? -2 : 0,
-              right: isMobile ? -4 : -2,
-              fontSize: '7px',
+              top: isMobile ? -4 : -3,
+              right: isMobile ? -8 : -6,
+              fontSize: '9px',
               fontWeight: 700,
               color: '#4caf50',
               letterSpacing: '0.3px',
