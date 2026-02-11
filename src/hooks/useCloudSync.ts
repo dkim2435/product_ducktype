@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
-import { getItem } from '../utils/storage';
+import { getItem, setItem } from '../utils/storage';
 
 const STORAGE_TO_DB: Record<string, string> = {
   profile: 'profile',
@@ -27,9 +27,7 @@ function writeLocalData(dbRow: Record<string, unknown>) {
   for (const [storageKey, dbColumn] of Object.entries(STORAGE_TO_DB)) {
     const value = dbRow[dbColumn];
     if (value !== undefined && value !== null) {
-      try {
-        localStorage.setItem('ducktype_' + storageKey, JSON.stringify(value));
-      } catch { /* storage full */ }
+      setItem(storageKey, value);
     }
   }
 }
