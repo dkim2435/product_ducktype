@@ -178,6 +178,12 @@
     "play": "开始",
     "highScore": "最高分",
     "tagline": "想要更多经验值？来玩一把吧！",
+    "loginToPlay": "登录即可解锁",
+    "loginFree": "完全免费 — 无需信用卡！",
+    "perk1": "解锁全部街机游戏",
+    "perk2": "分数和经验值云端保存",
+    "perk3": "在排行榜上竞争",
+    "perk4": "跨设备同步进度",
     "comingSoon": "更多游戏即将推出..."
   },
   "duckHunt": {

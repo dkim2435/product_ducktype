@@ -8,9 +8,11 @@ interface ArcadeProps {
   onPlayDuckRace: () => void;
   duckHuntHighScore: DuckHuntHighScore | null;
   duckRaceHighScore: DuckRaceHighScore | null;
+  isLoggedIn: boolean;
+  onLoginClick: () => void;
 }
 
-export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighScore, duckRaceHighScore }: ArcadeProps) {
+export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighScore, duckRaceHighScore, isLoggedIn, onLoginClick }: ArcadeProps) {
   const { t } = useTranslation();
 
   return (
@@ -140,20 +142,84 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
         style={{
           position: 'relative',
           marginTop: '16px',
-          padding: '24px',
-          backgroundColor: 'var(--sub-alt-color)',
           borderRadius: 'var(--border-radius)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '16px',
+          overflow: 'hidden',
           cursor: 'pointer',
           border: '1px solid transparent',
           transition: 'border-color 0.15s',
         }}
-        onClick={onPlayDuckRace}
+        onClick={isLoggedIn ? onPlayDuckRace : onLoginClick}
         onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--main-color)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
       >
+        {/* Card content */}
+        <div style={{
+          padding: '24px',
+          backgroundColor: 'var(--sub-alt-color)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          filter: isLoggedIn ? 'none' : 'blur(3px)',
+          opacity: isLoggedIn ? 1 : 0.5,
+          transition: 'filter 0.2s, opacity 0.2s',
+          pointerEvents: 'none',
+        }}>
+          <div style={{
+            width: '56px',
+            height: '56px',
+            borderRadius: '12px',
+            backgroundColor: 'var(--bg-color)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '28px',
+            flexShrink: 0,
+          }}>
+            🏁
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              color: 'var(--text-color)',
+              marginBottom: '4px',
+            }}>
+              {t('duckRace.title')}
+            </div>
+            <div style={{
+              fontSize: '12px',
+              color: 'var(--sub-color)',
+              lineHeight: 1.4,
+            }}>
+              {t('duckRace.description')}
+            </div>
+            {duckRaceHighScore && (
+              <div style={{
+                fontSize: '11px',
+                color: 'var(--main-color)',
+                marginTop: '6px',
+                fontWeight: 600,
+              }}>
+                🏆 {t('arcade.highScore')}: {duckRaceHighScore.bestWpm} WPM ({duckRaceHighScore.winsCount}W / {duckRaceHighScore.racesCompleted}R)
+              </div>
+            )}
+          </div>
+          <button
+            style={{
+              padding: '8px 20px',
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--bg-color)',
+              backgroundColor: 'var(--main-color)',
+              borderRadius: 'var(--border-radius)',
+              flexShrink: 0,
+            }}
+          >
+            {t('arcade.play')}
+          </button>
+        </div>
+
+        {/* NEW badge */}
         <span style={{
           position: 'absolute',
           top: '8px',
@@ -164,64 +230,54 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
           borderRadius: '999px',
           backgroundColor: 'var(--main-color)',
           color: 'var(--bg-color)',
+          zIndex: 2,
         }}>
           ✨ NEW
         </span>
-        <div style={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '12px',
-          backgroundColor: 'var(--bg-color)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '28px',
-          flexShrink: 0,
-        }}>
-          🏁
-        </div>
 
-        <div style={{ flex: 1 }}>
+        {/* Lock overlay (logged out only) */}
+        {!isLoggedIn && (
           <div style={{
-            fontSize: '16px',
-            fontWeight: 700,
-            color: 'var(--text-color)',
-            marginBottom: '4px',
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            zIndex: 1,
           }}>
-            {t('duckRace.title')}
-          </div>
-          <div style={{
-            fontSize: '12px',
-            color: 'var(--sub-color)',
-            lineHeight: 1.4,
-          }}>
-            {t('duckRace.description')}
-          </div>
-          {duckRaceHighScore && (
+            <div style={{ fontSize: '28px' }}>🔒</div>
             <div style={{
-              fontSize: '11px',
-              color: 'var(--main-color)',
-              marginTop: '6px',
-              fontWeight: 600,
+              fontSize: '14px',
+              fontWeight: 700,
+              color: 'var(--text-color)',
             }}>
-              🏆 {t('arcade.highScore')}: {duckRaceHighScore.bestWpm} WPM ({duckRaceHighScore.winsCount}W / {duckRaceHighScore.racesCompleted}R)
+              {t('arcade.loginToPlay')}
             </div>
-          )}
-        </div>
-
-        <button
-          style={{
-            padding: '8px 20px',
-            fontSize: '13px',
-            fontWeight: 600,
-            color: 'var(--bg-color)',
-            backgroundColor: 'var(--main-color)',
-            borderRadius: 'var(--border-radius)',
-            flexShrink: 0,
-          }}
-        >
-          {t('arcade.play')}
-        </button>
+            <div style={{
+              fontSize: '12px',
+              color: 'var(--sub-color)',
+              textAlign: 'center',
+              lineHeight: 1.5,
+              maxWidth: '280px',
+            }}>
+              {t('arcade.loginFree')}
+            </div>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+              marginTop: '4px',
+              fontSize: '11px',
+              color: 'var(--sub-color)',
+            }}>
+              {['arcade.perk1', 'arcade.perk2', 'arcade.perk3', 'arcade.perk4'].map((key) => (
+                <span key={key}>✓ {t(key)}</span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Coming soon placeholder */}

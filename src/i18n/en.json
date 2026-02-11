@@ -178,6 +178,12 @@
     "play": "Play",
     "highScore": "High Score",
     "tagline": "Need more XP? Give these a shot!",
+    "loginToPlay": "Log in to unlock",
+    "loginFree": "It's 100% free — no credit card needed!",
+    "perk1": "Unlock all arcade games",
+    "perk2": "Save scores & XP to the cloud",
+    "perk3": "Compete on the leaderboard",
+    "perk4": "Sync progress across devices",
     "comingSoon": "More games coming soon..."
   },
   "duckHunt": {

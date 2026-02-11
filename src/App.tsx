@@ -562,6 +562,8 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onPlayDuckRace={() => handleNavigate('duck-race')}
             duckHuntHighScore={duckHuntHighScore}
             duckRaceHighScore={duckRaceHighScore}
+            isLoggedIn={!!user}
+            onLoginClick={onLoginClick}
           />
         )}
 
