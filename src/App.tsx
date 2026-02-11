@@ -540,10 +540,14 @@ function App() {
     setSyncKey((k) => k + 1);
   }, [signOut, cancelSync]);
 
-  // Show AuthModal automatically for first-time visitors (after 1s delay)
+  // Show AuthModal once per browser session for non-logged-in visitors
   useEffect(() => {
     if (loading || user || !isSupabaseConfigured) return;
-    const timer = setTimeout(() => setShowAuth(true), 1000);
+    if (sessionStorage.getItem('auth_modal_shown')) return;
+    const timer = setTimeout(() => {
+      setShowAuth(true);
+      sessionStorage.setItem('auth_modal_shown', '1');
+    }, 1000);
     return () => clearTimeout(timer);
   }, [loading, user, isSupabaseConfigured]);
 
