@@ -296,6 +296,13 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v250": {
+      "title": "What's New in v2.5.0",
+      "item1": "Progress Saved Permanently — Your XP, level, streak, and achievements now persist even after closing the browser. No more starting over!",
+      "item2": "Streak Grace Period — Miss a day? No worries! Your streak is now protected for 1 extra day before resetting.",
+      "item3": "Dead Click Fixes — Daily Challenge, Arcade Play buttons, and game back buttons now respond properly to clicks.",
+      "item4": "Bug Fixes — Fixed JS errors in Duck Race rankings and Daily Challenge results."
+    },
     "v240": {
       "title": "What's New in v2.4.0",
       "item1": "Arcade Upgrades — HOT & NEW badges, plus a catchy tagline to get you playing!",

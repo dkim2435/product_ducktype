@@ -257,7 +257,8 @@ export function DuckRaceGame({
     }}>
       {/* Back button */}
       <button
-        onClick={raceState.phase === 'racing' ? undefined : onBack}
+        onClick={onBack}
+        disabled={raceState.phase === 'racing'}
         style={{
           color: 'var(--sub-color)',
           fontSize: '13px',

@@ -50,8 +50,8 @@ function computeRankings(
   for (const g of ghosts) progressMap[g.id] = g.currentProgress;
 
   entries.sort((a, b) => {
-    const aFinished = a.id === 'player' ? playerFinished : ghosts.find(g => g.id === a.id)!.finished;
-    const bFinished = b.id === 'player' ? playerFinished : ghosts.find(g => g.id === b.id)!.finished;
+    const aFinished = a.id === 'player' ? playerFinished : ghosts.find(g => g.id === a.id)?.finished ?? false;
+    const bFinished = b.id === 'player' ? playerFinished : ghosts.find(g => g.id === b.id)?.finished ?? false;
 
     if (aFinished && !bFinished) return -1;
     if (!aFinished && bFinished) return 1;

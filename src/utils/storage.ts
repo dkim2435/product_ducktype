@@ -12,12 +12,25 @@ export function setPersistProgress(enabled: boolean): void {
   _persistProgress = enabled;
 }
 
-function storageFor(key: string): Storage {
-  return PROGRESS_KEYS.has(key) ? sessionStorage : localStorage;
+function storageFor(_key: string): Storage {
+  return localStorage;
 }
 
 export function getItem<T>(key: string, defaultValue: T): T {
   try {
+    // Migration: move data from sessionStorage to localStorage if present
+    if (PROGRESS_KEYS.has(key)) {
+      const sessionRaw = sessionStorage.getItem(PREFIX + key);
+      if (sessionRaw !== null) {
+        try {
+          localStorage.setItem(PREFIX + key, sessionRaw);
+          sessionStorage.removeItem(PREFIX + key);
+        } catch {
+          // localStorage full — fall through to read sessionStorage value
+        }
+      }
+    }
+
     const raw = storageFor(key).getItem(PREFIX + key);
     if (raw === null) return defaultValue;
     return JSON.parse(raw) as T;
@@ -27,7 +40,6 @@ export function getItem<T>(key: string, defaultValue: T): T {
 }
 
 export function setItem<T>(key: string, value: T): void {
-  if (PROGRESS_KEYS.has(key) && !_persistProgress) return;
   try {
     storageFor(key).setItem(PREFIX + key, JSON.stringify(value));
   } catch {

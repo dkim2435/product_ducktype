@@ -17,7 +17,8 @@ export function useDailyChallenge() {
   });
 
   const today = getTodayDateString();
-  const todayResult = state.results.find(r => r.date === today);
+  const results = Array.isArray(state.results) ? state.results : [];
+  const todayResult = results.find(r => r.date === today);
   const hasCompletedToday = !!todayResult;
 
   const getWords = useCallback((date?: string) => {
@@ -34,9 +35,10 @@ export function useDailyChallenge() {
 
     setState(prev => {
       // Don't overwrite if already completed
-      if (prev.results.find(r => r.date === today)) return prev;
+      const prevResults = Array.isArray(prev.results) ? prev.results : [];
+      if (prevResults.find(r => r.date === today)) return prev;
 
-      const newResults = [...prev.results, result];
+      const newResults = [...prevResults, result];
 
       // Calculate streak
       let currentStreak = 1;

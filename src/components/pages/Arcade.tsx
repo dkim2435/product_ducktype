@@ -125,6 +125,7 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
         </div>
 
         <button
+          onClick={e => { e.stopPropagation(); onPlayDuckHunt(); }}
           style={{
             padding: '8px 20px',
             fontSize: '13px',
@@ -133,6 +134,7 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
             backgroundColor: 'var(--main-color)',
             borderRadius: 'var(--border-radius)',
             flexShrink: 0,
+            cursor: 'pointer',
           }}
         >
           {t('arcade.play')}
@@ -218,6 +220,7 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
             </div>
             {isLoggedIn && (
               <button
+                onClick={e => { e.stopPropagation(); onPlayDuckRace(); }}
                 style={{
                   padding: '8px 20px',
                   fontSize: '13px',
@@ -226,6 +229,7 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
                   backgroundColor: 'var(--main-color)',
                   borderRadius: 'var(--border-radius)',
                   flexShrink: 0,
+                  cursor: 'pointer',
                 }}
               >
                 {t('arcade.play')}

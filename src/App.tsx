@@ -100,6 +100,15 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   // Store last test state for key analysis
   const lastTestStateRef = useRef<TestState | null>(null);
 
+  // Auto-show onboarding for first-time non-logged-in visitors
+  useEffect(() => {
+    if (user) return;
+    if (localStorage.getItem('ducktype_onboarding_seen')) return;
+    const timer = setTimeout(() => setShowOnboarding(true), 2000);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Daily challenge reminder for returning users (once per session)
   useEffect(() => {
     if (sessionStorage.getItem('daily_reminder_shown')) return;
@@ -389,7 +398,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
               width: '100%',
             }}>
             <button
-              onClick={() => !dailyChallenge.hasCompletedToday && handleNavigate('daily-challenge')}
+              onClick={() => handleNavigate('daily-challenge')}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -401,7 +410,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
                 background: 'transparent',
                 color: dailyChallenge.hasCompletedToday ? 'var(--sub-color)' : 'var(--main-color)',
                 fontSize: '13px',
-                cursor: dailyChallenge.hasCompletedToday ? 'default' : 'pointer',
+                cursor: 'pointer',
                 opacity: dailyChallenge.hasCompletedToday ? 0.7 : 1,
                 transition: 'opacity 0.15s, border-color 0.15s',
               }}

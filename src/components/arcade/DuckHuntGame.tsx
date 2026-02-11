@@ -175,7 +175,8 @@ export function DuckHuntGame({ settings, onBack, onGameOver, highScore, isLogged
     }}>
       {/* Back button */}
       <button
-        onClick={state.phase === 'playing' ? undefined : onBack}
+        onClick={onBack}
+        disabled={state.phase === 'playing'}
         style={{
           color: 'var(--sub-color)',
           fontSize: '13px',
