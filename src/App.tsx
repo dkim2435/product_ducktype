@@ -190,6 +190,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       addToast,
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
+      user?.id,
     );
 
     triggerSync();
@@ -224,6 +225,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       addToast,
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
+      user?.id,
     );
 
     triggerSync();
@@ -252,6 +254,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       addToast,
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
+      user?.id,
     );
 
     setScreen('results');
@@ -639,6 +642,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
         onClose={() => setShowSettings(false)}
         visible={showSettings}
         playerLevel={gamification.profile.level}
+        userId={user?.id}
       />
 
       <OnboardingModal

@@ -2,6 +2,7 @@ import type { TestResult } from '../types/stats';
 import type { PlayerProfile, AchievementsState, StreakState, DailyChallengeState, LessonProgressMap } from '../types/gamification';
 import { ACHIEVEMENTS } from '../constants/achievements';
 import { LESSONS } from '../constants/lessons';
+import { getEffectiveLevel } from './admin';
 
 interface CheckContext {
   result: TestResult;
@@ -11,6 +12,7 @@ interface CheckContext {
   lessonProgress: LessonProgressMap;
   allLanguages: Set<string>;
   hasShared?: boolean;
+  userId?: string | null;
 }
 
 function checkAchievement(id: string, ctx: CheckContext): boolean {
@@ -65,9 +67,9 @@ function checkAchievement(id: string, ctx: CheckContext): boolean {
       return ctx.allLanguages.size >= 2;
     case 'daily-7':
       return dailyChallenge.currentStreak >= 7;
-    case 'level-25': return profile.level >= 25;
-    case 'level-50': return profile.level >= 50;
-    case 'level-100': return profile.level >= 100;
+    case 'level-25': return getEffectiveLevel(profile.level, ctx.userId) >= 25;
+    case 'level-50': return getEffectiveLevel(profile.level, ctx.userId) >= 50;
+    case 'level-100': return getEffectiveLevel(profile.level, ctx.userId) >= 100;
     case 'all-lessons': {
       const mainLessons = LESSONS.filter(l => l.id !== 'weak-keys');
       return mainLessons.every(l => lessonProgress[l.id]?.completedAt != null);

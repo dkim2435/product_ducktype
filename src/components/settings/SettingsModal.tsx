@@ -4,6 +4,7 @@ import { LANGUAGE_OPTIONS, FONT_OPTIONS } from '../../constants/defaults';
 import { SOUND_THEMES } from '../../constants/sounds';
 import { useSound } from '../../hooks/useSound';
 import { ThemePicker } from './ThemePicker';
+import { getEffectiveLevel } from '../../utils/admin';
 
 interface SettingsModalProps {
   settings: Settings;
@@ -11,6 +12,7 @@ interface SettingsModalProps {
   onClose: () => void;
   visible: boolean;
   playerLevel?: number;
+  userId?: string | null;
 }
 
 function SettingRow({ label, children }: { label: string; children: React.ReactNode }) {
@@ -56,7 +58,7 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
   );
 }
 
-export function SettingsModal({ settings, onSettingChange, onClose, visible, playerLevel = 1 }: SettingsModalProps) {
+export function SettingsModal({ settings, onSettingChange, onClose, visible, playerLevel = 1, userId }: SettingsModalProps) {
   const { t, i18n } = useTranslation();
   const { playClick: previewSound } = useSound({ enabled: true, volume: settings.soundVolume, theme: settings.soundTheme });
 
@@ -240,7 +242,7 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
             </span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {SOUND_THEMES.map(themeDef => {
-                const unlocked = playerLevel >= themeDef.unlockLevel;
+                const unlocked = getEffectiveLevel(playerLevel, userId) >= themeDef.unlockLevel;
                 const isActive = settings.soundTheme === themeDef.id;
                 return (
                   <button

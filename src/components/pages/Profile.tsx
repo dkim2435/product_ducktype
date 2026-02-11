@@ -302,7 +302,7 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
             fontWeight: 700,
             color: 'var(--main-color)',
           }}>
-            {t('gamification.level')} {profile.level}
+            {t('gamification.level')} {isAdmin ? 'MAX' : profile.level}
           </div>
           <div style={{
             fontSize: '14px',
@@ -322,7 +322,7 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
           color: 'var(--sub-color)',
           marginBottom: '4px',
         }}>
-          <span>{current} / {needed} XP</span>
+          <span>{isAdmin ? 'MAX' : `${current} / ${needed} XP`}</span>
           <span>{t('gamification.totalXp')}: {profile.totalXp}</span>
         </div>
         <div style={{
@@ -333,7 +333,7 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
           overflow: 'hidden',
         }}>
           <div style={{
-            width: `${Math.round(progress * 100)}%`,
+            width: isAdmin ? '100%' : `${Math.round(progress * 100)}%`,
             height: '100%',
             backgroundColor: 'var(--main-color)',
             borderRadius: '4px',

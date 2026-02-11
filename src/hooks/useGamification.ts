@@ -54,6 +54,7 @@ export function useGamification() {
     addToast: (toast: Omit<ToastNotification, 'id'>) => void,
     dailyChallengeState?: import('../types/gamification').DailyChallengeState,
     lessonProgress?: import('../types/gamification').LessonProgressMap,
+    userId?: string | null,
   ) => {
     // 1. Update streak
     const newStreak = updateStreak(streak);
@@ -98,6 +99,7 @@ export function useGamification() {
       dailyChallenge: dailyChallengeState || { results: [], currentStreak: 0, longestStreak: 0 },
       lessonProgress: lessonProgress || {},
       allLanguages: languagesRef.current,
+      userId,
     });
 
     const newAchievementsState: AchievementsState = {
