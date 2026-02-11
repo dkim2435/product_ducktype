@@ -68,6 +68,12 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const lessons = useLessons();
   const leaderboard = useLeaderboard();
 
+  // Fetch leaderboard on mount to get user rank for particle effects
+  useEffect(() => {
+    leaderboard.fetchLeaderboard(settings.timeLimit, user?.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings.timeLimit, user?.id]);
+
   // Store last test state for key analysis
   const lastTestStateRef = useRef<TestState | null>(null);
 
@@ -380,6 +386,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
               onSettingChange={handleSettingChange}
               onFinish={handleTestFinish}
               onTypingStateChange={setIsTypingActive}
+              leaderboardRank={leaderboard.userRank}
             />
             </div>
             <TypingInfo hidden={isTypingActive} />
@@ -486,6 +493,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
         onSettingChange={handleSettingChange}
         onClose={() => setShowSettings(false)}
         visible={showSettings}
+        playerLevel={gamification.profile.level}
       />
 
       <ToastContainer toasts={toasts} onDismiss={removeToast} />

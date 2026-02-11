@@ -40,13 +40,13 @@ export function xpToNextLevel(totalXp: number): { current: number; needed: numbe
 }
 
 // ---- Rank System ----
-interface RankDef {
+export interface RankDef {
   name: DuckRank;
   emoji: string;
   minLevel: number;
 }
 
-const RANKS: RankDef[] = [
+export const RANKS: RankDef[] = [
   { name: 'Egg', emoji: '🥚', minLevel: 1 },
   { name: 'Duckling', emoji: '🐣', minLevel: 5 },
   { name: 'Fledgling', emoji: '🐥', minLevel: 10 },

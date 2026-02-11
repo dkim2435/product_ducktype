@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import type { User } from '@supabase/supabase-js';
 import type { PlayerProfile, StreakState, KeyStatsMap } from '../../types/gamification';
-import { xpToNextLevel, getRank } from '../../constants/gamification';
+import { xpToNextLevel, getRank, RANKS } from '../../constants/gamification';
 import { KeyboardHeatmap } from '../profile/KeyboardHeatmap';
 import { StreakCalendar } from '../profile/StreakCalendar';
 
@@ -251,8 +251,120 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
         backgroundColor: 'var(--sub-alt-color)',
         borderRadius: 'var(--border-radius)',
         padding: '24px',
+        marginBottom: '24px',
       }}>
         <StreakCalendar streak={streak} />
+      </div>
+
+      {/* Rank Roadmap */}
+      <div style={{
+        backgroundColor: 'var(--sub-alt-color)',
+        borderRadius: 'var(--border-radius)',
+        padding: '24px',
+      }}>
+        <div style={{
+          fontSize: '14px',
+          fontWeight: 600,
+          color: 'var(--text-color)',
+          marginBottom: '4px',
+        }}>
+          {t('profile.rankRoadmap')}
+        </div>
+        <div style={{
+          fontSize: '11px',
+          color: 'var(--sub-color)',
+          marginBottom: '20px',
+        }}>
+          {t('profile.rankUnlocksAt')}
+        </div>
+
+        <div style={{ position: 'relative', paddingLeft: '32px' }}>
+          {/* Vertical line */}
+          <div style={{
+            position: 'absolute',
+            left: '11px',
+            top: '4px',
+            bottom: '4px',
+            width: '2px',
+            backgroundColor: 'var(--sub-alt-color)',
+            borderLeft: '2px solid var(--sub-color)',
+            opacity: 0.3,
+          }} />
+
+          {RANKS.map((r, i) => {
+            const isCurrent = rank.name === r.name;
+            const isPast = profile.level >= r.minLevel && !isCurrent;
+            const isFuture = profile.level < r.minLevel;
+
+            return (
+              <div
+                key={r.name}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '8px 0',
+                  opacity: isFuture ? 0.5 : 1,
+                  position: 'relative',
+                }}
+              >
+                {/* Timeline dot */}
+                <div style={{
+                  position: 'absolute',
+                  left: '-25px',
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: isCurrent ? 'var(--main-color)' : isPast ? 'var(--main-color)' : 'var(--sub-alt-color)',
+                  border: isCurrent ? '2px solid var(--main-color)' : '2px solid var(--sub-color)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }} />
+
+                {/* Emoji */}
+                <span style={{ fontSize: '20px', minWidth: '28px', textAlign: 'center' }}>
+                  {r.emoji}
+                </span>
+
+                {/* Name + level */}
+                <div style={{ flex: 1 }}>
+                  <span style={{
+                    fontSize: '13px',
+                    fontWeight: isCurrent ? 700 : 400,
+                    color: isCurrent ? 'var(--main-color)' : 'var(--text-color)',
+                  }}>
+                    {r.name}
+                  </span>
+                  <span style={{
+                    fontSize: '11px',
+                    color: 'var(--sub-color)',
+                    marginLeft: '8px',
+                  }}>
+                    Lv.{r.minLevel}
+                  </span>
+                </div>
+
+                {/* Status */}
+                {isCurrent && (
+                  <span style={{
+                    fontSize: '10px',
+                    padding: '2px 8px',
+                    borderRadius: '999px',
+                    backgroundColor: 'var(--main-color)',
+                    color: 'var(--bg-color)',
+                    fontWeight: 600,
+                  }}>
+                    {t('profile.currentRank')}
+                  </span>
+                )}
+                {isPast && (
+                  <span style={{ fontSize: '14px', color: 'var(--main-color)' }}>✓</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

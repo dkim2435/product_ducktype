@@ -70,6 +70,7 @@
     "difficulty": "難易度",
     "freedomMode": "フリーモード",
     "freedomModeDesc": "前の単語に戻ることができます",
+    "soundTheme": "サウンドテーマ",
     "normal": "通常",
     "expert": "エキスパート",
     "master": "マスター",
@@ -150,7 +151,10 @@
     "keyboardHeatmap": "キーボードヒートマップ",
     "heatmapDesc": "キー別エラー率（緑=良好、赤=練習が必要）",
     "streakCalendar": "アクティビティカレンダー",
-    "noKeyData": "キーボードヒートマップを表示するにはテストを完了してください"
+    "noKeyData": "キーボードヒートマップを表示するにはテストを完了してください",
+    "rankRoadmap": "ダックランクロードマップ",
+    "currentRank": "現在",
+    "rankUnlocksAt": "レベルアップして新しいランクを解除しよう"
   },
   "challenge": {
     "beatFriend": "友達が {{wpm}} WPM を記録しました。勝てますか？",

@@ -70,6 +70,7 @@
     "difficulty": "난이도",
     "freedomMode": "자유 모드",
     "freedomModeDesc": "이전 단어로 돌아갈 수 있습니다",
+    "soundTheme": "사운드 테마",
     "normal": "보통",
     "expert": "전문가",
     "master": "마스터",
@@ -150,7 +151,10 @@
     "keyboardHeatmap": "키보드 히트맵",
     "heatmapDesc": "키별 오타율 (녹색 = 좋음, 빨강 = 연습 필요)",
     "streakCalendar": "활동 캘린더",
-    "noKeyData": "키보드 히트맵을 보려면 테스트를 완료하세요"
+    "noKeyData": "키보드 히트맵을 보려면 테스트를 완료하세요",
+    "rankRoadmap": "덕 랭크 로드맵",
+    "currentRank": "현재",
+    "rankUnlocksAt": "레벨을 올려 새로운 랭크를 해금하세요"
   },
   "challenge": {
     "beatFriend": "친구가 {{wpm}} WPM을 기록했어요. 이길 수 있나요?",

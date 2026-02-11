@@ -14,6 +14,7 @@ import { Caret } from './Caret';
 import { ModeSelector } from './ModeSelector';
 import { LanguageSelector } from './LanguageSelector';
 import { FocusWarning } from './FocusWarning';
+import { TypingParticles } from './TypingParticles';
 
 interface TypingTestProps {
   settings: Settings;
@@ -22,9 +23,10 @@ interface TypingTestProps {
   customWords?: string[];
   hideModeSwitcher?: boolean;
   onTypingStateChange?: (isTyping: boolean) => void;
+  leaderboardRank?: number | null;
 }
 
-export function TypingTest({ settings, onSettingChange, onFinish, customWords, hideModeSwitcher, onTypingStateChange }: TypingTestProps) {
+export function TypingTest({ settings, onSettingChange, onFinish, customWords, hideModeSwitcher, onTypingStateChange, leaderboardRank }: TypingTestProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [isFocused, setIsFocused] = useState(true);
@@ -57,6 +59,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   const { playClick, playError } = useSound({
     enabled: settings.soundEnabled,
     volume: settings.soundVolume,
+    theme: settings.soundTheme,
   });
 
   const handleTimerFinish = useCallback(() => {
@@ -142,6 +145,18 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     });
   }, [scrollOffset, state.currentWordIndex, state.currentLetterIndex, state.words, updatePosition]);
 
+  const triggerParticle = useCallback(() => {
+    if (!leaderboardRank || leaderboardRank > 20) return;
+    const container = wordsContainerRef.current?.parentElement;
+    if (!container) return;
+    const canvas = container.querySelector('[data-particles="true"]') as HTMLCanvasElement | null;
+    if (!canvas) return;
+    // Use caret position for particle spawn
+    canvas.dispatchEvent(new CustomEvent('spawn-particle', {
+      detail: { x: position.left, y: position.top + (position.height / 2) },
+    }));
+  }, [leaderboardRank, wordsContainerRef, position]);
+
   const handleCharWithSound = useCallback((char: string) => {
     isTypingRef.current = true;
     const word = state.words[state.currentWordIndex];
@@ -149,6 +164,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     if (word && letterIdx < word.letters.length) {
       if (char === word.letters[letterIdx].char) {
         playClick();
+        triggerParticle();
       } else {
         playError();
       }
@@ -157,7 +173,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     }
     handleChar(char);
     setTimeout(() => { isTypingRef.current = false; }, 100);
-  }, [handleChar, playClick, playError, state.words, state.currentWordIndex, state.currentLetterIndex]);
+  }, [handleChar, playClick, playError, triggerParticle, state.words, state.currentWordIndex, state.currentLetterIndex]);
 
   const handleSpaceWithSound = useCallback(() => {
     isTypingRef.current = true;
@@ -302,6 +318,12 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
           height: `${lineStride * visibleLines}px`,
         }}
       >
+        {/* Typing particles for top 20 leaderboard users */}
+        <TypingParticles
+          visible={!!leaderboardRank && leaderboardRank <= 20 && state.phase === 'running'}
+          rank={leaderboardRank ?? 999}
+        />
+
         {/* Change 3: Tap-to-start overlay (mobile waiting state) */}
         <FocusWarning
           visible={showStartOverlay}

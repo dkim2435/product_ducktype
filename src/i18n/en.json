@@ -70,6 +70,7 @@
     "difficulty": "Difficulty",
     "freedomMode": "Freedom mode",
     "freedomModeDesc": "Allow going back to previous words",
+    "soundTheme": "Sound Theme",
     "normal": "Normal",
     "expert": "Expert",
     "master": "Master",
@@ -150,7 +151,10 @@
     "keyboardHeatmap": "Keyboard Heatmap",
     "heatmapDesc": "Error rate by key (green = good, red = needs practice)",
     "streakCalendar": "Activity Calendar",
-    "noKeyData": "Complete some tests to see your keyboard heatmap"
+    "noKeyData": "Complete some tests to see your keyboard heatmap",
+    "rankRoadmap": "Duck Rank Roadmap",
+    "currentRank": "Current",
+    "rankUnlocksAt": "Level up to unlock new ranks"
   },
   "challenge": {
     "beatFriend": "Your friend typed {{wpm}} WPM. Can you beat them?",

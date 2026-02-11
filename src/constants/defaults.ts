@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: Settings = {
   smoothCaret: true,
   soundEnabled: true,
   soundVolume: 0.25,
+  soundTheme: 'default',
   showLiveWpm: true,
   showLiveAccuracy: true,
   showTimer: true,

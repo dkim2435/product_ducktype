@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import type { Settings, CaretStyle, SoundVolume } from '../../types/settings';
+import type { Settings, CaretStyle, SoundVolume, SoundTheme } from '../../types/settings';
 import { LANGUAGE_OPTIONS, FONT_OPTIONS } from '../../constants/defaults';
+import { SOUND_THEMES } from '../../constants/sounds';
+import { useSound } from '../../hooks/useSound';
 import { ThemePicker } from './ThemePicker';
 
 interface SettingsModalProps {
@@ -8,6 +10,7 @@ interface SettingsModalProps {
   onSettingChange: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
   onClose: () => void;
   visible: boolean;
+  playerLevel?: number;
 }
 
 function SettingRow({ label, children }: { label: string; children: React.ReactNode }) {
@@ -53,8 +56,9 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
   );
 }
 
-export function SettingsModal({ settings, onSettingChange, onClose, visible }: SettingsModalProps) {
+export function SettingsModal({ settings, onSettingChange, onClose, visible, playerLevel = 1 }: SettingsModalProps) {
   const { t, i18n } = useTranslation();
+  const { playClick: previewSound } = useSound({ enabled: true, volume: settings.soundVolume, theme: settings.soundTheme });
 
   if (!visible) return null;
 
@@ -227,6 +231,53 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible }: S
               ))}
             </div>
           </SettingRow>
+        )}
+
+        {settings.soundEnabled && (
+          <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
+            <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+              {t('settings.soundTheme')}
+            </span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+              {SOUND_THEMES.map(themeDef => {
+                const unlocked = playerLevel >= themeDef.unlockLevel;
+                const isActive = settings.soundTheme === themeDef.id;
+                return (
+                  <button
+                    key={themeDef.id}
+                    onClick={() => {
+                      if (!unlocked) return;
+                      onSettingChange('soundTheme', themeDef.id as SoundTheme);
+                      // Preview the selected sound
+                      setTimeout(() => previewSound(), 50);
+                    }}
+                    disabled={!unlocked}
+                    style={{
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      borderRadius: '6px',
+                      border: isActive ? '1.5px solid var(--main-color)' : '1px solid var(--sub-alt-color)',
+                      color: isActive ? 'var(--main-color)' : unlocked ? 'var(--text-color)' : 'var(--sub-color)',
+                      backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
+                      opacity: unlocked ? 1 : 0.4,
+                      cursor: unlocked ? 'pointer' : 'not-allowed',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
+                    {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+                    {themeDef.name}
+                    {!unlocked && (
+                      <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
+                        Lv.{themeDef.unlockLevel}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         )}
 
         {/* Live WPM */}

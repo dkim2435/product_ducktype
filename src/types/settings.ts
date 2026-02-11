@@ -3,6 +3,7 @@ export type FontFamily = 'default' | 'mono' | 'roboto-mono' | 'fira-code' | 'sou
 export type SoundVolume = 0 | 0.25 | 0.5 | 0.75 | 1;
 export type SmoothCaret = boolean;
 export type Difficulty = 'normal' | 'expert' | 'master';
+export type SoundTheme = 'default' | 'typewriter' | 'mechanical' | 'bubble' | 'laser' | 'piano' | 'retro' | 'crystal';
 
 export interface Settings {
   theme: string;
@@ -16,6 +17,7 @@ export interface Settings {
   smoothCaret: boolean;
   soundEnabled: boolean;
   soundVolume: SoundVolume;
+  soundTheme: SoundTheme;
   showLiveWpm: boolean;
   showLiveAccuracy: boolean;
   showTimer: boolean;

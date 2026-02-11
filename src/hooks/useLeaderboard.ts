@@ -13,8 +13,9 @@ export interface LeaderboardEntry {
 export function useLeaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
+  const [userRank, setUserRank] = useState<number | null>(null);
 
-  const fetchLeaderboard = useCallback(async (modeValue: number) => {
+  const fetchLeaderboard = useCallback(async (modeValue: number, currentUserId?: string) => {
     setLoading(true);
     let realEntries: LeaderboardEntry[] = [];
 
@@ -51,6 +52,13 @@ export function useLeaderboard() {
       .slice(0, 100);
 
     setEntries(combined);
+
+    // Calculate user rank
+    if (currentUserId) {
+      const idx = combined.findIndex(e => 'user_id' in e && e.user_id === currentUserId);
+      setUserRank(idx >= 0 ? idx + 1 : null);
+    }
+
     setLoading(false);
   }, []);
 
@@ -92,5 +100,5 @@ export function useLeaderboard() {
     } catch { /* network error */ }
   }, []);
 
-  return { entries, loading, fetchLeaderboard, submitScore };
+  return { entries, loading, fetchLeaderboard, submitScore, userRank };
 }

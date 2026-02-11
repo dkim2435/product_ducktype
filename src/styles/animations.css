@@ -101,3 +101,8 @@
   animation: streakFlame 0.6s ease-in-out infinite;
   display: inline-block;
 }
+
+@keyframes particleFade {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.3); }
+}
