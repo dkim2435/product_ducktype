@@ -5,6 +5,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { StatCard } from './StatCard';
 import { WpmChart } from './WpmChart';
 import { ShareButton } from './ShareButton';
+import { EmailReportButton } from './EmailReportButton';
 import { XpGainDisplay } from './XpGainDisplay';
 import { AchievementUnlock } from './AchievementUnlock';
 import { HelpBadge } from './HelpBadge';
@@ -362,6 +363,9 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           {t('test.nextTest')}
         </button>
         <ShareButton result={result} />
+        {isLoggedIn && (
+          <EmailReportButton result={result} xpGain={xpGain} weakKeys={weakKeys} />
+        )}
       </div>
 
       {/* Cloud save prompt for non-logged-in users */}

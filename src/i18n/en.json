@@ -49,7 +49,11 @@
     "tryAgain": "Try again",
     "moreOptions": "More options...",
     "weakKeys": "Weak keys in this test",
-    "practiceWeakKeys": "How about practicing these keys?"
+    "practiceWeakKeys": "How about practicing these keys?",
+    "emailReport": "Email report",
+    "emailSending": "Sending...",
+    "emailSent": "Sent!",
+    "emailError": "Failed to send"
   },
   "settings": {
     "title": "Settings",

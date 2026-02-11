@@ -49,7 +49,11 @@
     "tryAgain": "再试一次",
     "moreOptions": "更多选项...",
     "weakKeys": "本次测试中的薄弱按键",
-    "practiceWeakKeys": "要不要练习一下这些按键？"
+    "practiceWeakKeys": "要不要练习一下这些按键？",
+    "emailReport": "邮件报告",
+    "emailSending": "发送中...",
+    "emailSent": "已发送！",
+    "emailError": "发送失败"
   },
   "settings": {
     "title": "设置",

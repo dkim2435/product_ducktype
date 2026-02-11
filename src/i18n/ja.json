@@ -49,7 +49,11 @@
     "tryAgain": "もう一度",
     "moreOptions": "その他...",
     "weakKeys": "このテストで苦手なキー",
-    "practiceWeakKeys": "これらのキーを練習してみませんか？"
+    "practiceWeakKeys": "これらのキーを練習してみませんか？",
+    "emailReport": "メールレポート",
+    "emailSending": "送信中...",
+    "emailSent": "送信完了！",
+    "emailError": "送信失敗"
   },
   "settings": {
     "title": "設定",
