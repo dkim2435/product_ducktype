@@ -181,12 +181,13 @@ export function Arcade({ onBack, onPlayDuckHunt, onPlayDuckRace, duckHuntHighSco
               height: '56px',
               borderRadius: '12px',
               backgroundColor: 'var(--bg-color)',
-              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '28px',
               flexShrink: 0,
-              overflow: 'hidden',
             }}>
-              <span style={{ position: 'absolute', bottom: '2px', left: '50%', transform: 'translateX(-50%)', fontSize: '26px', lineHeight: 1 }}>🏎️</span>
-              <span style={{ position: 'absolute', top: '0px', left: '50%', transform: 'translateX(-50%)', fontSize: '22px', lineHeight: 1 }}>🦆</span>
+              🏎️
             </div>
             <div style={{ flex: 1 }}>
               <div style={{
