@@ -203,7 +203,8 @@
     "tutorialCombo": "Build Combos",
     "tutorialComboDesc": "Shoot ducks consecutively to build a combo multiplier (up to 3x). Combos reset when a duck escapes or you mistype.",
     "tutorialLives": "Watch Your Lives",
-    "tutorialLivesDesc": "You have 3 lives. Each escaped duck costs one life. The game gets harder as you progress — ducks fly faster and words get longer!"
+    "tutorialLivesDesc": "You have 3 lives. Each escaped duck costs one life. The game gets harder as you progress — ducks fly faster and words get longer!",
+    "loginDesc": "Log in to save your high score to the cloud and access it from any device."
   },
   "auth": {
     "login": "Log In",

@@ -203,7 +203,8 @@
     "tutorialCombo": "积累连击！",
     "tutorialComboDesc": "连续击落鸭子可以提升连击倍数（最高3倍）。鸭子逃跑或打错字会重置连击。",
     "tutorialLives": "保护生命！",
-    "tutorialLivesDesc": "你有3条命。每只逃跑的鸭子扣一条命。游戏难度会逐渐提升 — 鸭子飞得更快，单词也更长！"
+    "tutorialLivesDesc": "你有3条命。每只逃跑的鸭子扣一条命。游戏难度会逐渐提升 — 鸭子飞得更快，单词也更长！",
+    "loginDesc": "登录后最高分将保存到云端，随时随地访问。"
   },
   "auth": {
     "login": "登录",

@@ -37,7 +37,7 @@ import { Arcade } from './components/pages/Arcade';
 import { DuckHuntGame } from './components/arcade/DuckHuntGame';
 import { TypingInfo } from './components/content/TypingInfo';
 import { useLeaderboard } from './hooks/useLeaderboard';
-import { setPersistProgress, clearProgressData } from './utils/storage';
+import { setPersistProgress, clearProgressData, getItem, setItem } from './utils/storage';
 import type { DuckHuntHighScore, DuckHuntResult } from './types/arcade';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
@@ -63,12 +63,9 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
   const [challengeWpm, setChallengeWpm] = useState<number | null>(null);
   const [isTypingActive, setIsTypingActive] = useState(false);
-  const [duckHuntHighScore, setDuckHuntHighScore] = useState<DuckHuntHighScore | null>(() => {
-    try {
-      const raw = localStorage.getItem('ducktype_duck_hunt_high_score');
-      return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
-  });
+  const [duckHuntHighScore, setDuckHuntHighScore] = useState<DuckHuntHighScore | null>(
+    () => getItem<DuckHuntHighScore | null>('duck_hunt_high_score', null)
+  );
 
   const isMobile = useIsMobile();
   useTheme(settings.theme);
@@ -265,7 +262,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
         timestamp: Date.now(),
       };
       setDuckHuntHighScore(newHS);
-      try { localStorage.setItem('ducktype_duck_hunt_high_score', JSON.stringify(newHS)); } catch {}
+      setItem('duck_hunt_high_score', newHS);
     }
 
     // XP reward: score / 25 (balanced for arcade)
@@ -535,6 +532,9 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onBack={() => handleNavigate('arcade')}
             onGameOver={handleDuckHuntGameOver}
             highScore={duckHuntHighScore}
+            isLoggedIn={!!user}
+            isSupabaseConfigured={isSupabaseConfigured}
+            onLoginClick={onLoginClick}
           />
         )}
 

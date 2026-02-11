@@ -12,6 +12,9 @@ interface DuckHuntGameProps {
   onBack: () => void;
   onGameOver: (result: DuckHuntResult) => void;
   highScore: DuckHuntHighScore | null;
+  isLoggedIn: boolean;
+  isSupabaseConfigured: boolean;
+  onLoginClick: () => void;
 }
 
 const GAME_WIDTH = 800;
@@ -28,7 +31,7 @@ function getDuckEmoji(difficulty: number): string {
   return '🦇';                         // bat — very hard
 }
 
-export function DuckHuntGame({ settings, onBack, onGameOver, highScore }: DuckHuntGameProps) {
+export function DuckHuntGame({ settings, onBack, onGameOver, highScore, isLoggedIn, isSupabaseConfigured, onLoginClick }: DuckHuntGameProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const { state, startGame, restart, handleChar, handleBackspace } = useDuckHunt(settings.language);
@@ -697,6 +700,44 @@ export function DuckHuntGame({ settings, onBack, onGameOver, highScore }: DuckHu
               {t('duckHunt.playAgain')}
             </button>
           </div>
+
+          {/* Login prompt */}
+          {isSupabaseConfigured && !isLoggedIn && (
+            <div style={{
+              marginTop: '16px',
+              padding: '14px 20px',
+              backgroundColor: 'var(--sub-alt-color)',
+              borderRadius: 'var(--border-radius)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '14px',
+              maxWidth: '400px',
+            }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-color)', marginBottom: '4px' }}>
+                  {t('auth.savePromptTitle')}
+                </div>
+                <div style={{ fontSize: '11px', color: 'var(--sub-color)', lineHeight: 1.5 }}>
+                  {t('duckHunt.loginDesc')}
+                </div>
+              </div>
+              <button
+                onClick={onLoginClick}
+                style={{
+                  padding: '8px 18px',
+                  borderRadius: '6px',
+                  backgroundColor: 'var(--main-color)',
+                  color: 'var(--bg-color)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  flexShrink: 0,
+                  cursor: 'pointer',
+                }}
+              >
+                {t('auth.login')}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
