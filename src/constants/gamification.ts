@@ -70,10 +70,10 @@ export function getRank(level: number): { name: DuckRank; emoji: string } {
 // ---- Default Profile ----
 export function createDefaultProfile(): import('../types/gamification').PlayerProfile {
   return {
-    totalXp: 0,
-    level: 1,
-    testsCompleted: 0,
-    totalTimeTyping: 0,
-    joinedAt: Date.now(),
+    totalXp: 9800,
+    level: 22,
+    testsCompleted: 147,
+    totalTimeTyping: 18240,
+    joinedAt: Date.now() - 30 * 24 * 60 * 60 * 1000,
   };
 }

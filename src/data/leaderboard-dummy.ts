@@ -21,18 +21,18 @@ interface DummyProfile {
 
 const DUMMY_POOL: DummyProfile[] = [
   // --- Specialists: skilled players, varied levels ---
-  { username: 'sprint_queen',  baseWpm: 52, peakWpm: 148, accuracy: 95.4, bestMode: 15,  level: 45 },
-  { username: 'blitz_keys',    baseWpm: 53, peakWpm: 141, accuracy: 96.1, bestMode: 30,  level: 38 },
-  { username: 'swiftfingers',  baseWpm: 56, peakWpm: 145, accuracy: 97.8, bestMode: 60,  level: 62 },
-  { username: 'typeracer99',   baseWpm: 54, peakWpm: 138, accuracy: 96.8, bestMode: 60,  level: 55 },
-  { username: 'marathon_typ',  baseWpm: 51, peakWpm: 134, accuracy: 97.2, bestMode: 120, level: 71 },
+  { username: 'sprint_queen',  baseWpm: 68, peakWpm: 148, accuracy: 95.4, bestMode: 15,  level: 45 },
+  { username: 'blitz_keys',    baseWpm: 72, peakWpm: 141, accuracy: 96.1, bestMode: 30,  level: 38 },
+  { username: 'swiftfingers',  baseWpm: 75, peakWpm: 145, accuracy: 97.8, bestMode: 60,  level: 62 },
+  { username: 'typeracer99',   baseWpm: 70, peakWpm: 138, accuracy: 96.8, bestMode: 60,  level: 55 },
+  { username: 'marathon_typ',  baseWpm: 65, peakWpm: 134, accuracy: 97.2, bestMode: 120, level: 71 },
 
   // --- Upper mid: some grinders (high lv, ok wpm), some casuals ---
-  { username: 'keyhero_kr',    baseWpm: 54, peakWpm: 62, accuracy: 95.5, bestMode: 30,  level: 28 },
-  { username: 'velocity_typ',  baseWpm: 52, peakWpm: 60, accuracy: 96.3, bestMode: 15,  level: 16 },
-  { username: 'ducky_master',  baseWpm: 50, peakWpm: 57, accuracy: 97.8, bestMode: 60,  level: 42 },
-  { username: 'blazekeys',     baseWpm: 48, peakWpm: 55, accuracy: 94.2, bestMode: 45,  level: 19 },
-  { username: 'turbotypist',   baseWpm: 47, peakWpm: 54, accuracy: 95.9, bestMode: 120, level: 33 },
+  { username: 'keyhero_kr',    baseWpm: 63, peakWpm: 72, accuracy: 95.5, bestMode: 30,  level: 28 },
+  { username: 'velocity_typ',  baseWpm: 60, peakWpm: 69, accuracy: 96.3, bestMode: 15,  level: 16 },
+  { username: 'ducky_master',  baseWpm: 56, peakWpm: 64, accuracy: 97.8, bestMode: 60,  level: 42 },
+  { username: 'blazekeys',     baseWpm: 53, peakWpm: 61, accuracy: 94.2, bestMode: 45,  level: 19 },
+  { username: 'turbotypist',   baseWpm: 51, peakWpm: 59, accuracy: 95.9, bestMode: 120, level: 33 },
 
   // --- Mid tier ---
   { username: 'fingerflow',    baseWpm: 45, peakWpm: 52, accuracy: 96.7, bestMode: 30,  level: 15 },
