@@ -325,9 +325,9 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
   const keyboardOpen = keyboardHeight > 0;
   const inputDisplayRef = useRef<HTMLDivElement>(null);
 
-  // Notify parent of typing state (fighting phase) to hide header/footer
+  // Notify parent of typing state (all combat phases) to hide header/footer
   useEffect(() => {
-    const active = state.phase === 'fighting';
+    const active = state.phase === 'fighting' || state.phase === 'wave-clear' || state.phase === 'boss-transition' || state.phase === 'boss-death';
     onTypingStateChange?.(active);
     return () => onTypingStateChange?.(false);
   }, [state.phase, onTypingStateChange]);
