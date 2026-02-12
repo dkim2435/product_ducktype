@@ -14,6 +14,7 @@ interface AdventurePageProps {
   addToast: (toast: Omit<ToastNotification, 'id'>) => void;
   unlockAchievements: (ids: string[], addToast: (toast: Omit<ToastNotification, 'id'>) => void) => void;
   triggerSync: () => void;
+  initialWorldId?: number;
 }
 
 export function AdventurePage({
@@ -23,9 +24,17 @@ export function AdventurePage({
   addToast,
   unlockAchievements,
   triggerSync,
+  initialWorldId,
 }: AdventurePageProps) {
   const adventure = useAdventure();
   const stageConfig = adventure.getActiveStageConfig();
+  const worldConfig = adventure.getCurrentWorldConfig();
+  const debuffType = worldConfig.debuff?.type ?? 'none';
+
+  // Navigate to initial world if provided
+  if (initialWorldId && initialWorldId !== adventure.currentWorldId && adventure.view === 'map') {
+    adventure.changeWorld(initialWorldId);
+  }
 
   const handleCombatComplete = useCallback((result: StageResult) => {
     adventure.saveStageResult(result);
@@ -65,13 +74,26 @@ export function AdventurePage({
     }
 
     // World 1 complete — check if all stages cleared
-    if (result.cleared) {
-      const allCleared = [1, 2, 3, 4, 5].every(id => {
-        if (id === result.stageId) return true;
-        return !!adventure.progress.stages[id]?.clearedAt;
+    if (result.cleared && adventure.currentWorldId === 1) {
+      const w1Stages = worldConfig.stages;
+      const allCleared = w1Stages.every(s => {
+        if (s.id === result.stageId) return true;
+        return !!adventure.getStageProgress(1, s.id)?.clearedAt;
       });
       if (allCleared) {
         achievementIds.push('adventure-world-1');
+      }
+    }
+
+    // World 2 complete
+    if (result.cleared && adventure.currentWorldId === 2) {
+      const w2Stages = worldConfig.stages;
+      const allCleared = w2Stages.every(s => {
+        if (s.id === result.stageId) return true;
+        return !!adventure.getStageProgress(2, s.id)?.clearedAt;
+      });
+      if (allCleared) {
+        achievementIds.push('adventure-world-2');
       }
     }
 
@@ -80,13 +102,16 @@ export function AdventurePage({
     }
 
     triggerSync();
-  }, [adventure, addXp, addToast, stageConfig, unlockAchievements, triggerSync]);
+  }, [adventure, addXp, addToast, stageConfig, worldConfig, unlockAchievements, triggerSync]);
 
   return (
     <>
       {adventure.view === 'map' && (
         <WorldMap
           progress={adventure.progress}
+          currentWorldId={adventure.currentWorldId}
+          onChangeWorld={adventure.changeWorld}
+          isWorldUnlocked={adventure.isWorldUnlocked}
           isStageUnlocked={adventure.isStageUnlocked}
           onSelectStage={adventure.startStage}
           onBack={onBack}
@@ -95,11 +120,13 @@ export function AdventurePage({
 
       {adventure.view === 'combat' && stageConfig && (
         <CombatScene
-          key={`${stageConfig.id}-${adventure.lastResult ? 'retry' : 'new'}`}
+          key={`${adventure.currentWorldId}-${stageConfig.id}-${adventure.lastResult ? 'retry' : 'new'}`}
           stageConfig={stageConfig}
           settings={settings}
           onComplete={handleCombatComplete}
           onBack={adventure.returnToMap}
+          worldId={adventure.currentWorldId}
+          debuff={debuffType}
         />
       )}
 
@@ -110,7 +137,13 @@ export function AdventurePage({
           onRetry={adventure.retryStage}
           onNextStage={adventure.nextStage}
           onReturnToMap={adventure.returnToMap}
-          isNextUnlocked={adventure.isStageUnlocked(adventure.lastResult.stageId + 1)}
+          isNextUnlocked={(() => {
+            const stages = worldConfig.stages;
+            const currentIdx = stages.findIndex(s => s.id === adventure.lastResult!.stageId);
+            const nextStage = stages[currentIdx + 1];
+            return nextStage ? adventure.isStageUnlocked(adventure.currentWorldId, nextStage.id) : false;
+          })()}
+          worldStages={worldConfig.stages}
         />
       )}
     </>

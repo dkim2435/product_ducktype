@@ -1,3 +1,13 @@
+// ---- Debuff System ----
+export type DebuffType = 'none' | 'poison' | 'fog' | 'freeze' | 'darkness' | 'reverse';
+
+export interface WorldDebuff {
+  type: DebuffType;
+  intensity: number;
+  description: string;
+  icon: string;
+}
+
 // ---- Word Difficulty ----
 export interface WordDifficulty {
   minLen: number;
@@ -8,29 +18,35 @@ export interface WordDifficulty {
 export interface EnemyConfig {
   name: string;
   emoji: string;
-  hp: number;
-  attackDamage: number;
+  hp: number;          // boss HP (unused for normal minion stages)
+  attackDamage: number; // damage on timeout
 }
 
 // ---- Boss Phase Config ----
 export interface BossPhaseConfig {
-  hpThreshold: number; // percentage (e.g. 0.6 = 60%)
-  wordDifficulty: WordDifficulty;
-  spawnInterval: number; // ms between word spawns
+  hpThreshold: number;
+  bossWordDifficulty: WordDifficulty;
+  bossWordTimeoutMs: number;
+  bossWordsCount: number;      // how many boss words to spawn simultaneously (1, 2, 3)
+  minionWordDifficulty: WordDifficulty;
+  minionTimeoutMs: number;
+  minionsPerWave: number;
   dialogue: string;
 }
 
 // ---- Boss Config ----
 export interface BossConfig {
+  minionEmoji: string;
+  minionAttackDamage: number;
   phases: BossPhaseConfig[];
 }
 
 // ---- Wave Config ----
 export interface WaveConfig {
   wordDifficulty: WordDifficulty;
-  wordCount: number; // total words in wave
-  spawnInterval: number; // ms between word spawns
-  timeoutMs: number; // ms before word expires
+  wordCount: number;
+  spawnInterval: number;
+  timeoutMs: number;
 }
 
 // ---- Stage Config ----
@@ -42,6 +58,7 @@ export interface StageConfig {
   waves: WaveConfig[];
   xpReward: number;
   isBoss: boolean;
+  isMidBoss?: boolean;
   bossConfig?: BossConfig;
 }
 
@@ -51,6 +68,7 @@ export interface WorldConfig {
   name: string;
   stages: StageConfig[];
   requiresLogin: boolean;
+  debuff?: WorldDebuff;
 }
 
 // ---- Star Thresholds ----
@@ -60,13 +78,15 @@ export interface StarThresholds {
   three: { minAccuracy: number; minHpPercent: number; minWpm: number };
 }
 
-// ---- Active Word (in combat) ----
-export interface ActiveWord {
+// ---- Field Minion (on battlefield) ----
+export interface FieldMinion {
   id: number;
   word: string;
   spawnedAt: number;
   timeoutMs: number;
-  typed: string; // characters typed so far
+  x: number; // percentage on field (0-100)
+  y: number; // percentage on field (0=top/far, 100=bottom/near)
+  isBossWord?: boolean; // true = typing this damages the boss
 }
 
 // ---- Combat Phase ----
@@ -79,22 +99,51 @@ export type CombatPhase =
   | 'victory'
   | 'defeat';
 
+// ---- Damage Number (floating) ----
+export interface DamageNumber {
+  id: number;
+  value: number;
+  x: number;
+  y: number;
+  createdAt: number;
+  isPlayer: boolean;
+}
+
+// ---- Kill Effect ----
+export interface KillEffect {
+  id: number;
+  x: number;
+  y: number;
+  createdAt: number;
+}
+
 // ---- Combat State ----
 export interface CombatState {
   phase: CombatPhase;
   stageConfig: StageConfig;
-  currentWave: number; // 0-indexed
-  bossPhase: number; // 0-indexed, only for boss stages
+  currentWave: number;
 
   playerHp: number;
   playerMaxHp: number;
-  enemyHp: number;
-  enemyMaxHp: number;
 
-  activeWords: ActiveWord[];
+  // Debuff
+  activeDebuff: DebuffType;
+  poisonLastTick: number | null;
+
+  // Field minions
+  minions: FieldMinion[];
+
+  // Boss state (only for boss stages)
+  bossHp: number;
+  bossMaxHp: number;
+  bossPhase: number;
+  bossDialogue: string | null;
+
+  // Input
   currentInput: string;
-  matchedWordId: number | null;
+  matchedMinionId: number | null;
 
+  // Stats
   combo: number;
   maxCombo: number;
   totalWordsTyped: number;
@@ -104,29 +153,17 @@ export interface CombatState {
 
   startTime: number | null;
   endTime: number | null;
-  waveStartTime: number | null;
 
-  // Floating damage numbers
+  // Visual effects
   damageNumbers: DamageNumber[];
-
-  // Boss dialogue
-  bossDialogue: string | null;
-}
-
-// ---- Damage Number (floating) ----
-export interface DamageNumber {
-  id: number;
-  value: number;
-  x: number; // percentage position
-  createdAt: number;
-  isPlayer: boolean; // true = player took damage
+  killEffects: KillEffect[];
 }
 
 // ---- Stage Result ----
 export interface StageResult {
   stageId: number;
   cleared: boolean;
-  stars: number; // 0-3
+  stars: number;
   wpm: number;
   accuracy: number;
   maxCombo: number;
@@ -142,15 +179,19 @@ export interface StageProgress {
   bestStars: number;
   bestWpm: number;
   bestAccuracy: number;
-  clearedAt: number | null; // timestamp
+  clearedAt: number | null;
   attempts: number;
+}
+
+// ---- Per-World Progress ----
+export interface WorldProgress {
+  stages: Record<number, StageProgress>;
+  totalXpEarned: number;
 }
 
 // ---- Adventure Progress (saved to localStorage) ----
 export interface AdventureProgress {
-  worldId: number;
-  stages: Record<number, StageProgress>;
-  totalXpEarned: number;
+  worlds: Record<number, WorldProgress>;
 }
 
 // ---- Adventure View ----

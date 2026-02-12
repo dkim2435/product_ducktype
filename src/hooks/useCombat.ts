@@ -2,10 +2,10 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import type {
   CombatState,
   CombatPhase,
-  ActiveWord,
-  DamageNumber,
+  FieldMinion,
   StageConfig,
   StageResult,
+  DebuffType,
 } from '../types/adventure';
 import {
   PLAYER_MAX_HP,
@@ -13,26 +13,38 @@ import {
   WAVE_CLEAR_DELAY_MS,
   BOSS_TRANSITION_DELAY_MS,
   DAMAGE_NUMBER_DURATION_MS,
+  KILL_EFFECT_DURATION_MS,
   WORD_SPAWN_INITIAL_DELAY_MS,
+  MISTYPE_DAMAGE,
+  POISON_DAMAGE_PER_SECOND,
+  POISON_TICK_INTERVAL_MS,
   calculateDamage,
   calculateStars,
   pickWordByLength,
+  getMinionPosition,
+  getBossWordPositions,
 } from '../constants/adventure';
 import { getWordListSync } from '../utils/words';
 
-function createInitialState(stageConfig: StageConfig): CombatState {
+let nextId = 1;
+
+function createInitialState(stageConfig: StageConfig, debuff: DebuffType = 'none'): CombatState {
+  const isBoss = stageConfig.isBoss;
   return {
     phase: 'intro',
     stageConfig,
     currentWave: 0,
-    bossPhase: 0,
     playerHp: PLAYER_MAX_HP,
     playerMaxHp: PLAYER_MAX_HP,
-    enemyHp: stageConfig.enemyConfig.hp,
-    enemyMaxHp: stageConfig.enemyConfig.hp,
-    activeWords: [],
+    activeDebuff: debuff,
+    poisonLastTick: null,
+    minions: [],
+    bossHp: isBoss ? stageConfig.enemyConfig.hp : 0,
+    bossMaxHp: isBoss ? stageConfig.enemyConfig.hp : 0,
+    bossPhase: 0,
+    bossDialogue: null,
     currentInput: '',
-    matchedWordId: null,
+    matchedMinionId: null,
     combo: 0,
     maxCombo: 0,
     totalWordsTyped: 0,
@@ -41,24 +53,21 @@ function createInitialState(stageConfig: StageConfig): CombatState {
     totalKeystrokes: 0,
     startTime: null,
     endTime: null,
-    waveStartTime: null,
     damageNumbers: [],
-    bossDialogue: null,
+    killEffects: [],
   };
 }
-
-let nextWordId = 1;
-let nextDamageId = 1;
 
 export function useCombat(
   stageConfig: StageConfig | null,
   onComplete: (result: StageResult) => void,
+  debuff: DebuffType = 'none',
 ) {
   const [state, setState] = useState<CombatState>(() =>
     createInitialState(stageConfig ?? {
       id: 0, name: '', subtitle: '', enemyConfig: { name: '', emoji: '', hp: 1, attackDamage: 0 },
       waves: [], xpReward: 0, isBoss: false,
-    })
+    }, debuff)
   );
 
   const stateRef = useRef(state);
@@ -66,18 +75,20 @@ export function useCombat(
 
   const rafRef = useRef<number>(0);
   const spawnTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const wordsSpawnedInWaveRef = useRef(0);
+  const minionsSpawnedRef = useRef(0);
   const completedRef = useRef(false);
+  // Boss: tracks what was last spawned to alternate between boss words and shields
+  const bossLastSpawnedRef = useRef<'boss-words' | 'shields'>('shields');
 
   // Reset when stage changes
   useEffect(() => {
     if (!stageConfig) return;
     completedRef.current = false;
-    nextWordId = 1;
-    nextDamageId = 1;
-    wordsSpawnedInWaveRef.current = 0;
-    setState(createInitialState(stageConfig));
-  }, [stageConfig]);
+    nextId = 1;
+    minionsSpawnedRef.current = 0;
+    bossLastSpawnedRef.current = 'shields';
+    setState(createInitialState(stageConfig, debuff));
+  }, [stageConfig, debuff]);
 
   // Cleanup
   useEffect(() => {
@@ -87,57 +98,141 @@ export function useCombat(
     };
   }, []);
 
-  const getWaveConfig = useCallback(() => {
+  // ---- Spawn a minion (normal stages) ----
+  const spawnMinion = useCallback(() => {
     const s = stateRef.current;
-    if (s.stageConfig.isBoss && s.stageConfig.bossConfig) {
-      const phaseIdx = Math.min(s.bossPhase, s.stageConfig.bossConfig.phases.length - 1);
-      const phase = s.stageConfig.bossConfig.phases[phaseIdx];
-      return {
-        wordDifficulty: phase.wordDifficulty,
-        wordCount: 99,
-        spawnInterval: phase.spawnInterval,
-        timeoutMs: s.stageConfig.waves[phaseIdx]?.timeoutMs ?? 6000,
-      };
-    }
-    return s.stageConfig.waves[s.currentWave] ?? s.stageConfig.waves[0];
-  }, []);
+    if (s.phase !== 'fighting' || s.stageConfig.isBoss) return;
 
-  const spawnWord = useCallback(() => {
-    const s = stateRef.current;
-    if (s.phase !== 'fighting') return;
-
-    const waveConfig = getWaveConfig();
-    if (!s.stageConfig.isBoss && wordsSpawnedInWaveRef.current >= waveConfig.wordCount) return;
-    if (s.activeWords.length >= 3) return; // max 3 words on screen
+    const wave = s.stageConfig.waves[s.currentWave];
+    if (!wave) return;
+    if (minionsSpawnedRef.current >= wave.wordCount) return;
+    if (s.minions.length >= 5) return; // max on screen
 
     const words = getWordListSync('en');
-    const word = pickWordByLength(words, waveConfig.wordDifficulty.minLen, waveConfig.wordDifficulty.maxLen);
+    const word = pickWordByLength(words, wave.wordDifficulty.minLen, wave.wordDifficulty.maxLen);
 
-    // Avoid duplicate words on screen
-    const activeWordTexts = new Set(s.activeWords.map(w => w.word));
-    if (activeWordTexts.has(word) && s.activeWords.length > 0) return;
+    // Avoid duplicates
+    const activeWords = new Set(s.minions.map(m => m.word));
+    if (activeWords.has(word)) return;
 
-    const newWord: ActiveWord = {
-      id: nextWordId++,
+    const pos = getMinionPosition(nextId, s.minions);
+    const minion: FieldMinion = {
+      id: nextId++,
       word,
       spawnedAt: Date.now(),
-      timeoutMs: waveConfig.timeoutMs,
-      typed: '',
+      timeoutMs: wave.timeoutMs,
+      x: pos.x,
+      y: pos.y,
     };
 
-    wordsSpawnedInWaveRef.current++;
-    setState(prev => ({ ...prev, activeWords: [...prev.activeWords, newWord] }));
-  }, [getWaveConfig]);
+    minionsSpawnedRef.current++;
+    setState(prev => ({ ...prev, minions: [...prev.minions, minion] }));
+  }, []);
 
-  const startSpawner = useCallback(() => {
+  const startMinionSpawner = useCallback(() => {
     if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
-    const waveConfig = getWaveConfig();
-    spawnTimerRef.current = setInterval(spawnWord, waveConfig.spawnInterval);
-  }, [getWaveConfig, spawnWord]);
+    const s = stateRef.current;
+    if (s.stageConfig.isBoss) return;
+    const wave = s.stageConfig.waves[s.currentWave];
+    if (!wave) return;
+    spawnTimerRef.current = setInterval(spawnMinion, wave.spawnInterval);
+  }, [spawnMinion]);
 
-  // Game loop - check timeouts and cleanup damage numbers
+  // ---- Boss: spawn boss word minions (near boss, isBossWord=true) ----
+  const spawnBossWords = useCallback(() => {
+    const s = stateRef.current;
+    if (!s.stageConfig.isBoss || !s.stageConfig.bossConfig) return;
+    if (s.phase !== 'fighting') return;
+
+    const phase = s.stageConfig.bossConfig.phases[Math.min(s.bossPhase, s.stageConfig.bossConfig.phases.length - 1)];
+    const words = getWordListSync('en');
+    const positions = getBossWordPositions(phase.bossWordsCount);
+    const usedWords = new Set(s.minions.map(m => m.word));
+
+    const newMinions: FieldMinion[] = [];
+    for (let i = 0; i < phase.bossWordsCount; i++) {
+      let word = pickWordByLength(words, phase.bossWordDifficulty.minLen, phase.bossWordDifficulty.maxLen);
+      let attempts = 0;
+      while (usedWords.has(word) && attempts < 20) {
+        word = pickWordByLength(words, phase.bossWordDifficulty.minLen, phase.bossWordDifficulty.maxLen);
+        attempts++;
+      }
+      usedWords.add(word);
+
+      newMinions.push({
+        id: nextId++,
+        word,
+        spawnedAt: Date.now(),
+        timeoutMs: phase.bossWordTimeoutMs,
+        x: positions[i].x,
+        y: positions[i].y,
+        isBossWord: true,
+      });
+    }
+
+    bossLastSpawnedRef.current = 'boss-words';
+    setState(prev => ({
+      ...prev,
+      minions: [...prev.minions, ...newMinions],
+      currentInput: '',
+      matchedMinionId: null,
+    }));
+  }, []);
+
+  // ---- Boss: spawn shield minions (in field) ----
+  const spawnBossShields = useCallback(() => {
+    const s = stateRef.current;
+    if (!s.stageConfig.isBoss || !s.stageConfig.bossConfig) return;
+    if (s.phase !== 'fighting') return;
+
+    const phase = s.stageConfig.bossConfig.phases[Math.min(s.bossPhase, s.stageConfig.bossConfig.phases.length - 1)];
+    const words = getWordListSync('en');
+    const usedWords = new Set(s.minions.map(m => m.word));
+
+    const newMinions: FieldMinion[] = [];
+    const existingPos = s.minions.map(m => ({ x: m.x, y: m.y }));
+
+    for (let i = 0; i < phase.minionsPerWave; i++) {
+      let word = pickWordByLength(words, phase.minionWordDifficulty.minLen, phase.minionWordDifficulty.maxLen);
+      let attempts = 0;
+      while (usedWords.has(word) && attempts < 20) {
+        word = pickWordByLength(words, phase.minionWordDifficulty.minLen, phase.minionWordDifficulty.maxLen);
+        attempts++;
+      }
+      usedWords.add(word);
+
+      const allPos = [...existingPos, ...newMinions.map(m => ({ x: m.x, y: m.y }))];
+      const pos = getMinionPosition(nextId, allPos, 45); // below boss area
+      newMinions.push({
+        id: nextId++,
+        word,
+        spawnedAt: Date.now(),
+        timeoutMs: phase.minionTimeoutMs,
+        x: pos.x,
+        y: pos.y,
+      });
+    }
+
+    bossLastSpawnedRef.current = 'shields';
+    setState(prev => ({
+      ...prev,
+      minions: [...prev.minions, ...newMinions],
+      currentInput: '',
+      matchedMinionId: null,
+    }));
+  }, []);
+
+  // ---- Game loop ----
   const gameLoop = useCallback(() => {
     const s = stateRef.current;
+
+    // Stop on terminal states
+    if (s.phase === 'victory' || s.phase === 'defeat' || s.phase === 'intro') return;
+
+    // Always schedule next frame for non-terminal states
+    rafRef.current = requestAnimationFrame(gameLoop);
+
+    // Only process timeout logic during fighting
     if (s.phase !== 'fighting') return;
 
     const now = Date.now();
@@ -145,84 +240,135 @@ export function useCombat(
     setState(prev => {
       if (prev.phase !== 'fighting') return prev;
 
-      let { activeWords, playerHp, combo, maxCombo, damageNumbers, matchedWordId, currentInput } = prev;
+      let { minions, playerHp, combo, maxCombo, damageNumbers, killEffects,
+            matchedMinionId, currentInput, bossHp } = prev;
       let changed = false;
 
-      // Check word timeouts
-      const timedOut: number[] = [];
-      activeWords.forEach(w => {
-        if (now - w.spawnedAt >= w.timeoutMs) {
-          timedOut.push(w.id);
-        }
+      // Check minion timeouts (both boss words and shield minions)
+      const timedOut: FieldMinion[] = [];
+      minions.forEach(m => {
+        if (now - m.spawnedAt >= m.timeoutMs) timedOut.push(m);
       });
 
       if (timedOut.length > 0) {
-        activeWords = activeWords.filter(w => !timedOut.includes(w.id));
-        playerHp -= prev.stageConfig.enemyConfig.attackDamage * timedOut.length;
-        combo = 0;
+        const timedOutIds = new Set(timedOut.map(m => m.id));
+        minions = minions.filter(m => !timedOutIds.has(m.id));
 
-        // Add damage number for player
-        timedOut.forEach(() => {
+        // Each timed-out minion deals its own damage
+        timedOut.forEach(m => {
+          const dmg = m.isBossWord
+            ? prev.stageConfig.enemyConfig.attackDamage  // boss hits hard
+            : (prev.stageConfig.bossConfig?.minionAttackDamage ?? prev.stageConfig.enemyConfig.attackDamage);
+          playerHp -= dmg;
           damageNumbers = [...damageNumbers, {
-            id: nextDamageId++,
-            value: prev.stageConfig.enemyConfig.attackDamage,
-            x: 25,
-            createdAt: now,
-            isPlayer: true,
+            id: nextId++, value: dmg,
+            x: 50, y: 85, createdAt: now, isPlayer: true,
           }];
         });
 
-        // If matched word timed out, clear input
-        if (matchedWordId && timedOut.includes(matchedWordId)) {
-          matchedWordId = null;
+        combo = 0;
+
+        if (matchedMinionId && timedOutIds.has(matchedMinionId)) {
+          matchedMinionId = null;
           currentInput = '';
         }
         changed = true;
       }
 
-      // Clean up old damage numbers
-      const freshDamageNumbers = damageNumbers.filter(
-        d => now - d.createdAt < DAMAGE_NUMBER_DURATION_MS
-      );
-      if (freshDamageNumbers.length !== damageNumbers.length) {
-        damageNumbers = freshDamageNumbers;
+      // Poison tick
+      let { poisonLastTick } = prev;
+      if (prev.activeDebuff === 'poison' && poisonLastTick !== null) {
+        if (now - poisonLastTick >= POISON_TICK_INTERVAL_MS) {
+          playerHp -= POISON_DAMAGE_PER_SECOND;
+          damageNumbers = [...damageNumbers, {
+            id: nextId++, value: POISON_DAMAGE_PER_SECOND,
+            x: 50, y: 90, createdAt: now, isPlayer: true,
+          }];
+          poisonLastTick = now;
+          changed = true;
+        }
+      }
+
+      // Clean up expired effects
+      const freshDmg = damageNumbers.filter(d => now - d.createdAt < DAMAGE_NUMBER_DURATION_MS);
+      const freshKill = killEffects.filter(k => now - k.createdAt < KILL_EFFECT_DURATION_MS);
+      if (freshDmg.length !== damageNumbers.length || freshKill.length !== killEffects.length) {
+        damageNumbers = freshDmg;
+        killEffects = freshKill;
         changed = true;
       }
 
       // Check defeat
       if (playerHp <= 0) {
-        cancelAnimationFrame(rafRef.current);
-        if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
+        if (spawnTimerRef.current) { clearInterval(spawnTimerRef.current); spawnTimerRef.current = null; }
         return {
-          ...prev,
-          phase: 'defeat' as CombatPhase,
-          playerHp: 0,
-          activeWords: [],
-          combo: 0,
-          damageNumbers,
-          endTime: now,
-          currentInput: '',
-          matchedWordId: null,
+          ...prev, phase: 'defeat' as CombatPhase,
+          playerHp: 0, minions: [], combo: 0,
+          damageNumbers, killEffects,
+          endTime: now, currentInput: '', matchedMinionId: null,
         };
       }
 
       if (!changed) return prev;
 
       return {
-        ...prev,
-        activeWords,
-        playerHp,
-        combo,
+        ...prev, minions, playerHp, combo,
         maxCombo: Math.max(maxCombo, combo),
-        damageNumbers,
-        matchedWordId,
-        currentInput,
+        damageNumbers, killEffects,
+        matchedMinionId, currentInput, bossHp,
+        poisonLastTick,
       };
     });
-
-    rafRef.current = requestAnimationFrame(gameLoop);
   }, []);
 
+  // Normal stages: detect wave clear when last minions timed out (not typed)
+  useEffect(() => {
+    if (state.phase !== 'fighting' || state.stageConfig.isBoss) return;
+    if (state.minions.length > 0) return;
+
+    const wave = state.stageConfig.waves[state.currentWave];
+    if (!wave || minionsSpawnedRef.current < wave.wordCount) return;
+
+    // All spawned and all gone → wave complete
+    if (spawnTimerRef.current) { clearInterval(spawnTimerRef.current); spawnTimerRef.current = null; }
+
+    const nextWaveIdx = state.currentWave + 1;
+    if (nextWaveIdx >= state.stageConfig.waves.length) {
+      // All waves done → victory
+      cancelAnimationFrame(rafRef.current);
+      setState(prev => ({ ...prev, phase: 'victory' as CombatPhase, endTime: Date.now() }));
+      return;
+    }
+
+    // Wave clear → next wave
+    setState(prev => ({ ...prev, phase: 'wave-clear' as CombatPhase }));
+    const t = setTimeout(() => {
+      minionsSpawnedRef.current = 0;
+      setState(p => ({ ...p, phase: 'fighting', currentWave: nextWaveIdx }));
+      startMinionSpawner();
+      setTimeout(spawnMinion, WORD_SPAWN_INITIAL_DELAY_MS);
+    }, WAVE_CLEAR_DELAY_MS);
+    return () => clearTimeout(t);
+  }, [state.phase, state.minions.length, state.currentWave, state.stageConfig, startMinionSpawner, spawnMinion]);
+
+  // Boss: auto-spawn cycle when no minions remain
+  useEffect(() => {
+    if (state.phase !== 'fighting' || !state.stageConfig.isBoss || state.bossHp <= 0) return;
+    if (state.minions.length > 0) return;
+
+    const t = setTimeout(() => {
+      if (bossLastSpawnedRef.current === 'shields') {
+        // Last spawned was shields (or initial) → spawn boss words next
+        spawnBossWords();
+      } else {
+        // Last spawned was boss words → spawn shield minions next
+        spawnBossShields();
+      }
+    }, 500);
+    return () => clearTimeout(t);
+  }, [state.phase, state.minions.length, state.bossHp, state.stageConfig.isBoss, spawnBossWords, spawnBossShields]);
+
+  // ---- Start countdown ----
   const startCountdown = useCallback(() => {
     setState(prev => ({ ...prev, phase: 'countdown' }));
     let count = COUNTDOWN_SECONDS;
@@ -231,7 +377,7 @@ export function useCombat(
       if (count <= 0) {
         clearInterval(interval);
         const now = Date.now();
-        wordsSpawnedInWaveRef.current = 0;
+        minionsSpawnedRef.current = 0;
 
         setState(prev => {
           const bossDialogue = prev.stageConfig.isBoss && prev.stageConfig.bossConfig
@@ -241,191 +387,240 @@ export function useCombat(
             ...prev,
             phase: 'fighting',
             startTime: now,
-            waveStartTime: now,
             bossDialogue,
+            poisonLastTick: prev.activeDebuff === 'poison' ? now : null,
           };
         });
 
         rafRef.current = requestAnimationFrame(gameLoop);
-        setTimeout(() => {
-          spawnWord();
-          startSpawner();
-        }, WORD_SPAWN_INITIAL_DELAY_MS);
+
+        if (stageConfig && !stageConfig.isBoss) {
+          setTimeout(() => {
+            spawnMinion();
+            startMinionSpawner();
+          }, WORD_SPAWN_INITIAL_DELAY_MS);
+        }
+        // Boss words/shields handled by the useEffect above
       }
     }, 1000);
-  }, [gameLoop, spawnWord, startSpawner]);
+  }, [gameLoop, spawnMinion, startMinionSpawner, stageConfig]);
 
+  // ---- Handle char ----
   const handleChar = useCallback((char: string) => {
     setState(prev => {
       if (prev.phase !== 'fighting') return prev;
 
       const newInput = prev.currentInput + char;
       const totalKeystrokes = prev.totalKeystrokes + 1;
+      const isBoss = prev.stageConfig.isBoss;
 
-      // Find matching word (prefix match)
-      const matches = prev.activeWords.filter(w => w.word.startsWith(newInput));
+      // Separate boss words from shield minions
+      const shieldMinions = prev.minions.filter(m => !m.isBossWord);
+      const bossWordMinions = prev.minions.filter(m => m.isBossWord);
+      const hasShields = shieldMinions.length > 0;
 
-      if (matches.length === 0) {
-        // Mistype - reset combo and input
+      // Priority 1: Try matching shield minions (always targetable)
+      const shieldMatches = shieldMinions.filter(m => m.word.startsWith(newInput));
+
+      if (shieldMatches.length > 0) {
+        const correctChars = prev.correctChars + 1;
+        const matched = shieldMatches.find(m => m.id === prev.matchedMinionId) ?? shieldMatches[0];
+
+        // Word complete → kill shield minion
+        if (newInput === matched.word) {
+          const now = Date.now();
+          const newCombo = prev.combo + 1;
+          const newMinions = prev.minions.filter(m => m.id !== matched.id);
+
+          const killEffects = [...prev.killEffects, {
+            id: nextId++, x: matched.x, y: matched.y, createdAt: now,
+          }];
+
+          let newState = {
+            ...prev,
+            minions: newMinions,
+            currentInput: '',
+            matchedMinionId: null,
+            combo: newCombo,
+            maxCombo: Math.max(prev.maxCombo, newCombo),
+            totalWordsTyped: prev.totalWordsTyped + 1,
+            totalCharsTyped: prev.totalCharsTyped + matched.word.length,
+            correctChars,
+            totalKeystrokes,
+            killEffects,
+          };
+
+          // Normal stage: check wave clear
+          if (!isBoss) {
+            const wave = prev.stageConfig.waves[prev.currentWave];
+            const allSpawned = minionsSpawnedRef.current >= wave.wordCount;
+            const allDead = newMinions.length === 0;
+
+            if (allSpawned && allDead) {
+              const nextWaveIdx = prev.currentWave + 1;
+              if (nextWaveIdx >= prev.stageConfig.waves.length) {
+                // All waves done → victory
+                if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
+                cancelAnimationFrame(rafRef.current);
+                return { ...newState, phase: 'victory' as CombatPhase, endTime: now };
+              }
+              // Wave clear → next wave
+              if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
+              setTimeout(() => {
+                minionsSpawnedRef.current = 0;
+                setState(p => ({ ...p, phase: 'fighting', currentWave: nextWaveIdx }));
+                startMinionSpawner();
+                setTimeout(spawnMinion, WORD_SPAWN_INITIAL_DELAY_MS);
+              }, WAVE_CLEAR_DELAY_MS);
+              return { ...newState, phase: 'wave-clear' as CombatPhase };
+            }
+          }
+
+          // Boss: shield killed — remaining cycle handled by useEffect
+          return newState;
+        }
+
+        // Partial shield match
         return {
           ...prev,
-          currentInput: '',
-          matchedWordId: null,
-          combo: 0,
+          currentInput: newInput,
+          matchedMinionId: matched.id,
+          correctChars: prev.correctChars + 1,
           totalKeystrokes,
         };
       }
 
-      const correctChars = prev.correctChars + 1;
+      // Priority 2: Try matching boss words (only when NO shields exist)
+      if (isBoss && !hasShields && bossWordMinions.length > 0) {
+        const bossMatches = bossWordMinions.filter(m => m.word.startsWith(newInput));
 
-      // Prefer currently matched word, then first match
-      let matched = matches.find(w => w.id === prev.matchedWordId) ?? matches[0];
+        if (bossMatches.length > 0) {
+          const correctChars = prev.correctChars + 1;
+          const matched = bossMatches.find(m => m.id === prev.matchedMinionId) ?? bossMatches[0];
 
-      // Check if word complete
-      if (newInput === matched.word) {
-        const now = Date.now();
-        const wordTimeMs = now - matched.spawnedAt;
-        const wordWpm = matched.word.length > 0 ? (matched.word.length / 5) / (wordTimeMs / 60000) : 0;
-        const newCombo = prev.combo + 1;
-        const overallAccuracy = (correctChars) / Math.max(1, totalKeystrokes);
-        const damage = calculateDamage(wordWpm, newCombo, overallAccuracy);
+          // Boss word complete → damage boss
+          if (newInput === matched.word) {
+            const now = Date.now();
+            const wordTimeMs = now - matched.spawnedAt;
+            const wordWpm = matched.word.length > 0
+              ? (matched.word.length / 5) / (wordTimeMs / 60000) : 0;
+            const newCombo = prev.combo + 1;
+            const accuracy = correctChars / Math.max(1, totalKeystrokes);
+            const damage = calculateDamage(wordWpm, newCombo, accuracy);
+            const newBossHp = Math.max(0, prev.bossHp - damage);
+            const newMinions = prev.minions.filter(m => m.id !== matched.id);
 
-        const newEnemyHp = Math.max(0, prev.enemyHp - damage);
+            const damageNumbers = [...prev.damageNumbers, {
+              id: nextId++, value: damage,
+              x: 50, y: 10, createdAt: now, isPlayer: false,
+            }];
 
-        const damageNumbers = [...prev.damageNumbers, {
-          id: nextDamageId++,
-          value: damage,
-          x: 75,
-          createdAt: now,
-          isPlayer: false,
-        }];
+            const killEffects = [...prev.killEffects, {
+              id: nextId++, x: matched.x, y: matched.y, createdAt: now,
+            }];
 
-        const newActiveWords = prev.activeWords.filter(w => w.id !== matched.id);
-        const totalWordsTyped = prev.totalWordsTyped + 1;
-        const totalCharsTyped = prev.totalCharsTyped + matched.word.length;
-        const maxCombo = Math.max(prev.maxCombo, newCombo);
-
-        let newState = {
-          ...prev,
-          activeWords: newActiveWords,
-          currentInput: '',
-          matchedWordId: null,
-          enemyHp: newEnemyHp,
-          combo: newCombo,
-          maxCombo,
-          totalWordsTyped,
-          totalCharsTyped,
-          correctChars,
-          totalKeystrokes,
-          damageNumbers,
-        };
-
-        // Check boss phase transition
-        if (prev.stageConfig.isBoss && prev.stageConfig.bossConfig && newEnemyHp > 0) {
-          const hpPercent = newEnemyHp / prev.enemyMaxHp;
-          const phases = prev.stageConfig.bossConfig.phases;
-          let newBossPhase = prev.bossPhase;
-
-          for (let i = phases.length - 1; i > prev.bossPhase; i--) {
-            if (hpPercent <= phases[i].hpThreshold) {
-              newBossPhase = i;
-              break;
-            }
-          }
-
-          if (newBossPhase !== prev.bossPhase) {
-            // Boss phase transition
-            if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
-            newState = {
-              ...newState,
-              bossPhase: newBossPhase,
-              bossDialogue: phases[newBossPhase].dialogue,
-              activeWords: [],
-              phase: 'boss-transition',
+            let newState = {
+              ...prev,
+              bossHp: newBossHp,
+              minions: newMinions,
+              currentInput: '',
+              matchedMinionId: null,
+              combo: newCombo,
+              maxCombo: Math.max(prev.maxCombo, newCombo),
+              totalWordsTyped: prev.totalWordsTyped + 1,
+              totalCharsTyped: prev.totalCharsTyped + matched.word.length,
+              correctChars,
+              totalKeystrokes,
+              damageNumbers,
+              killEffects,
             };
 
-            // Resume after delay
-            setTimeout(() => {
-              wordsSpawnedInWaveRef.current = 0;
-              setState(p => ({ ...p, phase: 'fighting', bossDialogue: null }));
-              startSpawner();
-              setTimeout(spawnWord, WORD_SPAWN_INITIAL_DELAY_MS);
-            }, BOSS_TRANSITION_DELAY_MS);
-
-            return newState;
-          }
-        }
-
-        // Check enemy defeated
-        if (newEnemyHp <= 0) {
-          if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
-          cancelAnimationFrame(rafRef.current);
-          return {
-            ...newState,
-            phase: 'victory' as CombatPhase,
-            activeWords: [],
-            endTime: now,
-          };
-        }
-
-        // Check wave clear (non-boss)
-        if (!prev.stageConfig.isBoss) {
-          const waveConfig = prev.stageConfig.waves[prev.currentWave];
-          const allSpawned = wordsSpawnedInWaveRef.current >= waveConfig.wordCount;
-          const allCleared = newActiveWords.length === 0;
-
-          if (allSpawned && allCleared) {
-            const nextWaveIdx = prev.currentWave + 1;
-            if (nextWaveIdx >= prev.stageConfig.waves.length) {
-              // All waves complete - enemy defeated
-              if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
+            // Boss defeated
+            if (newBossHp <= 0) {
               cancelAnimationFrame(rafRef.current);
               return {
                 ...newState,
                 phase: 'victory' as CombatPhase,
-                enemyHp: 0,
-                activeWords: [],
+                minions: [],
                 endTime: now,
               };
             }
 
-            // Wave clear - transition to next wave
-            if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
+            // Check phase transition
+            if (prev.stageConfig.bossConfig) {
+              const phases = prev.stageConfig.bossConfig.phases;
+              const hpPercent = newBossHp / prev.bossMaxHp;
+              let newBossPhase = prev.bossPhase;
+              for (let i = phases.length - 1; i > prev.bossPhase; i--) {
+                if (hpPercent <= phases[i].hpThreshold) {
+                  newBossPhase = i;
+                  break;
+                }
+              }
+              if (newBossPhase !== prev.bossPhase) {
+                bossLastSpawnedRef.current = 'shields'; // reset cycle for new phase
+                newState = {
+                  ...newState,
+                  bossPhase: newBossPhase,
+                  bossDialogue: phases[newBossPhase].dialogue,
+                  phase: 'boss-transition' as CombatPhase,
+                  minions: [],
+                };
+                setTimeout(() => {
+                  setState(p => ({ ...p, phase: 'fighting', bossDialogue: null }));
+                }, BOSS_TRANSITION_DELAY_MS);
+                return newState;
+              }
+            }
 
-            setTimeout(() => {
-              wordsSpawnedInWaveRef.current = 0;
-              setState(p => ({
-                ...p,
-                phase: 'fighting',
-                currentWave: nextWaveIdx,
-                waveStartTime: Date.now(),
-              }));
-              startSpawner();
-              setTimeout(spawnWord, WORD_SPAWN_INITIAL_DELAY_MS);
-            }, WAVE_CLEAR_DELAY_MS);
-
-            return {
-              ...newState,
-              phase: 'wave-clear' as CombatPhase,
-              activeWords: [],
-            };
+            // Boss word killed, remaining cycle handled by useEffect
+            return newState;
           }
-        }
 
-        return newState;
+          // Partial boss word match
+          return {
+            ...prev,
+            currentInput: newInput,
+            matchedMinionId: matched.id,
+            correctChars: prev.correctChars + 1,
+            totalKeystrokes,
+          };
+        }
       }
 
-      // Partial match
+      // No match → mistype → HP penalty
+      const now = Date.now();
+      const newHp = prev.playerHp - MISTYPE_DAMAGE;
+      const mistypeDmgNumbers = [...prev.damageNumbers, {
+        id: nextId++, value: MISTYPE_DAMAGE,
+        x: 50, y: 85, createdAt: now, isPlayer: true,
+      }];
+
+      if (newHp <= 0) {
+        if (spawnTimerRef.current) { clearInterval(spawnTimerRef.current); spawnTimerRef.current = null; }
+        cancelAnimationFrame(rafRef.current);
+        return {
+          ...prev, phase: 'defeat' as CombatPhase,
+          playerHp: 0, minions: [], combo: 0,
+          damageNumbers: mistypeDmgNumbers,
+          endTime: now, currentInput: '', matchedMinionId: null,
+          totalKeystrokes,
+        };
+      }
+
       return {
         ...prev,
-        currentInput: newInput,
-        matchedWordId: matched.id,
-        correctChars,
+        currentInput: '',
+        matchedMinionId: null,
+        combo: 0,
+        playerHp: newHp,
+        damageNumbers: mistypeDmgNumbers,
         totalKeystrokes,
       };
     });
-  }, [spawnWord, startSpawner]);
+  }, [spawnMinion, startMinionSpawner]);
 
+  // ---- Handle backspace ----
   const handleBackspace = useCallback(() => {
     setState(prev => {
       if (prev.phase !== 'fighting') return prev;
@@ -433,21 +628,30 @@ export function useCombat(
 
       const newInput = prev.currentInput.slice(0, -1);
       if (newInput.length === 0) {
-        return { ...prev, currentInput: '', matchedWordId: null };
+        return { ...prev, currentInput: '', matchedMinionId: null };
       }
 
-      const matches = prev.activeWords.filter(w => w.word.startsWith(newInput));
-      const matched = matches.find(w => w.id === prev.matchedWordId) ?? matches[0] ?? null;
+      // Re-match: try shield minions first, then boss words if no shields
+      const shieldMinions = prev.minions.filter(m => !m.isBossWord);
+      const shieldMatches = shieldMinions.filter(m => m.word.startsWith(newInput));
+      if (shieldMatches.length > 0) {
+        const matched = shieldMatches.find(m => m.id === prev.matchedMinionId) ?? shieldMatches[0];
+        return { ...prev, currentInput: newInput, matchedMinionId: matched.id };
+      }
 
-      return {
-        ...prev,
-        currentInput: newInput,
-        matchedWordId: matched?.id ?? null,
-      };
+      if (prev.stageConfig.isBoss && shieldMinions.length === 0) {
+        const bossMatches = prev.minions.filter(m => m.isBossWord && m.word.startsWith(newInput));
+        if (bossMatches.length > 0) {
+          const matched = bossMatches.find(m => m.id === prev.matchedMinionId) ?? bossMatches[0];
+          return { ...prev, currentInput: newInput, matchedMinionId: matched.id };
+        }
+      }
+
+      return { ...prev, currentInput: newInput, matchedMinionId: null };
     });
   }, []);
 
-  // Fire completion callback
+  // ---- Fire completion callback ----
   useEffect(() => {
     if ((state.phase === 'victory' || state.phase === 'defeat') && !completedRef.current && stageConfig) {
       completedRef.current = true;
@@ -455,12 +659,11 @@ export function useCombat(
       const timeMs = (state.endTime ?? Date.now()) - (state.startTime ?? Date.now());
       const accuracy = state.totalKeystrokes > 0 ? state.correctChars / state.totalKeystrokes : 0;
       const wpm = state.totalCharsTyped > 0
-        ? (state.totalCharsTyped / 5) / (timeMs / 60000)
-        : 0;
+        ? (state.totalCharsTyped / 5) / (timeMs / 60000) : 0;
       const hpPercent = state.playerHp / state.playerMaxHp;
       const stars = cleared ? calculateStars(accuracy, hpPercent, wpm) : 0;
 
-      const result: StageResult = {
+      onComplete({
         stageId: stageConfig.id,
         cleared,
         stars,
@@ -471,9 +674,7 @@ export function useCombat(
         hpMax: state.playerMaxHp,
         timeMs,
         xpEarned: cleared ? stageConfig.xpReward : Math.floor(stageConfig.xpReward * 0.2),
-      };
-
-      onComplete(result);
+      });
     }
   }, [state.phase, state.endTime, state.startTime, state.totalKeystrokes, state.correctChars,
       state.totalCharsTyped, state.playerHp, state.playerMaxHp, state.maxCombo, stageConfig, onComplete]);

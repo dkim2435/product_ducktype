@@ -33,21 +33,16 @@ import { DailyChallenge } from './components/pages/DailyChallenge';
 import { Practice } from './components/pages/Practice';
 import { LessonTest } from './components/practice/LessonTest';
 import { Leaderboard } from './components/pages/Leaderboard';
-import { Arcade } from './components/pages/Arcade';
-import { DuckHuntGame } from './components/arcade/DuckHuntGame';
-import { DuckRaceGame } from './components/arcade/DuckRaceGame';
 import { AdventurePage } from './components/adventure/AdventurePage';
 import { WhatsNewModal } from './components/layout/WhatsNewModal';
 import { OnboardingModal } from './components/layout/OnboardingModal';
 import { TypingInfo } from './components/content/TypingInfo';
 import { useLeaderboard } from './hooks/useLeaderboard';
-import { setPersistProgress, clearProgressData, getItem, setItem } from './utils/storage';
-import type { DuckHuntHighScore, DuckHuntResult } from './types/arcade';
-import type { DuckRaceHighScore, DuckRaceResult } from './types/duckRace';
+import { setPersistProgress, clearProgressData } from './utils/storage';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard'
-  | 'arcade' | 'duck-hunt' | 'duck-race' | 'adventure';
+  | 'adventure';
 
 interface AppContentProps {
   user: User | null;
@@ -77,13 +72,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
   const [challengeWpm, setChallengeWpm] = useState<number | null>(null);
   const [isTypingActive, setIsTypingActive] = useState(false);
-  const [duckHuntHighScore, setDuckHuntHighScore] = useState<DuckHuntHighScore | null>(
-    () => getItem<DuckHuntHighScore | null>('duck_hunt_high_score', null)
-  );
-  const [duckRaceHighScore, setDuckRaceHighScore] = useState<DuckRaceHighScore | null>(
-    () => getItem<DuckRaceHighScore | null>('duck_race_high_score', null)
-  );
-
+  const [adventureWorldId, setAdventureWorldId] = useState<number | undefined>(undefined);
   const isMobile = useIsMobile();
   useTheme(settings.theme);
   const { saveResult, getPersonalBest } = useStats();
@@ -140,6 +129,22 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       setChallengeWpm(parseInt(match[1], 10));
       // Clear hash without triggering navigation
       history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, []);
+
+  // Parse adventure share URL on mount (e.g. /adventure?world=2)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const worldParam = params.get('world');
+    const isAdventurePath = window.location.pathname.includes('/adventure');
+    if (worldParam || isAdventurePath) {
+      const worldId = worldParam ? parseInt(worldParam, 10) : undefined;
+      if (!worldParam || (worldId && worldId >= 1 && worldId <= 6)) {
+        setScreen('adventure');
+        setAdventureWorldId(worldId);
+      }
+      // Clean up URL
+      history.replaceState(null, '', window.location.pathname.replace('/adventure', '/'));
     }
   }, []);
 
@@ -281,65 +286,6 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     setActiveLessonId(lessonId);
     setScreen('lesson');
   }, []);
-
-  const handleDuckHuntGameOver = useCallback((result: DuckHuntResult) => {
-    // Save high score
-    const isNew = !duckHuntHighScore || result.score > duckHuntHighScore.score;
-    if (isNew) {
-      const newHS: DuckHuntHighScore = {
-        score: result.score,
-        ducksShot: result.ducksShot,
-        maxCombo: result.maxCombo,
-        timestamp: Date.now(),
-      };
-      setDuckHuntHighScore(newHS);
-      setItem('duck_hunt_high_score', newHS);
-    }
-
-    // XP reward: score / 25 (balanced for arcade)
-    const xpAmount = Math.max(1, Math.floor(result.score / 25));
-    if (gamification.profile) {
-      gamification.addXp(xpAmount);
-    }
-    addToast({
-      type: 'xp',
-      title: t('duckHunt.gameOver'),
-      message: `+${xpAmount} XP`,
-      icon: '🦆',
-    });
-    triggerSync();
-  }, [duckHuntHighScore, gamification, addToast, t, triggerSync]);
-
-  const handleDuckRaceGameOver = useCallback((result: DuckRaceResult) => {
-    // Update high score
-    const prev = duckRaceHighScore;
-    const isNewBestWpm = !prev || result.playerWpm > prev.bestWpm;
-    const isNewBestPlace = !prev || result.placement < prev.bestPlacement;
-    const newHS: DuckRaceHighScore = {
-      bestPlacement: isNewBestPlace ? result.placement : (prev?.bestPlacement ?? result.placement),
-      bestWpm: isNewBestWpm ? result.playerWpm : (prev?.bestWpm ?? result.playerWpm),
-      racesCompleted: (prev?.racesCompleted ?? 0) + 1,
-      winsCount: (prev?.winsCount ?? 0) + (result.placement === 1 ? 1 : 0),
-      timestamp: Date.now(),
-    };
-    setDuckRaceHighScore(newHS);
-    setItem('duck_race_high_score', newHS);
-
-    // XP: base (WPM * 0.5) + placement bonus (1st: +100, 2nd: +50, 3rd: +25)
-    const baseXp = Math.max(1, Math.floor(result.playerWpm * 0.5));
-    const placeBonus = result.placement === 1 ? 100 : result.placement === 2 ? 50 : result.placement === 3 ? 25 : 0;
-    const xpAmount = baseXp + placeBonus;
-    if (gamification.profile) {
-      gamification.addXp(xpAmount);
-    }
-    addToast({
-      type: 'xp',
-      title: t('duckRace.raceOver'),
-      message: `+${xpAmount} XP`,
-      icon: '\uD83C\uDFC1',
-    });
-    triggerSync();
-  }, [duckRaceHighScore, gamification, addToast, t, triggerSync]);
 
   const handleSettingChange = useCallback(<K extends keyof Settings>(key: K, value: Settings[K]) => {
     updateSetting(key, value);
@@ -625,42 +571,6 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
           />
         )}
 
-        {screen === 'arcade' && (
-          <Arcade
-            onBack={() => handleNavigate('test')}
-            onPlayDuckHunt={() => handleNavigate('duck-hunt')}
-            onPlayDuckRace={() => handleNavigate('duck-race')}
-            duckHuntHighScore={duckHuntHighScore}
-            duckRaceHighScore={duckRaceHighScore}
-            isLoggedIn={!!user}
-            onLoginClick={handleLoginClick}
-          />
-        )}
-
-        {screen === 'duck-hunt' && (
-          <DuckHuntGame
-            settings={settings}
-            onBack={() => handleNavigate('arcade')}
-            onGameOver={handleDuckHuntGameOver}
-            highScore={duckHuntHighScore}
-            isLoggedIn={!!user}
-            isSupabaseConfigured={isSupabaseConfigured}
-            onLoginClick={handleLoginClick}
-          />
-        )}
-
-        {screen === 'duck-race' && (
-          <DuckRaceGame
-            settings={settings}
-            onBack={() => handleNavigate('arcade')}
-            onGameOver={handleDuckRaceGameOver}
-            highScore={duckRaceHighScore}
-            isLoggedIn={!!user}
-            isSupabaseConfigured={isSupabaseConfigured}
-            onLoginClick={handleLoginClick}
-          />
-        )}
-
         {screen === 'adventure' && (
           <AdventurePage
             settings={settings}
@@ -669,6 +579,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             addToast={addToast}
             unlockAchievements={gamification.unlockAchievements}
             triggerSync={triggerSync}
+            initialWorldId={adventureWorldId}
           />
         )}
 

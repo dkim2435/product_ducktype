@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { StageResult, StageConfig } from '../../types/adventure';
-import { WORLD_1 } from '../../constants/adventure';
 
 interface StageCompleteProps {
   result: StageResult;
@@ -10,6 +9,7 @@ interface StageCompleteProps {
   onNextStage: () => void;
   onReturnToMap: () => void;
   isNextUnlocked: boolean;
+  worldStages: StageConfig[];
 }
 
 export function StageComplete({
@@ -19,6 +19,7 @@ export function StageComplete({
   onNextStage,
   onReturnToMap,
   isNextUnlocked,
+  worldStages,
 }: StageCompleteProps) {
   const { t } = useTranslation();
   const [visibleStars, setVisibleStars] = useState(0);
@@ -34,7 +35,8 @@ export function StageComplete({
     return () => timers.forEach(clearTimeout);
   }, [result.stars, result.cleared]);
 
-  const hasNextStage = WORLD_1.stages.some(s => s.id === result.stageId + 1);
+  const currentIdx = worldStages.findIndex(s => s.id === result.stageId);
+  const hasNextStage = currentIdx >= 0 && currentIdx < worldStages.length - 1;
   const timeSeconds = Math.round(result.timeMs / 1000);
   const minutes = Math.floor(timeSeconds / 60);
   const seconds = timeSeconds % 60;

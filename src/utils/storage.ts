@@ -3,7 +3,6 @@ const PREFIX = 'ducktype_';
 const PROGRESS_KEYS = new Set([
   'profile', 'achievements', 'streak', 'key_stats',
   'history', 'pb', 'daily_challenge', 'lesson_progress',
-  'duck_hunt_high_score', 'duck_race_high_score',
   'adventure_progress',
 ]);
 
