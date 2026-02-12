@@ -19,6 +19,7 @@ interface AdventurePageProps {
   isLoggedIn: boolean;
   onLoginClick: () => void;
   onShareClick: () => void;
+  onTypingStateChange?: (active: boolean) => void;
 }
 
 export function AdventurePage({
@@ -32,6 +33,7 @@ export function AdventurePage({
   isLoggedIn,
   onLoginClick,
   onShareClick,
+  onTypingStateChange,
 }: AdventurePageProps) {
   const adventure = useAdventure();
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('beginner');
@@ -171,6 +173,7 @@ export function AdventurePage({
             stageBestStars={adventure.getStageProgress(adventure.currentWorldId, stageConfig.id)?.bestStars ?? 0}
             bossBestStars={bossBestStars}
             prevStageBestStars={prevStageStars}
+            onTypingStateChange={onTypingStateChange}
           />
         );
       })()}

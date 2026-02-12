@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { StageConfig, StageResult, DebuffType, DifficultyLevel } from '../../types/adventure';
 import { useCombat } from '../../hooks/useCombat';
@@ -28,6 +28,7 @@ interface CombatSceneProps {
   stageBestStars: number;     // 0=not cleared, 1=beginner cleared, 2=intermediate cleared, 3=expert cleared
   bossBestStars: number;      // boss stage bestStars — gates difficulty tiers
   prevStageBestStars: number; // previous stage bestStars (-1 = first stage, no prev requirement)
+  onTypingStateChange?: (active: boolean) => void;
 }
 
 const GAME_WIDTH = 800;
@@ -226,7 +227,7 @@ function getStageTheme(worldId: number, stageId: number) {
   return getW1Theme(stageId);
 }
 
-export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId, debuff, difficulty, onDifficultyChange, stageBestStars, bossBestStars, prevStageBestStars }: CombatSceneProps) {
+export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId, debuff, difficulty, onDifficultyChange, stageBestStars, bossBestStars, prevStageBestStars, onTypingStateChange }: CombatSceneProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const { playClick, playError } = useSound({
@@ -322,6 +323,21 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
   const keyboardHeight = useKeyboardHeight();
   const keyboardOpen = keyboardHeight > 0;
+  const inputDisplayRef = useRef<HTMLDivElement>(null);
+
+  // Notify parent of typing state (fighting phase) to hide header/footer
+  useEffect(() => {
+    const active = state.phase === 'fighting';
+    onTypingStateChange?.(active);
+    return () => onTypingStateChange?.(false);
+  }, [state.phase, onTypingStateChange]);
+
+  // Scroll input into view when virtual keyboard opens on mobile
+  useEffect(() => {
+    if (isMobile && keyboardOpen && inputDisplayRef.current) {
+      inputDisplayRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, [isMobile, keyboardOpen]);
 
   const playerHpPercent = (state.playerHp / state.playerMaxHp) * 100;
   const bossHpPercent = state.bossMaxHp > 0 ? (state.bossHp / state.bossMaxHp) * 100 : 0;
@@ -331,7 +347,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
   // Mobile: scale by width, and also shrink when keyboard is open
   const widthScale = isMobile ? Math.min(window.innerWidth - 32, GAME_WIDTH) / GAME_WIDTH : 1;
   const mobileGameHeight = keyboardOpen && isMobile
-    ? Math.min(GAME_HEIGHT, window.innerHeight - keyboardHeight - 140) // 140 = HUD + input + padding
+    ? Math.min(GAME_HEIGHT, window.innerHeight - keyboardHeight - 100) // 100 = HUD + input + gaps
     : GAME_HEIGHT;
   const heightScale = isMobile && keyboardOpen ? mobileGameHeight / GAME_HEIGHT : 1;
   const gameScale = isMobile ? Math.min(widthScale, heightScale) : 1;
@@ -347,7 +363,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
       width: '100%',
       maxWidth: '860px',
       margin: '0 auto',
-      padding: 'var(--page-vertical-padding) 0',
+      padding: isMobile && state.phase === 'fighting' ? '0' : 'var(--page-vertical-padding) 0',
     }}>
       <textarea
         ref={inputRef}
@@ -473,14 +489,14 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
       {(state.phase === 'fighting' || state.phase === 'wave-clear' || state.phase === 'boss-transition' || state.phase === 'boss-death') && (
         <div onClick={focusInput} style={{ cursor: 'text' }}>
           {/* HUD */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', gap: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile && keyboardOpen ? '4px' : '8px', gap: '12px' }}>
             {/* Player HP */}
             <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--sub-color)', marginBottom: '4px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: isMobile && keyboardOpen ? '10px' : '12px', color: 'var(--sub-color)', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
                 <span>🐤 {t('adventure.player')}</span>
                 <span>{Math.max(0, state.playerHp)}/{state.playerMaxHp}</span>
               </div>
-              <div style={{ height: '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ height: isMobile && keyboardOpen ? '6px' : '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
                 <div style={{
                   height: '100%', width: `${playerHpPercent}%`,
                   backgroundColor: playerHpPercent > 50 ? '#4caf50' : playerHpPercent > 25 ? '#ff9800' : '#f44336',
@@ -524,11 +540,11 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
             {/* Boss HP or enemy info */}
             {isBoss ? (
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--sub-color)', marginBottom: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: isMobile && keyboardOpen ? '10px' : '12px', color: 'var(--sub-color)', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
                   <span>{Math.max(0, state.bossHp)}/{state.bossMaxHp}</span>
                   <span>{stageConfig.enemyConfig.emoji} {stageConfig.enemyConfig.name}</span>
                 </div>
-                <div style={{ height: '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ height: isMobile && keyboardOpen ? '6px' : '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{
                     height: '100%', width: `${bossHpPercent}%`,
                     backgroundColor: '#f44336', borderRadius: '4px',
@@ -841,7 +857,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
           {/* Input display */}
           {state.phase === 'fighting' && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
+            <div ref={inputDisplayRef} style={{ display: 'flex', justifyContent: 'center', marginTop: isMobile ? '6px' : '12px' }}>
               <div style={{
                 padding: '8px 24px', minWidth: '200px', textAlign: 'center',
                 backgroundColor: 'var(--sub-alt-color)', borderRadius: 'var(--border-radius)',

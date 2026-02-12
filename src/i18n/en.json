@@ -261,6 +261,12 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v211": {
+      "title": "Adventure Mode Mobile Optimization",
+      "item1": "Mobile Combat Layout — Compact HUD and reduced padding during combat for maximum game field visibility on mobile.",
+      "item2": "Virtual Keyboard Auto-Scroll — Input field automatically scrolls into view when the virtual keyboard opens.",
+      "item3": "Combat Header Auto-Hide — Header and footer automatically hide during adventure combat to maximize screen space."
+    },
     "v210": {
       "title": "Daily Boost & Smart Keyboard Detection",
       "item1": "Daily XP Boost (1.5x) — Complete the daily challenge to earn 1.5x XP on all tests for the rest of the day! Start your day right.",
