@@ -96,6 +96,7 @@
     "xpLength": "length",
     "xpStreak": "streak",
     "xpDaily": "daily",
+    "xpDailyBoost": "daily boost (1.5x)",
     "xpShare": "share",
     "achievementUnlocked": "Achievement Unlocked!",
     "level": "Level",
@@ -132,7 +133,9 @@
     "streak": "Daily Streak",
     "recentActivity": "Recent Activity",
     "reminderTitle": "Daily Challenge awaits!",
-    "reminderMessage": "Keep your streak alive — today's challenge is ready"
+    "reminderMessage": "Keep your streak alive — today's challenge is ready",
+    "boostDescription": "Complete the daily challenge to get 1.5x XP on all tests today!",
+    "boostActive": "Daily Boost Active — 1.5x XP"
   },
   "practice": {
     "title": "Practice",

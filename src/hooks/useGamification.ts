@@ -55,6 +55,7 @@ export function useGamification() {
     dailyChallengeState?: import('../types/gamification').DailyChallengeState,
     lessonProgress?: import('../types/gamification').LessonProgressMap,
     userId?: string | null,
+    hasDailyBoost?: boolean,
   ) => {
     // 1. Update streak
     const newStreak = updateStreak(streak);
@@ -68,7 +69,8 @@ export function useGamification() {
       result.accuracy,
       elapsed,
       newStreak.currentStreak,
-      isDailyChallenge
+      isDailyChallenge,
+      !!hasDailyBoost
     );
 
     // 3. Update profile

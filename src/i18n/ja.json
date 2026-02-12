@@ -96,6 +96,7 @@
     "xpLength": "時間",
     "xpStreak": "連続",
     "xpDaily": "デイリー",
+    "xpDailyBoost": "デイリーブースト (1.5x)",
     "xpShare": "共有",
     "achievementUnlocked": "実績解除！",
     "level": "レベル",
@@ -132,7 +133,9 @@
     "streak": "デイリー連続",
     "recentActivity": "最近の活動",
     "reminderTitle": "今日のチャレンジが待っています！",
-    "reminderMessage": "ストリークを続けましょう — 今日のチャレンジの準備ができました"
+    "reminderMessage": "ストリークを続けましょう — 今日のチャレンジの準備ができました",
+    "boostDescription": "デイリーチャレンジをクリアして、今日の全テストで1.5倍XPをゲット！",
+    "boostActive": "デイリーブースト発動中 — 1.5x XP"
   },
   "practice": {
     "title": "練習",

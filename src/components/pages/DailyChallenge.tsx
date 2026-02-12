@@ -108,6 +108,32 @@ export function DailyChallenge({
         }}>
           {t('daily.description')}
         </p>
+        {hasCompletedToday ? (
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            marginTop: '10px',
+            padding: '4px 12px',
+            fontSize: '12px',
+            fontWeight: 600,
+            color: 'var(--main-color)',
+            backgroundColor: 'color-mix(in srgb, var(--main-color) 12%, transparent)',
+            borderRadius: '999px',
+          }}>
+            <span>⚡</span>
+            {t('daily.boostActive')}
+          </div>
+        ) : (
+          <p style={{
+            fontSize: '12px',
+            color: 'var(--main-color)',
+            marginTop: '6px',
+            fontWeight: 500,
+          }}>
+            ⚡ {t('daily.boostDescription')}
+          </p>
+        )}
       </div>
 
       {/* Streak */}
@@ -164,8 +190,22 @@ export function DailyChallenge({
               <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>ACC</div>
             </div>
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--sub-color)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginBottom: '8px' }}>
             {t('daily.comeBack')}
+          </div>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '4px 12px',
+            fontSize: '11px',
+            fontWeight: 600,
+            color: 'var(--main-color)',
+            backgroundColor: 'color-mix(in srgb, var(--main-color) 12%, transparent)',
+            borderRadius: '999px',
+          }}>
+            <span>⚡</span>
+            {t('daily.boostActive')}
           </div>
         </div>
       ) : (

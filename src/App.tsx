@@ -197,6 +197,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
       user?.id,
+      dailyChallenge.hasCompletedToday,
     );
 
     triggerSync();
@@ -205,7 +206,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     if (user?.id && currentUsername && settings.mode === 'time') {
       leaderboard.submitScore(user.id, currentUsername, result.wpm, result.accuracy, 'time', settings.timeLimit);
     }
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress, triggerSync, user, currentUsername, leaderboard]);
+  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, dailyChallenge.hasCompletedToday, lessons.lessonProgress, triggerSync, user, currentUsername, leaderboard]);
 
   const handleDailyChallengeFinish = useCallback((testState: TestState) => {
     const result = saveResult(testState, settings);
@@ -223,7 +224,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     // Save daily challenge result
     dailyChallenge.saveDailyChallengeResult(result.wpm, result.accuracy);
 
-    // Process gamification with daily challenge flag
+    // Process gamification with daily challenge flag + boost (daily challenge itself gets 1.5x)
     gamification.processTestResult(
       result,
       testState,
@@ -232,6 +233,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
       user?.id,
+      true,
     );
 
     triggerSync();
@@ -261,11 +263,12 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
       user?.id,
+      dailyChallenge.hasCompletedToday,
     );
 
     setScreen('results');
     triggerSync();
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons, triggerSync]);
+  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, dailyChallenge.hasCompletedToday, lessons, triggerSync]);
 
   const handleRestart = useCallback(() => {
     setScreen('test');

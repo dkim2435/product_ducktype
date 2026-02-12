@@ -6,6 +6,7 @@ import {
   XP_STREAK_BONUS_PER_DAY,
   XP_STREAK_BONUS_MAX,
   XP_DAILY_CHALLENGE_BONUS,
+  XP_DAILY_BOOST_MULTIPLIER,
   XP_LENGTH_MIN_SECONDS,
   XP_LENGTH_MAX_SECONDS,
   XP_LENGTH_MIN_MULTIPLIER,
@@ -17,7 +18,8 @@ export function calculateXpGain(
   accuracy: number,
   elapsedSeconds: number,
   currentStreak: number,
-  isDailyChallenge: boolean
+  isDailyChallenge: boolean,
+  hasDailyBoost: boolean
 ): XpGain {
   // Base XP from WPM
   const base = Math.floor(wpm * XP_WPM_MULTIPLIER);
@@ -40,7 +42,12 @@ export function calculateXpGain(
   // Daily challenge flat bonus
   const dailyChallengeBonus = isDailyChallenge ? XP_DAILY_CHALLENGE_BONUS : 0;
 
-  const total = base + accuracyBonus + lengthBonus + streakBonus + dailyChallengeBonus;
+  const subtotal = base + accuracyBonus + lengthBonus + streakBonus + dailyChallengeBonus;
 
-  return { base, accuracyBonus, lengthBonus, streakBonus, dailyChallengeBonus, shareBonus: 0, total };
+  // Daily boost: 1.5x when daily challenge completed today
+  const dailyBoostBonus = hasDailyBoost ? Math.floor(subtotal * (XP_DAILY_BOOST_MULTIPLIER - 1)) : 0;
+
+  const total = subtotal + dailyBoostBonus;
+
+  return { base, accuracyBonus, lengthBonus, streakBonus, dailyChallengeBonus, dailyBoostBonus, shareBonus: 0, total };
 }

@@ -96,6 +96,7 @@
     "xpLength": "길이",
     "xpStreak": "스트릭",
     "xpDaily": "일일",
+    "xpDailyBoost": "일일 부스트 (1.5x)",
     "xpShare": "공유",
     "achievementUnlocked": "업적 달성!",
     "level": "레벨",
@@ -132,7 +133,9 @@
     "streak": "일일 스트릭",
     "recentActivity": "최근 활동",
     "reminderTitle": "오늘의 챌린지가 기다리고 있어요!",
-    "reminderMessage": "스트릭을 이어가세요 — 오늘의 챌린지가 준비되었습니다"
+    "reminderMessage": "스트릭을 이어가세요 — 오늘의 챌린지가 준비되었습니다",
+    "boostDescription": "데일리 챌린지를 완료하면 오늘 모든 테스트에 1.5x XP 부스트!",
+    "boostActive": "데일리 부스트 활성 — 1.5x XP"
   },
   "practice": {
     "title": "연습",

@@ -34,6 +34,7 @@ export function XpGainDisplay({ xpGain }: XpGainDisplayProps) {
     xpGain.lengthBonus > 0 && { label: t('gamification.xpLength'), value: xpGain.lengthBonus },
     xpGain.streakBonus > 0 && { label: t('gamification.xpStreak'), value: xpGain.streakBonus },
     xpGain.dailyChallengeBonus > 0 && { label: t('gamification.xpDaily'), value: xpGain.dailyChallengeBonus },
+    xpGain.dailyBoostBonus > 0 && { label: t('gamification.xpDailyBoost'), value: xpGain.dailyBoostBonus },
     xpGain.shareBonus > 0 && { label: t('gamification.xpShare'), value: xpGain.shareBonus },
   ].filter(Boolean) as { label: string; value: number }[];
 
