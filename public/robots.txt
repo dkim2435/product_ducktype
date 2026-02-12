@@ -6,8 +6,28 @@ Disallow:
 User-agent: Googlebot
 Allow: /
 
-# Bing
+# Bing (feeds into Microsoft Copilot & OpenAI)
 User-agent: Bingbot
+Allow: /
+
+# OpenAI — ChatGPT search & browsing
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Anthropic — Claude
+User-agent: ClaudeBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+
+# Apple — Siri & AI features
+User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://ducktype.xyz/sitemap.xml

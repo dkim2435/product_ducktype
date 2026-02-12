@@ -71,7 +71,32 @@
     <link rel="alternate" hreflang="ru" href="https://ducktype.xyz/" />
     <link rel="alternate" hreflang="x-default" href="https://ducktype.xyz/" />
 
-    <!-- Structured Data: WebApplication (Schema.org) -->
+    <!-- Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://ducktype.xyz/#organization",
+      "name": "DuckType",
+      "url": "https://ducktype.xyz",
+      "logo": "https://ducktype.xyz/favicon-192.png",
+      "description": "DuckType is a free online typing speed test with Adventure Mode, daily challenges, and typing lessons. Supports 9 languages."
+    }
+    </script>
+
+    <!-- Structured Data: WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "DuckType",
+      "url": "https://ducktype.xyz",
+      "publisher": { "@id": "https://ducktype.xyz/#organization" },
+      "inLanguage": ["en", "ko", "zh", "ja", "es", "fr", "de", "pt", "ru"]
+    }
+    </script>
+
+    <!-- Structured Data: WebApplication -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -88,17 +113,13 @@
       },
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "softwareVersion": "2.1.1",
-      "author": {
-        "@type": "Organization",
-        "name": "DuckType",
-        "url": "https://ducktype.xyz"
-      },
+      "author": { "@id": "https://ducktype.xyz/#organization" },
       "inLanguage": ["en", "ko", "zh", "ja", "es", "fr", "de", "pt", "ru"],
       "keywords": "typing test, WPM, typing speed, typing practice, touch typing, typing RPG, adventure mode"
     }
     </script>
 
-    <!-- Structured Data: FAQPage for GEO -->
+    <!-- Structured Data: FAQPage for SEO + GEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -143,6 +164,30 @@
             "@type": "Answer",
             "text": "DuckType supports 9 languages for typing tests: English, Korean, Chinese, Japanese, Spanish, French, German, Portuguese, and Russian. The user interface is available in 4 languages (English, Korean, Chinese, Japanese). Full IME support is provided for CJK languages."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Adventure Mode in DuckType?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Adventure Mode is a typing RPG where you fight monsters by typing words. It features 2 worlds (Duck Village and Venom Jungle), 17 stages, boss battles, 3 difficulty tiers (Beginner, Intermediate, Expert), and cinematic victory scenes. You earn XP and unlock achievements as you progress."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are DuckType's daily challenges?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every day, all DuckType users receive the same set of words to type. Completing the daily challenge earns a 1.5x XP boost on all tests for the rest of the day. Maintain your streak for consistent progress and bonus rewards."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does DuckType compare to other typing tests?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DuckType stands out with its Adventure Mode typing RPG, 9-language support with full CJK IME, WPM percentile ranking, gamification with 30+ achievements and 10 duck ranks, structured typing lessons with weak key analysis, daily challenges with streak system, and a global leaderboard. It's completely free with no ads interrupting the typing experience."
+          }
         }
       ]
     }
@@ -155,11 +200,11 @@
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://ducktype.xyz/" },
-        { "@type": "ListItem", "position": 2, "name": "About", "item": "https://ducktype.xyz/about" },
+        { "@type": "ListItem", "position": 2, "name": "Adventure", "item": "https://ducktype.xyz/adventure" },
         { "@type": "ListItem", "position": 3, "name": "Practice", "item": "https://ducktype.xyz/practice" },
         { "@type": "ListItem", "position": 4, "name": "Daily Challenge", "item": "https://ducktype.xyz/daily-challenge" },
-        { "@type": "ListItem", "position": 5, "name": "Adventure", "item": "https://ducktype.xyz/adventure" },
-        { "@type": "ListItem", "position": 6, "name": "Leaderboard", "item": "https://ducktype.xyz/leaderboard" }
+        { "@type": "ListItem", "position": 5, "name": "Leaderboard", "item": "https://ducktype.xyz/leaderboard" },
+        { "@type": "ListItem", "position": 6, "name": "About", "item": "https://ducktype.xyz/about" }
       ]
     }
     </script>
@@ -247,7 +292,11 @@
           <dt style="font-weight:bold;margin-bottom:4px;">How do I improve my weak keys?</dt>
           <dd style="margin-bottom:12px;margin-left:0;">Go to Practice, then select Weak Keys. DuckType analyzes your typing data and generates exercises targeting your most error-prone keys.</dd>
           <dt style="font-weight:bold;margin-bottom:4px;">What are the daily challenges?</dt>
-          <dd style="margin-bottom:12px;margin-left:0;">Every day, all DuckType users receive the same set of words to type. Complete the challenge daily to maintain your streak and earn bonus XP.</dd>
+          <dd style="margin-bottom:12px;margin-left:0;">Every day, all DuckType users receive the same set of words to type. Completing the daily challenge earns a 1.5x XP boost on all tests for the rest of the day.</dd>
+          <dt style="font-weight:bold;margin-bottom:4px;">What is Adventure Mode?</dt>
+          <dd style="margin-bottom:12px;margin-left:0;">Adventure Mode is a typing RPG where you fight monsters by typing words. It features 2 worlds (Duck Village and Venom Jungle), 17 stages, boss battles, 3 difficulty tiers, and cinematic victory scenes.</dd>
+          <dt style="font-weight:bold;margin-bottom:4px;">How does DuckType compare to other typing tests?</dt>
+          <dd style="margin-bottom:12px;margin-left:0;">DuckType stands out with its Adventure Mode typing RPG, 9-language support with full CJK IME, WPM percentile ranking, gamification with 30+ achievements and 10 duck ranks, structured typing lessons, daily challenges, and a global leaderboard. It's completely free.</dd>
         </dl>
 
         <p style="text-align:center;font-size:14px;color:#6b6893;margin-top:32px;">Please enable JavaScript to use the DuckType typing test application.</p>

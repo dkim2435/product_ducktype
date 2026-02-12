@@ -1,0 +1,43 @@
+# DuckType
+
+> DuckType is a free online typing speed test that measures WPM (words per minute), accuracy, and consistency. It supports 9 languages, requires no sign-up, and includes Adventure Mode — a typing RPG where you fight monsters by typing words.
+
+## Features
+
+- **Typing Test**: Timed tests (15s, 30s, 60s, 120s) or word count tests (10, 25, 50, 100 words) with punctuation and numbers options.
+- **9 Languages**: English, Korean, Chinese, Japanese, Spanish, French, German, Portuguese, and Russian with full IME support.
+- **WPM Percentile Ranking**: See how your typing speed compares to other typists worldwide.
+- **Adventure Mode**: A typing RPG with 2 worlds, 17 stages, boss battles, 3 difficulty tiers (Beginner, Intermediate, Expert), and cinematic victory scenes.
+- **Daily Challenges**: A new challenge every day with the same words for all users. Maintain your streak for bonus XP.
+- **Typing Lessons**: Structured lessons from home row (ASDF JKL;) to full keyboard mastery, plus weak key analysis with keyboard heatmap.
+- **Gamification**: Earn XP, level up through 10 duck ranks (Egg to Duck King), unlock 30+ achievements, and maintain daily streaks.
+- **Leaderboard**: Compete with typists worldwide for the top ranking.
+- **Challenge Friends**: Share a link with your WPM score and challenge friends to beat it.
+- **Cloud Sync**: Sign up to save progress across devices, or use locally with no account.
+- **17+ Themes**: DuckType Dark, Duck Pond, Dracula, Nord, Tokyo Night, Solarized, and more.
+
+## Typing Speed Reference
+
+- Beginner: below 30 WPM
+- Average: 40-50 WPM
+- Above Average: 60-75 WPM
+- Fast: 80-100 WPM
+- Professional: 100-130 WPM
+- Expert: 130+ WPM
+
+The average office worker types around 40 WPM. With 10-15 minutes of daily practice, most people can reach 80+ WPM within a few months.
+
+## WPM Calculation
+
+WPM = (correct characters / 5) / (elapsed time in minutes). Each "word" is standardized to 5 characters including spaces for fair cross-language comparison.
+
+## Links
+
+- [Homepage](https://ducktype.xyz/)
+- [Adventure Mode](https://ducktype.xyz/adventure)
+- [Daily Challenge](https://ducktype.xyz/daily-challenge)
+- [Practice & Lessons](https://ducktype.xyz/practice)
+- [Leaderboard](https://ducktype.xyz/leaderboard)
+- [About](https://ducktype.xyz/about)
+- [Privacy Policy](https://ducktype.xyz/privacy)
+- [Terms of Service](https://ducktype.xyz/terms)
