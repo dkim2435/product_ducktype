@@ -344,13 +344,12 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
   const now = Date.now();
   const theme = getStageTheme(worldId, stageConfig.id);
 
-  // Mobile: scale by width, and also shrink when keyboard is open
-  const widthScale = isMobile ? Math.min(window.innerWidth - 32, GAME_WIDTH) / GAME_WIDTH : 1;
-  const mobileGameHeight = keyboardOpen && isMobile
-    ? Math.min(GAME_HEIGHT, window.innerHeight - keyboardHeight - 100) // 100 = HUD + input + gaps
+  // Mobile: use full width (content is %-positioned), only adjust height when keyboard is open
+  const gameFieldHeight = isMobile
+    ? (keyboardOpen
+      ? Math.max(120, window.innerHeight - keyboardHeight - 100)
+      : GAME_HEIGHT)
     : GAME_HEIGHT;
-  const heightScale = isMobile && keyboardOpen ? mobileGameHeight / GAME_HEIGHT : 1;
-  const gameScale = isMobile ? Math.min(widthScale, heightScale) : 1;
   const containerWidth = isMobile ? '100%' : `${GAME_WIDTH}px`;
   const isBoss = stageConfig.isBoss;
   const bossWordMinions = state.minions.filter(m => m.isBossWord);
@@ -467,7 +466,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               color: 'var(--sub-color)', backgroundColor: 'var(--sub-alt-color)',
               borderRadius: 'var(--border-radius)', cursor: 'pointer',
             }}>{t('adventure.back')}</button>
-            <button onClick={startCountdown} style={{
+            <button onClick={() => { focusInput(); startCountdown(); }} style={{
               padding: '12px 36px', fontSize: '15px', fontWeight: 700,
               color: 'var(--bg-color)', backgroundColor: 'var(--main-color)',
               borderRadius: 'var(--border-radius)', cursor: 'pointer',
@@ -565,14 +564,12 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
           <div style={{
             position: 'relative',
             width: containerWidth,
-            height: `${GAME_HEIGHT * gameScale}px`,
+            height: `${gameFieldHeight}px`,
             borderRadius: 'var(--border-radius)',
             overflow: 'hidden',
             margin: '0 auto',
             background: theme.bg,
             border: '1px solid var(--sub-alt-color)',
-            transform: isMobile ? `scale(${gameScale})` : undefined,
-            transformOrigin: 'top center',
           }}>
             {/* Decorations */}
             {theme.deco.map((d, i) => (
