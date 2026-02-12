@@ -464,9 +464,9 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
                   <div style={{ fontWeight: 600, fontSize: '13px' }}>
                     {dailyChallenge.hasCompletedToday ? 'Challenge Done' : 'Daily Challenge'}
                   </div>
-                  <div style={{ fontSize: '11px', color: dailyChallenge.hasCompletedToday ? 'var(--sub-color)' : 'var(--main-color)', marginTop: '1px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--main-color)', marginTop: '1px' }}>
                     {dailyChallenge.hasCompletedToday
-                      ? "Completed today!"
+                      ? '1.5x XP boost active!'
                       : '1.5x XP boost!'}
                   </div>
                 </div>
