@@ -1,9 +1,10 @@
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TestResult, PersonalBest } from '../../types/stats';
 import type { XpGain, KeyStats } from '../../types/gamification';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { StatCard } from './StatCard';
-import { WpmChart } from './WpmChart';
+const WpmChart = lazy(() => import('./WpmChart').then(m => ({ default: m.WpmChart })));
 import { ShareButton } from './ShareButton';
 import { XP_SHARE_BONUS } from '../../constants/gamification';
 import { XpGainDisplay } from './XpGainDisplay';
@@ -170,11 +171,13 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
 
         {/* Right: Chart */}
         <div>
-          <WpmChart
-            wpmHistory={result.wpmHistory}
-            rawWpmHistory={result.rawWpmHistory}
-            errorHistory={result.errorHistory}
-          />
+          <Suspense fallback={<div style={{ height: '200px' }} />}>
+            <WpmChart
+              wpmHistory={result.wpmHistory}
+              rawWpmHistory={result.rawWpmHistory}
+              errorHistory={result.errorHistory}
+            />
+          </Suspense>
         </div>
       </div>
 

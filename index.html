@@ -12,6 +12,11 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://ducktype.xyz/" />
 
+    <!-- Google Fonts: preconnect + primary font only (alternatives loaded on demand) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap" />
+
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -162,13 +167,6 @@
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-7280155441452276" />
 
-    <!-- Redirect Vercel preview to custom domain -->
-    <script>
-      if (window.location.hostname === 'product-ducktype.vercel.app') {
-        window.location.replace('https://ducktype.xyz' + window.location.pathname + window.location.search + window.location.hash);
-      }
-    </script>
-
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MMQ2JLC3JK"></script>
     <script>
@@ -256,6 +254,12 @@
         <p style="text-align:center;font-size:12px;color:#6b6893;"><a href="https://ducktype.xyz/about" style="color:#ffb347;">About</a> · <a href="https://ducktype.xyz/privacy" style="color:#ffb347;">Privacy Policy</a> · <a href="https://ducktype.xyz/terms" style="color:#ffb347;">Terms of Service</a> · <a href="https://ducktype.xyz/contact" style="color:#ffb347;">Contact</a></p>
       </div>
     </noscript>
+    <!-- Redirect Vercel preview to custom domain -->
+    <script>
+      if (window.location.hostname === 'product-ducktype.vercel.app') {
+        window.location.replace('https://ducktype.xyz' + window.location.pathname + window.location.search + window.location.hash);
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 

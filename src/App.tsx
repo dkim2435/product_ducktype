@@ -155,7 +155,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     }
   }, [settings.uiLanguage, i18n]);
 
-  // Apply font family
+  // Apply font family (alternative fonts loaded on demand)
   useEffect(() => {
     const fontMap: Record<string, string> = {
       default: "'Roboto Mono', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', monospace",
@@ -164,11 +164,47 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       'fira-code': "'Fira Code', monospace",
       'source-code-pro': "'Source Code Pro', monospace",
     };
+    // Lazy-load alternative fonts when selected
+    const fontsToLoad: Record<string, string> = {
+      'fira-code': 'Fira+Code:wght@300;400;500;700',
+      'source-code-pro': 'Source+Code+Pro:wght@300;400;500;700',
+    };
+    const fontParam = fontsToLoad[settings.fontFamily];
+    if (fontParam) {
+      const id = `gfont-${settings.fontFamily}`;
+      if (!document.getElementById(id)) {
+        const link = document.createElement('link');
+        link.id = id;
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${fontParam}&display=swap`;
+        document.head.appendChild(link);
+      }
+    }
     document.documentElement.style.setProperty(
       '--font-family',
       fontMap[settings.fontFamily] || fontMap.default
     );
   }, [settings.fontFamily]);
+
+  // Lazy-load CJK fonts when CJK language is selected
+  useEffect(() => {
+    const cjkFonts: Record<string, string> = {
+      ko: 'Noto+Sans+KR:wght@400;700',
+      ja: 'Noto+Sans+JP:wght@400;700',
+      zh: 'Noto+Sans+SC:wght@400;700',
+    };
+    const fontParam = cjkFonts[settings.language];
+    if (fontParam) {
+      const id = `gfont-cjk-${settings.language}`;
+      if (!document.getElementById(id)) {
+        const link = document.createElement('link');
+        link.id = id;
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${fontParam}&display=swap`;
+        document.head.appendChild(link);
+      }
+    }
+  }, [settings.language]);
 
   const triggerSync = useCallback(() => {
     if (user?.id) requestSync(user.id);
