@@ -11,7 +11,7 @@ export const DEFAULT_SETTINGS: Settings = {
   caretStyle: 'line',
   smoothCaret: true,
   soundEnabled: true,
-  soundVolume: 0.25,
+  soundVolume: 0.5,
   soundTheme: 'default',
   showLiveWpm: true,
   showLiveAccuracy: true,

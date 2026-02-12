@@ -12,6 +12,7 @@ const STORAGE_TO_DB: Record<string, string> = {
   key_stats: 'key_stats',
   daily_challenge: 'daily_challenge',
   lesson_progress: 'lesson_progress',
+  adventure_progress: 'adventure_progress',
 };
 
 function collectLocalData(): Record<string, unknown> {

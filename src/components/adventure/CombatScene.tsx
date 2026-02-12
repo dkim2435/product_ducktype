@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { StageConfig, StageResult, DebuffType } from '../../types/adventure';
+import type { StageConfig, StageResult, DebuffType, DifficultyLevel } from '../../types/adventure';
 import { useCombat } from '../../hooks/useCombat';
 import { useKeyboard } from '../../hooks/useKeyboard';
 import { useSound } from '../../hooks/useSound';
@@ -9,7 +9,11 @@ import {
   COUNTDOWN_SECONDS,
   DAMAGE_NUMBER_DURATION_MS,
   KILL_EFFECT_DURATION_MS,
+  DIFFICULTY_CONFIGS,
+  WORLD_VICTORY_CINEMATICS,
+  WORLD_PREVIEWS,
 } from '../../constants/adventure';
+import { useKeyboardHeight } from '../../hooks/useVisualViewport';
 import type { Settings } from '../../types/settings';
 
 interface CombatSceneProps {
@@ -19,6 +23,11 @@ interface CombatSceneProps {
   onBack: () => void;
   worldId: number;
   debuff: DebuffType;
+  difficulty: DifficultyLevel;
+  onDifficultyChange: (d: DifficultyLevel) => void;
+  stageBestStars: number;     // 0=not cleared, 1=beginner cleared, 2=intermediate cleared, 3=expert cleared
+  bossBestStars: number;      // boss stage bestStars — gates difficulty tiers
+  prevStageBestStars: number; // previous stage bestStars (-1 = first stage, no prev requirement)
 }
 
 const GAME_WIDTH = 800;
@@ -217,7 +226,7 @@ function getStageTheme(worldId: number, stageId: number) {
   return getW1Theme(stageId);
 }
 
-export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId, debuff }: CombatSceneProps) {
+export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId, debuff, difficulty, onDifficultyChange, stageBestStars, bossBestStars, prevStageBestStars }: CombatSceneProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const { playClick, playError } = useSound({
@@ -226,13 +235,43 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
     theme: settings.soundTheme,
   });
 
-  const { state, startCountdown, handleChar, handleBackspace } = useCombat(stageConfig, onComplete, debuff);
+  // Sequential difficulty unlock:
+  // Intermediate: boss cleared on Beginner + previous stage cleared on Intermediate (or first stage)
+  // Expert: boss cleared on Intermediate + previous stage cleared on Expert (or first stage)
+  const isDiffUnlocked = useCallback((d: DifficultyLevel) => {
+    if (d === 'beginner') return true;
+    if (d === 'intermediate') {
+      if (bossBestStars < 1) return false; // boss not cleared on beginner
+      if (prevStageBestStars === -1) return true; // first stage
+      return prevStageBestStars >= 2; // prev stage cleared on intermediate
+    }
+    if (d === 'expert') {
+      if (bossBestStars < 2) return false; // boss not cleared on intermediate
+      if (prevStageBestStars === -1) return true; // first stage
+      return prevStageBestStars >= 3; // prev stage cleared on expert
+    }
+    return false;
+  }, [bossBestStars, prevStageBestStars]);
+
+  // Auto-select highest unlocked difficulty
+  useEffect(() => {
+    const best: DifficultyLevel = isDiffUnlocked('expert') ? 'expert'
+      : isDiffUnlocked('intermediate') ? 'intermediate'
+      : 'beginner';
+    if (difficulty !== best) {
+      onDifficultyChange(best);
+    }
+  }, [isDiffUnlocked, onDifficultyChange]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const effectiveDifficulty = isDiffUnlocked(difficulty) ? difficulty : 'beginner';
+
+  const { state, startCountdown, handleChar, handleBackspace } = useCombat(stageConfig, onComplete, debuff, effectiveDifficulty, stageBestStars);
   const [countdown, setCountdown] = useState(COUNTDOWN_SECONDS);
   const [, setTick] = useState(0);
 
   // Re-render every 100ms during combat for smooth timer countdown
   useEffect(() => {
-    if (state.phase !== 'fighting' && state.phase !== 'wave-clear' && state.phase !== 'boss-transition') return;
+    if (state.phase !== 'fighting' && state.phase !== 'wave-clear' && state.phase !== 'boss-transition' && state.phase !== 'boss-death') return;
     const interval = setInterval(() => setTick(t => t + 1), 100);
     return () => clearInterval(interval);
   }, [state.phase]);
@@ -270,14 +309,32 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
   });
 
   useEffect(() => {
-    if (state.phase === 'fighting') focusInput();
-  }, [state.phase, focusInput]);
+    if (state.phase === 'fighting') {
+      focusInput();
+      // Scroll game area into view on mobile when keyboard opens
+      if (isMobile) {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 300);
+      }
+    }
+  }, [state.phase, focusInput, isMobile]);
+
+  const keyboardHeight = useKeyboardHeight();
+  const keyboardOpen = keyboardHeight > 0;
 
   const playerHpPercent = (state.playerHp / state.playerMaxHp) * 100;
   const bossHpPercent = state.bossMaxHp > 0 ? (state.bossHp / state.bossMaxHp) * 100 : 0;
   const now = Date.now();
   const theme = getStageTheme(worldId, stageConfig.id);
-  const gameScale = isMobile ? Math.min(window.innerWidth - 32, GAME_WIDTH) / GAME_WIDTH : 1;
+
+  // Mobile: scale by width, and also shrink when keyboard is open
+  const widthScale = isMobile ? Math.min(window.innerWidth - 32, GAME_WIDTH) / GAME_WIDTH : 1;
+  const mobileGameHeight = keyboardOpen && isMobile
+    ? Math.min(GAME_HEIGHT, window.innerHeight - keyboardHeight - 140) // 140 = HUD + input + padding
+    : GAME_HEIGHT;
+  const heightScale = isMobile && keyboardOpen ? mobileGameHeight / GAME_HEIGHT : 1;
+  const gameScale = isMobile ? Math.min(widthScale, heightScale) : 1;
   const containerWidth = isMobile ? '100%' : `${GAME_WIDTH}px`;
   const isBoss = stageConfig.isBoss;
   const bossWordMinions = state.minions.filter(m => m.isBossWord);
@@ -294,8 +351,14 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
     }}>
       <textarea
         ref={inputRef}
-        style={{ position: 'absolute', opacity: 0, width: 0, height: 0, overflow: 'hidden' }}
+        style={{
+          position: 'fixed', top: 0, left: 0,
+          opacity: 0, width: '1px', height: '1px',
+          padding: 0, border: 'none', outline: 'none', resize: 'none',
+          fontSize: '16px', overflow: 'hidden', pointerEvents: 'none',
+        }}
         autoCapitalize="none" autoCorrect="off" autoComplete="off" spellCheck={false}
+        tabIndex={-1}
       />
 
       {/* INTRO */}
@@ -321,6 +384,53 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
             {isBoss && <span style={{ color: 'var(--error-color)', fontWeight: 700 }}>BOSS</span>}
           </div>
 
+          {/* Difficulty selector */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', width: '100%', maxWidth: '400px' }}>
+            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--sub-color)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Difficulty
+            </span>
+            <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+              {(['beginner', 'intermediate', 'expert'] as DifficultyLevel[]).map(d => {
+                const cfg = DIFFICULTY_CONFIGS[d];
+                const unlocked = isDiffUnlocked(d);
+                const isSelected = d === effectiveDifficulty && unlocked;
+                return (
+                  <button
+                    key={d}
+                    onClick={() => unlocked && onDifficultyChange(d)}
+                    disabled={!unlocked}
+                    style={{
+                      flex: 1, padding: '10px 8px', borderRadius: '8px',
+                      backgroundColor: isSelected ? `${cfg.color}18` : 'var(--sub-alt-color)',
+                      border: isSelected ? `2px solid ${cfg.color}` : '2px solid transparent',
+                      cursor: unlocked ? 'pointer' : 'default',
+                      opacity: unlocked ? 1 : 0.4,
+                      transition: 'all 0.15s',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+                    }}
+                  >
+                    <div style={{ fontSize: '14px', letterSpacing: '2px' }}>
+                      {unlocked
+                        ? <>{'★'.repeat(cfg.maxStars)}{'☆'.repeat(3 - cfg.maxStars)}</>
+                        : '🔒'}
+                    </div>
+                    <div style={{
+                      fontSize: '12px', fontWeight: 700,
+                      color: isSelected ? cfg.color : 'var(--sub-color)',
+                    }}>
+                      {cfg.label}
+                    </div>
+                    <div style={{ fontSize: '10px', color: 'var(--sub-color)', lineHeight: 1.3 }}>
+                      {unlocked
+                        ? <>{cfg.mistypeDamage === 0 ? 'No penalty' : `Mistype: -${cfg.mistypeDamage} HP`}{' · '}{cfg.xpMultiplier}x XP</>
+                        : `Clear on ${d === 'intermediate' ? 'Beginner' : 'Intermediate'} first`}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Debuff warning */}
           {isPoisoned && (
             <div style={{
@@ -331,7 +441,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               fontSize: '13px', fontWeight: 700, color: '#4caf50',
             }}>
               <span style={{ fontSize: '18px' }}>☠️</span>
-              POISON: -1 HP per second during combat
+              POISON: -0.5 HP per second during combat
             </div>
           )}
 
@@ -359,8 +469,8 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
         </div>
       )}
 
-      {/* FIGHTING / WAVE-CLEAR / BOSS-TRANSITION */}
-      {(state.phase === 'fighting' || state.phase === 'wave-clear' || state.phase === 'boss-transition') && (
+      {/* FIGHTING / WAVE-CLEAR / BOSS-TRANSITION / BOSS-DEATH */}
+      {(state.phase === 'fighting' || state.phase === 'wave-clear' || state.phase === 'boss-transition' || state.phase === 'boss-death') && (
         <div onClick={focusInput} style={{ cursor: 'text' }}>
           {/* HUD */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', gap: '12px' }}>
@@ -391,14 +501,22 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                   Phase {state.bossPhase + 1}/{stageConfig.bossConfig.phases.length}
                 </div>
               )}
-              {state.combo > 0 && (
-                <div style={{ fontSize: '14px', fontWeight: 700, color: state.combo >= 10 ? 'var(--main-color)' : 'var(--text-color)' }}>
-                  x{state.combo} {state.combo >= 5 ? '🔥' : ''}
-                </div>
-              )}
+              <div style={{
+                fontSize: '14px', fontWeight: 700,
+                color: state.combo >= 10 ? 'var(--main-color)' : 'var(--text-color)',
+                visibility: state.combo > 0 ? 'visible' : 'hidden',
+              }}>
+                x{state.combo || 1} {state.combo >= 5 ? '🔥' : ''}
+              </div>
+              <div style={{
+                fontSize: '10px', fontWeight: 700, marginTop: '2px',
+                color: DIFFICULTY_CONFIGS[effectiveDifficulty].color,
+              }}>
+                {'★'.repeat(DIFFICULTY_CONFIGS[effectiveDifficulty].maxStars)} {DIFFICULTY_CONFIGS[effectiveDifficulty].label}
+              </div>
               {isPoisoned && (
                 <div style={{ fontSize: '10px', fontWeight: 700, color: '#4caf50', marginTop: '2px' }}>
-                  ☠️ POISON -1/s
+                  ☠️ POISON -0.5/s
                 </div>
               )}
             </div>
@@ -670,6 +788,55 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                 </div>
               </div>
             )}
+
+            {/* Boss death overlay */}
+            {state.phase === 'boss-death' && (
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 35,
+                pointerEvents: 'none',
+              }}>
+                {/* Boss emoji shaking and fading */}
+                <div style={{
+                  position: 'absolute', top: '2%', left: '50%',
+                  fontSize: isMobile ? '52px' : '72px',
+                  animation: 'boss-shake 2.5s ease-out forwards',
+                  zIndex: 36,
+                }}>
+                  {stageConfig.enemyConfig.emoji}
+                </div>
+
+                {/* "꾸엑!!" death cry text */}
+                <div style={{
+                  position: 'absolute', top: '25%', left: '50%',
+                  fontSize: isMobile ? '28px' : '36px', fontWeight: 900,
+                  color: '#f44336',
+                  textShadow: '0 2px 8px rgba(244,67,54,0.5)',
+                  animation: 'boss-death-text 2s ease-out forwards',
+                  zIndex: 37, whiteSpace: 'nowrap',
+                }}>
+                  QUACK!!
+                </div>
+
+                {/* Explosion effects */}
+                {[
+                  { x: 45, y: 8, delay: 0, size: 36 },
+                  { x: 55, y: 12, delay: 0.2, size: 32 },
+                  { x: 40, y: 18, delay: 0.4, size: 28 },
+                  { x: 60, y: 15, delay: 0.6, size: 34 },
+                  { x: 50, y: 5, delay: 0.8, size: 30 },
+                ].map((exp, i) => (
+                  <div key={i} style={{
+                    position: 'absolute', left: `${exp.x}%`, top: `${exp.y}%`,
+                    fontSize: `${exp.size}px`,
+                    animation: `boss-death-explosion 0.8s ease-out ${exp.delay}s both`,
+                    zIndex: 38,
+                  }}>
+                    💥
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Input display */}
@@ -701,18 +868,71 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
       {/* VICTORY */}
       {state.phase === 'victory' && (
-        <div className="slide-up" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          gap: '16px', padding: '40px 20px', textAlign: 'center',
-        }}>
-          <div style={{ fontSize: '56px' }}>🎉</div>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--main-color)' }}>
-            {t('adventure.victory')}
-          </h2>
-          <p style={{ fontSize: '14px', color: 'var(--sub-color)' }}>
-            {stageConfig.name} {t('adventure.cleared')}
-          </p>
-        </div>
+        isBoss && WORLD_VICTORY_CINEMATICS[worldId] ? (
+          /* Cinematic victory for boss stages */
+          <div style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            justifyContent: 'center', gap: '20px', padding: '40px 20px',
+            textAlign: 'center', minHeight: `${GAME_HEIGHT}px`,
+            backgroundColor: 'var(--bg-color)',
+          }}>
+            {/* World emoji */}
+            <div style={{
+              fontSize: '64px',
+              animation: 'cinematic-fade-in 1s ease-out both',
+            }}>
+              {WORLD_PREVIEWS.find(w => w.id === worldId)?.emoji ?? '🎉'}
+            </div>
+
+            {/* Cinematic title */}
+            <h2 style={{
+              fontSize: isMobile ? '20px' : '26px', fontWeight: 700,
+              color: 'var(--text-color)',
+              animation: 'cinematic-fade-in 1.2s ease-out 0.5s both',
+              lineHeight: 1.4, maxWidth: '500px',
+            }}>
+              {WORLD_VICTORY_CINEMATICS[worldId].title}
+            </h2>
+
+            {/* Cinematic subtitle */}
+            <p style={{
+              fontSize: isMobile ? '13px' : '15px', fontStyle: 'italic',
+              color: 'var(--sub-color)',
+              animation: 'cinematic-fade-in 1.2s ease-out 1.2s both',
+              maxWidth: '400px',
+            }}>
+              {WORLD_VICTORY_CINEMATICS[worldId].subtitle}
+            </p>
+
+            {/* Victory badge (delayed) */}
+            <div style={{
+              animation: 'cinematic-fade-in 0.8s ease-out 2s both',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+            }}>
+              <div style={{ fontSize: '40px' }}>🎉</div>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--main-color)' }}>
+                {t('adventure.victory')}
+              </h3>
+              <p style={{ fontSize: '13px', color: 'var(--sub-color)' }}>
+                {stageConfig.name} {t('adventure.cleared')}
+              </p>
+            </div>
+          </div>
+        ) : (
+          /* Normal victory for regular stages */
+          <div className="slide-up" style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            gap: '16px', padding: '40px 20px', textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '56px' }}>🎉</div>
+            <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--main-color)' }}>
+              {t('adventure.victory')}
+            </h2>
+            <p style={{ fontSize: '14px', color: 'var(--sub-color)' }}>
+              {stageConfig.name} {t('adventure.cleared')}
+            </p>
+          </div>
+        )
       )}
 
       {/* DEFEAT */}

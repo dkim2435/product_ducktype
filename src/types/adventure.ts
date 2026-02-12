@@ -1,5 +1,16 @@
+// ---- Difficulty System ----
+export type DifficultyLevel = 'beginner' | 'intermediate' | 'expert';
+
+export interface DifficultyConfig {
+  mistypeDamage: number;
+  maxStars: number;
+  xpMultiplier: number;
+  label: string;
+  color: string;
+}
+
 // ---- Debuff System ----
-export type DebuffType = 'none' | 'poison' | 'fog' | 'freeze' | 'darkness' | 'reverse';
+export type DebuffType = 'none' | 'poison' | 'fog' | 'freeze' | 'darkness' | 'mirage' | 'burn' | 'storm' | 'pressure' | 'reverse';
 
 export interface WorldDebuff {
   type: DebuffType;
@@ -69,13 +80,8 @@ export interface WorldConfig {
   stages: StageConfig[];
   requiresLogin: boolean;
   debuff?: WorldDebuff;
-}
-
-// ---- Star Thresholds ----
-export interface StarThresholds {
-  one: { minAccuracy: number; minHpPercent: number };
-  two: { minAccuracy: number; minHpPercent: number; minWpm: number };
-  three: { minAccuracy: number; minHpPercent: number; minWpm: number };
+  starsRequired: number; // stars needed from PREVIOUS world to unlock this world
+  loginGateStageId?: number; // stages with id >= this require login (within an unlocked world)
 }
 
 // ---- Field Minion (on battlefield) ----
@@ -96,6 +102,7 @@ export type CombatPhase =
   | 'fighting'
   | 'wave-clear'
   | 'boss-transition'
+  | 'boss-death'
   | 'victory'
   | 'defeat';
 
@@ -164,6 +171,7 @@ export interface StageResult {
   stageId: number;
   cleared: boolean;
   stars: number;
+  difficulty: DifficultyLevel;
   wpm: number;
   accuracy: number;
   maxCombo: number;

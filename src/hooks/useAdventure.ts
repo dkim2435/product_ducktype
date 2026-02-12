@@ -72,7 +72,14 @@ export function useAdventure() {
     if (!prevWorld) return false;
     const bossStage = prevWorld.stages[prevWorld.stages.length - 1];
     const prevProgress = getWorldProgress(progress, worldId - 1);
-    return !!prevProgress.stages[bossStage.id]?.clearedAt;
+    if (!prevProgress.stages[bossStage.id]?.clearedAt) return false;
+    // Check star requirement
+    const currentWorld = WORLDS.find(w => w.id === worldId);
+    if (currentWorld && currentWorld.starsRequired > 0) {
+      const prevStars = Object.values(prevProgress.stages).reduce((sum, s) => sum + s.bestStars, 0);
+      if (prevStars < currentWorld.starsRequired) return false;
+    }
+    return true;
   }, [progress]);
 
   const isStageUnlocked = useCallback((worldId: number, stageId: number): boolean => {

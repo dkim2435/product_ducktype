@@ -8,6 +8,7 @@ import { getWpmPercentile } from '../../utils/percentile';
 interface ShareButtonProps {
   result: TestResult;
   onShareClick?: () => void;
+  fullWidth?: boolean;
 }
 
 const SITE_URL = 'https://ducktype.xyz';
@@ -21,7 +22,7 @@ function getShareUrl(result: TestResult): string {
   return `${SITE_URL}/#c=${result.wpm}-${result.accuracy}`;
 }
 
-export function ShareButton({ result, onShareClick }: ShareButtonProps) {
+export function ShareButton({ result, onShareClick, fullWidth }: ShareButtonProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [copied, setCopied] = useState(false);
@@ -209,8 +210,10 @@ export function ShareButton({ result, onShareClick }: ShareButtonProps) {
           borderRadius: 'var(--border-radius)',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           gap: '8px',
           fontWeight: 600,
+          ...(fullWidth ? { width: '100%' } : {}),
         }}
       >
         {/* Share icon */}

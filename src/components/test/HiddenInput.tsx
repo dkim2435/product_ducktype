@@ -22,6 +22,7 @@ export const HiddenInput = forwardRef<HTMLTextAreaElement, HiddenInputProps>(
           outline: 'none',
           resize: 'none',
           overflow: 'hidden',
+          fontSize: '16px', // Prevents iOS auto-zoom on focus
           // Must NOT be display:none — that prevents IME from working
           pointerEvents: 'none',
         }}

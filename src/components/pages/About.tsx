@@ -32,6 +32,26 @@ export function About({ onBack }: AboutProps) {
         </p>
       </section>
 
+      <section style={{ marginBottom: '28px', padding: '20px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '12px', border: '1.5px solid var(--main-color)' }}>
+        <h2 style={{ fontSize: '20px', color: 'var(--main-color)', marginBottom: '12px' }}>
+          ⚔️ Adventure Mode — Typing RPG
+        </h2>
+        <p style={{ marginBottom: '12px' }}>
+          DuckType isn't just a typing test — it's a <strong style={{ color: 'var(--main-color)' }}>typing RPG</strong>.
+          Battle monsters, defeat epic bosses, and conquer worlds by typing fast and accurately.
+          Each world has unique enemies, debuffs, and a final boss with cinematic death animations.
+        </p>
+        <ul style={{ paddingLeft: '20px', marginBottom: '12px' }}>
+          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>World 1: Duck Village</strong> — 8 stages + Shadow Wolf boss. Defend your home!</li>
+          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>World 2: Venom Jungle</strong> — 9 stages + Giant Viper boss. Survive the poison!</li>
+          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>3 Difficulty Tiers</strong> — Beginner, Intermediate, Expert. Beat the boss to unlock the next tier.</li>
+          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>More worlds coming soon</strong> — Fog, freeze, darkness, and more debuffs await.</li>
+        </ul>
+        <p style={{ fontSize: '13px', color: 'var(--sub-color)' }}>
+          Free to start. No account needed for World 1. Login to unlock World 2+ and sync progress across devices.
+        </p>
+      </section>
+
       <section style={{ marginBottom: '28px' }}>
         <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>Features</h2>
         <ul style={{ paddingLeft: '20px' }}>

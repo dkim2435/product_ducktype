@@ -6,20 +6,21 @@ import type {
   StageConfig,
   StageResult,
   DebuffType,
+  DifficultyLevel,
 } from '../types/adventure';
 import {
   PLAYER_MAX_HP,
   COUNTDOWN_SECONDS,
   WAVE_CLEAR_DELAY_MS,
   BOSS_TRANSITION_DELAY_MS,
+  BOSS_DEATH_DELAY_MS,
   DAMAGE_NUMBER_DURATION_MS,
   KILL_EFFECT_DURATION_MS,
   WORD_SPAWN_INITIAL_DELAY_MS,
-  MISTYPE_DAMAGE,
+  DIFFICULTY_CONFIGS,
   POISON_DAMAGE_PER_SECOND,
   POISON_TICK_INTERVAL_MS,
   calculateDamage,
-  calculateStars,
   pickWordByLength,
   getMinionPosition,
   getBossWordPositions,
@@ -62,6 +63,8 @@ export function useCombat(
   stageConfig: StageConfig | null,
   onComplete: (result: StageResult) => void,
   debuff: DebuffType = 'none',
+  difficulty: DifficultyLevel = 'intermediate',
+  stageBestStars: number = 0,
 ) {
   const [state, setState] = useState<CombatState>(() =>
     createInitialState(stageConfig ?? {
@@ -79,6 +82,9 @@ export function useCombat(
   const completedRef = useRef(false);
   // Boss: tracks what was last spawned to alternate between boss words and shields
   const bossLastSpawnedRef = useRef<'boss-words' | 'shields'>('shields');
+  // Difficulty ref for use in callbacks
+  const difficultyRef = useRef(difficulty);
+  difficultyRef.current = difficulty;
 
   // Reset when stage changes
   useEffect(() => {
@@ -88,7 +94,7 @@ export function useCombat(
     minionsSpawnedRef.current = 0;
     bossLastSpawnedRef.current = 'shields';
     setState(createInitialState(stageConfig, debuff));
-  }, [stageConfig, debuff]);
+  }, [stageConfig, debuff, difficulty]);
 
   // Cleanup
   useEffect(() => {
@@ -227,7 +233,7 @@ export function useCombat(
     const s = stateRef.current;
 
     // Stop on terminal states
-    if (s.phase === 'victory' || s.phase === 'defeat' || s.phase === 'intro') return;
+    if (s.phase === 'victory' || s.phase === 'defeat' || s.phase === 'intro' || s.phase === 'boss-death') return;
 
     // Always schedule next frame for non-terminal states
     rafRef.current = requestAnimationFrame(gameLoop);
@@ -309,6 +315,28 @@ export function useCombat(
         };
       }
 
+      // Check wave clear for normal stages (detect atomically inside setState)
+      if (!prev.stageConfig.isBoss && minions.length === 0) {
+        const wave = prev.stageConfig.waves[prev.currentWave];
+        if (wave && minionsSpawnedRef.current >= wave.wordCount) {
+          if (spawnTimerRef.current) { clearInterval(spawnTimerRef.current); spawnTimerRef.current = null; }
+          const nextWaveIdx = prev.currentWave + 1;
+          if (nextWaveIdx >= prev.stageConfig.waves.length) {
+            cancelAnimationFrame(rafRef.current);
+            return {
+              ...prev, phase: 'victory' as CombatPhase, endTime: now,
+              minions, playerHp, combo, maxCombo: Math.max(maxCombo, combo),
+              damageNumbers, killEffects, matchedMinionId, currentInput, bossHp, poisonLastTick,
+            };
+          }
+          return {
+            ...prev, phase: 'wave-clear' as CombatPhase,
+            minions, playerHp, combo, maxCombo: Math.max(maxCombo, combo),
+            damageNumbers, killEffects, matchedMinionId, currentInput, bossHp, poisonLastTick,
+          };
+        }
+      }
+
       if (!changed) return prev;
 
       return {
@@ -321,27 +349,19 @@ export function useCombat(
     });
   }, []);
 
-  // Normal stages: detect wave clear when last minions timed out (not typed)
+  // Wave-clear transition: advance to next wave after delay
+  // Detection is handled inside gameLoop setState and handleChar setState
   useEffect(() => {
-    if (state.phase !== 'fighting' || state.stageConfig.isBoss) return;
-    if (state.minions.length > 0) return;
-
-    const wave = state.stageConfig.waves[state.currentWave];
-    if (!wave || minionsSpawnedRef.current < wave.wordCount) return;
-
-    // All spawned and all gone → wave complete
-    if (spawnTimerRef.current) { clearInterval(spawnTimerRef.current); spawnTimerRef.current = null; }
+    if (state.phase !== 'wave-clear' || state.stageConfig.isBoss) return;
 
     const nextWaveIdx = state.currentWave + 1;
     if (nextWaveIdx >= state.stageConfig.waves.length) {
-      // All waves done → victory
+      // All waves done → victory (backup path)
       cancelAnimationFrame(rafRef.current);
       setState(prev => ({ ...prev, phase: 'victory' as CombatPhase, endTime: Date.now() }));
       return;
     }
 
-    // Wave clear → next wave
-    setState(prev => ({ ...prev, phase: 'wave-clear' as CombatPhase }));
     const t = setTimeout(() => {
       minionsSpawnedRef.current = 0;
       setState(p => ({ ...p, phase: 'fighting', currentWave: nextWaveIdx }));
@@ -349,7 +369,7 @@ export function useCombat(
       setTimeout(spawnMinion, WORD_SPAWN_INITIAL_DELAY_MS);
     }, WAVE_CLEAR_DELAY_MS);
     return () => clearTimeout(t);
-  }, [state.phase, state.minions.length, state.currentWave, state.stageConfig, startMinionSpawner, spawnMinion]);
+  }, [state.phase, state.currentWave, state.stageConfig, startMinionSpawner, spawnMinion]);
 
   // Boss: auto-spawn cycle when no minions remain
   useEffect(() => {
@@ -367,6 +387,15 @@ export function useCombat(
     }, 500);
     return () => clearTimeout(t);
   }, [state.phase, state.minions.length, state.bossHp, state.stageConfig.isBoss, spawnBossWords, spawnBossShields]);
+
+  // Boss death → victory transition after delay
+  useEffect(() => {
+    if (state.phase !== 'boss-death') return;
+    const t = setTimeout(() => {
+      setState(prev => ({ ...prev, phase: 'victory' as CombatPhase }));
+    }, BOSS_DEATH_DELAY_MS);
+    return () => clearTimeout(t);
+  }, [state.phase]);
 
   // ---- Start countdown ----
   const startCountdown = useCallback(() => {
@@ -457,21 +486,13 @@ export function useCombat(
             const allDead = newMinions.length === 0;
 
             if (allSpawned && allDead) {
+              if (spawnTimerRef.current) { clearInterval(spawnTimerRef.current); spawnTimerRef.current = null; }
               const nextWaveIdx = prev.currentWave + 1;
               if (nextWaveIdx >= prev.stageConfig.waves.length) {
-                // All waves done → victory
-                if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
                 cancelAnimationFrame(rafRef.current);
                 return { ...newState, phase: 'victory' as CombatPhase, endTime: now };
               }
-              // Wave clear → next wave
-              if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
-              setTimeout(() => {
-                minionsSpawnedRef.current = 0;
-                setState(p => ({ ...p, phase: 'fighting', currentWave: nextWaveIdx }));
-                startMinionSpawner();
-                setTimeout(spawnMinion, WORD_SPAWN_INITIAL_DELAY_MS);
-              }, WAVE_CLEAR_DELAY_MS);
+              // Wave clear → useEffect handles transition to next wave
               return { ...newState, phase: 'wave-clear' as CombatPhase };
             }
           }
@@ -535,12 +556,12 @@ export function useCombat(
               killEffects,
             };
 
-            // Boss defeated
+            // Boss defeated → boss-death animation phase
             if (newBossHp <= 0) {
               cancelAnimationFrame(rafRef.current);
               return {
                 ...newState,
-                phase: 'victory' as CombatPhase,
+                phase: 'boss-death' as CombatPhase,
                 minions: [],
                 endTime: now,
               };
@@ -588,11 +609,24 @@ export function useCombat(
         }
       }
 
-      // No match → mistype → HP penalty
+      // No match → mistype → HP penalty (difficulty-based)
       const now = Date.now();
-      const newHp = prev.playerHp - MISTYPE_DAMAGE;
+      const mistypeDmg = DIFFICULTY_CONFIGS[difficultyRef.current].mistypeDamage;
+
+      if (mistypeDmg === 0) {
+        // Beginner: no HP penalty, just reset input + break combo
+        return {
+          ...prev,
+          currentInput: '',
+          matchedMinionId: null,
+          combo: 0,
+          totalKeystrokes,
+        };
+      }
+
+      const newHp = prev.playerHp - mistypeDmg;
       const mistypeDmgNumbers = [...prev.damageNumbers, {
-        id: nextId++, value: MISTYPE_DAMAGE,
+        id: nextId++, value: mistypeDmg,
         x: 50, y: 85, createdAt: now, isPlayer: true,
       }];
 
@@ -660,20 +694,26 @@ export function useCombat(
       const accuracy = state.totalKeystrokes > 0 ? state.correctChars / state.totalKeystrokes : 0;
       const wpm = state.totalCharsTyped > 0
         ? (state.totalCharsTyped / 5) / (timeMs / 60000) : 0;
-      const hpPercent = state.playerHp / state.playerMaxHp;
-      const stars = cleared ? calculateStars(accuracy, hpPercent, wpm) : 0;
+      const diffConfig = DIFFICULTY_CONFIGS[difficultyRef.current];
+      const stars = cleared ? diffConfig.maxStars : 0;
+      const isReplay = stageBestStars >= diffConfig.maxStars;
+      const baseXp = cleared
+        ? Math.round(stageConfig.xpReward * diffConfig.xpMultiplier)
+        : Math.floor(stageConfig.xpReward * 0.2);
+      const xpEarned = isReplay ? Math.floor(baseXp / 3) : baseXp;
 
       onComplete({
         stageId: stageConfig.id,
         cleared,
         stars,
+        difficulty: difficultyRef.current,
         wpm: Math.round(wpm),
         accuracy: Math.round(accuracy * 100),
         maxCombo: state.maxCombo,
         hpRemaining: Math.max(0, state.playerHp),
         hpMax: state.playerMaxHp,
         timeMs,
-        xpEarned: cleared ? stageConfig.xpReward : Math.floor(stageConfig.xpReward * 0.2),
+        xpEarned,
       });
     }
   }, [state.phase, state.endTime, state.startTime, state.totalKeystrokes, state.correctChars,

@@ -350,71 +350,99 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
               minHeight: 'calc(100vh - 240px)',
               width: '100%',
             }}>
-            <button
-              onClick={() => handleNavigate('adventure')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 18px',
-                marginBottom: '12px',
-                border: '2px solid var(--main-color)',
-                borderRadius: '999px',
-                background: 'transparent',
-                color: 'var(--main-color)',
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'opacity 0.15s, background-color 0.15s',
-              }}
-            >
-              <span style={{ fontSize: '16px' }}>⚔️</span>
-              Adventure
-              <span style={{
-                fontSize: '10px',
-                fontWeight: 700,
-                backgroundColor: 'var(--main-color)',
-                color: 'var(--bg-color)',
-                padding: '1px 6px',
-                borderRadius: '999px',
-                letterSpacing: '0.5px',
-              }}>
-                NEW
-              </span>
-            </button>
-            <button
-              onClick={() => handleNavigate('daily-challenge')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 14px',
-                marginBottom: '16px',
-                border: `1.5px solid ${dailyChallenge.hasCompletedToday ? 'var(--sub-alt-color)' : 'var(--main-color)'}`,
-                borderRadius: '999px',
-                background: 'transparent',
-                color: dailyChallenge.hasCompletedToday ? 'var(--sub-color)' : 'var(--main-color)',
-                fontSize: '13px',
-                cursor: 'pointer',
-                opacity: dailyChallenge.hasCompletedToday ? 0.7 : 1,
-                transition: 'opacity 0.15s, border-color 0.15s',
-              }}
-            >
-              <span style={{ fontSize: '15px' }}>
-                {dailyChallenge.hasCompletedToday ? '✓' : '📅'}
-              </span>
-              {dailyChallenge.hasCompletedToday
-                ? "Today's challenge completed"
-                : 'Daily Challenge'}
-              {dailyChallenge.dailyChallengeState.currentStreak > 0 && (
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              marginBottom: '16px',
+              width: '100%',
+              maxWidth: '520px',
+            }}>
+              <button
+                onClick={() => handleNavigate('adventure')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '10px 14px',
+                  border: '1.5px solid #4caf50',
+                  borderRadius: 'var(--border-radius)',
+                  background: 'var(--sub-alt-color)',
+                  color: 'var(--text-color)',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'filter 0.15s',
+                  flex: 1,
+                  minWidth: 0,
+                  textAlign: 'left',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(1.15)')}
+                onMouseLeave={(e) => (e.currentTarget.style.filter = 'none')}
+              >
+                <span style={{ fontSize: '20px', flexShrink: 0 }}>⚔️</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: '13px' }}>Adventure</div>
+                  <div style={{ fontSize: '11px', color: 'var(--sub-color)', marginTop: '1px' }}>Type to fight monsters!</div>
+                </div>
                 <span style={{
-                  fontSize: '12px',
-                  opacity: 0.8,
+                  fontSize: '9px',
+                  fontWeight: 700,
+                  backgroundColor: '#4caf50',
+                  color: '#fff',
+                  padding: '2px 6px',
+                  borderRadius: '999px',
+                  letterSpacing: '0.5px',
+                  flexShrink: 0,
                 }}>
-                  🔥 {dailyChallenge.dailyChallengeState.currentStreak}
+                  NEW
                 </span>
-              )}
-            </button>
+              </button>
+              <button
+                onClick={() => handleNavigate('daily-challenge')}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '10px 14px',
+                  border: `1.5px solid ${dailyChallenge.hasCompletedToday ? 'var(--sub-alt-color)' : 'var(--main-color)'}`,
+                  borderRadius: 'var(--border-radius)',
+                  background: 'var(--sub-alt-color)',
+                  color: 'var(--text-color)',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'filter 0.15s',
+                  opacity: dailyChallenge.hasCompletedToday ? 0.7 : 1,
+                  flex: 1,
+                  minWidth: 0,
+                  textAlign: 'left',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(1.15)')}
+                onMouseLeave={(e) => (e.currentTarget.style.filter = 'none')}
+              >
+                <span style={{ fontSize: '20px', flexShrink: 0 }}>
+                  {dailyChallenge.hasCompletedToday ? '✅' : '📅'}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: '13px' }}>
+                    {dailyChallenge.hasCompletedToday ? 'Challenge Done' : 'Daily Challenge'}
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--sub-color)', marginTop: '1px' }}>
+                    {dailyChallenge.hasCompletedToday
+                      ? "Completed today!"
+                      : 'Test your skills daily'}
+                  </div>
+                </div>
+                {dailyChallenge.dailyChallengeState.currentStreak > 0 && (
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: 'var(--main-color)',
+                    flexShrink: 0,
+                  }}>
+                    🔥 {dailyChallenge.dailyChallengeState.currentStreak}
+                  </span>
+                )}
+              </button>
+            </div>
             {challengeWpm && (
               isMobile ? (
                 <div style={{
@@ -476,7 +504,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
               leaderboardRank={leaderboard.userRank}
             />
             </div>
-            <TypingInfo hidden={isTypingActive} />
+            <TypingInfo hidden={isTypingActive} onNavigate={handleNavigate} />
           </>
         )}
 
@@ -580,6 +608,9 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             unlockAchievements={gamification.unlockAchievements}
             triggerSync={triggerSync}
             initialWorldId={adventureWorldId}
+            isLoggedIn={!!user}
+            onLoginClick={handleLoginClick}
+            onShareClick={() => gamification.awardShareBonus(addToast)}
           />
         )}
 

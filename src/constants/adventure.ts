@@ -4,7 +4,8 @@ import type {
   WaveConfig,
   EnemyConfig,
   BossConfig,
-  StarThresholds,
+  DifficultyLevel,
+  DifficultyConfig,
   WorldDebuff,
 } from '../types/adventure';
 
@@ -25,23 +26,21 @@ export const ACCURACY_BONUS_MULT = 1.2;
 export const COUNTDOWN_SECONDS = 3;
 export const WAVE_CLEAR_DELAY_MS = 1500;
 export const BOSS_TRANSITION_DELAY_MS = 2000;
+export const BOSS_DEATH_DELAY_MS = 2500;
 export const DAMAGE_NUMBER_DURATION_MS = 1200;
 export const KILL_EFFECT_DURATION_MS = 600;
 export const WORD_SPAWN_INITIAL_DELAY_MS = 800;
 
-// ---- Mistype Penalty ----
-export const MISTYPE_DAMAGE = 5;
+// ---- Difficulty Configs ----
+export const DIFFICULTY_CONFIGS: Record<DifficultyLevel, DifficultyConfig> = {
+  beginner: { mistypeDamage: 0, maxStars: 1, xpMultiplier: 0.5, label: 'Beginner', color: '#4caf50' },
+  intermediate: { mistypeDamage: 2, maxStars: 2, xpMultiplier: 1.0, label: 'Intermediate', color: '#ff9800' },
+  expert: { mistypeDamage: 4, maxStars: 3, xpMultiplier: 1.5, label: 'Expert', color: '#f44336' },
+};
 
 // ---- Poison Debuff ----
-export const POISON_DAMAGE_PER_SECOND = 1;
+export const POISON_DAMAGE_PER_SECOND = 0.5;
 export const POISON_TICK_INTERVAL_MS = 1000;
-
-// ---- Star Thresholds ----
-export const STAR_THRESHOLDS: StarThresholds = {
-  one: { minAccuracy: 0, minHpPercent: 0 },
-  two: { minAccuracy: 0.80, minHpPercent: 0.30, minWpm: 30 },
-  three: { minAccuracy: 0.92, minHpPercent: 0.60, minWpm: 50 },
-};
 
 // ---- Calculate Damage (boss hits) ----
 export function calculateDamage(
@@ -53,25 +52,6 @@ export function calculateDamage(
   const comboMult = Math.min(COMBO_MULT_MAX, 1 + combo * COMBO_SCALE);
   const accBonus = overallAccuracy >= ACCURACY_BONUS_THRESHOLD ? ACCURACY_BONUS_MULT : 1.0;
   return Math.round(PLAYER_BASE_DAMAGE * wpmMult * comboMult * accBonus);
-}
-
-// ---- Calculate Stars ----
-export function calculateStars(
-  accuracy: number,
-  hpPercent: number,
-  wpm: number,
-): number {
-  if (
-    accuracy >= STAR_THRESHOLDS.three.minAccuracy &&
-    hpPercent >= STAR_THRESHOLDS.three.minHpPercent &&
-    wpm >= STAR_THRESHOLDS.three.minWpm
-  ) return 3;
-  if (
-    accuracy >= STAR_THRESHOLDS.two.minAccuracy &&
-    hpPercent >= STAR_THRESHOLDS.two.minHpPercent &&
-    wpm >= STAR_THRESHOLDS.two.minWpm
-  ) return 2;
-  return 1;
 }
 
 // ---- Minion Field Positions ----
@@ -249,6 +229,7 @@ export const WORLD_1: WorldConfig = {
   name: 'Duck Village',
   stages: [STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, STAGE_6, STAGE_7, STAGE_8_BOSS],
   requiresLogin: false,
+  starsRequired: 0,
 };
 
 // ========== WORLD 2: Venom Jungle ==========
@@ -379,7 +360,7 @@ const W2_STAGE_9_BOSS: StageConfig = {
 const WORLD_2_DEBUFF: WorldDebuff = {
   type: 'poison',
   intensity: POISON_DAMAGE_PER_SECOND,
-  description: 'Poison -1 HP/s',
+  description: 'Poison -0.5 HP/s',
   icon: '☠️',
 };
 
@@ -390,10 +371,18 @@ export const WORLD_2: WorldConfig = {
   stages: [W2_STAGE_1, W2_STAGE_2, W2_STAGE_3, W2_STAGE_4, W2_STAGE_5, W2_STAGE_6, W2_STAGE_7, W2_STAGE_8, W2_STAGE_9_BOSS],
   requiresLogin: false,
   debuff: WORLD_2_DEBUFF,
+  starsRequired: 15,
+  loginGateStageId: 3,
 };
 
 // ---- All Worlds ----
 export const WORLDS: WorldConfig[] = [WORLD_1, WORLD_2];
+
+// ---- World Victory Cinematics ----
+export const WORLD_VICTORY_CINEMATICS: Record<number, { title: string; subtitle: string }> = {
+  1: { title: 'Peace has returned to Duck Village.', subtitle: 'The Shadow Wolf is no more...' },
+  2: { title: 'The jungle breathes freely once more.', subtitle: 'The Giant Viper has fallen...' },
+};
 
 // ---- World Previews (for map navigation) ----
 export const WORLD_PREVIEWS = [
@@ -402,7 +391,11 @@ export const WORLD_PREVIEWS = [
   { id: 3, name: 'Misty Harbor', emoji: '⚓', desc: 'Thick fog hides the words. Can you guess what lies beneath?' },
   { id: 4, name: 'Glacier Peak', emoji: '❄️', desc: 'One wrong key and you freeze. Precision is everything.' },
   { id: 5, name: 'Crypt of Shadows', emoji: '💀', desc: 'Words appear and vanish into darkness. Remember them quickly.' },
-  { id: 6, name: 'The Rift', emoji: '🌀', desc: 'Reality is reversed. Type backwards to survive the rift.' },
+  { id: 6, name: 'Sandstorm Citadel', emoji: '🏜️', desc: 'Mirages distort your vision. Focus through the shifting sands.' },
+  { id: 7, name: 'Volcanic Forge', emoji: '🌋', desc: 'The heat intensifies. Type faster as timers accelerate!' },
+  { id: 8, name: 'Thunder Peaks', emoji: '⚡', desc: 'Lightning blinds the sky. Type between the flashes.' },
+  { id: 9, name: 'Abyssal Depths', emoji: '🌊', desc: 'Crushing pressure and murky waters. Poison and fog combine.' },
+  { id: 10, name: 'The Rift', emoji: '🌀', desc: 'Reality is reversed. Type backwards to conquer the final frontier.' },
 ] as const;
 
 // ---- Helper: pick word from list by length ----

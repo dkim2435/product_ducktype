@@ -1,8 +1,9 @@
-import { useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import type { Settings } from '../../types/settings';
-import type { StageResult } from '../../types/adventure';
+import type { StageResult, DifficultyLevel } from '../../types/adventure';
 import type { ToastNotification } from '../../types/gamification';
 import { useAdventure } from '../../hooks/useAdventure';
+import { WORLDS, WORLD_PREVIEWS } from '../../constants/adventure';
 import { WorldMap } from './WorldMap';
 import { CombatScene } from './CombatScene';
 import { StageComplete } from './StageComplete';
@@ -15,6 +16,9 @@ interface AdventurePageProps {
   unlockAchievements: (ids: string[], addToast: (toast: Omit<ToastNotification, 'id'>) => void) => void;
   triggerSync: () => void;
   initialWorldId?: number;
+  isLoggedIn: boolean;
+  onLoginClick: () => void;
+  onShareClick: () => void;
 }
 
 export function AdventurePage({
@@ -25,8 +29,15 @@ export function AdventurePage({
   unlockAchievements,
   triggerSync,
   initialWorldId,
+  isLoggedIn,
+  onLoginClick,
+  onShareClick,
 }: AdventurePageProps) {
   const adventure = useAdventure();
+  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('beginner');
+  const prevUnlockedRef = useRef<Set<number>>(new Set(
+    WORLDS.map(w => w.id).filter(id => adventure.isWorldUnlocked(id))
+  ));
   const stageConfig = adventure.getActiveStageConfig();
   const worldConfig = adventure.getCurrentWorldConfig();
   const debuffType = worldConfig.debuff?.type ?? 'none';
@@ -58,7 +69,7 @@ export function AdventurePage({
       achievementIds.push('adventure-first-clear');
     }
 
-    // Perfect stage (3 stars)
+    // Expert clear (3 stars)
     if (result.stars >= 3) {
       achievementIds.push('adventure-perfect-stage');
     }
@@ -102,6 +113,24 @@ export function AdventurePage({
     }
 
     triggerSync();
+
+    // Check if a new world just became unlocked
+    setTimeout(() => {
+      WORLDS.forEach(w => {
+        if (!prevUnlockedRef.current.has(w.id) && adventure.isWorldUnlocked(w.id)) {
+          const preview = WORLD_PREVIEWS.find(p => p.id === w.id);
+          if (preview) {
+            addToast({
+              type: 'achievement',
+              title: `${preview.emoji} ${preview.name} Unlocked!`,
+              message: 'A new world awaits you!',
+              icon: '🗺️',
+            });
+          }
+          prevUnlockedRef.current.add(w.id);
+        }
+      });
+    }, 0);
   }, [adventure, addXp, addToast, stageConfig, worldConfig, unlockAchievements, triggerSync]);
 
   return (
@@ -115,20 +144,36 @@ export function AdventurePage({
           isStageUnlocked={adventure.isStageUnlocked}
           onSelectStage={adventure.startStage}
           onBack={onBack}
+          isLoggedIn={isLoggedIn}
+          onLoginClick={onLoginClick}
         />
       )}
 
-      {adventure.view === 'combat' && stageConfig && (
-        <CombatScene
-          key={`${adventure.currentWorldId}-${stageConfig.id}-${adventure.lastResult ? 'retry' : 'new'}`}
-          stageConfig={stageConfig}
-          settings={settings}
-          onComplete={handleCombatComplete}
-          onBack={adventure.returnToMap}
-          worldId={adventure.currentWorldId}
-          debuff={debuffType}
-        />
-      )}
+      {adventure.view === 'combat' && stageConfig && (() => {
+        const stages = worldConfig.stages;
+        const bossStage = stages[stages.length - 1];
+        const bossBestStars = adventure.getStageProgress(adventure.currentWorldId, bossStage.id)?.bestStars ?? 0;
+        const stageIdx = stages.findIndex(s => s.id === stageConfig.id);
+        const prevStageStars = stageIdx > 0
+          ? adventure.getStageProgress(adventure.currentWorldId, stages[stageIdx - 1].id)?.bestStars ?? 0
+          : -1; // -1 = first stage (no prev requirement)
+        return (
+          <CombatScene
+            key={`${adventure.currentWorldId}-${stageConfig.id}-${adventure.lastResult ? 'retry' : 'new'}`}
+            stageConfig={stageConfig}
+            settings={settings}
+            onComplete={handleCombatComplete}
+            onBack={adventure.returnToMap}
+            worldId={adventure.currentWorldId}
+            debuff={debuffType}
+            difficulty={selectedDifficulty}
+            onDifficultyChange={setSelectedDifficulty}
+            stageBestStars={adventure.getStageProgress(adventure.currentWorldId, stageConfig.id)?.bestStars ?? 0}
+            bossBestStars={bossBestStars}
+            prevStageBestStars={prevStageStars}
+          />
+        );
+      })()}
 
       {adventure.view === 'result' && adventure.lastResult && stageConfig && (
         <StageComplete
@@ -143,7 +188,22 @@ export function AdventurePage({
             const nextStage = stages[currentIdx + 1];
             return nextStage ? adventure.isStageUnlocked(adventure.currentWorldId, nextStage.id) : false;
           })()}
+          isNextLoginGated={(() => {
+            const stages = worldConfig.stages;
+            const currentIdx = stages.findIndex(s => s.id === adventure.lastResult!.stageId);
+            const nextStage = stages[currentIdx + 1];
+            if (!nextStage) return false;
+            const loginGate = worldConfig.loginGateStageId;
+            if (!isLoggedIn && loginGate !== undefined && nextStage.id >= loginGate) {
+              return !adventure.getStageProgress(adventure.currentWorldId, nextStage.id)?.clearedAt;
+            }
+            return false;
+          })()}
+          onLoginClick={onLoginClick}
+          onShareClick={onShareClick}
           worldStages={worldConfig.stages}
+          difficulty={selectedDifficulty}
+          worldId={adventure.currentWorldId}
         />
       )}
     </>

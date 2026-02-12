@@ -302,79 +302,106 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         </div>
       )}
 
-      {/* Leaderboard CTA */}
-      {result.mode === 'time' && onNavigate && (
-        <button
-          onClick={() => onNavigate('leaderboard')}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '6px',
-            margin: '0 auto 24px',
-            padding: '14px 28px',
-            backgroundColor: 'var(--sub-alt-color)',
-            border: '1px solid var(--sub-alt-color)',
-            borderRadius: 'var(--border-radius)',
-            cursor: 'pointer',
-            transition: 'border-color 0.2s',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--main-color)')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--sub-alt-color)')}
-        >
-          {/* Bar chart icon */}
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--main-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="12" width="4" height="9" rx="1" />
-            <rect x="10" y="3" width="4" height="18" rx="1" />
-            <rect x="17" y="8" width="4" height="13" rx="1" />
-          </svg>
-          <span style={{
-            fontSize: '13px',
-            color: 'var(--text-color)',
-            fontWeight: 500,
-          }}>
-            {t('leaderboard.checkRank')}
-          </span>
-        </button>
-      )}
-
-      {/* Actions */}
+      {/* Actions + Adventure banner */}
       <div style={{
         display: 'flex',
-        justifyContent: 'center',
-        gap: '16px',
-        alignItems: 'center',
+        gap: '10px',
+        alignItems: 'stretch',
       }}>
-        <button
-          onClick={onRestart}
-          style={{
-            padding: '10px 24px',
-            fontSize: '14px',
-            color: 'var(--sub-color)',
-            backgroundColor: 'var(--sub-alt-color)',
-            borderRadius: 'var(--border-radius)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
-          </svg>
-          {t('test.nextTest')}
-        </button>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-          <ShareButton result={result} onShareClick={onShareClick} />
-          {(!xpGain || xpGain.shareBonus === 0) && (
-            <span style={{
-              fontSize: '11px',
-              color: 'var(--main-color)',
-              fontWeight: 600,
-              opacity: 0.8,
-            }}>
-              +{XP_SHARE_BONUS} XP
-            </span>
-          )}
+        {/* Adventure banner — fills remaining space */}
+        {onNavigate && (
+          <button
+            onClick={() => onNavigate('adventure')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              flex: 1,
+              minWidth: 0,
+              padding: '14px 16px',
+              border: '1.5px solid #4caf50',
+              borderRadius: 'var(--border-radius)',
+              background: 'var(--sub-alt-color)',
+              color: 'var(--text-color)',
+              fontSize: '13px',
+              cursor: 'pointer',
+              transition: 'filter 0.15s, border-color 0.15s',
+              textAlign: 'left',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.1)'; e.currentTarget.style.borderColor = '#66bb6a'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.borderColor = '#4caf50'; }}
+          >
+            <span style={{ fontSize: '24px', flexShrink: 0 }}>⚔️</span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                <span style={{ fontWeight: 700, fontSize: '13px' }}>Adventure Mode</span>
+                <span style={{
+                  fontSize: '9px',
+                  fontWeight: 700,
+                  backgroundColor: '#4caf50',
+                  color: '#fff',
+                  padding: '2px 6px',
+                  borderRadius: '999px',
+                  letterSpacing: '0.5px',
+                }}>
+                  NEW
+                </span>
+              </div>
+              <div style={{ fontSize: '11px', color: 'var(--sub-color)', lineHeight: 1.4 }}>
+                {t('results.adventureBanner', { wpm: result.wpm })}
+              </div>
+            </div>
+          </button>
+        )}
+
+        {/* Next test + Share — right-aligned column */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '6px',
+          flexShrink: 0,
+        }}>
+          <button
+            onClick={onRestart}
+            style={{
+              padding: '8px 20px',
+              fontSize: '13px',
+              color: 'var(--text-color)',
+              backgroundColor: 'transparent',
+              border: '1px solid var(--sub-color)',
+              borderRadius: 'var(--border-radius)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              cursor: 'pointer',
+              flex: 1,
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+            </svg>
+            {t('test.nextTest')}
+          </button>
+          <div style={{ position: 'relative' }}>
+            <ShareButton result={result} onShareClick={onShareClick} fullWidth />
+            {(!xpGain || xpGain.shareBonus === 0) && (
+              <span style={{
+                position: 'absolute',
+                right: '-28px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                fontSize: '10px',
+                color: 'var(--main-color)',
+                fontWeight: 600,
+                opacity: 0.8,
+                lineHeight: 1.2,
+                textAlign: 'center',
+              }}>
+                +{XP_SHARE_BONUS}<br />XP
+              </span>
+            )}
+          </div>
         </div>
       </div>
 

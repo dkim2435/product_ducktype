@@ -23,10 +23,10 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
   if (!visible) return null;
 
   const features = [
+    { emoji: '⚔️', title: t('onboarding.featAdventure'), desc: t('onboarding.featAdventureDesc'), highlight: true },
     { emoji: '⌨️', title: t('onboarding.featTyping'), desc: t('onboarding.featTypingDesc') },
     { emoji: '📅', title: t('onboarding.featDaily'), desc: t('onboarding.featDailyDesc') },
     { emoji: '📖', title: t('onboarding.featLessons'), desc: t('onboarding.featLessonsDesc') },
-    { emoji: '🕹️', title: t('onboarding.featArcade'), desc: t('onboarding.featArcadeDesc') },
   ];
 
   const ranks = [
@@ -116,15 +116,21 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
                 padding: '12px',
                 backgroundColor: 'var(--sub-alt-color)',
                 borderRadius: 'var(--border-radius)',
+                ...(f.highlight ? {
+                  gridColumn: '1 / -1',
+                  border: '1.5px solid var(--main-color)',
+                  background: 'linear-gradient(135deg, var(--sub-alt-color) 0%, rgba(255,179,71,0.08) 100%)',
+                } : {}),
               }}>
-                <div style={{ fontSize: '18px', marginBottom: '6px' }}>{f.emoji}</div>
+                <div style={{ fontSize: f.highlight ? '22px' : '18px', marginBottom: '6px' }}>{f.emoji}</div>
                 <div style={{
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  color: 'var(--text-color)',
+                  fontSize: f.highlight ? '14px' : '13px',
+                  fontWeight: f.highlight ? 700 : 600,
+                  color: f.highlight ? 'var(--main-color)' : 'var(--text-color)',
                   marginBottom: '2px',
                 }}>
                   {f.title}
+                  {f.highlight && <span style={{ fontSize: '10px', marginLeft: '8px', padding: '1px 6px', borderRadius: '4px', backgroundColor: 'var(--main-color)', color: 'var(--bg-color)', fontWeight: 800 }}>NEW</span>}
                 </div>
                 <div style={{
                   fontSize: '11px',

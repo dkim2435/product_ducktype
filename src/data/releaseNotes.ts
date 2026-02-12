@@ -14,60 +14,16 @@ export interface ReleaseNote {
 export const releaseNotes: ReleaseNote[] = [
   {
     version: '2.0.0',
-    date: '2026-02-11',
+    date: '2026-02-12',
     title: 'whatsNew.v200.title',
     items: [
       { emoji: '⚔️', text: 'whatsNew.v200.item1' },
-      { emoji: '🏆', text: 'whatsNew.v200.item2' },
+      { emoji: '🌿', text: 'whatsNew.v200.item2' },
       { emoji: '🗺️', text: 'whatsNew.v200.item3' },
-    ],
-  },
-  {
-    version: '2.5.2',
-    date: '2026-02-11',
-    title: 'whatsNew.v252.title',
-    items: [
-      { emoji: '🔒', text: 'whatsNew.v252.item1' },
-      { emoji: '🏷️', text: 'whatsNew.v252.item2' },
-      { emoji: '🛠️', text: 'whatsNew.v252.item3' },
-    ],
-  },
-  {
-    version: '2.5.1',
-    date: '2026-02-11',
-    title: 'whatsNew.v251.title',
-    items: [
-      { emoji: '✏️', text: 'whatsNew.v251.item1' },
-    ],
-  },
-  {
-    version: '2.5.0',
-    date: '2026-02-11',
-    title: 'whatsNew.v250.title',
-    items: [
-      { emoji: '💾', text: 'whatsNew.v250.item1' },
-      { emoji: '🔥', text: 'whatsNew.v250.item2' },
-      { emoji: '🖱️', text: 'whatsNew.v250.item3' },
-      { emoji: '🐛', text: 'whatsNew.v250.item4' },
-    ],
-  },
-  {
-    version: '2.4.0',
-    date: '2026-02-11',
-    title: 'whatsNew.v240.title',
-    items: [
-      { emoji: '🕹️', text: 'whatsNew.v240.item1' },
-      { emoji: '🔒', text: 'whatsNew.v240.item2' },
-      { emoji: '📖', text: 'whatsNew.v240.item3' },
-    ],
-  },
-  {
-    version: '2.2.0',
-    date: '2026-02-11',
-    title: 'whatsNew.v220.title',
-    items: [
-      { emoji: '\uD83C\uDFC1', text: 'whatsNew.v220.item1' },
-      { emoji: '\uD83D\uDCCB', text: 'whatsNew.v220.item2' },
+      { emoji: '💀', text: 'whatsNew.v200.item4' },
+      { emoji: '🎬', text: 'whatsNew.v200.item5' },
+      { emoji: '🎮', text: 'whatsNew.v200.item6' },
+      { emoji: '📢', text: 'whatsNew.v200.item7' },
     ],
   },
 ];

@@ -4,9 +4,10 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 
 interface TypingInfoProps {
   hidden?: boolean;
+  onNavigate?: (page: string) => void;
 }
 
-export function TypingInfo({ hidden }: TypingInfoProps) {
+export function TypingInfo({ hidden, onNavigate }: TypingInfoProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
@@ -48,6 +49,48 @@ export function TypingInfo({ hidden }: TypingInfoProps) {
         maxWidth: '700px',
         textAlign: 'center' as const,
       }}>
+      {/* Adventure promo */}
+      {onNavigate && (
+        <button
+          onClick={() => onNavigate('adventure')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px',
+            width: '100%',
+            padding: isMobile ? '16px' : '16px 24px',
+            marginBottom: '20px',
+            backgroundColor: 'var(--sub-alt-color)',
+            border: '1.5px solid var(--main-color)',
+            borderRadius: 'var(--border-radius)',
+            cursor: 'pointer',
+            textAlign: 'left',
+            transition: 'filter 0.15s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(1.15)')}
+          onMouseLeave={(e) => (e.currentTarget.style.filter = 'none')}
+        >
+          <span style={{ fontSize: '28px', flexShrink: 0 }}>🐤⚔️🐺</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-color)' }}>
+              Adventure Mode
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginTop: '2px' }}>
+              Type to fight monsters and explore worlds!
+            </div>
+          </div>
+          <span style={{
+            fontSize: '13px',
+            color: 'var(--main-color)',
+            fontWeight: 600,
+            flexShrink: 0,
+            whiteSpace: 'nowrap',
+          }}>
+            Play Now →
+          </span>
+        </button>
+      )}
+
       {/* Feature highlights */}
       <div style={{
         display: 'grid',

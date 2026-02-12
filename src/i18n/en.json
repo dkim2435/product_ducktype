@@ -50,7 +50,8 @@
     "moreOptions": "More options...",
     "weakKeys": "Weak keys in this test",
     "practiceWeakKeys": "How about practicing these keys?",
-    "emailReport": "Email report"
+    "emailReport": "Email report",
+    "adventureBanner": "Your {{wpm}} WPM can slay monsters! Try the typing RPG."
   },
   "settings": {
     "title": "Settings",
@@ -240,8 +241,8 @@
     "featDailyDesc": "A new challenge every day — build your streak!",
     "featLessons": "Practice Lessons",
     "featLessonsDesc": "8 structured lessons from home row to full keyboard",
-    "featArcade": "Arcade Games",
-    "featArcadeDesc": "Fun typing games to earn XP and compete",
+    "featAdventure": "Adventure Mode",
+    "featAdventureDesc": "A typing RPG! Battle monsters, defeat bosses, and conquer worlds — all by typing fast and accurately.",
     "levelTitle": "Level Up & Unlock",
     "rankEvolution": "Your duck evolves as you level up!",
     "soundUnlocks": "Unlock sound themes by leveling up",
@@ -249,7 +250,7 @@
     "loginFree": "100% free — no credit card needed",
     "loginPerk1": "Save progress to the cloud",
     "loginPerk2": "Compete on the leaderboard",
-    "loginPerk3": "Unlock exclusive arcade games",
+    "loginPerk3": "Unlock all Adventure worlds",
     "loginPerk4": "Sync across all your devices",
     "gotIt": "Let's go!"
   },
@@ -257,38 +258,14 @@
     "title": "What's New",
     "gotIt": "Got it!",
     "v200": {
-      "title": "What's New in v2.0.0",
-      "item1": "Adventure Mode — A typing RPG! Defend Duck Village from wolves by typing words to attack. 5 stages with a boss battle!",
-      "item2": "New Achievements — 5 new adventure-related achievements to unlock.",
-      "item3": "World Map — Navigate through stages, earn stars, and track your progress."
-    },
-    "v252": {
-      "title": "What's New in v2.5.2",
-      "item1": "Unique Usernames — Usernames are now unique. No more duplicates on the leaderboard!",
-      "item2": "DEV Badge — The developer gets a special DEV badge on the leaderboard.",
-      "item3": "Creator Rank — A special Creator rank appears on the developer's profile."
-    },
-    "v251": {
-      "title": "What's New in v2.5.1",
-      "item1": "Change Username — You can now edit your display name from the Profile page. Your leaderboard name updates instantly!"
-    },
-    "v250": {
-      "title": "What's New in v2.5.0",
-      "item1": "Progress Saved Permanently — Your XP, level, streak, and achievements now persist even after closing the browser. No more starting over!",
-      "item2": "Streak Grace Period — Miss a day? No worries! Your streak is now protected for 1 extra day before resetting.",
-      "item3": "Dead Click Fixes — Daily Challenge, Arcade Play buttons, and game back buttons now respond properly to clicks.",
-      "item4": "Bug Fixes — Fixed JS errors in Duck Race rankings and Daily Challenge results."
-    },
-    "v240": {
-      "title": "What's New in v2.4.0",
-      "item1": "Arcade Upgrades — HOT & NEW badges, plus a catchy tagline to get you playing!",
-      "item2": "Login-Only Games — Some games now require a free account to play.",
-      "item3": "Feature Guide — First-time visitors get a tour of everything DuckType offers."
-    },
-    "v220": {
-      "title": "What's New in v2.2.0",
-      "item1": "Duck Race — Race against AI ducks! Type fast to swim across the pond.",
-      "item2": "What's New — Now you can see what changed in each update (like this!)."
+      "title": "Adventure Mode — Typing RPG is here!",
+      "item1": "World 1: Duck Village — 8 stages + Shadow Wolf boss. Defend the village with the power of typing!",
+      "item2": "World 2: Venom Jungle — 9 stages + Giant Viper boss. Survive the poison that drains your HP every second!",
+      "item3": "3 Difficulty Tiers — Beginner, Intermediate, Expert. Each cleared difficulty earns more stars and XP.",
+      "item4": "Boss Death Animation — Bosses shake, shatter and scream \"QUACK!!\" when defeated, with cinematic victory scenes.",
+      "item5": "Cinematic Endings — Unique story cinematics after each world boss. \"Peace has returned to Duck Village...\"",
+      "item6": "Difficulty Progression — Beat the boss to unlock the next difficulty tier. Master all 3 to fully conquer each world!",
+      "item7": "Share Your Victories — Share your adventure results with friends on X, KakaoTalk, WhatsApp, and more. Earn +35 XP daily!"
     }
   },
   "adventure": {

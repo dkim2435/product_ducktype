@@ -109,7 +109,20 @@ export function useGamification() {
       ],
     };
 
-    // 7. Generate toasts
+    // 7. Adventure promo toast (first test only)
+    if (profile.testsCompleted === 0 && !localStorage.getItem('ducktype_adventure_promo_shown')) {
+      localStorage.setItem('ducktype_adventure_promo_shown', '1');
+      setTimeout(() => {
+        addToast({
+          type: 'info',
+          title: 'Try Adventure Mode!',
+          message: 'Fight monsters with your typing skills ⚔️',
+          icon: '🗺️',
+        });
+      }, 1500);
+    }
+
+    // 8. Generate toasts
     if (newLevel > oldLevel) {
       const rank = getRank(newLevel);
       addToast({
@@ -132,7 +145,7 @@ export function useGamification() {
       }
     }
 
-    // 8. Save to localStorage
+    // 9. Save to localStorage
     setProfile(newProfile);
     setAchievements(newAchievementsState);
     setStreak(newStreak);
