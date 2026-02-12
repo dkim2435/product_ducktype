@@ -1,16 +1,22 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { User } from '@supabase/supabase-js';
 import type { PlayerProfile, StreakState, KeyStatsMap } from '../../types/gamification';
+import type { TestResult } from '../../types/stats';
 import { xpToNextLevel, getRank, RANKS, CREATOR_RANK } from '../../constants/gamification';
 import { isAdminUser } from '../../utils/admin';
 import { KeyboardHeatmap } from '../profile/KeyboardHeatmap';
 import { StreakCalendar } from '../profile/StreakCalendar';
 
+const WpmTrendChart = React.lazy(() =>
+  import('../profile/WpmTrendChart').then(m => ({ default: m.WpmTrendChart }))
+);
+
 interface ProfileProps {
   profile: PlayerProfile;
   streak: StreakState;
   keyStats: KeyStatsMap;
+  history?: TestResult[];
   onBack: () => void;
   user?: User | null;
   isSupabaseConfigured?: boolean;
@@ -31,7 +37,7 @@ function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString();
 }
 
-export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseConfigured, onLoginClick, onLogout, currentUsername, onUpdateUsername }: ProfileProps) {
+export function Profile({ profile, streak, keyStats, history, onBack, user, isSupabaseConfigured, onLoginClick, onLogout, currentUsername, onUpdateUsername }: ProfileProps) {
   const { t } = useTranslation();
   const isAdmin = isAdminUser(user?.id);
   const rank = getRank(profile.level, isAdmin);
@@ -396,6 +402,46 @@ export function Profile({ profile, streak, keyStats, onBack, user, isSupabaseCon
       }}>
         <StreakCalendar streak={streak} />
       </div>
+
+      {/* WPM Trend Chart */}
+      {history && history.length > 0 && (
+        <div style={{
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+          padding: '24px',
+          marginBottom: '24px',
+        }}>
+          <div style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: 'var(--text-color)',
+            marginBottom: '4px',
+          }}>
+            {t('profile.wpmTrend')}
+          </div>
+          <div style={{
+            fontSize: '11px',
+            color: 'var(--sub-color)',
+            marginBottom: '16px',
+          }}>
+            {t('profile.wpmTrendDesc')}
+          </div>
+          <Suspense fallback={
+            <div style={{
+              height: '220px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--sub-color)',
+              fontSize: '13px',
+            }}>
+              Loading...
+            </div>
+          }>
+            <WpmTrendChart history={history} />
+          </Suspense>
+        </div>
+      )}
 
       {/* Rank Roadmap */}
       <div style={{

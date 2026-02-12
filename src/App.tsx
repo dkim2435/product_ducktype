@@ -75,7 +75,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const [adventureWorldId, setAdventureWorldId] = useState<number | undefined>(undefined);
   const isMobile = useIsMobile();
   useTheme(settings.theme);
-  const { saveResult, getPersonalBest } = useStats();
+  const { history: testHistory, saveResult, getPersonalBest } = useStats();
   const { toasts, addToast, removeToast } = useToast();
   const gamification = useGamification();
   const dailyChallenge = useDailyChallenge();
@@ -574,6 +574,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             profile={gamification.profile}
             streak={gamification.streak}
             keyStats={gamification.keyStats}
+            history={testHistory}
             onBack={() => handleNavigate('test')}
             user={user}
             isSupabaseConfigured={isSupabaseConfigured}

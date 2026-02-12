@@ -164,7 +164,10 @@
     "rankUnlocksAt": "레벨을 올려 새로운 랭크를 해금하세요",
     "editUsername": "사용자 이름 변경",
     "save": "저장",
-    "cancel": "취소"
+    "cancel": "취소",
+    "wpmTrend": "WPM 추이",
+    "wpmTrendDesc": "최근 테스트의 타이핑 속도 변화",
+    "noTrendData": "WPM 추이를 보려면 더 많은 테스트를 완료하세요"
   },
   "challenge": {
     "beatFriend": "친구가 {{wpm}} WPM을 기록했어요. 이길 수 있나요?",
@@ -261,6 +264,10 @@
   "whatsNew": {
     "title": "새로운 소식",
     "gotIt": "확인!",
+    "v220": {
+      "title": "프로필 WPM 추이 차트",
+      "item1": "WPM 추이 차트 — 프로필 페이지에서 최근 테스트의 타이핑 속도 변화를 라인 차트로 확인하세요."
+    },
     "v211": {
       "title": "어드벤처 모바일 레이아웃 최적화",
       "item1": "모바일 전투 레이아웃 — 전투 중 HUD 압축 및 패딩 제거로 모바일에서 게임 화면을 최대화합니다.",

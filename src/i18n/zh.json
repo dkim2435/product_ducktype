@@ -164,7 +164,10 @@
     "rankUnlocksAt": "升级以解锁新段位",
     "editUsername": "修改用户名",
     "save": "保存",
-    "cancel": "取消"
+    "cancel": "取消",
+    "wpmTrend": "WPM 趋势",
+    "wpmTrendDesc": "最近测试的打字速度变化",
+    "noTrendData": "完成更多测试以查看WPM趋势"
   },
   "challenge": {
     "beatFriend": "你的朋友打了 {{wpm}} WPM，你能超过吗？",
@@ -261,6 +264,10 @@
   "whatsNew": {
     "title": "更新内容",
     "gotIt": "知道了!",
+    "v220": {
+      "title": "个人资料WPM趋势图",
+      "item1": "WPM趋势图 — 在个人资料页面通过折线图查看最近测试的打字速度变化。"
+    },
     "v211": {
       "title": "冒险模式移动端布局优化",
       "item1": "移动端战斗布局 — 战斗中压缩HUD并移除边距，最大化移动端游戏画面。",

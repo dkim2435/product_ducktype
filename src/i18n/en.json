@@ -164,7 +164,10 @@
     "rankUnlocksAt": "Level up to unlock new ranks",
     "editUsername": "Edit username",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "wpmTrend": "WPM Trend",
+    "wpmTrendDesc": "Your typing speed over recent tests",
+    "noTrendData": "Complete more tests to see your WPM trend"
   },
   "challenge": {
     "beatFriend": "Your friend typed {{wpm}} WPM. Can you beat them?",
@@ -261,6 +264,10 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v220": {
+      "title": "Profile WPM Trend Chart",
+      "item1": "WPM Trend Chart — See how your typing speed has changed over your recent tests with a line chart on your profile page."
+    },
     "v211": {
       "title": "Adventure Mode Mobile Optimization",
       "item1": "Mobile Combat Layout — Compact HUD and reduced padding during combat for maximum game field visibility on mobile.",
