@@ -87,12 +87,12 @@ export function getMinionPosition(
 // ---- Enemy Definitions ----
 const WOLF_PUP: EnemyConfig = { name: 'Wolf Pup', emoji: '🐕', hp: 0, attackDamage: 8 };
 const WOLF_SCOUT: EnemyConfig = { name: 'Wolf Scout', emoji: '🐺', hp: 0, attackDamage: 10 };
-const WOLF_WARRIOR: EnemyConfig = { name: 'Wolf Warrior', emoji: '🦊', hp: 0, attackDamage: 12 };
-const WOLF_GUARD: EnemyConfig = { name: 'Wolf Guard', emoji: '🐗', hp: 0, attackDamage: 14 };
-const SHADOW_STALKER: EnemyConfig = { name: 'Shadow Stalker', emoji: '🦝', hp: 0, attackDamage: 15 };
-const DIRE_WOLF: EnemyConfig = { name: 'Dire Wolf', emoji: '🐻', hp: 0, attackDamage: 16 };
-const PACK_LEADER: EnemyConfig = { name: 'Pack Leader', emoji: '🦁', hp: 0, attackDamage: 18 };
-const SHADOW_WOLF: EnemyConfig = { name: 'Shadow Wolf', emoji: '👹', hp: 600, attackDamage: 20 };
+const SPEEDY_FOX: EnemyConfig = { name: 'Speedy Fox', emoji: '🦊', hp: 0, attackDamage: 12 };
+const PUMBA: EnemyConfig = { name: 'Pumba', emoji: '🐗', hp: 0, attackDamage: 14 };
+const RASCAL_RACCOON: EnemyConfig = { name: 'Rascal Raccoon', emoji: '🦝', hp: 0, attackDamage: 15 };
+const GRUMPY_BEAR: EnemyConfig = { name: 'Grumpy Bear', emoji: '🐻', hp: 0, attackDamage: 16 };
+const LION_NOT_KING: EnemyConfig = { name: 'Lion Not King', emoji: '🦁', hp: 0, attackDamage: 18 };
+const GAEBI: EnemyConfig = { name: 'Gaebi the Oni', emoji: '👹', hp: 600, attackDamage: 20 };
 
 // ---- Boss Word Positions (below boss, not overlapping) ----
 export function getBossWordPositions(count: number): { x: number; y: number }[] {
@@ -105,7 +105,7 @@ export function getBossWordPositions(count: number): { x: number; y: number }[] 
 }
 
 // ---- Boss Config ----
-const SHADOW_WOLF_BOSS: BossConfig = {
+const GAEBI_BOSS: BossConfig = {
   minionEmoji: '🐺',
   minionAttackDamage: 12,
   phases: [
@@ -177,50 +177,50 @@ const STAGE_2: StageConfig = {
 
 const STAGE_3: StageConfig = {
   id: 3, name: 'Town Square',
-  subtitle: 'Warriors storm the town center!',
-  enemyConfig: WOLF_WARRIOR,
+  subtitle: 'A speedy fox dashes through the town!',
+  enemyConfig: SPEEDY_FOX,
   waves: makeWaves(4, 6, { minLen: 4, maxLen: 6 }, 2200, 6000),
   xpReward: 20, isBoss: false,
 };
 
 const STAGE_4: StageConfig = {
   id: 4, name: "Elder's Garden",
-  subtitle: 'Guards surround the sacred garden.',
-  enemyConfig: WOLF_GUARD,
+  subtitle: 'Pumba charges through the sacred garden!',
+  enemyConfig: PUMBA,
   waves: makeWaves(4, 6, { minLen: 4, maxLen: 7 }, 2000, 5500),
   xpReward: 25, isBoss: false,
 };
 
 const STAGE_5: StageConfig = {
   id: 5, name: 'Dark Forest',
-  subtitle: 'Shadows move between the twisted trees.',
-  enemyConfig: SHADOW_STALKER,
+  subtitle: 'Raccoons lurk between the twisted trees.',
+  enemyConfig: RASCAL_RACCOON,
   waves: makeWaves(5, 6, { minLen: 5, maxLen: 7 }, 1800, 5000),
   xpReward: 30, isBoss: false,
 };
 
 const STAGE_6: StageConfig = {
   id: 6, name: 'Mountain Pass',
-  subtitle: 'Dire wolves howl from the cliff tops.',
-  enemyConfig: DIRE_WOLF,
+  subtitle: 'A grumpy bear blocks the mountain path.',
+  enemyConfig: GRUMPY_BEAR,
   waves: makeWaves(5, 7, { minLen: 5, maxLen: 8 }, 1600, 4500),
   xpReward: 35, isBoss: false,
 };
 
 const STAGE_7: StageConfig = {
   id: 7, name: 'Wolf Den',
-  subtitle: 'The pack leaders make their last stand.',
-  enemyConfig: PACK_LEADER,
+  subtitle: 'The lion stands guard before the final lair.',
+  enemyConfig: LION_NOT_KING,
   waves: makeWaves(6, 7, { minLen: 6, maxLen: 9 }, 1400, 4000),
   xpReward: 40, isBoss: false,
 };
 
 const STAGE_8_BOSS: StageConfig = {
-  id: 8, name: "Shadow Wolf's Lair",
-  subtitle: 'Face the Shadow Wolf and save the village!',
-  enemyConfig: SHADOW_WOLF,
+  id: 8, name: "Gaebi's Lair",
+  subtitle: 'Face Gaebi the Oni and save the village!',
+  enemyConfig: GAEBI,
   waves: [],
-  xpReward: 75, isBoss: true, bossConfig: SHADOW_WOLF_BOSS,
+  xpReward: 75, isBoss: true, bossConfig: GAEBI_BOSS,
 };
 
 // ---- World 1 ----

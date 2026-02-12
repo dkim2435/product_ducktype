@@ -264,6 +264,12 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v230": {
+      "title": "Adventure Mode Visual Upgrade",
+      "item1": "Custom Player Sprite — The player duck now uses a hand-drawn character image instead of an emoji.",
+      "item2": "New Monster Names — World 1 monsters have been renamed with unique personalities (Speedy Fox, Pumba, Rascal Raccoon, and more).",
+      "item3": "Combat Animations — Player bounces on wave clear and glows with a purple poison aura in World 2."
+    },
     "v220": {
       "title": "Profile WPM Trend Chart",
       "item1": "WPM Trend Chart — See how your typing speed has changed over your recent tests with a line chart on your profile page."
