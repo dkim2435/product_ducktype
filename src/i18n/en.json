@@ -261,6 +261,11 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v210": {
+      "title": "Daily Boost & Smart Keyboard Detection",
+      "item1": "Daily XP Boost (1.5x) — Complete the daily challenge to earn 1.5x XP on all tests for the rest of the day! Start your day right.",
+      "item2": "Keyboard Mismatch Warning — Automatically detects when your input method doesn't match the test language and shows a helpful reminder to switch."
+    },
     "v200": {
       "title": "Adventure Mode — Typing RPG is here!",
       "item1": "World 1: Duck Village — 8 stages + Shadow Wolf boss. Defend the village with the power of typing!",
