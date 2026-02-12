@@ -42,6 +42,8 @@ export function Footer({ onNavigate, hidden }: FooterProps) {
       <button style={linkStyle} onClick={() => onNavigate('privacy')}>privacy policy</button>
       <span style={sepStyle}>|</span>
       <button style={linkStyle} onClick={() => onNavigate('terms')}>terms of service</button>
+      <span style={sepStyle}>|</span>
+      <a href="/blog" style={linkStyle}>blog</a>
     </footer>
   );
 }

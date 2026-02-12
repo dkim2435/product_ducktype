@@ -264,6 +264,11 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v240": {
+      "title": "DuckType Blog",
+      "item1": "Typing Blog — 20 expert articles covering typing tips, keyboard guides, WPM explained, ergonomics, and more.",
+      "item2": "SEO & Discoverability — Blog articles are fully static HTML for maximum search engine visibility."
+    },
     "v230": {
       "title": "Adventure Mode Visual Upgrade",
       "item1": "Custom Player Sprite — The player duck now uses a hand-drawn character image instead of an emoji.",

@@ -13,6 +13,15 @@ export interface ReleaseNote {
 // Newest first — add new releases at the top
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: '2.4.0',
+    date: '2026-02-12',
+    title: 'whatsNew.v240.title',
+    items: [
+      { emoji: '📝', text: 'whatsNew.v240.item1' },
+      { emoji: '🔍', text: 'whatsNew.v240.item2' },
+    ],
+  },
+  {
     version: '2.3.0',
     date: '2026-02-12',
     title: 'whatsNew.v230.title',
