@@ -18,6 +18,69 @@ import type { Settings } from '../../types/settings';
 
 const PLAYER_IMG = '/images/adventure/player.png';
 
+// Debuff aura visual config per type
+const DEBUFF_AURA: Record<string, {
+  filter: string;
+  overlay: string;
+  color: string;
+  label: string;
+}> = {
+  poison: {
+    filter: 'drop-shadow(0 0 14px rgba(160, 0, 255, 0.9)) drop-shadow(0 0 6px rgba(120, 0, 200, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(160, 0, 255, 0.06) 100%)',
+    color: '#a000ff',
+    label: '☠️ POISON',
+  },
+  fog: {
+    filter: 'drop-shadow(0 0 14px rgba(200, 200, 220, 0.9)) drop-shadow(0 0 6px rgba(170, 170, 190, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(200, 200, 220, 0.06) 100%)',
+    color: '#c8c8dc',
+    label: '🌫️ FOG',
+  },
+  freeze: {
+    filter: 'drop-shadow(0 0 14px rgba(0, 200, 255, 0.9)) drop-shadow(0 0 6px rgba(0, 150, 220, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 200, 255, 0.06) 100%)',
+    color: '#00c8ff',
+    label: '❄️ FREEZE',
+  },
+  darkness: {
+    filter: 'drop-shadow(0 0 14px rgba(80, 0, 120, 0.9)) drop-shadow(0 0 6px rgba(40, 0, 80, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(80, 0, 120, 0.06) 100%)',
+    color: '#500078',
+    label: '🌑 DARKNESS',
+  },
+  mirage: {
+    filter: 'drop-shadow(0 0 14px rgba(255, 200, 0, 0.9)) drop-shadow(0 0 6px rgba(220, 160, 0, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(255, 200, 0, 0.06) 100%)',
+    color: '#ffc800',
+    label: '🏜️ MIRAGE',
+  },
+  burn: {
+    filter: 'drop-shadow(0 0 14px rgba(255, 80, 0, 0.9)) drop-shadow(0 0 6px rgba(220, 40, 0, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(255, 80, 0, 0.06) 100%)',
+    color: '#ff5000',
+    label: '🔥 BURN',
+  },
+  storm: {
+    filter: 'drop-shadow(0 0 14px rgba(0, 150, 255, 0.9)) drop-shadow(0 0 6px rgba(50, 100, 255, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 150, 255, 0.06) 100%)',
+    color: '#0096ff',
+    label: '⚡ STORM',
+  },
+  pressure: {
+    filter: 'drop-shadow(0 0 14px rgba(0, 40, 150, 0.9)) drop-shadow(0 0 6px rgba(0, 20, 120, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 40, 150, 0.06) 100%)',
+    color: '#002896',
+    label: '🌊 PRESSURE',
+  },
+  reverse: {
+    filter: 'drop-shadow(0 0 14px rgba(255, 0, 160, 0.9)) drop-shadow(0 0 6px rgba(200, 0, 120, 0.7))',
+    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(255, 0, 160, 0.06) 100%)',
+    color: '#ff00a0',
+    label: '🌀 REVERSE',
+  },
+};
+
 function isImagePath(s: string) { return s.startsWith('/'); }
 
 function SpriteIcon({ src, size, style }: { src: string; size: number; style?: React.CSSProperties }) {
@@ -365,6 +428,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
   const bossWordMinions = state.minions.filter(m => m.isBossWord);
   const shieldMinions = state.minions.filter(m => !m.isBossWord);
   const bossShielded = isBoss && shieldMinions.length > 0;
+  const debuffAura = debuff !== 'none' ? DEBUFF_AURA[debuff] : undefined;
   const isPoisoned = debuff === 'poison';
 
   return (
@@ -539,9 +603,9 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               }}>
                 {'★'.repeat(DIFFICULTY_CONFIGS[effectiveDifficulty].maxStars)} {DIFFICULTY_CONFIGS[effectiveDifficulty].label}
               </div>
-              {isPoisoned && (
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#4caf50', marginTop: '2px' }}>
-                  ☠️ POISON -0.5/s
+              {debuffAura && (
+                <div style={{ fontSize: '10px', fontWeight: 700, color: debuffAura.color, marginTop: '2px' }}>
+                  {debuffAura.label}{isPoisoned ? ' -0.5/s' : ''}
                 </div>
               )}
             </div>
@@ -596,11 +660,11 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               background: theme.ground, pointerEvents: 'none',
             }} />
 
-            {/* Poison overlay */}
-            {isPoisoned && state.phase === 'fighting' && (
+            {/* Debuff overlay */}
+            {debuffAura && state.phase === 'fighting' && (
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 180, 0, 0.06) 100%)',
+                background: debuffAura.overlay,
                 pointerEvents: 'none', zIndex: 25,
               }} />
             )}
@@ -762,11 +826,11 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               zIndex: 6,
               animation: state.phase === 'wave-clear'
                 ? 'player-bounce 0.8s ease-out'
-                : isPoisoned && state.phase === 'fighting'
-                  ? 'player-poison 2s ease-in-out infinite'
+                : debuffAura && state.phase === 'fighting'
+                  ? 'player-debuff 2s ease-in-out infinite'
                   : undefined,
-              filter: isPoisoned && state.phase === 'fighting'
-                ? 'drop-shadow(0 0 14px rgba(160, 0, 255, 0.9)) drop-shadow(0 0 6px rgba(120, 0, 200, 0.7))'
+              filter: debuffAura && state.phase === 'fighting'
+                ? debuffAura.filter
                 : undefined,
               transition: 'filter 0.5s',
             }}>
