@@ -5,6 +5,7 @@ import type {
   StageResult,
   StageProgress,
   WorldProgress,
+  DifficultyStats,
 } from '../types/adventure';
 import { WORLDS } from '../constants/adventure';
 import { getItem, setItem } from '../utils/storage';
@@ -112,6 +113,26 @@ export function useAdventure() {
     setProgress(prev => {
       const wp = getWorldProgress(prev, currentWorldId);
       const existing = wp.stages[result.stageId];
+
+      // --- byDifficulty update ---
+      const existingDiff = existing?.byDifficulty?.[result.difficulty];
+      const newDiffStats: DifficultyStats = {
+        bestWpm: Math.max(existingDiff?.bestWpm ?? 0, result.wpm),
+        bestAccuracy: Math.max(existingDiff?.bestAccuracy ?? 0, result.accuracy),
+        bestCombo: Math.max(existingDiff?.bestCombo ?? 0, result.maxCombo),
+        clearedAt: result.cleared
+          ? (existingDiff?.clearedAt ?? Date.now())
+          : (existingDiff?.clearedAt ?? null),
+        attempts: (existingDiff?.attempts ?? 0) + 1,
+        bestTimeMs: result.cleared
+          ? Math.min(existingDiff?.bestTimeMs ?? Infinity, result.timeMs)
+          : (existingDiff?.bestTimeMs ?? null),
+      };
+      // Normalize Infinity → null (first clear sets actual time)
+      if (newDiffStats.bestTimeMs === Infinity) {
+        newDiffStats.bestTimeMs = null;
+      }
+
       const newStageProgress: StageProgress = {
         stageId: result.stageId,
         bestStars: Math.max(existing?.bestStars ?? 0, result.stars),
@@ -119,6 +140,10 @@ export function useAdventure() {
         bestAccuracy: Math.max(existing?.bestAccuracy ?? 0, result.accuracy),
         clearedAt: result.cleared ? (existing?.clearedAt ?? Date.now()) : (existing?.clearedAt ?? null),
         attempts: (existing?.attempts ?? 0) + 1,
+        byDifficulty: {
+          ...existing?.byDifficulty,
+          [result.difficulty]: newDiffStats,
+        },
       };
 
       const newWorldProgress: WorldProgress = {
@@ -127,7 +152,23 @@ export function useAdventure() {
           [result.stageId]: newStageProgress,
         },
         totalXpEarned: wp.totalXpEarned + result.xpEarned,
+        completedAt: wp.completedAt,
       };
+
+      // --- World completion check for this difficulty ---
+      const world = WORLDS.find(w => w.id === currentWorldId);
+      if (world && result.cleared && !newWorldProgress.completedAt?.[result.difficulty]) {
+        const allCleared = world.stages.every(stage => {
+          const sp = newWorldProgress.stages[stage.id];
+          return sp?.byDifficulty?.[result.difficulty]?.clearedAt != null;
+        });
+        if (allCleared) {
+          newWorldProgress.completedAt = {
+            ...newWorldProgress.completedAt,
+            [result.difficulty]: Date.now(),
+          };
+        }
+      }
 
       const newProgress: AdventureProgress = {
         worlds: {

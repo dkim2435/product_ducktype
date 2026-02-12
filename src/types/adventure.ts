@@ -181,20 +181,32 @@ export interface StageResult {
   xpEarned: number;
 }
 
+// ---- Difficulty Stats (per-difficulty breakdown) ----
+export interface DifficultyStats {
+  bestWpm: number;
+  bestAccuracy: number;
+  bestCombo: number;
+  clearedAt: number | null;
+  attempts: number;
+  bestTimeMs: number | null;
+}
+
 // ---- Stage Progress (saved) ----
 export interface StageProgress {
   stageId: number;
-  bestStars: number;
-  bestWpm: number;
-  bestAccuracy: number;
-  clearedAt: number | null;
-  attempts: number;
+  bestStars: number;           // aggregate max across all difficulties
+  bestWpm: number;             // aggregate max
+  bestAccuracy: number;        // aggregate max
+  clearedAt: number | null;    // first-ever clear timestamp
+  attempts: number;            // total attempts across all difficulties
+  byDifficulty?: Partial<Record<DifficultyLevel, DifficultyStats>>;
 }
 
 // ---- Per-World Progress ----
 export interface WorldProgress {
   stages: Record<number, StageProgress>;
   totalXpEarned: number;
+  completedAt?: Partial<Record<DifficultyLevel, number>>;
 }
 
 // ---- Adventure Progress (saved to localStorage) ----
