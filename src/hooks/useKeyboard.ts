@@ -1,5 +1,19 @@
 import { useEffect, useRef, useCallback } from 'react';
 
+function getExpectedScript(lang: string): 'latin' | 'cyrillic' | 'cjk' {
+  if (['ko', 'zh', 'ja'].includes(lang)) return 'cjk';
+  if (lang === 'ru') return 'cyrillic';
+  return 'latin';
+}
+
+function isLatinChar(char: string): boolean {
+  return /^[a-zA-Z]$/.test(char);
+}
+
+function isCyrillicChar(char: string): boolean {
+  return /^[\u0400-\u04FF]$/.test(char);
+}
+
 interface UseKeyboardOptions {
   onChar: (char: string) => void;
   onSpace: () => void;
@@ -8,6 +22,8 @@ interface UseKeyboardOptions {
   onTab: () => void;
   onEscape: () => void;
   enabled: boolean;
+  language?: string;
+  onInputMismatch?: (mismatch: boolean) => void;
 }
 
 export function useKeyboard({
@@ -18,10 +34,13 @@ export function useKeyboard({
   onTab,
   onEscape,
   enabled,
+  language,
+  onInputMismatch,
 }: UseKeyboardOptions) {
   const isComposingRef = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const tabPressedRef = useRef(false);
+  const mismatchRef = useRef(false);
 
   const onCharRef = useRef(onChar);
   const onSpaceRef = useRef(onSpace);
@@ -29,6 +48,8 @@ export function useKeyboard({
   const onCjkInputRef = useRef(onCjkInput);
   const onTabRef = useRef(onTab);
   const onEscapeRef = useRef(onEscape);
+  const onInputMismatchRef = useRef(onInputMismatch);
+  const languageRef = useRef(language);
 
   onCharRef.current = onChar;
   onSpaceRef.current = onSpace;
@@ -36,6 +57,8 @@ export function useKeyboard({
   onCjkInputRef.current = onCjkInput;
   onTabRef.current = onTab;
   onEscapeRef.current = onEscape;
+  onInputMismatchRef.current = onInputMismatch;
+  languageRef.current = language;
 
   const focusInput = useCallback(() => {
     if (inputRef.current) {
@@ -46,6 +69,13 @@ export function useKeyboard({
   useEffect(() => {
     const textarea = inputRef.current;
     if (!textarea || !enabled) return;
+
+    const setMismatch = (value: boolean) => {
+      if (mismatchRef.current !== value) {
+        mismatchRef.current = value;
+        onInputMismatchRef.current?.(value);
+      }
+    };
 
     const handleKeyDown = (e: KeyboardEvent) => {
       // IME guard - keyCode 229 is the generic IME key
@@ -96,10 +126,35 @@ export function useKeyboard({
 
       e.preventDefault();
       onCharRef.current(e.key);
+
+      // Check input script mismatch (only for alphabetic chars)
+      const lang = languageRef.current;
+      if (lang) {
+        const expected = getExpectedScript(lang);
+        if (expected === 'cjk' && isLatinChar(e.key)) {
+          setMismatch(true);
+        } else if (expected === 'cyrillic' && isLatinChar(e.key)) {
+          setMismatch(true);
+        } else if (expected === 'latin' && isCyrillicChar(e.key)) {
+          setMismatch(true);
+        } else {
+          setMismatch(false);
+        }
+      }
     };
 
     const handleCompositionStart = () => {
       isComposingRef.current = true;
+      // IME activated: mismatch if language expects non-IME input
+      const lang = languageRef.current;
+      if (lang) {
+        const expected = getExpectedScript(lang);
+        if (expected !== 'cjk') {
+          setMismatch(true);
+        } else {
+          setMismatch(false);
+        }
+      }
     };
 
     const handleCompositionUpdate = () => {
@@ -111,6 +166,14 @@ export function useKeyboard({
       const text = e.data;
       if (text) {
         onCjkInputRef.current(text);
+      }
+      // IME deactivated: clear mismatch for non-CJK languages
+      const lang = languageRef.current;
+      if (lang) {
+        const expected = getExpectedScript(lang);
+        if (expected !== 'cjk') {
+          setMismatch(false);
+        }
       }
       // Clear the textarea value after composition
       if (textarea) {

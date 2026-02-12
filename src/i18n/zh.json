@@ -10,7 +10,8 @@
     "restartHint": "Tab + Enter 重新开始",
     "nextTest": "下一个测试",
     "tapToStart": "点击开始",
-    "tapToResume": "点击继续"
+    "tapToResume": "点击继续",
+    "inputMismatch": "输入法不匹配 — 请切换键盘以匹配测试语言"
   },
   "mode": {
     "time": "时间",

@@ -10,7 +10,8 @@
     "restartHint": "Tab + Enter로 다시 시작",
     "nextTest": "다음 테스트",
     "tapToStart": "탭하여 시작",
-    "tapToResume": "탭하여 계속"
+    "tapToResume": "탭하여 계속",
+    "inputMismatch": "입력 방식이 다릅니다 — 테스트 언어에 맞게 키보드를 전환해주세요"
   },
   "mode": {
     "time": "시간",

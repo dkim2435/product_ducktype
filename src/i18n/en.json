@@ -10,7 +10,8 @@
     "restartHint": "Tab + Enter to restart",
     "nextTest": "Next test",
     "tapToStart": "Tap to start",
-    "tapToResume": "Tap to continue"
+    "tapToResume": "Tap to continue",
+    "inputMismatch": "Wrong input method — please switch your keyboard to match the test language"
   },
   "mode": {
     "time": "time",
