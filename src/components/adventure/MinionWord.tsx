@@ -67,13 +67,13 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
         filter: isMatched ? 'drop-shadow(0 0 6px var(--main-color))' : undefined,
         transition: 'filter 0.15s',
       }}>
-        <SpriteIcon src={emoji} size={isMobile ? 40 : 48} />
+        <SpriteIcon src={emoji} size={isMobile ? 60 : 72} />
       </div>
       <div style={{
         padding: '3px 10px', borderRadius: '6px',
         backgroundColor: isMatched ? 'rgba(var(--main-color-rgb, 0,0,0), 0.1)' : isUrgent ? 'rgba(var(--error-color-rgb, 200,50,50), 0.06)' : 'var(--bg-color)',
         border: isMatched ? '2px solid var(--main-color)' : isUrgent ? '2px solid var(--error-color)' : '1px solid var(--sub-alt-color)',
-        fontSize: isMobile ? '13px' : '16px', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap',
+        fontSize: isMobile ? '12px' : '15px', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap',
         boxShadow: isMatched ? '0 0 10px rgba(var(--main-color-rgb, 0,0,0), 0.2)' : '0 2px 6px rgba(0,0,0,0.08)',
       }}>
         {minion.word.split('').map((ch, i) => (

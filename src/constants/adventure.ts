@@ -39,7 +39,7 @@ export const DIFFICULTY_CONFIGS: Record<DifficultyLevel, DifficultyConfig> = {
 };
 
 // ---- Poison Debuff ----
-export const POISON_DAMAGE_PER_SECOND = 0.5;
+export const POISON_DAMAGE_PER_SECOND = 0.3;
 export const POISON_TICK_INTERVAL_MS = 1000;
 
 // ---- Calculate Damage (boss hits) ----
@@ -85,14 +85,14 @@ export function getMinionPosition(
 }
 
 // ---- Enemy Definitions ----
-const WOLF_PUP: EnemyConfig = { name: 'Wolf Pup', emoji: '🐕', hp: 0, attackDamage: 8 };
-const WOLF_SCOUT: EnemyConfig = { name: 'Wolf Scout', emoji: '🐺', hp: 0, attackDamage: 10 };
-const SPEEDY_FOX: EnemyConfig = { name: 'Speedy Fox', emoji: '🦊', hp: 0, attackDamage: 12 };
-const PUMBA: EnemyConfig = { name: 'Pumba', emoji: '🐗', hp: 0, attackDamage: 14 };
-const RASCAL_RACCOON: EnemyConfig = { name: 'Rascal Raccoon', emoji: '🦝', hp: 0, attackDamage: 15 };
-const GRUMPY_BEAR: EnemyConfig = { name: 'Grumpy Bear', emoji: '🐻', hp: 0, attackDamage: 16 };
-const LION_NOT_KING: EnemyConfig = { name: 'Lion Not King', emoji: '🦁', hp: 0, attackDamage: 18 };
-const GAEBI: EnemyConfig = { name: 'Gaebi the Oni', emoji: '👹', hp: 600, attackDamage: 20 };
+const WOLF_PUP: EnemyConfig = { name: 'Wolf Pup', emoji: '/images/adventure/monsters/w1/wolf-pup.png', hp: 0, attackDamage: 8 };
+const WOLF_SCOUT: EnemyConfig = { name: 'Wolf Scout', emoji: '/images/adventure/monsters/w1/wolf-scout.png', hp: 0, attackDamage: 10 };
+const SPEEDY_FOX: EnemyConfig = { name: 'Speedy Fox', emoji: '/images/adventure/monsters/w1/speedy-fox.png', hp: 0, attackDamage: 12 };
+const PUMBA: EnemyConfig = { name: 'Pumba', emoji: '/images/adventure/monsters/w1/pumba.png', hp: 0, attackDamage: 14 };
+const RASCAL_RACCOON: EnemyConfig = { name: 'Rascal Raccoon', emoji: '/images/adventure/monsters/w1/rascal-raccoon.png', hp: 0, attackDamage: 15 };
+const GRUMPY_BEAR: EnemyConfig = { name: 'Grumpy Bear', emoji: '/images/adventure/monsters/w1/grumpy-bear.png', hp: 0, attackDamage: 16 };
+const LION_NOT_KING: EnemyConfig = { name: 'Lion Not King', emoji: '/images/adventure/monsters/w1/lion-not-king.png', hp: 0, attackDamage: 18 };
+const GAEBI: EnemyConfig = { name: 'Gaebi the Oni', emoji: '/images/adventure/monsters/w1/gaebi.png', hp: 600, attackDamage: 20 };
 
 // ---- Boss Word Positions (below boss, not overlapping) ----
 export function getBossWordPositions(count: number): { x: number; y: number }[] {
@@ -106,7 +106,7 @@ export function getBossWordPositions(count: number): { x: number; y: number }[] 
 
 // ---- Boss Config ----
 const GAEBI_BOSS: BossConfig = {
-  minionEmoji: '🐺',
+  minionEmoji: '/images/adventure/monsters/w1/wolf-scout.png',
   minionAttackDamage: 12,
   phases: [
     {
@@ -235,19 +235,19 @@ export const WORLD_1: WorldConfig = {
 // ========== WORLD 2: Venom Jungle ==========
 
 // ---- Enemy Definitions (W2) ----
-const POISON_FROG: EnemyConfig = { name: 'Poison Frog', emoji: '🐸', hp: 0, attackDamage: 10 };
-const VINE_SNAKE: EnemyConfig = { name: 'Vine Snake', emoji: '🐍', hp: 0, attackDamage: 12 };
-const ACID_SLIME: EnemyConfig = { name: 'Acid Slime', emoji: '🟢', hp: 0, attackDamage: 13 };
-const SWAMP_CRAWLER: EnemyConfig = { name: 'Swamp Crawler', emoji: '🦎', hp: 0, attackDamage: 14 };
-const JUNGLE_STALKER: EnemyConfig = { name: 'Jungle Stalker', emoji: '🐆', hp: 0, attackDamage: 15 };
-const TOXIC_BLOOM: EnemyConfig = { name: 'Toxic Bloom', emoji: '🌺', hp: 0, attackDamage: 16 };
-const VENOM_BRUTE: EnemyConfig = { name: 'Venom Brute', emoji: '🦍', hp: 0, attackDamage: 18 };
-const JUNGLE_WARDEN: EnemyConfig = { name: 'Jungle Warden', emoji: '🌿', hp: 0, attackDamage: 19 };
-const GIANT_VIPER: EnemyConfig = { name: 'Giant Viper', emoji: '🐲', hp: 750, attackDamage: 22 };
+const POISON_FROG: EnemyConfig = { name: 'Poison Frog', emoji: '/images/adventure/monsters/w2/poison-frog.png', hp: 0, attackDamage: 10 };
+const VINE_SNAKE: EnemyConfig = { name: 'Vine Snake', emoji: '/images/adventure/monsters/w2/vine-snake.png', hp: 0, attackDamage: 12 };
+const ACID_SLIME: EnemyConfig = { name: 'Acid Slime', emoji: '/images/adventure/monsters/w2/acid-slime.png', hp: 0, attackDamage: 13 };
+const SWAMP_CRAWLER: EnemyConfig = { name: 'Swamp Crawler', emoji: '/images/adventure/monsters/w2/swamp-crawler.png', hp: 0, attackDamage: 14 };
+const JUNGLE_STALKER: EnemyConfig = { name: 'Jungle Stalker', emoji: '/images/adventure/monsters/w2/jungle-stalker.png', hp: 0, attackDamage: 15 };
+const TOXIC_BLOOM: EnemyConfig = { name: 'Toxic Bloom', emoji: '/images/adventure/monsters/w2/toxic-bloom.png', hp: 0, attackDamage: 16 };
+const VENOM_BRUTE: EnemyConfig = { name: 'Venom Brute', emoji: '/images/adventure/monsters/w2/venom-brute.png', hp: 0, attackDamage: 18 };
+const JUNGLE_WARDEN: EnemyConfig = { name: 'Jungle Warden', emoji: '/images/adventure/monsters/w2/jungle-warden.png', hp: 0, attackDamage: 19 };
+const GIANT_VIPER: EnemyConfig = { name: 'Giant Viper', emoji: '/images/adventure/monsters/w2/giant-viper.png', hp: 750, attackDamage: 22 };
 
 // ---- Boss Config (W2) ----
 const GIANT_VIPER_BOSS: BossConfig = {
-  minionEmoji: '🐍',
+  minionEmoji: '/images/adventure/monsters/w2/vine-snake.png',
   minionAttackDamage: 14,
   phases: [
     {
@@ -360,7 +360,7 @@ const W2_STAGE_9_BOSS: StageConfig = {
 const WORLD_2_DEBUFF: WorldDebuff = {
   type: 'poison',
   intensity: POISON_DAMAGE_PER_SECOND,
-  description: 'Poison -0.5 HP/s',
+  description: 'Poison -0.3 HP/s',
   icon: '☠️',
 };
 

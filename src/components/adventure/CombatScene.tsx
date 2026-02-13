@@ -270,7 +270,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               fontSize: '13px', fontWeight: 700, color: '#4caf50',
             }}>
               <span style={{ fontSize: '18px' }}>☠️</span>
-              POISON: -0.5 HP per second during combat
+              POISON: -0.3 HP per second during combat
             </div>
           )}
 
@@ -307,7 +307,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: isMobile && keyboardOpen ? '10px' : '12px', color: 'var(--sub-color)', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
                 <span><SpriteIcon src={PLAYER_IMG} size={20} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('adventure.player')}</span>
-                <span>{Math.max(0, state.playerHp)}/{state.playerMaxHp}</span>
+                <span>{Math.max(0, Math.round(state.playerHp))}/{state.playerMaxHp}</span>
               </div>
               <div style={{ height: isMobile && keyboardOpen ? '6px' : '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
                 <div style={{
@@ -345,7 +345,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               </div>
               {debuffAura && (
                 <div style={{ fontSize: '10px', fontWeight: 700, color: debuffAura.color, marginTop: '2px' }}>
-                  {debuffAura.label}{isPoisoned ? ' -0.5/s' : ''}
+                  {debuffAura.label}{isPoisoned ? ' -0.3/s' : ''}
                 </div>
               )}
             </div>
@@ -355,7 +355,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: isMobile && keyboardOpen ? '10px' : '12px', color: 'var(--sub-color)', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
                   <span>{Math.max(0, state.bossHp)}/{state.bossMaxHp}</span>
-                  <span><SpriteIcon src={stageConfig.enemyConfig.emoji} size={20} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{stageConfig.enemyConfig.name}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><SpriteIcon src={stageConfig.enemyConfig.emoji} size={20} />{stageConfig.enemyConfig.name}</span>
                 </div>
                 <div style={{ height: isMobile && keyboardOpen ? '6px' : '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
                   <div style={{
@@ -366,10 +366,9 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                 </div>
               </div>
             ) : (
-              <div style={{ flex: 1, textAlign: 'right' }}>
-                <span style={{ fontSize: '12px', color: 'var(--sub-color)' }}>
-                  <SpriteIcon src={stageConfig.enemyConfig.emoji} size={20} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{stageConfig.enemyConfig.name}
-                </span>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
+                <SpriteIcon src={stageConfig.enemyConfig.emoji} size={24} />
+                <span style={{ fontSize: '12px', color: 'var(--sub-color)' }}>{stageConfig.enemyConfig.name}</span>
               </div>
             )}
           </div>
@@ -420,7 +419,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                   filter: bossShielded ? 'brightness(0.8)' : undefined,
                   transition: 'filter 0.3s',
                 }}>
-                  <SpriteIcon src={stageConfig.enemyConfig.emoji} size={isMobile ? 72 : 96} />
+                  <SpriteIcon src={stageConfig.enemyConfig.emoji} size={isMobile ? 117 : 155} />
                 </div>
                 {bossShielded && (
                   <div style={{
@@ -569,7 +568,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                   animation: 'boss-shake 2.5s ease-out forwards',
                   zIndex: 36,
                 }}>
-                  <SpriteIcon src={stageConfig.enemyConfig.emoji} size={isMobile ? 72 : 96} />
+                  <SpriteIcon src={stageConfig.enemyConfig.emoji} size={isMobile ? 117 : 155} />
                 </div>
 
                 {/* "꾸엑!!" death cry text */}
