@@ -29,8 +29,11 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
   const remainSec = Math.max(0, (minion.timeoutMs - elapsed) / 1000);
   const isUrgent = timeProgress > 0.7;
 
-  // Fog debuff: unmatched words are blurry + faded, matched words are clear
-  const isFoggy = debuffType === 'fog' && !isBossWord && !isMatched;
+  // Fog debuff: words start clear, gradually fade into fog over 1.5s. Matched = clear.
+  const isFogActive = debuffType === 'fog' && !isBossWord && !isMatched;
+  const fogProgress = isFogActive ? Math.min(1, elapsed / 1500) : 0; // 0→1 over 1.5s
+  const fogOpacity = isFogActive ? 1 - fogProgress * 0.82 : 1;      // 1.0 → 0.18
+  const fogBlur = isFogActive ? fogProgress * 4 : 0;                 // 0px → 4px
 
   // Darkness debuff: unmatched words blink (2s cycle, hidden for 0.5s)
   const isDarknessHidden = debuffType === 'darkness' && !isBossWord && !isMatched
@@ -70,9 +73,9 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
       transform: 'translate(-50%, -50%)', zIndex: isMatched ? 10 : 3,
       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px',
       animation: 'fadeIn 0.3s ease-out',
-      opacity: isDarknessHidden ? 0 : isFoggy ? 0.18 : 1,
-      filter: isFoggy ? 'blur(4px)' : undefined,
-      transition: isFoggy ? 'opacity 0.3s, filter 0.3s' : isDarknessHidden !== undefined ? 'opacity 0.15s' : undefined,
+      opacity: isDarknessHidden ? 0 : fogOpacity,
+      filter: fogBlur > 0 ? `blur(${fogBlur}px)` : undefined,
+      transition: isMatched ? 'opacity 0.2s, filter 0.2s' : isDarknessHidden !== undefined ? 'opacity 0.15s' : undefined,
     }}>
       <div style={{
         filter: isMatched ? 'drop-shadow(0 0 6px var(--main-color))' : undefined,
