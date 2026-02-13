@@ -38,9 +38,9 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
   // Freeze debuff: word is frozen (can't be typed) — show ice effect
   const isFrozen = !!minion.frozenUntil && now < minion.frozenUntil;
 
-  // Darkness debuff: unmatched words blink (2s cycle, hidden for 0.8s)
+  // Darkness debuff: unmatched words blink (2s cycle, hidden for 1s)
   const isDarknessHidden = debuffType === 'darkness' && !isBossWord && !isMatched
-    && (now % 2000) > 1200;
+    && (now % 2000) > 1000;
 
   if (isBossWord) {
     return (
