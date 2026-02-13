@@ -238,7 +238,10 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
           maxWidth: '550px',
           maxHeight: '85vh',
           overflowY: 'auto',
+          overflowX: 'hidden',
           border: '1px solid var(--sub-alt-color)',
+          touchAction: 'pan-y',
+          WebkitOverflowScrolling: 'touch',
         }}
       >
         <div style={{
