@@ -536,6 +536,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onLoginClick={handleLoginClick}
             onShareClick={() => gamification.awardShareBonus(addToast)}
             onTypingStateChange={setIsTypingActive}
+            userId={user?.id}
           />
         )}
 

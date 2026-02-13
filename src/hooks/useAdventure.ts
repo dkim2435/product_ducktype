@@ -7,7 +7,8 @@ import type {
   WorldProgress,
   DifficultyStats,
 } from '../types/adventure';
-import { WORLDS } from '../constants/adventure';
+import { WORLDS, PREMIUM_WORLDS } from '../constants/adventure';
+import { isAdminUser } from '../utils/admin';
 import { getItem, setItem } from '../utils/storage';
 
 const STORAGE_KEY = 'adventure_progress';
@@ -52,7 +53,9 @@ function getWorldProgress(progress: AdventureProgress, worldId: number): WorldPr
   return progress.worlds[worldId] ?? { stages: {}, totalXpEarned: 0 };
 }
 
-export function useAdventure() {
+export function useAdventure(userId?: string | null) {
+  const activeWorlds = isAdminUser(userId) ? [...WORLDS, ...PREMIUM_WORLDS] : WORLDS;
+
   const [progress, setProgress] = useState<AdventureProgress>(() => {
     const raw = getItem<unknown>(STORAGE_KEY, null);
     return migrateProgress(raw);
@@ -63,38 +66,38 @@ export function useAdventure() {
   const [lastResult, setLastResult] = useState<StageResult | null>(null);
 
   const getCurrentWorldConfig = useCallback(() => {
-    return WORLDS.find(w => w.id === currentWorldId) ?? WORLDS[0];
-  }, [currentWorldId]);
+    return activeWorlds.find(w => w.id === currentWorldId) ?? activeWorlds[0];
+  }, [currentWorldId, activeWorlds]);
 
   const isWorldUnlocked = useCallback((worldId: number): boolean => {
     if (worldId === 1) return true;
     // Previous world's boss must be cleared
-    const prevWorld = WORLDS.find(w => w.id === worldId - 1);
+    const prevWorld = activeWorlds.find(w => w.id === worldId - 1);
     if (!prevWorld) return false;
     const bossStage = prevWorld.stages[prevWorld.stages.length - 1];
     const prevProgress = getWorldProgress(progress, worldId - 1);
     if (!prevProgress.stages[bossStage.id]?.clearedAt) return false;
     // Check star requirement
-    const currentWorld = WORLDS.find(w => w.id === worldId);
+    const currentWorld = activeWorlds.find(w => w.id === worldId);
     if (currentWorld && currentWorld.starsRequired > 0) {
       const prevStars = Object.values(prevProgress.stages).reduce((sum, s) => sum + s.bestStars, 0);
       if (prevStars < currentWorld.starsRequired) return false;
     }
     return true;
-  }, [progress]);
+  }, [progress, activeWorlds]);
 
   const isStageUnlocked = useCallback((worldId: number, stageId: number): boolean => {
     if (!isWorldUnlocked(worldId)) return false;
     if (stageId === 1) return true;
     const wp = getWorldProgress(progress, worldId);
     // Find the previous stage id in the world
-    const world = WORLDS.find(w => w.id === worldId);
+    const world = activeWorlds.find(w => w.id === worldId);
     if (!world) return false;
     const stageIdx = world.stages.findIndex(s => s.id === stageId);
     if (stageIdx <= 0) return stageIdx === 0;
     const prevStageId = world.stages[stageIdx - 1].id;
     return !!wp.stages[prevStageId]?.clearedAt;
-  }, [progress, isWorldUnlocked]);
+  }, [progress, isWorldUnlocked, activeWorlds]);
 
   const getStageProgress = useCallback((worldId: number, stageId: number): StageProgress | undefined => {
     return getWorldProgress(progress, worldId).stages[stageId];
@@ -156,7 +159,7 @@ export function useAdventure() {
       };
 
       // --- World completion check for this difficulty ---
-      const world = WORLDS.find(w => w.id === currentWorldId);
+      const world = activeWorlds.find(w => w.id === currentWorldId);
       if (world && result.cleared && !newWorldProgress.completedAt?.[result.difficulty]) {
         const allCleared = world.stages.every(stage => {
           const sp = newWorldProgress.stages[stage.id];
@@ -227,6 +230,7 @@ export function useAdventure() {
     view,
     activeStageId,
     lastResult,
+    activeWorlds,
     isWorldUnlocked,
     isStageUnlocked,
     getStageProgress,

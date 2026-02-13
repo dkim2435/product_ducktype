@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { AdventureProgress } from '../../types/adventure';
-import { WORLDS, WORLD_PREVIEWS } from '../../constants/adventure';
+import type { WorldConfig } from '../../types/adventure';
+import { WORLD_PREVIEWS } from '../../constants/adventure';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
 interface WorldMapProps {
@@ -14,6 +15,7 @@ interface WorldMapProps {
   onBack: () => void;
   isLoggedIn: boolean;
   onLoginClick: () => void;
+  activeWorlds: WorldConfig[];
 }
 
 // Stage thumbnail themes — World 1 (Duck Village)
@@ -71,6 +73,7 @@ export function WorldMap({
   onBack,
   isLoggedIn,
   onLoginClick,
+  activeWorlds,
 }: WorldMapProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
@@ -80,7 +83,7 @@ export function WorldMap({
   const prevWorld = WORLD_PREVIEWS.find(w => w.id === currentWorldId - 1);
   const nextWorld = WORLD_PREVIEWS.find(w => w.id === currentWorldId + 1);
 
-  const worldConfig = WORLDS.find(w => w.id === currentWorldId);
+  const worldConfig = activeWorlds.find(w => w.id === currentWorldId);
   const isPlayable = !!worldConfig && isWorldUnlocked(currentWorldId);
   const stages = worldConfig?.stages ?? [];
   const worldDebuff = worldConfig?.debuff;
@@ -89,7 +92,7 @@ export function WorldMap({
 
   const prevWorldLockInfo = (() => {
     if (currentWorldId === 1) return { bossCleared: true, starsOk: true, prevStars: 0, starsRequired: 0 };
-    const prevWorldConfig = WORLDS.find(w => w.id === currentWorldId - 1);
+    const prevWorldConfig = activeWorlds.find(w => w.id === currentWorldId - 1);
     if (!prevWorldConfig) return { bossCleared: false, starsOk: true, prevStars: 0, starsRequired: 0 };
     const bossStage = prevWorldConfig.stages[prevWorldConfig.stages.length - 1];
     const prevWp = getWorldProgress(progress, currentWorldId - 1);
@@ -211,7 +214,7 @@ export function WorldMap({
 
       {/* Right arrow + unlock requirement */}
       {nextWorld && (() => {
-        const nextWorldConfig = WORLDS.find(w => w.id === nextWorld.id);
+        const nextWorldConfig = activeWorlds.find(w => w.id === nextWorld.id);
         const nextWorldLocked = !isWorldUnlocked(nextWorld.id);
         const nextStarsRequired = nextWorldConfig?.starsRequired ?? 0;
         const currentWorldStars = Object.values(getWorldProgress(progress, currentWorldId).stages)

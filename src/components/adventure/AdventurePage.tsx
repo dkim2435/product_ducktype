@@ -3,7 +3,7 @@ import type { Settings } from '../../types/settings';
 import type { StageResult, DifficultyLevel } from '../../types/adventure';
 import type { ToastNotification } from '../../types/gamification';
 import { useAdventure } from '../../hooks/useAdventure';
-import { WORLDS, WORLD_PREVIEWS } from '../../constants/adventure';
+import { WORLD_PREVIEWS } from '../../constants/adventure';
 import { WorldMap } from './WorldMap';
 import { CombatScene } from './CombatScene';
 import { StageComplete } from './StageComplete';
@@ -20,6 +20,7 @@ interface AdventurePageProps {
   onLoginClick: () => void;
   onShareClick: () => void;
   onTypingStateChange?: (active: boolean) => void;
+  userId?: string | null;
 }
 
 export function AdventurePage({
@@ -34,11 +35,12 @@ export function AdventurePage({
   onLoginClick,
   onShareClick,
   onTypingStateChange,
+  userId,
 }: AdventurePageProps) {
-  const adventure = useAdventure();
+  const adventure = useAdventure(userId);
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('beginner');
   const prevUnlockedRef = useRef<Set<number>>(new Set(
-    WORLDS.map(w => w.id).filter(id => adventure.isWorldUnlocked(id))
+    adventure.activeWorlds.map(w => w.id).filter(id => adventure.isWorldUnlocked(id))
   ));
   const stageConfig = adventure.getActiveStageConfig();
   const worldConfig = adventure.getCurrentWorldConfig();
@@ -118,7 +120,7 @@ export function AdventurePage({
 
     // Check if a new world just became unlocked
     setTimeout(() => {
-      WORLDS.forEach(w => {
+      adventure.activeWorlds.forEach(w => {
         if (!prevUnlockedRef.current.has(w.id) && adventure.isWorldUnlocked(w.id)) {
           const preview = WORLD_PREVIEWS.find(p => p.id === w.id);
           if (preview) {
@@ -148,6 +150,7 @@ export function AdventurePage({
           onBack={onBack}
           isLoggedIn={isLoggedIn}
           onLoginClick={onLoginClick}
+          activeWorlds={adventure.activeWorlds}
         />
       )}
 

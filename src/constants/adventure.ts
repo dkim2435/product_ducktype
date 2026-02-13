@@ -9,6 +9,16 @@ import type {
   WorldDebuff,
 } from '../types/adventure';
 
+// =========================================================================
+// WORLD ACCESS CONTROL
+// -------------------------------------------------------------------------
+// PUBLIC (everyone):  World 1, 2        → WORLDS array
+// PREMIUM (admin/paid): World 3, 4, 5  → PREMIUM_WORLDS array
+//
+// To open a world to all users: move it from PREMIUM_WORLDS to WORLDS.
+// To add paid access: check user's premium status in useAdventure hook.
+// =========================================================================
+
 // ---- Player Constants ----
 export const PLAYER_MAX_HP = 100;
 export const PLAYER_BASE_DAMAGE = 10;
@@ -1024,6 +1034,7 @@ export const WORLD_5: WorldConfig = {
 
 // ---- All Worlds ----
 export const WORLDS: WorldConfig[] = [WORLD_1, WORLD_2];
+export const PREMIUM_WORLDS: WorldConfig[] = [WORLD_3, WORLD_4, WORLD_5];
 
 // ---- World Victory Cinematics ----
 export const WORLD_VICTORY_CINEMATICS: Record<number, { title: string; subtitle: string }> = {
