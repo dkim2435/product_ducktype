@@ -24,9 +24,10 @@ interface TypingTestProps {
   hideModeSwitcher?: boolean;
   onTypingStateChange?: (isTyping: boolean) => void;
   leaderboardRank?: number | null;
+  themeMainColor?: string;
 }
 
-export function TypingTest({ settings, onSettingChange, onFinish, customWords, hideModeSwitcher, onTypingStateChange, leaderboardRank }: TypingTestProps) {
+export function TypingTest({ settings, onSettingChange, onFinish, customWords, hideModeSwitcher, onTypingStateChange, leaderboardRank, themeMainColor }: TypingTestProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const [isFocused, setIsFocused] = useState(true);
@@ -146,8 +147,9 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     });
   }, [scrollOffset, updatePosition]);
 
+  const hasParticles = (leaderboardRank && leaderboardRank <= 20) || (settings.particleTier && settings.particleTier !== 'none');
   const triggerParticle = useCallback(() => {
-    if (!leaderboardRank || leaderboardRank > 20) return;
+    if (!hasParticles) return;
     const container = wordsContainerRef.current?.parentElement;
     if (!container) return;
     const canvas = container.querySelector('[data-particles="true"]') as HTMLCanvasElement | null;
@@ -156,7 +158,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     canvas.dispatchEvent(new CustomEvent('spawn-particle', {
       detail: { x: position.left, y: position.top + (position.height / 2) },
     }));
-  }, [leaderboardRank, wordsContainerRef, position]);
+  }, [hasParticles, wordsContainerRef, position]);
 
   const handleCharWithSound = useCallback((char: string) => {
     isTypingRef.current = true;
@@ -345,10 +347,12 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
           height: `${lineStride * visibleLines}px`,
         }}
       >
-        {/* Typing particles for top 20 leaderboard users */}
+        {/* Typing particles for top 20 leaderboard users or settings-based tier */}
         <TypingParticles
-          visible={!!leaderboardRank && leaderboardRank <= 20 && state.phase === 'running'}
+          visible={!!hasParticles && state.phase === 'running'}
           rank={leaderboardRank ?? 999}
+          particleTier={settings.particleTier}
+          themeMainColor={themeMainColor}
         />
 
         {/* Change 3: Tap-to-start overlay (mobile waiting state) */}

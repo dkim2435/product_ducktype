@@ -18,6 +18,7 @@ import { getStageTheme } from '../../constants/stageThemes';
 import { useKeyboardHeight } from '../../hooks/useVisualViewport';
 import { SpriteIcon, MinionWord } from './MinionWord';
 import type { Settings } from '../../types/settings';
+import { getEffectiveLevel } from '../../utils/admin';
 
 const PLAYER_IMG = '/images/adventure/player.png';
 
@@ -34,13 +35,15 @@ interface CombatSceneProps {
   bossBestStars: number;      // boss stage bestStars — gates difficulty tiers
   prevStageBestStars: number; // previous stage bestStars (-1 = first stage, no prev requirement)
   onTypingStateChange?: (active: boolean) => void;
+  playerLevel?: number;
+  userId?: string | null;
 }
 
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 420;
 
 
-export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId, debuff, difficulty, onDifficultyChange, stageBestStars, bossBestStars, prevStageBestStars, onTypingStateChange }: CombatSceneProps) {
+export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId, debuff, difficulty, onDifficultyChange, stageBestStars, bossBestStars, prevStageBestStars, onTypingStateChange, playerLevel = 1, userId }: CombatSceneProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const { playClick, playError } = useSound({
@@ -49,9 +52,11 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
     theme: settings.soundTheme,
   });
 
+  const effectiveLevel = getEffectiveLevel(playerLevel, userId);
+
   // Sequential difficulty unlock:
   // Intermediate: boss cleared on Beginner + previous stage cleared on Intermediate (or first stage)
-  // Expert: boss cleared on Intermediate + previous stage cleared on Expert (or first stage)
+  // Expert: boss cleared on Intermediate + previous stage cleared on Expert (or first stage) + Lv.15
   const isDiffUnlocked = useCallback((d: DifficultyLevel) => {
     if (d === 'beginner') return true;
     if (d === 'intermediate') {
@@ -60,12 +65,13 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
       return prevStageBestStars >= 2; // prev stage cleared on intermediate
     }
     if (d === 'expert') {
+      if (effectiveLevel < 15) return false; // requires Lv.15
       if (bossBestStars < 2) return false; // boss not cleared on intermediate
       if (prevStageBestStars === -1) return true; // first stage
       return prevStageBestStars >= 3; // prev stage cleared on expert
     }
     return false;
-  }, [bossBestStars, prevStageBestStars]);
+  }, [bossBestStars, prevStageBestStars, effectiveLevel]);
 
   // Auto-select highest unlocked difficulty
   useEffect(() => {
@@ -252,7 +258,9 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                     <div style={{ fontSize: '10px', color: 'var(--sub-color)', lineHeight: 1.3 }}>
                       {unlocked
                         ? <>{cfg.mistypeDamage === 0 ? 'No penalty' : `Mistype: -${cfg.mistypeDamage} HP`}{' · '}{cfg.xpMultiplier}x XP</>
-                        : `Clear on ${d === 'intermediate' ? 'Beginner' : 'Intermediate'} first`}
+                        : d === 'expert' && effectiveLevel < 15
+                          ? 'Requires Lv.15'
+                          : `Clear on ${d === 'intermediate' ? 'Beginner' : 'Intermediate'} first`}
                     </div>
                   </button>
                 );

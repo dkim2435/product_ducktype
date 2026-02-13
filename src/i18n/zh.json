@@ -74,6 +74,8 @@
     "freedomMode": "自由模式",
     "freedomModeDesc": "允许返回之前的词",
     "soundTheme": "音效主题",
+    "profileFrame": "头像框",
+    "particleTier": "打字粒子",
     "normal": "普通",
     "expert": "专家",
     "master": "大师",

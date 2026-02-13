@@ -1,4 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react';
+import type { ParticleTier } from '../../types/settings';
+import { PARTICLE_TIERS } from '../../constants/particles';
 
 interface Particle {
   x: number;
@@ -13,30 +15,67 @@ interface Particle {
 
 interface TypingParticlesProps {
   visible: boolean;
-  rank: number; // 1-20
+  rank: number; // 1-20 (leaderboard rank, 999 = no rank)
+  particleTier?: ParticleTier;
+  themeMainColor?: string;
 }
 
+// Leaderboard rank-based colors (existing behavior)
 function getRankColors(rank: number): string[] {
   if (rank <= 3) return ['#FFD700', '#FFA500', '#FFEC8B', '#FFE4B5']; // Gold
   if (rank <= 10) return ['#00BFFF', '#7B68EE', '#00CED1', '#87CEEB']; // Color
   return ['#C0C0C0', '#D3D3D3', '#A9A9A9']; // Silver sparkle
 }
 
-function getParticleCount(rank: number): number {
+function getRankParticleCount(rank: number): number {
   if (rank <= 3) return 6;
   if (rank <= 10) return 4;
   return 2;
 }
 
-export function TypingParticles({ visible, rank }: TypingParticlesProps) {
+function getRankGlow(rank: number): boolean {
+  return rank <= 3;
+}
+
+export function TypingParticles({ visible, rank, particleTier = 'none', themeMainColor }: TypingParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animFrameRef = useRef<number>(0);
 
-  const colors = getRankColors(rank);
-  const count = getParticleCount(rank);
+  // Determine particle settings: leaderboard rank takes priority, then settings tier
+  const hasLeaderboardParticles = rank <= 20;
+  const tierConfig = PARTICLE_TIERS.find(t => t.id === particleTier);
+  const hasTierParticles = tierConfig && tierConfig.count > 0;
+  const hasAnyParticles = hasLeaderboardParticles || hasTierParticles;
+
+  // Resolve final particle params
+  let count: number;
+  let colors: string[];
+  let glow: boolean;
+  let particleSize: number;
+
+  if (hasLeaderboardParticles) {
+    // Leaderboard rank particles (original behavior, takes priority)
+    count = getRankParticleCount(rank);
+    colors = getRankColors(rank);
+    glow = getRankGlow(rank);
+    particleSize = rank <= 3 ? 3 + Math.random() * 2 : 2 + Math.random() * 1.5;
+  } else if (hasTierParticles && tierConfig) {
+    count = tierConfig.count;
+    colors = tierConfig.colors === 'theme'
+      ? (themeMainColor ? [themeMainColor, themeMainColor + 'cc', themeMainColor + '99'] : ['#888', '#aaa', '#ccc'])
+      : tierConfig.colors as string[];
+    glow = tierConfig.glow;
+    particleSize = 2 + Math.random() * 1.5;
+  } else {
+    count = 0;
+    colors = [];
+    glow = false;
+    particleSize = 2;
+  }
 
   const spawnParticles = useCallback((x: number, y: number) => {
+    if (!hasAnyParticles) return;
     for (let i = 0; i < count; i++) {
       const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
       const speed = 1 + Math.random() * 2;
@@ -47,14 +86,14 @@ export function TypingParticles({ visible, rank }: TypingParticlesProps) {
         vy: Math.sin(angle) * speed - 1,
         life: 1,
         maxLife: 0.4 + Math.random() * 0.3,
-        size: rank <= 3 ? 3 + Math.random() * 2 : 2 + Math.random() * 1.5,
+        size: glow ? 3 + Math.random() * 2 : 2 + Math.random() * 1.5,
         color: colors[Math.floor(Math.random() * colors.length)],
       });
     }
-  }, [count, colors, rank]);
+  }, [count, colors, glow, hasAnyParticles]);
 
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || !hasAnyParticles) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -93,8 +132,7 @@ export function TypingParticles({ visible, rank }: TypingParticlesProps) {
         ctx.globalAlpha = alpha;
         ctx.fillStyle = p.color;
 
-        if (rank <= 3) {
-          // Glow effect for top 3
+        if (glow) {
           ctx.shadowColor = p.color;
           ctx.shadowBlur = 6;
         } else {
@@ -117,12 +155,12 @@ export function TypingParticles({ visible, rank }: TypingParticlesProps) {
       cancelAnimationFrame(animFrameRef.current);
       window.removeEventListener('resize', resize);
     };
-  }, [visible, rank]);
+  }, [visible, hasAnyParticles, glow]);
 
   // Expose spawn function via a custom event listener on the canvas
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !visible) return;
+    if (!canvas || !visible || !hasAnyParticles) return;
 
     const handler = (e: Event) => {
       const detail = (e as CustomEvent).detail;
@@ -132,9 +170,9 @@ export function TypingParticles({ visible, rank }: TypingParticlesProps) {
     };
     canvas.addEventListener('spawn-particle', handler);
     return () => canvas.removeEventListener('spawn-particle', handler);
-  }, [visible, spawnParticles]);
+  }, [visible, spawnParticles, hasAnyParticles]);
 
-  if (!visible) return null;
+  if (!visible || !hasAnyParticles) return null;
 
   return (
     <canvas

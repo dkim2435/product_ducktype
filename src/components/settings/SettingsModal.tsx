@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import type { Settings, CaretStyle, SoundVolume, SoundTheme } from '../../types/settings';
-import { LANGUAGE_OPTIONS, FONT_OPTIONS } from '../../constants/defaults';
+import type { Settings, CaretStyle, SoundVolume, SoundTheme, ProfileFrame, ParticleTier } from '../../types/settings';
+import { LANGUAGE_OPTIONS, FONT_OPTIONS, CARET_UNLOCK, FONT_UNLOCK } from '../../constants/defaults';
 import { SOUND_THEMES } from '../../constants/sounds';
+import { PROFILE_FRAMES } from '../../constants/profileFrames';
+import { PARTICLE_TIERS } from '../../constants/particles';
 import { useSound } from '../../hooks/useSound';
 import { ThemePicker } from './ThemePicker';
 import { getEffectiveLevel } from '../../utils/admin';
@@ -58,9 +60,42 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
   );
 }
 
+function UnlockButton({ label, unlocked, unlockLevel, isActive, onClick }: {
+  label: string;
+  unlocked: boolean;
+  unlockLevel: number;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={() => unlocked && onClick()}
+      disabled={!unlocked}
+      style={{
+        padding: '4px 10px',
+        fontSize: '12px',
+        borderRadius: '4px',
+        color: !unlocked ? 'var(--sub-color)' : isActive ? 'var(--main-color)' : 'var(--sub-color)',
+        backgroundColor: isActive && unlocked ? 'var(--sub-alt-color)' : 'transparent',
+        opacity: unlocked ? 1 : 0.4,
+        cursor: unlocked ? 'pointer' : 'not-allowed',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '3px',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+      {label}
+      {!unlocked && <span style={{ fontSize: '9px' }}>Lv.{unlockLevel}</span>}
+    </button>
+  );
+}
+
 export function SettingsModal({ settings, onSettingChange, onClose, visible, playerLevel = 1, userId }: SettingsModalProps) {
   const { t, i18n } = useTranslation();
   const { playClick: previewSound } = useSound({ enabled: true, volume: settings.soundVolume, theme: settings.soundTheme });
+  const effectiveLevel = getEffectiveLevel(playerLevel, userId);
 
   if (!visible) return null;
 
@@ -133,6 +168,8 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
           <ThemePicker
             currentTheme={settings.theme}
             onThemeChange={(id) => onSettingChange('theme', id)}
+            playerLevel={playerLevel}
+            userId={userId}
           />
         </div>
 
@@ -153,17 +190,28 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         </SettingRow>
 
         {/* Font */}
-        <SettingRow label={t('settings.font')}>
-          <select
-            value={settings.fontFamily}
-            onChange={(e) => onSettingChange('fontFamily', e.target.value as Settings['fontFamily'])}
-            style={selectStyle}
-          >
-            {FONT_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-        </SettingRow>
+        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
+          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+            {t('settings.font')}
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+            {FONT_OPTIONS.map(opt => {
+              const unlockLv = FONT_UNLOCK[opt.value as keyof typeof FONT_UNLOCK];
+              const unlocked = effectiveLevel >= unlockLv;
+              const isActive = settings.fontFamily === opt.value;
+              return (
+                <UnlockButton
+                  key={opt.value}
+                  label={opt.label}
+                  unlocked={unlocked}
+                  unlockLevel={unlockLv}
+                  isActive={isActive}
+                  onClick={() => onSettingChange('fontFamily', opt.value as Settings['fontFamily'])}
+                />
+              );
+            })}
+          </div>
+        </div>
 
         {/* Font Size */}
         <SettingRow label={t('settings.fontSize')}>
@@ -183,30 +231,115 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         </SettingRow>
 
         {/* Caret Style */}
-        <SettingRow label={t('settings.caretStyle')}>
+        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
+          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+            {t('settings.caretStyle')}
+          </span>
           <div style={{ display: 'flex', gap: '4px' }}>
-            {(['line', 'block', 'underline', 'outline'] as CaretStyle[]).map(style => (
-              <button
-                key={style}
-                onClick={() => onSettingChange('caretStyle', style)}
-                style={{
-                  padding: '4px 10px',
-                  fontSize: '12px',
-                  borderRadius: '4px',
-                  color: settings.caretStyle === style ? 'var(--main-color)' : 'var(--sub-color)',
-                  backgroundColor: settings.caretStyle === style ? 'var(--sub-alt-color)' : 'transparent',
-                }}
-              >
-                {style}
-              </button>
-            ))}
+            {(['line', 'block', 'underline', 'outline'] as CaretStyle[]).map(style => {
+              const unlockLv = CARET_UNLOCK[style];
+              const unlocked = effectiveLevel >= unlockLv;
+              const isActive = settings.caretStyle === style;
+              return (
+                <UnlockButton
+                  key={style}
+                  label={style}
+                  unlocked={unlocked}
+                  unlockLevel={unlockLv}
+                  isActive={isActive}
+                  onClick={() => onSettingChange('caretStyle', style)}
+                />
+              );
+            })}
           </div>
-        </SettingRow>
+        </div>
 
         {/* Smooth Caret */}
         <SettingRow label={t('settings.smoothCaret')}>
           <Toggle value={settings.smoothCaret} onChange={(v) => onSettingChange('smoothCaret', v)} />
         </SettingRow>
+
+        {/* Profile Frame */}
+        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
+          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+            {t('settings.profileFrame')}
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+            {PROFILE_FRAMES.map(frame => {
+              const unlocked = effectiveLevel >= frame.unlockLevel;
+              const isActive = settings.profileFrame === frame.id;
+              return (
+                <button
+                  key={frame.id}
+                  onClick={() => unlocked && onSettingChange('profileFrame', frame.id as ProfileFrame)}
+                  disabled={!unlocked}
+                  style={{
+                    padding: '6px 12px',
+                    fontSize: '12px',
+                    borderRadius: '6px',
+                    border: isActive ? '1.5px solid var(--main-color)' : '1px solid var(--sub-alt-color)',
+                    color: isActive ? 'var(--main-color)' : unlocked ? 'var(--text-color)' : 'var(--sub-color)',
+                    backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
+                    opacity: unlocked ? 1 : 0.4,
+                    cursor: unlocked ? 'pointer' : 'not-allowed',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+                  {frame.name}
+                  {!unlocked && (
+                    <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
+                      Lv.{frame.unlockLevel}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Typing Particles */}
+        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
+          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+            {t('settings.particleTier')}
+          </span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+            {PARTICLE_TIERS.map(tier => {
+              const unlocked = effectiveLevel >= tier.unlockLevel;
+              const isActive = settings.particleTier === tier.id;
+              return (
+                <button
+                  key={tier.id}
+                  onClick={() => unlocked && onSettingChange('particleTier', tier.id as ParticleTier)}
+                  disabled={!unlocked}
+                  style={{
+                    padding: '6px 12px',
+                    fontSize: '12px',
+                    borderRadius: '6px',
+                    border: isActive ? '1.5px solid var(--main-color)' : '1px solid var(--sub-alt-color)',
+                    color: isActive ? 'var(--main-color)' : unlocked ? 'var(--text-color)' : 'var(--sub-color)',
+                    backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
+                    opacity: unlocked ? 1 : 0.4,
+                    cursor: unlocked ? 'pointer' : 'not-allowed',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+                  {tier.name}
+                  {!unlocked && (
+                    <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
+                      Lv.{tier.unlockLevel}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         {/* Sound */}
         <SettingRow label={t('settings.sound')}>
@@ -242,7 +375,7 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
             </span>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {SOUND_THEMES.map(themeDef => {
-                const unlocked = getEffectiveLevel(playerLevel, userId) >= themeDef.unlockLevel;
+                const unlocked = effectiveLevel >= themeDef.unlockLevel;
                 const isActive = settings.soundTheme === themeDef.id;
                 return (
                   <button

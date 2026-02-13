@@ -21,6 +21,7 @@ interface AdventurePageProps {
   onShareClick: () => void;
   onTypingStateChange?: (active: boolean) => void;
   userId?: string | null;
+  playerLevel?: number;
 }
 
 export function AdventurePage({
@@ -36,6 +37,7 @@ export function AdventurePage({
   onShareClick,
   onTypingStateChange,
   userId,
+  playerLevel,
 }: AdventurePageProps) {
   const adventure = useAdventure(userId);
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('beginner');
@@ -177,6 +179,8 @@ export function AdventurePage({
             bossBestStars={bossBestStars}
             prevStageBestStars={prevStageStars}
             onTypingStateChange={onTypingStateChange}
+            playerLevel={playerLevel}
+            userId={userId}
           />
         );
       })()}

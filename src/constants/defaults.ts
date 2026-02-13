@@ -1,4 +1,4 @@
-import type { Settings } from '../types/settings';
+import type { Settings, CaretStyle, FontFamily } from '../types/settings';
 
 export const DEFAULT_SETTINGS: Settings = {
   theme: 'ducktype-dark',
@@ -21,6 +21,23 @@ export const DEFAULT_SETTINGS: Settings = {
   difficulty: 'normal',
   freedomMode: false,
   uiLanguage: 'en',
+  profileFrame: 'none',
+  particleTier: 'none',
+};
+
+export const CARET_UNLOCK: Record<CaretStyle, number> = {
+  line: 1,
+  block: 5,
+  underline: 12,
+  outline: 22,
+};
+
+export const FONT_UNLOCK: Record<FontFamily, number> = {
+  default: 1,
+  mono: 1,
+  'roboto-mono': 8,
+  'fira-code': 20,
+  'source-code-pro': 35,
 };
 
 export const TIME_OPTIONS = [15, 30, 45, 60, 120];

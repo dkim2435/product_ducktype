@@ -15,4 +15,5 @@ export interface Theme {
   id: string;
   name: string;
   colors: ThemeColors;
+  unlockLevel: number;
 }

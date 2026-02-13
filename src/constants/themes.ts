@@ -4,6 +4,7 @@ export const themes: Theme[] = [
   {
     id: 'ducktype-dark',
     name: 'DuckType Dark',
+    unlockLevel: 1,
     colors: {
       bg: '#1a1b2e',
       main: '#ffb347',
@@ -20,6 +21,7 @@ export const themes: Theme[] = [
   {
     id: 'ducktype-light',
     name: 'DuckType Light',
+    unlockLevel: 1,
     colors: {
       bg: '#faf4eb',
       main: '#e08a2e',
@@ -36,6 +38,7 @@ export const themes: Theme[] = [
   {
     id: 'duck-pond',
     name: 'Duck Pond',
+    unlockLevel: 1,
     colors: {
       bg: '#0f2027',
       main: '#78d5d7',
@@ -52,6 +55,7 @@ export const themes: Theme[] = [
   {
     id: 'rubber-duck',
     name: 'Rubber Duck',
+    unlockLevel: 3,
     colors: {
       bg: '#2b1f3b',
       main: '#ffd56b',
@@ -68,6 +72,7 @@ export const themes: Theme[] = [
   {
     id: 'monokai',
     name: 'Monokai',
+    unlockLevel: 6,
     colors: {
       bg: '#272822',
       main: '#f92672',
@@ -84,6 +89,7 @@ export const themes: Theme[] = [
   {
     id: 'dracula',
     name: 'Dracula',
+    unlockLevel: 10,
     colors: {
       bg: '#282a36',
       main: '#bd93f9',
@@ -100,6 +106,7 @@ export const themes: Theme[] = [
   {
     id: 'nord',
     name: 'Nord',
+    unlockLevel: 14,
     colors: {
       bg: '#2e3440',
       main: '#88c0d0',
@@ -116,6 +123,7 @@ export const themes: Theme[] = [
   {
     id: 'solarized-dark',
     name: 'Solarized Dark',
+    unlockLevel: 18,
     colors: {
       bg: '#002b36',
       main: '#b58900',
@@ -132,6 +140,7 @@ export const themes: Theme[] = [
   {
     id: 'gruvbox-dark',
     name: 'Gruvbox Dark',
+    unlockLevel: 22,
     colors: {
       bg: '#282828',
       main: '#fabd2f',
@@ -148,6 +157,7 @@ export const themes: Theme[] = [
   {
     id: 'tokyo-night',
     name: 'Tokyo Night',
+    unlockLevel: 27,
     colors: {
       bg: '#1a1b26',
       main: '#7aa2f7',
@@ -164,6 +174,7 @@ export const themes: Theme[] = [
   {
     id: 'catppuccin-mocha',
     name: 'Catppuccin Mocha',
+    unlockLevel: 32,
     colors: {
       bg: '#1e1e2e',
       main: '#cba6f7',
@@ -180,6 +191,7 @@ export const themes: Theme[] = [
   {
     id: 'one-dark',
     name: 'One Dark',
+    unlockLevel: 37,
     colors: {
       bg: '#282c34',
       main: '#61afef',
@@ -196,6 +208,7 @@ export const themes: Theme[] = [
   {
     id: 'rose-pine',
     name: 'Rose Pine',
+    unlockLevel: 42,
     colors: {
       bg: '#191724',
       main: '#c4a7e7',
@@ -212,6 +225,7 @@ export const themes: Theme[] = [
   {
     id: 'ayu-dark',
     name: 'Ayu Dark',
+    unlockLevel: 47,
     colors: {
       bg: '#0a0e14',
       main: '#ffb454',
@@ -228,6 +242,7 @@ export const themes: Theme[] = [
   {
     id: 'material',
     name: 'Material',
+    unlockLevel: 52,
     colors: {
       bg: '#263238',
       main: '#80cbc4',
@@ -244,6 +259,7 @@ export const themes: Theme[] = [
   {
     id: 'ocean',
     name: 'Ocean',
+    unlockLevel: 55,
     colors: {
       bg: '#1b2838',
       main: '#5fb4c9',
@@ -260,6 +276,7 @@ export const themes: Theme[] = [
   {
     id: 'midnight',
     name: 'Midnight',
+    unlockLevel: 58,
     colors: {
       bg: '#0d1117',
       main: '#58a6ff',
@@ -276,6 +293,7 @@ export const themes: Theme[] = [
   {
     id: 'sakura',
     name: 'Sakura',
+    unlockLevel: 62,
     colors: {
       bg: '#2a1f2d',
       main: '#f7a8c4',
@@ -292,6 +310,7 @@ export const themes: Theme[] = [
   {
     id: 'forest',
     name: 'Forest',
+    unlockLevel: 65,
     colors: {
       bg: '#1a2416',
       main: '#7ec850',

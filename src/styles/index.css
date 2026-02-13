@@ -170,6 +170,19 @@ button:hover {
   100% { transform: translateX(-50%) rotate(0deg); }
 }
 
+/* Profile frame animations */
+@keyframes frame-gold-pulse {
+  0%   { box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+  50%  { box-shadow: 0 0 20px rgba(255,215,0,0.8); }
+  100% { box-shadow: 0 0 12px rgba(255,215,0,0.5); }
+}
+@keyframes frame-diamond-sparkle {
+  0%   { box-shadow: 0 0 14px rgba(185,242,255,0.5), 0 0 28px rgba(185,242,255,0.2); }
+  33%  { box-shadow: 0 0 18px rgba(185,242,255,0.7), 0 0 36px rgba(185,242,255,0.3); }
+  66%  { box-shadow: 0 0 14px rgba(200,220,255,0.5), 0 0 28px rgba(200,220,255,0.2); }
+  100% { box-shadow: 0 0 14px rgba(185,242,255,0.5), 0 0 28px rgba(185,242,255,0.2); }
+}
+
 /* Hide scrollbar utility */
 .hide-scrollbar {
   -ms-overflow-style: none;

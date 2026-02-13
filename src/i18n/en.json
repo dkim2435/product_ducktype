@@ -74,6 +74,8 @@
     "freedomMode": "Freedom mode",
     "freedomModeDesc": "Allow going back to previous words",
     "soundTheme": "Sound Theme",
+    "profileFrame": "Profile Frame",
+    "particleTier": "Typing Particles",
     "normal": "Normal",
     "expert": "Expert",
     "master": "Master",

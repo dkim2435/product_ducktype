@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import type { User } from '@supabase/supabase-js';
 import type { PlayerProfile, StreakState, KeyStatsMap } from '../../types/gamification';
 import type { TestResult } from '../../types/stats';
+import type { ProfileFrame } from '../../types/settings';
 import { xpToNextLevel, getRank, RANKS, CREATOR_RANK } from '../../constants/gamification';
+import { PROFILE_FRAMES } from '../../constants/profileFrames';
 import { isAdminUser } from '../../utils/admin';
 import { KeyboardHeatmap } from '../profile/KeyboardHeatmap';
 import { StreakCalendar } from '../profile/StreakCalendar';
@@ -24,6 +26,7 @@ interface ProfileProps {
   onLogout?: () => void;
   currentUsername?: string | null;
   onUpdateUsername?: (newUsername: string) => Promise<void>;
+  profileFrame?: ProfileFrame;
 }
 
 function formatTime(seconds: number): string {
@@ -37,7 +40,7 @@ function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString();
 }
 
-export function Profile({ profile, streak, keyStats, history, onBack, user, isSupabaseConfigured, onLoginClick, onLogout, currentUsername, onUpdateUsername }: ProfileProps) {
+export function Profile({ profile, streak, keyStats, history, onBack, user, isSupabaseConfigured, onLoginClick, onLogout, currentUsername, onUpdateUsername, profileFrame = 'none' }: ProfileProps) {
   const { t } = useTranslation();
   const isAdmin = isAdminUser(user?.id);
   const rank = getRank(profile.level, isAdmin);
@@ -301,7 +304,27 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
         gap: '16px',
         marginBottom: '24px',
       }}>
-        <div style={{ fontSize: '48px' }}>{rank.emoji}</div>
+        {(() => {
+          const frameConfig = PROFILE_FRAMES.find(f => f.id === profileFrame);
+          const hasFrame = frameConfig && frameConfig.id !== 'none';
+          return (
+            <div style={{
+              fontSize: '48px',
+              width: '72px',
+              height: '72px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+              border: hasFrame ? frameConfig.border : 'none',
+              boxShadow: hasFrame && frameConfig.glow ? frameConfig.glow : 'none',
+              animation: hasFrame && frameConfig.animation ? frameConfig.animation : 'none',
+              flexShrink: 0,
+            }}>
+              {rank.emoji}
+            </div>
+          );
+        })()}
         <div>
           <div style={{
             fontSize: '24px',

@@ -43,6 +43,7 @@ import { useLeaderboard } from './hooks/useLeaderboard';
 import { useFontLoader } from './hooks/useFontLoader';
 import { useUrlParams } from './hooks/useUrlParams';
 import { setPersistProgress, clearProgressData } from './utils/storage';
+import { validateSettings } from './utils/settingsValidation';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard'
@@ -76,12 +77,24 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
   const [isTypingActive, setIsTypingActive] = useState(false);
   const isMobile = useIsMobile();
-  useTheme(settings.theme);
+  const { currentTheme } = useTheme(settings.theme);
   useFontLoader(settings.fontFamily, settings.language);
   const { challengeWpm, adventureWorldId } = useUrlParams();
+
   const { history: testHistory, saveResult, getPersonalBest } = useStats();
   const { toasts, addToast, removeToast } = useToast();
   const gamification = useGamification();
+
+  // Validate settings against player level (fallback locked items to defaults)
+  useEffect(() => {
+    const validated = validateSettings(settings, gamification.profile.level, user?.id);
+    const keys = Object.keys(validated) as (keyof typeof validated)[];
+    for (const key of keys) {
+      if (validated[key] !== settings[key]) {
+        updateSetting(key, validated[key]);
+      }
+    }
+  }, [gamification.profile.level, user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const dailyChallenge = useDailyChallenge();
   const lessons = useLessons();
   const leaderboard = useLeaderboard();
@@ -424,6 +437,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
               onFinish={handleTestFinish}
               onTypingStateChange={setIsTypingActive}
               leaderboardRank={leaderboard.userRank}
+              themeMainColor={currentTheme.colors.main}
             />
             </div>
             <TypingInfo hidden={isTypingActive} onNavigate={handleNavigate} />
@@ -466,6 +480,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onLogout={onLogout}
             currentUsername={currentUsername}
             onUpdateUsername={onUpdateUsername}
+            profileFrame={settings.profileFrame}
           />
         )}
 
@@ -537,6 +552,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onShareClick={() => gamification.awardShareBonus(addToast)}
             onTypingStateChange={setIsTypingActive}
             userId={user?.id}
+            playerLevel={gamification.profile.level}
           />
         )}
 
