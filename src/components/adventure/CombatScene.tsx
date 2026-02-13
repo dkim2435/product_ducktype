@@ -272,7 +272,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               <span style={{ fontSize: '18px' }}>{debuffAura.label.split(' ')[0]}</span>
               {debuff === 'poison' && 'POISON: -0.3 HP per second during combat'}
               {debuff === 'fog' && 'FOG: Words appear blurry until you start typing them'}
-              {debuff === 'freeze' && 'FREEZE: Mistypes deal 50% more damage'}
+              {debuff === 'freeze' && 'FREEZE: Mistypes freeze the word for 1.5 seconds'}
               {debuff === 'darkness' && 'DARKNESS: Unmatched words flicker in and out of sight'}
             </div>
           )}

@@ -93,6 +93,7 @@ export interface FieldMinion {
   x: number; // percentage on field (0-100)
   y: number; // percentage on field (0=top/far, 100=bottom/near)
   isBossWord?: boolean; // true = typing this damages the boss
+  frozenUntil?: number; // freeze debuff: timestamp until which this minion can't be typed
 }
 
 // ---- Combat Phase ----

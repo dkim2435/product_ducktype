@@ -448,8 +448,12 @@ export function useCombat(
       const bossWordMinions = prev.minions.filter(m => m.isBossWord);
       const hasShields = shieldMinions.length > 0;
 
+      // Freeze debuff: skip frozen minions
+      const now_input = Date.now();
+      const isNotFrozen = (m: FieldMinion) => !m.frozenUntil || now_input >= m.frozenUntil;
+
       // Priority 1: Try matching shield minions (always targetable)
-      const shieldMatches = shieldMinions.filter(m => m.word.startsWith(newInput));
+      const shieldMatches = shieldMinions.filter(m => isNotFrozen(m) && m.word.startsWith(newInput));
 
       if (shieldMatches.length > 0) {
         const correctChars = prev.correctChars + 1;
@@ -513,7 +517,7 @@ export function useCombat(
 
       // Priority 2: Try matching boss words (only when NO shields exist)
       if (isBoss && !hasShields && bossWordMinions.length > 0) {
-        const bossMatches = bossWordMinions.filter(m => m.word.startsWith(newInput));
+        const bossMatches = bossWordMinions.filter(m => isNotFrozen(m) && m.word.startsWith(newInput));
 
         if (bossMatches.length > 0) {
           const correctChars = prev.correctChars + 1;
@@ -611,18 +615,24 @@ export function useCombat(
 
       // No match → mistype → HP penalty (difficulty-based)
       const now = Date.now();
-      let mistypeDmg = DIFFICULTY_CONFIGS[difficultyRef.current].mistypeDamage;
+      const mistypeDmg = DIFFICULTY_CONFIGS[difficultyRef.current].mistypeDamage;
 
-      // Freeze debuff: multiply mistype damage by intensity
-      if (prev.activeDebuff === 'freeze' && mistypeDmg > 0) {
-        const freezeIntensity = 1.5; // 50% extra damage
-        mistypeDmg = Math.round(mistypeDmg * freezeIntensity);
+      // Freeze debuff: freeze the matched minion for 1.5s instead of extra damage
+      let frozenMinions = prev.minions;
+      if (prev.activeDebuff === 'freeze' && prev.matchedMinionId) {
+        const FREEZE_DURATION_MS = 1500;
+        frozenMinions = prev.minions.map(m =>
+          m.id === prev.matchedMinionId
+            ? { ...m, frozenUntil: now + FREEZE_DURATION_MS }
+            : m
+        );
       }
 
       if (mistypeDmg === 0) {
         // Beginner: no HP penalty, just reset input + break combo
         return {
           ...prev,
+          minions: frozenMinions,
           currentInput: '',
           matchedMinionId: null,
           combo: 0,
@@ -650,6 +660,7 @@ export function useCombat(
 
       return {
         ...prev,
+        minions: frozenMinions,
         currentInput: '',
         matchedMinionId: null,
         combo: 0,

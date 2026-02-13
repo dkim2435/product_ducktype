@@ -35,6 +35,9 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
   const fogOpacity = isFogActive ? 1 - fogProgress * 0.82 : 1;      // 1.0 → 0.18
   const fogBlur = isFogActive ? fogProgress * 4 : 0;                 // 0px → 4px
 
+  // Freeze debuff: word is frozen (can't be typed) — show ice effect
+  const isFrozen = !!minion.frozenUntil && now < minion.frozenUntil;
+
   // Darkness debuff: unmatched words blink (2s cycle, hidden for 0.5s)
   const isDarknessHidden = debuffType === 'darkness' && !isBossWord && !isMatched
     && (now % 2000) > 1500;
@@ -78,26 +81,26 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
       transition: isMatched ? 'opacity 0.2s, filter 0.2s' : isDarknessHidden !== undefined ? 'opacity 0.15s' : undefined,
     }}>
       <div style={{
-        filter: isMatched ? 'drop-shadow(0 0 6px var(--main-color))' : undefined,
+        filter: isFrozen ? 'drop-shadow(0 0 8px #00c8ff) brightness(1.2)' : isMatched ? 'drop-shadow(0 0 6px var(--main-color))' : undefined,
         transition: 'filter 0.15s',
       }}>
         <SpriteIcon src={emoji} size={isMobile ? 60 : 72} />
       </div>
       <div style={{
         padding: '3px 10px', borderRadius: '6px',
-        backgroundColor: isMatched ? 'rgba(var(--main-color-rgb, 0,0,0), 0.1)' : isUrgent ? 'rgba(var(--error-color-rgb, 200,50,50), 0.06)' : 'var(--bg-color)',
-        border: isMatched ? '2px solid var(--main-color)' : isUrgent ? '2px solid var(--error-color)' : '1px solid var(--sub-alt-color)',
+        backgroundColor: isFrozen ? 'rgba(0, 200, 255, 0.12)' : isMatched ? 'rgba(var(--main-color-rgb, 0,0,0), 0.1)' : isUrgent ? 'rgba(var(--error-color-rgb, 200,50,50), 0.06)' : 'var(--bg-color)',
+        border: isFrozen ? '2px solid #00c8ff' : isMatched ? '2px solid var(--main-color)' : isUrgent ? '2px solid var(--error-color)' : '1px solid var(--sub-alt-color)',
         fontSize: isMobile ? '12px' : '15px', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap',
-        boxShadow: isMatched ? '0 0 10px rgba(var(--main-color-rgb, 0,0,0), 0.2)' : '0 2px 6px rgba(0,0,0,0.08)',
+        boxShadow: isFrozen ? '0 0 12px rgba(0, 200, 255, 0.3)' : isMatched ? '0 0 10px rgba(var(--main-color-rgb, 0,0,0), 0.2)' : '0 2px 6px rgba(0,0,0,0.08)',
       }}>
         {minion.word.split('').map((ch, i) => (
           <span key={i} style={{
-            color: i < typedLen ? 'var(--main-color)' : isUrgent ? 'var(--error-color)' : 'var(--text-color)',
+            color: isFrozen ? '#00c8ff' : i < typedLen ? 'var(--main-color)' : isUrgent ? 'var(--error-color)' : 'var(--text-color)',
             fontWeight: i < typedLen ? 700 : 600,
           }}>{ch}</span>
         ))}
       </div>
-      <TimerBar timeProgress={timeProgress} remainSec={remainSec} isUrgent={isUrgent} barColor={isUrgent ? '#f44336' : 'var(--main-color)'} />
+      <TimerBar timeProgress={timeProgress} remainSec={remainSec} isUrgent={isUrgent} barColor={isFrozen ? '#00c8ff' : isUrgent ? '#f44336' : 'var(--main-color)'} />
     </div>
   );
 });
