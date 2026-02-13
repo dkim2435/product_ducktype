@@ -29,9 +29,9 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
   const remainSec = Math.max(0, (minion.timeoutMs - elapsed) / 1000);
   const isUrgent = timeProgress > 0.7;
 
-  // Fog debuff: words start clear, gradually fade into fog over 1.5s. Matched = clear.
+  // Fog debuff: words start clear, gradually fade into fog over 2.5s. Matched = clear.
   const isFogActive = debuffType === 'fog' && !isBossWord && !isMatched;
-  const fogProgress = isFogActive ? Math.min(1, elapsed / 1500) : 0; // 0→1 over 1.5s
+  const fogProgress = isFogActive ? Math.min(1, elapsed / 2500) : 0; // 0→1 over 2.5s
   const fogOpacity = isFogActive ? 1 - fogProgress * 0.82 : 1;      // 1.0 → 0.18
   const fogBlur = isFogActive ? fogProgress * 4 : 0;                 // 0px → 4px
 
