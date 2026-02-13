@@ -3,15 +3,16 @@ import { DEFAULT_SETTINGS, CARET_UNLOCK, FONT_UNLOCK } from '../constants/defaul
 import { themes } from '../constants/themes';
 import { PROFILE_FRAMES } from '../constants/profileFrames';
 import { PARTICLE_TIERS } from '../constants/particles';
-import { getEffectiveLevel } from './admin';
+import { getEffectiveLevel, isAdminUser } from './admin';
 
 /**
  * Validates settings against the player's effective level.
  * If any setting requires a higher level than the player has,
- * it falls back to the default value.
+ * or is premium and user is not admin, it falls back to the default value.
  */
 export function validateSettings(settings: Settings, level: number, userId?: string | null): Settings {
   const effectiveLevel = getEffectiveLevel(level, userId);
+  const isAdmin = isAdminUser(userId);
   let validated = { ...settings };
 
   // Validate caret style
@@ -26,22 +27,34 @@ export function validateSettings(settings: Settings, level: number, userId?: str
     validated.fontFamily = DEFAULT_SETTINGS.fontFamily;
   }
 
-  // Validate theme
+  // Validate theme (premium requires admin)
   const theme = themes.find(t => t.id === settings.theme);
-  if (theme && effectiveLevel < theme.unlockLevel) {
-    validated.theme = DEFAULT_SETTINGS.theme;
+  if (theme) {
+    if (theme.premium && !isAdmin) {
+      validated.theme = DEFAULT_SETTINGS.theme;
+    } else if (!theme.premium && effectiveLevel < theme.unlockLevel) {
+      validated.theme = DEFAULT_SETTINGS.theme;
+    }
   }
 
-  // Validate profile frame
+  // Validate profile frame (premium requires admin)
   const frame = PROFILE_FRAMES.find(f => f.id === settings.profileFrame);
-  if (frame && effectiveLevel < frame.unlockLevel) {
-    validated.profileFrame = DEFAULT_SETTINGS.profileFrame;
+  if (frame) {
+    if (frame.premium && !isAdmin) {
+      validated.profileFrame = DEFAULT_SETTINGS.profileFrame;
+    } else if (!frame.premium && effectiveLevel < frame.unlockLevel) {
+      validated.profileFrame = DEFAULT_SETTINGS.profileFrame;
+    }
   }
 
-  // Validate particle tier
+  // Validate particle tier (premium requires admin)
   const tier = PARTICLE_TIERS.find(t => t.id === settings.particleTier);
-  if (tier && effectiveLevel < tier.unlockLevel) {
-    validated.particleTier = DEFAULT_SETTINGS.particleTier;
+  if (tier) {
+    if (tier.premium && !isAdmin) {
+      validated.particleTier = DEFAULT_SETTINGS.particleTier;
+    } else if (!tier.premium && effectiveLevel < tier.unlockLevel) {
+      validated.particleTier = DEFAULT_SETTINGS.particleTier;
+    }
   }
 
   return validated;

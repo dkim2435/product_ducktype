@@ -16,4 +16,6 @@ export interface Theme {
   name: string;
   colors: ThemeColors;
   unlockLevel: number;
+  premium?: boolean;
+  premiumSet?: string;
 }

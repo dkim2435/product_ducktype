@@ -183,6 +183,37 @@ button:hover {
   100% { box-shadow: 0 0 14px rgba(185,242,255,0.5), 0 0 28px rgba(185,242,255,0.2); }
 }
 
+/* Neon frame animations */
+@keyframes frame-neon-pulse-cyber {
+  0%   { box-shadow: 0 0 12px rgba(255,45,149,0.6), 0 0 30px rgba(255,45,149,0.25); }
+  50%  { box-shadow: 0 0 22px rgba(255,45,149,0.85), 0 0 50px rgba(255,45,149,0.4); }
+  100% { box-shadow: 0 0 12px rgba(255,45,149,0.6), 0 0 30px rgba(255,45,149,0.25); }
+}
+@keyframes frame-neon-pulse-synthwave {
+  0%   { box-shadow: 0 0 12px rgba(255,110,39,0.6), 0 0 30px rgba(168,60,255,0.25); }
+  50%  { box-shadow: 0 0 22px rgba(255,110,39,0.85), 0 0 50px rgba(168,60,255,0.4); }
+  100% { box-shadow: 0 0 12px rgba(255,110,39,0.6), 0 0 30px rgba(168,60,255,0.25); }
+}
+@keyframes frame-neon-flicker-toxic {
+  0%   { box-shadow: 0 0 12px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.25); }
+  30%  { box-shadow: 0 0 4px rgba(57,255,20,0.25), 0 0 10px rgba(57,255,20,0.1); }
+  32%  { box-shadow: 0 0 20px rgba(57,255,20,0.85), 0 0 45px rgba(57,255,20,0.4); }
+  60%  { box-shadow: 0 0 12px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.25); }
+  80%  { box-shadow: 0 0 5px rgba(57,255,20,0.25), 0 0 12px rgba(57,255,20,0.1); }
+  82%  { box-shadow: 0 0 22px rgba(57,255,20,0.9), 0 0 50px rgba(57,255,20,0.45); }
+  100% { box-shadow: 0 0 12px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.25); }
+}
+@keyframes frame-neon-pulse-aurora {
+  0%   { box-shadow: 0 0 12px rgba(0,255,245,0.6), 0 0 30px rgba(0,255,245,0.25); }
+  50%  { box-shadow: 0 0 22px rgba(0,255,245,0.85), 0 0 50px rgba(0,255,245,0.4); }
+  100% { box-shadow: 0 0 12px rgba(0,255,245,0.6), 0 0 30px rgba(0,255,245,0.25); }
+}
+@keyframes frame-neon-pulse-sunset {
+  0%   { box-shadow: 0 0 12px rgba(255,79,129,0.6), 0 0 30px rgba(255,170,0,0.25); }
+  50%  { box-shadow: 0 0 22px rgba(255,79,129,0.85), 0 0 50px rgba(255,170,0,0.4); }
+  100% { box-shadow: 0 0 12px rgba(255,79,129,0.6), 0 0 30px rgba(255,170,0,0.25); }
+}
+
 /* Hide scrollbar utility */
 .hide-scrollbar {
   -ms-overflow-style: none;

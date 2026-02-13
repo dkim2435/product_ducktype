@@ -6,7 +6,15 @@ import { PROFILE_FRAMES } from '../../constants/profileFrames';
 import { PARTICLE_TIERS } from '../../constants/particles';
 import { useSound } from '../../hooks/useSound';
 import { ThemePicker } from './ThemePicker';
-import { getEffectiveLevel } from '../../utils/admin';
+import { getEffectiveLevel, isAdminUser } from '../../utils/admin';
+
+const NEON_SET_COLORS: Record<string, string> = {
+  'neon-cyber': '#ff2d95',
+  'neon-synthwave': '#ff6e27',
+  'neon-toxic': '#39ff14',
+  'neon-aurora': '#00fff5',
+  'neon-sunset': '#ff4f81',
+};
 
 interface SettingsModalProps {
   settings: Settings;
@@ -85,6 +93,7 @@ function UnlockButton({ label, unlocked, unlockLevel, isActive, onClick }: {
         whiteSpace: 'nowrap',
       }}
     >
+      {unlocked && <span style={{ fontSize: '10px', color: '#4ade80' }}>✓</span>}
       {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
       {label}
       {!unlocked && <span style={{ fontSize: '9px' }}>Lv.{unlockLevel}</span>}
@@ -96,6 +105,7 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
   const { t, i18n } = useTranslation();
   const { playClick: previewSound } = useSound({ enabled: true, volume: settings.soundVolume, theme: settings.soundTheme });
   const effectiveLevel = getEffectiveLevel(playerLevel, userId);
+  const isAdmin = isAdminUser(userId);
 
   if (!visible) return null;
 
@@ -109,6 +119,98 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
     fontSize: '13px',
     outline: 'none',
     cursor: 'pointer',
+  };
+
+  const regularFrames = PROFILE_FRAMES.filter(f => !f.premium);
+  const premiumFrames = PROFILE_FRAMES.filter(f => f.premium);
+  const regularParticles = PARTICLE_TIERS.filter(p => !p.premium);
+  const premiumParticles = PARTICLE_TIERS.filter(p => p.premium);
+
+  const renderPerkButton = (
+    id: string,
+    name: string,
+    unlocked: boolean,
+    isActive: boolean,
+    isPremium: boolean,
+    unlockLevel: number,
+    premiumSet: string | undefined,
+    onClick: () => void,
+  ) => {
+    const neonColor = premiumSet ? NEON_SET_COLORS[premiumSet] : undefined;
+    return (
+      <button
+        key={id}
+        onClick={() => unlocked && onClick()}
+        disabled={!unlocked}
+        style={{
+          padding: '6px 12px',
+          fontSize: '12px',
+          borderRadius: '6px',
+          border: isActive
+            ? `1.5px solid ${isPremium && neonColor ? neonColor : 'var(--main-color)'}`
+            : isPremium && neonColor
+              ? `1px solid ${neonColor}40`
+              : '1px solid var(--sub-alt-color)',
+          color: isActive
+            ? isPremium && neonColor ? neonColor : 'var(--main-color)'
+            : unlocked
+              ? 'var(--text-color)'
+              : 'var(--sub-color)',
+          backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
+          opacity: !isPremium && !unlocked ? 0.4 : isPremium && !unlocked ? 0.75 : 1,
+          cursor: unlocked ? 'pointer' : 'not-allowed',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          position: 'relative',
+          textShadow: isPremium && neonColor
+            ? `0 0 8px ${neonColor}, 0 0 16px ${neonColor}50`
+            : undefined,
+          boxShadow: isPremium && neonColor ? `0 0 8px ${neonColor}20` : undefined,
+        }}
+      >
+        {/* Unlocked badge */}
+        {unlocked && (
+          <span style={{
+            fontSize: '10px',
+            color: isPremium && neonColor ? neonColor : '#4ade80',
+            textShadow: isPremium && neonColor ? `0 0 4px ${neonColor}` : undefined,
+          }}>✓</span>
+        )}
+        {/* Locked (level) badge */}
+        {!isPremium && !unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+        {/* Locked (premium) badge */}
+        {isPremium && !unlocked && (
+          <span style={{
+            fontSize: '10px',
+            color: neonColor,
+            textShadow: neonColor ? `0 0 4px ${neonColor}` : undefined,
+          }}>🔒</span>
+        )}
+
+        {name}
+
+        {/* Level requirement */}
+        {!isPremium && !unlocked && (
+          <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
+            Lv.{unlockLevel}
+          </span>
+        )}
+        {/* COMING SOON badge */}
+        {isPremium && !unlocked && (
+          <span style={{
+            fontSize: '8px',
+            padding: '1px 4px',
+            borderRadius: '3px',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            color: neonColor || 'var(--sub-color)',
+            textShadow: neonColor ? `0 0 4px ${neonColor}` : undefined,
+            letterSpacing: '0.5px',
+            fontWeight: 600,
+          }}>SOON</span>
+        )}
+      </button>
+    );
   };
 
   return (
@@ -265,39 +367,46 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
             {t('settings.profileFrame')}
           </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-            {PROFILE_FRAMES.map(frame => {
+            {regularFrames.map(frame => {
               const unlocked = effectiveLevel >= frame.unlockLevel;
               const isActive = settings.profileFrame === frame.id;
-              return (
-                <button
-                  key={frame.id}
-                  onClick={() => unlocked && onSettingChange('profileFrame', frame.id as ProfileFrame)}
-                  disabled={!unlocked}
-                  style={{
-                    padding: '6px 12px',
-                    fontSize: '12px',
-                    borderRadius: '6px',
-                    border: isActive ? '1.5px solid var(--main-color)' : '1px solid var(--sub-alt-color)',
-                    color: isActive ? 'var(--main-color)' : unlocked ? 'var(--text-color)' : 'var(--sub-color)',
-                    backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
-                    opacity: unlocked ? 1 : 0.4,
-                    cursor: unlocked ? 'pointer' : 'not-allowed',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}
-                >
-                  {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
-                  {frame.name}
-                  {!unlocked && (
-                    <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
-                      Lv.{frame.unlockLevel}
-                    </span>
-                  )}
-                </button>
+              return renderPerkButton(
+                frame.id, frame.name, unlocked, isActive, false, frame.unlockLevel, undefined,
+                () => onSettingChange('profileFrame', frame.id as ProfileFrame),
               );
             })}
           </div>
+          {premiumFrames.length > 0 && (
+            <>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                margin: '10px 0 6px 0',
+              }}>
+                <span style={{
+                  fontSize: '10px',
+                  color: 'var(--sub-color)',
+                  letterSpacing: '1.5px',
+                  textTransform: 'uppercase',
+                }}>Premium</span>
+                <div style={{
+                  flex: 1, height: '1px',
+                  background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)',
+                }} />
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {premiumFrames.map(frame => {
+                  const unlocked = isAdmin;
+                  const isActive = settings.profileFrame === frame.id;
+                  return renderPerkButton(
+                    frame.id, frame.name, unlocked, isActive, true, frame.unlockLevel, frame.premiumSet,
+                    () => onSettingChange('profileFrame', frame.id as ProfileFrame),
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Typing Particles */}
@@ -306,39 +415,46 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
             {t('settings.particleTier')}
           </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-            {PARTICLE_TIERS.map(tier => {
+            {regularParticles.map(tier => {
               const unlocked = effectiveLevel >= tier.unlockLevel;
               const isActive = settings.particleTier === tier.id;
-              return (
-                <button
-                  key={tier.id}
-                  onClick={() => unlocked && onSettingChange('particleTier', tier.id as ParticleTier)}
-                  disabled={!unlocked}
-                  style={{
-                    padding: '6px 12px',
-                    fontSize: '12px',
-                    borderRadius: '6px',
-                    border: isActive ? '1.5px solid var(--main-color)' : '1px solid var(--sub-alt-color)',
-                    color: isActive ? 'var(--main-color)' : unlocked ? 'var(--text-color)' : 'var(--sub-color)',
-                    backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
-                    opacity: unlocked ? 1 : 0.4,
-                    cursor: unlocked ? 'pointer' : 'not-allowed',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}
-                >
-                  {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
-                  {tier.name}
-                  {!unlocked && (
-                    <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
-                      Lv.{tier.unlockLevel}
-                    </span>
-                  )}
-                </button>
+              return renderPerkButton(
+                tier.id, tier.name, unlocked, isActive, false, tier.unlockLevel, undefined,
+                () => onSettingChange('particleTier', tier.id as ParticleTier),
               );
             })}
           </div>
+          {premiumParticles.length > 0 && (
+            <>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                margin: '10px 0 6px 0',
+              }}>
+                <span style={{
+                  fontSize: '10px',
+                  color: 'var(--sub-color)',
+                  letterSpacing: '1.5px',
+                  textTransform: 'uppercase',
+                }}>Premium</span>
+                <div style={{
+                  flex: 1, height: '1px',
+                  background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)',
+                }} />
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {premiumParticles.map(tier => {
+                  const unlocked = isAdmin;
+                  const isActive = settings.particleTier === tier.id;
+                  return renderPerkButton(
+                    tier.id, tier.name, unlocked, isActive, true, tier.unlockLevel, tier.premiumSet,
+                    () => onSettingChange('particleTier', tier.id as ParticleTier),
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Sound */}
@@ -383,7 +499,6 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
                     onClick={() => {
                       if (!unlocked) return;
                       onSettingChange('soundTheme', themeDef.id as SoundTheme);
-                      // Preview the selected sound
                       setTimeout(() => previewSound(), 50);
                     }}
                     disabled={!unlocked}
@@ -401,6 +516,7 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
                       gap: '4px',
                     }}
                   >
+                    {unlocked && <span style={{ fontSize: '10px', color: '#4ade80' }}>✓</span>}
                     {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
                     {themeDef.name}
                     {!unlocked && (
