@@ -71,6 +71,8 @@ export function useAdventure(userId?: string | null) {
 
   const isWorldUnlocked = useCallback((worldId: number): boolean => {
     if (worldId === 1) return true;
+    // Admin skips all unlock requirements
+    if (isAdminUser(userId)) return true;
     // Previous world's boss must be cleared
     const prevWorld = activeWorlds.find(w => w.id === worldId - 1);
     if (!prevWorld) return false;
