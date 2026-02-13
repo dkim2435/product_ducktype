@@ -57,10 +57,9 @@ interface AppContentProps {
   requestSync: (userId: string) => void;
   currentUsername: string | null;
   onUpdateUsername: (newUsername: string) => Promise<void>;
-  onRequestWhatsNew?: () => void;
 }
 
-function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync, currentUsername, onUpdateUsername, onRequestWhatsNew }: AppContentProps) {
+function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, requestSync, currentUsername, onUpdateUsername }: AppContentProps) {
   const { settings, updateSetting } = useSettings();
   const { t, i18n } = useTranslation();
   const [screen, setScreen] = useState<Screen>(() => {
@@ -73,7 +72,6 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   });
   const [showSettings, setShowSettings] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const onboardingFlowRef = useRef(false);
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
   const [activeLessonId, setActiveLessonId] = useState<LessonId | null>(null);
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
@@ -571,13 +569,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       <SettingsModal
         settings={settings}
         onSettingChange={handleSettingChange}
-        onClose={() => {
-          setShowSettings(false);
-          if (onboardingFlowRef.current) {
-            onboardingFlowRef.current = false;
-            onRequestWhatsNew?.();
-          }
-        }}
+        onClose={() => setShowSettings(false)}
         visible={showSettings}
         playerLevel={gamification.profile.level}
         userId={user?.id}
@@ -588,8 +580,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
         onClose={() => {
           setShowOnboarding(false);
           localStorage.setItem('ducktype_onboarding_seen', '1');
-          onboardingFlowRef.current = true;
-          setShowSettings(true);
+          localStorage.setItem('ducktype_whats_new_seen', __APP_VERSION__);
         }}
       />
 
@@ -670,10 +661,6 @@ function App() {
         requestSync={requestSync}
         currentUsername={currentUsername}
         onUpdateUsername={updateUsername}
-        onRequestWhatsNew={() => {
-          const seen = localStorage.getItem('ducktype_whats_new_seen');
-          if (seen !== __APP_VERSION__) setShowWhatsNew(true);
-        }}
       />
       <AuthModal
         visible={showAuth}
