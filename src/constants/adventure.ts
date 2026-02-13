@@ -559,7 +559,7 @@ const W3_STAGE_11_BOSS: StageConfig = {
 const WORLD_3_DEBUFF: WorldDebuff = {
   type: 'fog',
   intensity: 0.3,
-  description: 'Fog: words appear blurry',
+  description: 'Fog: words fade into mist over time',
   icon: '🌫️',
 };
 
@@ -784,7 +784,7 @@ const W4_STAGE_12_BOSS: StageConfig = {
 const WORLD_4_DEBUFF: WorldDebuff = {
   type: 'freeze',
   intensity: 1.5,
-  description: 'Freeze: +50% mistype damage',
+  description: 'Freeze: mistypes freeze the word for 1.5s',
   icon: '❄️',
 };
 
