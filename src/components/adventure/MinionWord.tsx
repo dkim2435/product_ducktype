@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { FieldMinion } from '../../types/adventure';
+import type { FieldMinion, DebuffType } from '../../types/adventure';
 
 interface MinionWordProps {
   minion: FieldMinion;
@@ -10,6 +10,7 @@ interface MinionWordProps {
   emoji: string;
   isBossWord: boolean;
   dimmed?: boolean;
+  debuffType?: DebuffType;
 }
 
 function isImagePath(s: string) { return s.startsWith('/'); }
@@ -22,11 +23,18 @@ function SpriteIcon({ src, size, style }: { src: string; size: number; style?: R
 
 export { SpriteIcon };
 
-export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen, now, isMobile, emoji, isBossWord, dimmed }: MinionWordProps) {
+export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen, now, isMobile, emoji, isBossWord, dimmed, debuffType }: MinionWordProps) {
   const elapsed = now - minion.spawnedAt;
   const timeProgress = Math.min(1, elapsed / minion.timeoutMs);
   const remainSec = Math.max(0, (minion.timeoutMs - elapsed) / 1000);
   const isUrgent = timeProgress > 0.7;
+
+  // Fog debuff: unmatched words are blurry (opacity 0.3), matched words are clear
+  const isFoggy = debuffType === 'fog' && !isBossWord && !isMatched;
+
+  // Darkness debuff: unmatched words blink (2s cycle, hidden for 0.5s)
+  const isDarknessHidden = debuffType === 'darkness' && !isBossWord && !isMatched
+    && (now % 2000) > 1500;
 
   if (isBossWord) {
     return (
@@ -62,6 +70,8 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
       transform: 'translate(-50%, -50%)', zIndex: isMatched ? 10 : 3,
       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px',
       animation: 'fadeIn 0.3s ease-out',
+      opacity: isDarknessHidden ? 0 : isFoggy ? 0.3 : 1,
+      transition: isFoggy ? 'opacity 0.3s' : isDarknessHidden !== undefined ? 'opacity 0.15s' : undefined,
     }}>
       <div style={{
         filter: isMatched ? 'drop-shadow(0 0 6px var(--main-color))' : undefined,

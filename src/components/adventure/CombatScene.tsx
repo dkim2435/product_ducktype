@@ -261,16 +261,19 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
           </div>
 
           {/* Debuff warning */}
-          {isPoisoned && (
+          {debuffAura && (
             <div style={{
               display: 'flex', alignItems: 'center', gap: '8px',
               padding: '8px 18px', borderRadius: '8px',
-              backgroundColor: 'rgba(76, 175, 80, 0.1)',
-              border: '1px solid rgba(76, 175, 80, 0.3)',
-              fontSize: '13px', fontWeight: 700, color: '#4caf50',
+              backgroundColor: `${debuffAura.color}18`,
+              border: `1px solid ${debuffAura.color}4d`,
+              fontSize: '13px', fontWeight: 700, color: debuffAura.color,
             }}>
-              <span style={{ fontSize: '18px' }}>☠️</span>
-              POISON: -0.3 HP per second during combat
+              <span style={{ fontSize: '18px' }}>{debuffAura.label.split(' ')[0]}</span>
+              {debuff === 'poison' && 'POISON: -0.3 HP per second during combat'}
+              {debuff === 'fog' && 'FOG: Words appear blurry until you start typing them'}
+              {debuff === 'freeze' && 'FREEZE: Mistypes deal 50% more damage'}
+              {debuff === 'darkness' && 'DARKNESS: Unmatched words flicker in and out of sight'}
             </div>
           )}
 
@@ -445,6 +448,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                 emoji={stageConfig.enemyConfig.emoji}
                 isBossWord={true}
                 dimmed={bossShielded}
+                debuffType={debuff}
               />
             ))}
 
@@ -459,6 +463,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                 isMobile={isMobile}
                 emoji={isBoss && stageConfig.bossConfig ? stageConfig.bossConfig.minionEmoji : stageConfig.enemyConfig.emoji}
                 isBossWord={false}
+                debuffType={debuff}
               />
             ))}
 
@@ -633,7 +638,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
       {/* VICTORY */}
       {state.phase === 'victory' && (
-        isBoss && WORLD_VICTORY_CINEMATICS[worldId] ? (
+        isBoss && !stageConfig.isMidBoss && WORLD_VICTORY_CINEMATICS[worldId] ? (
           /* Cinematic victory for boss stages */
           <div style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center',

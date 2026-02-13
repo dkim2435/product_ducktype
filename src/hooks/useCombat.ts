@@ -611,7 +611,13 @@ export function useCombat(
 
       // No match → mistype → HP penalty (difficulty-based)
       const now = Date.now();
-      const mistypeDmg = DIFFICULTY_CONFIGS[difficultyRef.current].mistypeDamage;
+      let mistypeDmg = DIFFICULTY_CONFIGS[difficultyRef.current].mistypeDamage;
+
+      // Freeze debuff: multiply mistype damage by intensity
+      if (prev.activeDebuff === 'freeze' && mistypeDmg > 0) {
+        const freezeIntensity = 1.5; // 50% extra damage
+        mistypeDmg = Math.round(mistypeDmg * freezeIntensity);
+      }
 
       if (mistypeDmg === 0) {
         // Beginner: no HP penalty, just reset input + break combo
