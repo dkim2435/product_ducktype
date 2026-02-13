@@ -89,6 +89,7 @@ export function useAdventure(userId?: string | null) {
   }, [progress, activeWorlds]);
 
   const isStageUnlocked = useCallback((worldId: number, stageId: number): boolean => {
+    if (isAdminUser(userId)) return true;
     if (!isWorldUnlocked(worldId)) return false;
     if (stageId === 1) return true;
     const wp = getWorldProgress(progress, worldId);
