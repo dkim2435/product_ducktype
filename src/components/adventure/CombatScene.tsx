@@ -365,7 +365,7 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
             {isBoss ? (
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: isMobile && keyboardOpen ? '10px' : '12px', color: 'var(--sub-color)', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
-                  <span>{Math.max(0, state.bossHp)}/{state.bossMaxHp}</span>
+                  <span>{Math.max(0, Math.round(state.bossHp))}/{state.bossMaxHp}</span>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><SpriteIcon src={stageConfig.enemyConfig.emoji} size={20} />{stageConfig.enemyConfig.name}</span>
                 </div>
                 <div style={{ height: isMobile && keyboardOpen ? '6px' : '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>

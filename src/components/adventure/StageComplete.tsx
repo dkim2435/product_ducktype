@@ -251,7 +251,7 @@ export function StageComplete({
           { label: t('adventure.wpm'), value: `${result.wpm}`, icon: '⌨️' },
           { label: t('adventure.accuracy'), value: `${result.accuracy}%`, icon: '🎯' },
           { label: t('adventure.maxCombo'), value: `${result.maxCombo}x`, icon: '🔥' },
-          { label: t('adventure.hpLeft'), value: `${result.hpRemaining}/${result.hpMax}`, icon: '❤️' },
+          { label: t('adventure.hpLeft'), value: `${Math.round(result.hpRemaining)}/${result.hpMax}`, icon: '❤️' },
           { label: t('adventure.time'), value: timeStr, icon: '⏱️' },
           { label: 'XP', value: `+${result.xpEarned}`, icon: '✨' },
         ].map(({ label, value, icon }) => (
