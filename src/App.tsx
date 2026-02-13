@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { User } from '@supabase/supabase-js';
 import type { TestState } from './types/test';
@@ -27,17 +27,21 @@ import { About } from './components/pages/About';
 import { Contact } from './components/pages/Contact';
 import { PrivacyPolicy } from './components/pages/PrivacyPolicy';
 import { TermsOfService } from './components/pages/TermsOfService';
-import { Profile } from './components/pages/Profile';
-import { Achievements } from './components/pages/Achievements';
-import { DailyChallenge } from './components/pages/DailyChallenge';
-import { Practice } from './components/pages/Practice';
-import { LessonTest } from './components/practice/LessonTest';
-import { Leaderboard } from './components/pages/Leaderboard';
-import { AdventurePage } from './components/adventure/AdventurePage';
 import { WhatsNewModal } from './components/layout/WhatsNewModal';
 import { OnboardingModal } from './components/layout/OnboardingModal';
 import { TypingInfo } from './components/content/TypingInfo';
+
+// Lazy-loaded pages (code-split for smaller initial bundle)
+const Profile = lazy(() => import('./components/pages/Profile').then(m => ({ default: m.Profile })));
+const Achievements = lazy(() => import('./components/pages/Achievements').then(m => ({ default: m.Achievements })));
+const Leaderboard = lazy(() => import('./components/pages/Leaderboard').then(m => ({ default: m.Leaderboard })));
+const AdventurePage = lazy(() => import('./components/adventure/AdventurePage').then(m => ({ default: m.AdventurePage })));
+const DailyChallenge = lazy(() => import('./components/pages/DailyChallenge').then(m => ({ default: m.DailyChallenge })));
+const Practice = lazy(() => import('./components/pages/Practice').then(m => ({ default: m.Practice })));
+const LessonTest = lazy(() => import('./components/practice/LessonTest').then(m => ({ default: m.LessonTest })));
 import { useLeaderboard } from './hooks/useLeaderboard';
+import { useFontLoader } from './hooks/useFontLoader';
+import { useUrlParams } from './hooks/useUrlParams';
 import { setPersistProgress, clearProgressData } from './utils/storage';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
@@ -70,11 +74,11 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
   const [activeLessonId, setActiveLessonId] = useState<LessonId | null>(null);
   const [lastWeakKeys, setLastWeakKeys] = useState<KeyStats[]>([]);
-  const [challengeWpm, setChallengeWpm] = useState<number | null>(null);
   const [isTypingActive, setIsTypingActive] = useState(false);
-  const [adventureWorldId, setAdventureWorldId] = useState<number | undefined>(undefined);
   const isMobile = useIsMobile();
   useTheme(settings.theme);
+  useFontLoader(settings.fontFamily, settings.language);
+  const { challengeWpm, adventureWorldId } = useUrlParams();
   const { history: testHistory, saveResult, getPersonalBest } = useStats();
   const { toasts, addToast, removeToast } = useToast();
   const gamification = useGamification();
@@ -121,32 +125,10 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Parse challenge URL hash on mount (e.g. #c=85-97)
+  // Navigate to adventure if URL params indicate it
   useEffect(() => {
-    const hash = window.location.hash;
-    const match = hash.match(/^#c=(\d+)-(\d+)$/);
-    if (match) {
-      setChallengeWpm(parseInt(match[1], 10));
-      // Clear hash without triggering navigation
-      history.replaceState(null, '', window.location.pathname + window.location.search);
-    }
-  }, []);
-
-  // Parse adventure share URL on mount (e.g. /adventure?world=2)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const worldParam = params.get('world');
-    const isAdventurePath = window.location.pathname.includes('/adventure');
-    if (worldParam || isAdventurePath) {
-      const worldId = worldParam ? parseInt(worldParam, 10) : undefined;
-      if (!worldParam || (worldId && worldId >= 1 && worldId <= 6)) {
-        setScreen('adventure');
-        setAdventureWorldId(worldId);
-      }
-      // Clean up URL
-      history.replaceState(null, '', window.location.pathname.replace('/adventure', '/'));
-    }
-  }, []);
+    if (adventureWorldId !== undefined) setScreen('adventure');
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Sync UI language
   useEffect(() => {
@@ -155,68 +137,16 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
     }
   }, [settings.uiLanguage, i18n]);
 
-  // Apply font family (alternative fonts loaded on demand)
-  useEffect(() => {
-    const fontMap: Record<string, string> = {
-      default: "'Roboto Mono', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', monospace",
-      mono: "monospace",
-      'roboto-mono': "'Roboto Mono', monospace",
-      'fira-code': "'Fira Code', monospace",
-      'source-code-pro': "'Source Code Pro', monospace",
-    };
-    // Lazy-load alternative fonts when selected
-    const fontsToLoad: Record<string, string> = {
-      'fira-code': 'Fira+Code:wght@300;400;500;700',
-      'source-code-pro': 'Source+Code+Pro:wght@300;400;500;700',
-    };
-    const fontParam = fontsToLoad[settings.fontFamily];
-    if (fontParam) {
-      const id = `gfont-${settings.fontFamily}`;
-      if (!document.getElementById(id)) {
-        const link = document.createElement('link');
-        link.id = id;
-        link.rel = 'stylesheet';
-        link.href = `https://fonts.googleapis.com/css2?family=${fontParam}&display=swap`;
-        document.head.appendChild(link);
-      }
-    }
-    document.documentElement.style.setProperty(
-      '--font-family',
-      fontMap[settings.fontFamily] || fontMap.default
-    );
-  }, [settings.fontFamily]);
-
-  // Lazy-load CJK fonts when CJK language is selected
-  useEffect(() => {
-    const cjkFonts: Record<string, string> = {
-      ko: 'Noto+Sans+KR:wght@400;700',
-      ja: 'Noto+Sans+JP:wght@400;700',
-      zh: 'Noto+Sans+SC:wght@400;700',
-    };
-    const fontParam = cjkFonts[settings.language];
-    if (fontParam) {
-      const id = `gfont-cjk-${settings.language}`;
-      if (!document.getElementById(id)) {
-        const link = document.createElement('link');
-        link.id = id;
-        link.rel = 'stylesheet';
-        link.href = `https://fonts.googleapis.com/css2?family=${fontParam}&display=swap`;
-        document.head.appendChild(link);
-      }
-    }
-  }, [settings.language]);
-
   const triggerSync = useCallback(() => {
     if (user?.id) requestSync(user.id);
   }, [user, requestSync]);
 
-  const handleTestFinish = useCallback((testState: TestState) => {
+  // Shared test completion logic: save result, extract weak keys, process gamification
+  const processTestCompletion = useCallback((testState: TestState, isDailyChallenge: boolean, hasBoost: boolean) => {
     const result = saveResult(testState, settings);
     lastTestStateRef.current = testState;
     setLastResult(result);
-    setScreen('results');
 
-    // Extract weak keys from this test (any key with errors, min 1 attempt)
     const testKeyStats = extractKeyStats(testState);
     const weak = Object.values(testKeyStats)
       .filter(s => s.errors > 0)
@@ -224,87 +154,40 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       .slice(0, 8);
     setLastWeakKeys(weak);
 
-    // Process gamification
     gamification.processTestResult(
       result,
       testState,
-      false,
+      isDailyChallenge,
       addToast,
       dailyChallenge.dailyChallengeState,
       lessons.lessonProgress,
       user?.id,
-      dailyChallenge.hasCompletedToday,
+      hasBoost,
     );
 
+    setScreen('results');
     triggerSync();
+    return result;
+  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress, user?.id, triggerSync]);
+
+  const handleTestFinish = useCallback((testState: TestState) => {
+    const result = processTestCompletion(testState, false, dailyChallenge.hasCompletedToday);
 
     // Auto-submit to leaderboard for logged-in users (time mode only)
     if (user?.id && currentUsername && settings.mode === 'time') {
       leaderboard.submitScore(user.id, currentUsername, result.wpm, result.accuracy, 'time', settings.timeLimit);
     }
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, dailyChallenge.hasCompletedToday, lessons.lessonProgress, triggerSync, user, currentUsername, leaderboard]);
+  }, [processTestCompletion, dailyChallenge.hasCompletedToday, user, currentUsername, settings.mode, settings.timeLimit, leaderboard]);
 
   const handleDailyChallengeFinish = useCallback((testState: TestState) => {
-    const result = saveResult(testState, settings);
-    lastTestStateRef.current = testState;
-    setLastResult(result);
-    setScreen('results');
-
-    const testKeyStats = extractKeyStats(testState);
-    const weak = Object.values(testKeyStats)
-      .filter(s => s.errors > 0)
-      .sort((a, b) => b.errorRate - a.errorRate || b.errors - a.errors)
-      .slice(0, 8);
-    setLastWeakKeys(weak);
-
-    // Save daily challenge result
+    const result = processTestCompletion(testState, true, true);
     dailyChallenge.saveDailyChallengeResult(result.wpm, result.accuracy);
-
-    // Process gamification with daily challenge flag + boost (daily challenge itself gets 1.5x)
-    gamification.processTestResult(
-      result,
-      testState,
-      true,
-      addToast,
-      dailyChallenge.dailyChallengeState,
-      lessons.lessonProgress,
-      user?.id,
-      true,
-    );
-
-    triggerSync();
-  }, [settings, saveResult, gamification, addToast, dailyChallenge, lessons.lessonProgress, triggerSync]);
+  }, [processTestCompletion, dailyChallenge]);
 
   const handleLessonFinish = useCallback((testState: TestState, lessonId: LessonId) => {
-    const result = saveResult(testState, settings);
-    lastTestStateRef.current = testState;
-    setLastResult(result);
-
-    const testKeyStats = extractKeyStats(testState);
-    const weak = Object.values(testKeyStats)
-      .filter(s => s.errors > 0)
-      .sort((a, b) => b.errorRate - a.errorRate || b.errors - a.errors)
-      .slice(0, 8);
-    setLastWeakKeys(weak);
-
-    // Save lesson result
+    const result = processTestCompletion(testState, false, dailyChallenge.hasCompletedToday);
     lessons.saveLessonResult(lessonId, result.wpm, result.accuracy);
-
-    // Process gamification
-    gamification.processTestResult(
-      result,
-      testState,
-      false,
-      addToast,
-      dailyChallenge.dailyChallengeState,
-      lessons.lessonProgress,
-      user?.id,
-      dailyChallenge.hasCompletedToday,
-    );
-
-    setScreen('results');
-    triggerSync();
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, dailyChallenge.hasCompletedToday, lessons, triggerSync]);
+  }, [processTestCompletion, dailyChallenge.hasCompletedToday, lessons]);
 
   const handleRestart = useCallback(() => {
     setScreen('test');
@@ -569,6 +452,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
           />
         )}
 
+        <Suspense fallback={null}>
         {screen === 'profile' && (
           <Profile
             profile={gamification.profile}
@@ -654,6 +538,8 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             onTypingStateChange={setIsTypingActive}
           />
         )}
+
+        </Suspense>
 
         {screen === 'about' && <About onBack={() => handleNavigate('test')} />}
         {screen === 'contact' && <Contact onBack={() => handleNavigate('test')} />}

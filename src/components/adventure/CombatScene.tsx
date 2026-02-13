@@ -13,81 +13,13 @@ import {
   WORLD_VICTORY_CINEMATICS,
   WORLD_PREVIEWS,
 } from '../../constants/adventure';
+import { DEBUFF_AURA } from '../../constants/debuffConfig';
+import { getStageTheme } from '../../constants/stageThemes';
 import { useKeyboardHeight } from '../../hooks/useVisualViewport';
+import { SpriteIcon, MinionWord } from './MinionWord';
 import type { Settings } from '../../types/settings';
 
 const PLAYER_IMG = '/images/adventure/player.png';
-
-// Debuff aura visual config per type
-const DEBUFF_AURA: Record<string, {
-  filter: string;
-  overlay: string;
-  color: string;
-  label: string;
-}> = {
-  poison: {
-    filter: 'drop-shadow(0 0 14px rgba(160, 0, 255, 0.9)) drop-shadow(0 0 6px rgba(120, 0, 200, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(160, 0, 255, 0.06) 100%)',
-    color: '#a000ff',
-    label: '☠️ POISON',
-  },
-  fog: {
-    filter: 'drop-shadow(0 0 14px rgba(200, 200, 220, 0.9)) drop-shadow(0 0 6px rgba(170, 170, 190, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(200, 200, 220, 0.06) 100%)',
-    color: '#c8c8dc',
-    label: '🌫️ FOG',
-  },
-  freeze: {
-    filter: 'drop-shadow(0 0 14px rgba(0, 200, 255, 0.9)) drop-shadow(0 0 6px rgba(0, 150, 220, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 200, 255, 0.06) 100%)',
-    color: '#00c8ff',
-    label: '❄️ FREEZE',
-  },
-  darkness: {
-    filter: 'drop-shadow(0 0 14px rgba(80, 0, 120, 0.9)) drop-shadow(0 0 6px rgba(40, 0, 80, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(80, 0, 120, 0.06) 100%)',
-    color: '#500078',
-    label: '🌑 DARKNESS',
-  },
-  mirage: {
-    filter: 'drop-shadow(0 0 14px rgba(255, 200, 0, 0.9)) drop-shadow(0 0 6px rgba(220, 160, 0, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(255, 200, 0, 0.06) 100%)',
-    color: '#ffc800',
-    label: '🏜️ MIRAGE',
-  },
-  burn: {
-    filter: 'drop-shadow(0 0 14px rgba(255, 80, 0, 0.9)) drop-shadow(0 0 6px rgba(220, 40, 0, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(255, 80, 0, 0.06) 100%)',
-    color: '#ff5000',
-    label: '🔥 BURN',
-  },
-  storm: {
-    filter: 'drop-shadow(0 0 14px rgba(0, 150, 255, 0.9)) drop-shadow(0 0 6px rgba(50, 100, 255, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 150, 255, 0.06) 100%)',
-    color: '#0096ff',
-    label: '⚡ STORM',
-  },
-  pressure: {
-    filter: 'drop-shadow(0 0 14px rgba(0, 40, 150, 0.9)) drop-shadow(0 0 6px rgba(0, 20, 120, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 40, 150, 0.06) 100%)',
-    color: '#002896',
-    label: '🌊 PRESSURE',
-  },
-  reverse: {
-    filter: 'drop-shadow(0 0 14px rgba(255, 0, 160, 0.9)) drop-shadow(0 0 6px rgba(200, 0, 120, 0.7))',
-    overlay: 'radial-gradient(ellipse at center, transparent 40%, rgba(255, 0, 160, 0.06) 100%)',
-    color: '#ff00a0',
-    label: '🌀 REVERSE',
-  },
-};
-
-function isImagePath(s: string) { return s.startsWith('/'); }
-
-function SpriteIcon({ src, size, style }: { src: string; size: number; style?: React.CSSProperties }) {
-  return isImagePath(src)
-    ? <img src={src} alt="" width={size} height={size} style={{ objectFit: 'contain', background: 'transparent', display: 'block', ...style }} />
-    : <span style={{ fontSize: `${size}px`, ...style }}>{src}</span>;
-}
 
 interface CombatSceneProps {
   stageConfig: StageConfig;
@@ -107,198 +39,6 @@ interface CombatSceneProps {
 const GAME_WIDTH = 800;
 const GAME_HEIGHT = 420;
 
-// World 1 stage themes
-function getW1Theme(stageId: number) {
-  switch (stageId) {
-    case 1: return {
-      bg: 'linear-gradient(180deg, #1a3a1a 0%, #1e4422 30%, #1a3a1a 60%, #162e14 85%, #0f240e 100%)',
-      ground: 'linear-gradient(180deg, #1e4422 0%, #152e12 100%)',
-      deco: [
-        { e: '🌲', x: 1, y: 5, s: 42, o: 0.35 }, { e: '🌲', x: 10, y: 12, s: 34, o: 0.28 },
-        { e: '🌳', x: 88, y: 8, s: 38, o: 0.32 }, { e: '🌳', x: 95, y: 18, s: 30, o: 0.25 },
-        { e: '🌿', x: 5, y: 68, s: 22, o: 0.2 }, { e: '🌿', x: 92, y: 72, s: 20, o: 0.18 },
-        { e: '☁️', x: 25, y: 2, s: 22, o: 0.15 }, { e: '☁️', x: 60, y: 1, s: 18, o: 0.12 },
-        { e: '🍃', x: 40, y: 6, s: 14, o: 0.15 },
-      ],
-    };
-    case 2: return {
-      bg: 'linear-gradient(180deg, #1a2a3a 0%, #1e3448 25%, #2a4060 50%, #3a3a2e 75%, #2e2a1e 100%)',
-      ground: 'linear-gradient(180deg, #3a3020 0%, #2e2818 100%)',
-      deco: [
-        { e: '🏠', x: 2, y: 6, s: 32, o: 0.3 }, { e: '🏘️', x: 12, y: 14, s: 26, o: 0.25 },
-        { e: '🏠', x: 90, y: 10, s: 28, o: 0.28 }, { e: '🌉', x: 50, y: 72, s: 30, o: 0.22 },
-        { e: '💧', x: 30, y: 78, s: 14, o: 0.12 }, { e: '💧', x: 65, y: 76, s: 12, o: 0.1 },
-        { e: '☁️', x: 35, y: 2, s: 20, o: 0.15 }, { e: '🏮', x: 94, y: 30, s: 16, o: 0.2 },
-      ],
-    };
-    case 3: return {
-      bg: 'linear-gradient(180deg, #2a2520 0%, #352e25 25%, #40362a 50%, #3a3025 75%, #302820 100%)',
-      ground: 'linear-gradient(180deg, #3a3228 0%, #2e2820 100%)',
-      deco: [
-        { e: '🏰', x: 1, y: 3, s: 40, o: 0.3 }, { e: '🏛️', x: 90, y: 6, s: 34, o: 0.28 },
-        { e: '⛲', x: 50, y: 68, s: 28, o: 0.2 }, { e: '🏠', x: 8, y: 20, s: 22, o: 0.18 },
-        { e: '🏠', x: 85, y: 25, s: 20, o: 0.16 }, { e: '🏮', x: 3, y: 40, s: 16, o: 0.18 },
-        { e: '🏮', x: 95, y: 45, s: 14, o: 0.16 },
-      ],
-    };
-    case 4: return {
-      bg: 'linear-gradient(180deg, #1a2e1a 0%, #1e3820 25%, #224020 50%, #1e3a1e 75%, #182e16 100%)',
-      ground: 'linear-gradient(180deg, #1e3a1e 0%, #162e14 100%)',
-      deco: [
-        { e: '🌸', x: 3, y: 8, s: 30, o: 0.35 }, { e: '🌸', x: 18, y: 4, s: 22, o: 0.28 },
-        { e: '🌸', x: 85, y: 6, s: 26, o: 0.3 }, { e: '🌺', x: 92, y: 15, s: 24, o: 0.28 },
-        { e: '🌷', x: 5, y: 65, s: 22, o: 0.22 }, { e: '🌷', x: 90, y: 70, s: 20, o: 0.2 },
-        { e: '🦋', x: 70, y: 5, s: 18, o: 0.22 }, { e: '🦋', x: 30, y: 10, s: 14, o: 0.18 },
-        { e: '🌿', x: 8, y: 50, s: 18, o: 0.15 },
-      ],
-    };
-    case 5: return {
-      bg: 'linear-gradient(180deg, #0a0f0a 0%, #0e150e 25%, #0a120a 50%, #080e08 75%, #050a05 100%)',
-      ground: 'linear-gradient(180deg, #0e150e 0%, #080e08 100%)',
-      deco: [
-        { e: '🌲', x: 0, y: 5, s: 44, o: 0.3 }, { e: '🌲', x: 12, y: 10, s: 36, o: 0.25 },
-        { e: '🌲', x: 88, y: 8, s: 40, o: 0.28 }, { e: '🌲', x: 96, y: 15, s: 32, o: 0.22 },
-        { e: '🌑', x: 50, y: 1, s: 24, o: 0.2 }, { e: '🕷️', x: 78, y: 35, s: 18, o: 0.18 },
-        { e: '🕷️', x: 15, y: 42, s: 14, o: 0.14 }, { e: '🍂', x: 40, y: 70, s: 14, o: 0.12 },
-        { e: '🍂', x: 60, y: 75, s: 12, o: 0.1 },
-      ],
-    };
-    case 6: return {
-      bg: 'linear-gradient(180deg, #1a2030 0%, #1e2838 25%, #252e38 50%, #2a2a28 75%, #222018 100%)',
-      ground: 'linear-gradient(180deg, #2a2820 0%, #1e1c16 100%)',
-      deco: [
-        { e: '⛰️', x: 0, y: 4, s: 48, o: 0.35 }, { e: '🏔️', x: 85, y: 2, s: 44, o: 0.32 },
-        { e: '🪨', x: 5, y: 55, s: 24, o: 0.2 }, { e: '🪨', x: 92, y: 60, s: 20, o: 0.18 },
-        { e: '🪨', x: 50, y: 72, s: 18, o: 0.15 }, { e: '☁️', x: 30, y: 1, s: 24, o: 0.18 },
-        { e: '☁️', x: 65, y: 3, s: 20, o: 0.15 }, { e: '🌬️', x: 45, y: 15, s: 16, o: 0.12 },
-      ],
-    };
-    case 7: return {
-      bg: 'linear-gradient(180deg, #18100a 0%, #1e1510 25%, #201812 50%, #1a1210 75%, #120c08 100%)',
-      ground: 'linear-gradient(180deg, #1e1510 0%, #120c08 100%)',
-      deco: [
-        { e: '🕯️', x: 2, y: 10, s: 26, o: 0.35 }, { e: '🕯️', x: 94, y: 15, s: 24, o: 0.32 },
-        { e: '🕯️', x: 6, y: 45, s: 20, o: 0.25 }, { e: '🕯️', x: 92, y: 50, s: 18, o: 0.22 },
-        { e: '🦴', x: 15, y: 70, s: 20, o: 0.2 }, { e: '🦴', x: 80, y: 72, s: 18, o: 0.18 },
-        { e: '🦴', x: 50, y: 75, s: 16, o: 0.15 }, { e: '💀', x: 40, y: 68, s: 16, o: 0.12 },
-        { e: '🪨', x: 0, y: 30, s: 30, o: 0.2 }, { e: '🪨', x: 96, y: 35, s: 28, o: 0.18 },
-      ],
-    };
-    case 8: default: return {
-      bg: 'linear-gradient(180deg, #10081a 0%, #180e28 20%, #201438 45%, #1a1030 70%, #100820 90%, #080410 100%)',
-      ground: 'linear-gradient(180deg, #1a1030 0%, #100820 100%)',
-      deco: [
-        { e: '🦇', x: 8, y: 5, s: 26, o: 0.3 }, { e: '🦇', x: 82, y: 8, s: 22, o: 0.25 },
-        { e: '🦇', x: 35, y: 3, s: 18, o: 0.2 }, { e: '🌙', x: 50, y: 1, s: 28, o: 0.22 },
-        { e: '💀', x: 3, y: 60, s: 22, o: 0.2 }, { e: '💀', x: 92, y: 65, s: 20, o: 0.18 },
-        { e: '🕸️', x: 0, y: 20, s: 30, o: 0.18 }, { e: '🕸️', x: 92, y: 30, s: 26, o: 0.16 },
-        { e: '🔥', x: 5, y: 40, s: 18, o: 0.2 }, { e: '🔥', x: 93, y: 45, s: 16, o: 0.18 },
-      ],
-    };
-  }
-}
-
-// World 2 stage themes — Venom Jungle
-function getW2Theme(stageId: number) {
-  switch (stageId) {
-    case 1: return {
-      bg: 'linear-gradient(180deg, #0a1f0a 0%, #0e2e0e 30%, #122a12 60%, #0a1e0a 85%, #061206 100%)',
-      ground: 'linear-gradient(180deg, #1a3a14 0%, #0e2a0a 100%)',
-      deco: [
-        { e: '🌴', x: 2, y: 4, s: 44, o: 0.35 }, { e: '🌴', x: 92, y: 8, s: 38, o: 0.3 },
-        { e: '🐸', x: 15, y: 65, s: 20, o: 0.22 }, { e: '🐸', x: 80, y: 70, s: 18, o: 0.18 },
-        { e: '🌿', x: 5, y: 55, s: 22, o: 0.2 }, { e: '🌿', x: 90, y: 60, s: 20, o: 0.18 },
-        { e: '🟢', x: 40, y: 75, s: 12, o: 0.12 }, { e: '☁️', x: 50, y: 1, s: 18, o: 0.1 },
-      ],
-    };
-    case 2: return {
-      bg: 'linear-gradient(180deg, #081a08 0%, #0e2a10 25%, #0a2208 50%, #081a06 75%, #041004 100%)',
-      ground: 'linear-gradient(180deg, #1a3010 0%, #0e200a 100%)',
-      deco: [
-        { e: '🌴', x: 0, y: 5, s: 46, o: 0.3 }, { e: '🌴', x: 90, y: 3, s: 42, o: 0.28 },
-        { e: '🐍', x: 20, y: 40, s: 20, o: 0.2 }, { e: '🐍', x: 78, y: 45, s: 18, o: 0.18 },
-        { e: '🕸️', x: 5, y: 20, s: 24, o: 0.15 }, { e: '🕸️', x: 88, y: 25, s: 22, o: 0.14 },
-        { e: '🌿', x: 45, y: 72, s: 18, o: 0.15 },
-      ],
-    };
-    case 3: return {
-      bg: 'linear-gradient(180deg, #0e1a0a 0%, #1a2a12 25%, #1e3014 50%, #1a2a10 75%, #0e1a08 100%)',
-      ground: 'linear-gradient(180deg, #2a3a18 0%, #1a2a0e 100%)',
-      deco: [
-        { e: '🟢', x: 10, y: 50, s: 26, o: 0.25 }, { e: '🟢', x: 85, y: 55, s: 22, o: 0.22 },
-        { e: '🟢', x: 50, y: 70, s: 20, o: 0.18 }, { e: '🌴', x: 0, y: 6, s: 40, o: 0.28 },
-        { e: '🌴', x: 94, y: 4, s: 36, o: 0.25 }, { e: '💧', x: 30, y: 78, s: 14, o: 0.1 },
-        { e: '💧', x: 65, y: 76, s: 12, o: 0.08 },
-      ],
-    };
-    case 4: return {
-      bg: 'linear-gradient(180deg, #0e180a 0%, #142210 25%, #1a2a14 50%, #142210 75%, #0a1408 100%)',
-      ground: 'linear-gradient(180deg, #2a3418 0%, #1a2410 100%)',
-      deco: [
-        { e: '🦎', x: 12, y: 60, s: 22, o: 0.22 }, { e: '🦎', x: 82, y: 65, s: 20, o: 0.2 },
-        { e: '🌴', x: 2, y: 8, s: 42, o: 0.3 }, { e: '🌴', x: 92, y: 6, s: 38, o: 0.28 },
-        { e: '🌿', x: 8, y: 45, s: 22, o: 0.18 }, { e: '🌿', x: 88, y: 50, s: 20, o: 0.16 },
-        { e: '🟢', x: 45, y: 74, s: 14, o: 0.1 },
-      ],
-    };
-    case 5: return {
-      bg: 'linear-gradient(180deg, #0a140a 0%, #0e1e0e 25%, #0a180a 50%, #081408 75%, #040e04 100%)',
-      ground: 'linear-gradient(180deg, #1a2a12 0%, #0e1a0a 100%)',
-      deco: [
-        { e: '🐆', x: 75, y: 30, s: 24, o: 0.2 }, { e: '🌴', x: 0, y: 3, s: 48, o: 0.32 },
-        { e: '🌴', x: 88, y: 5, s: 44, o: 0.3 }, { e: '🌴', x: 14, y: 12, s: 36, o: 0.25 },
-        { e: '🕸️', x: 5, y: 35, s: 26, o: 0.16 }, { e: '🕸️', x: 92, y: 40, s: 22, o: 0.14 },
-        { e: '☠️', x: 50, y: 72, s: 14, o: 0.1 },
-      ],
-    };
-    case 6: return {
-      bg: 'linear-gradient(180deg, #1a0e1a 0%, #2a142a 25%, #221022 50%, #1a0e1a 75%, #10061a 100%)',
-      ground: 'linear-gradient(180deg, #2a1a2a 0%, #1a0e1a 100%)',
-      deco: [
-        { e: '🌺', x: 8, y: 15, s: 28, o: 0.3 }, { e: '🌺', x: 85, y: 10, s: 26, o: 0.28 },
-        { e: '🌺', x: 50, y: 65, s: 22, o: 0.22 }, { e: '🌴', x: 0, y: 4, s: 42, o: 0.25 },
-        { e: '🌴', x: 94, y: 3, s: 38, o: 0.22 }, { e: '🟢', x: 20, y: 70, s: 16, o: 0.12 },
-        { e: '🟢', x: 75, y: 72, s: 14, o: 0.1 },
-      ],
-    };
-    case 7: return {
-      bg: 'linear-gradient(180deg, #0a120a 0%, #0e1a0e 25%, #0a160a 50%, #08120a 75%, #040a04 100%)',
-      ground: 'linear-gradient(180deg, #1a2812 0%, #0e1a0a 100%)',
-      deco: [
-        { e: '🦍', x: 80, y: 25, s: 26, o: 0.2 }, { e: '🌴', x: 0, y: 5, s: 46, o: 0.3 },
-        { e: '🌴', x: 90, y: 3, s: 42, o: 0.28 }, { e: '☠️', x: 12, y: 60, s: 20, o: 0.18 },
-        { e: '☠️', x: 84, y: 65, s: 18, o: 0.16 }, { e: '🟢', x: 40, y: 74, s: 16, o: 0.12 },
-        { e: '🕸️', x: 5, y: 30, s: 28, o: 0.16 },
-      ],
-    };
-    case 8: return {
-      bg: 'linear-gradient(180deg, #081008 0%, #0e1a0e 20%, #0a160a 45%, #081208 70%, #040c04 90%, #020602 100%)',
-      ground: 'linear-gradient(180deg, #1a2a14 0%, #0e1a0a 100%)',
-      deco: [
-        { e: '🌿', x: 5, y: 10, s: 32, o: 0.3 }, { e: '🌿', x: 90, y: 8, s: 30, o: 0.28 },
-        { e: '🌴', x: 0, y: 20, s: 40, o: 0.22 }, { e: '🌴', x: 95, y: 18, s: 36, o: 0.2 },
-        { e: '☠️', x: 15, y: 55, s: 22, o: 0.18 }, { e: '☠️', x: 80, y: 60, s: 20, o: 0.16 },
-        { e: '🕸️', x: 8, y: 40, s: 24, o: 0.14 }, { e: '🟢', x: 50, y: 70, s: 18, o: 0.1 },
-      ],
-    };
-    case 9: default: return {
-      bg: 'linear-gradient(180deg, #060a04 0%, #0a1208 15%, #0e1a0a 35%, #0a1408 55%, #081008 75%, #040804 90%, #020402 100%)',
-      ground: 'linear-gradient(180deg, #141e0e 0%, #0a1206 100%)',
-      deco: [
-        { e: '☠️', x: 3, y: 8, s: 28, o: 0.3 }, { e: '☠️', x: 90, y: 6, s: 26, o: 0.28 },
-        { e: '☠️', x: 50, y: 70, s: 22, o: 0.2 }, { e: '🐍', x: 10, y: 40, s: 22, o: 0.18 },
-        { e: '🐍', x: 85, y: 45, s: 20, o: 0.16 }, { e: '🌴', x: 0, y: 15, s: 44, o: 0.22 },
-        { e: '🌴', x: 94, y: 12, s: 40, o: 0.2 }, { e: '🟢', x: 25, y: 65, s: 18, o: 0.14 },
-        { e: '🟢', x: 70, y: 68, s: 16, o: 0.12 }, { e: '🕸️', x: 5, y: 55, s: 26, o: 0.14 },
-      ],
-    };
-  }
-}
-
-function getStageTheme(worldId: number, stageId: number) {
-  if (worldId === 2) return getW2Theme(stageId);
-  return getW1Theme(stageId);
-}
 
 export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId, debuff, difficulty, onDifficultyChange, stageBestStars, bossBestStars, prevStageBestStars, onTypingStateChange }: CombatSceneProps) {
   const { t } = useTranslation();
@@ -695,102 +435,33 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
             )}
 
             {/* BOSS WORD MINIONS */}
-            {bossWordMinions.map(minion => {
-              const isMatched = minion.id === state.matchedMinionId;
-              const typedLen = isMatched ? state.currentInput.length : 0;
-              const elapsed = now - minion.spawnedAt;
-              const timeProgress = Math.min(1, elapsed / minion.timeoutMs);
-              const remainSec = Math.max(0, (minion.timeoutMs - elapsed) / 1000);
-              const isUrgent = timeProgress > 0.7;
-
-              return (
-                <div key={minion.id} style={{
-                  position: 'absolute', left: `${minion.x}%`, top: `${minion.y}%`,
-                  transform: 'translate(-50%, -50%)', zIndex: isMatched ? 12 : 9,
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
-                  animation: 'fadeIn 0.3s ease-out',
-                  opacity: bossShielded ? 0.4 : 1, transition: 'opacity 0.3s',
-                }}>
-                  <div style={{
-                    padding: '5px 14px', borderRadius: '8px',
-                    backgroundColor: isMatched ? 'rgba(var(--main-color-rgb, 0,0,0), 0.12)' : isUrgent ? 'rgba(var(--error-color-rgb, 200,50,50), 0.08)' : 'var(--bg-color)',
-                    border: isMatched ? '2px solid var(--main-color)' : '2px solid var(--error-color)',
-                    fontSize: isMobile ? '15px' : '18px', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap',
-                    boxShadow: isMatched ? '0 0 14px rgba(var(--main-color-rgb, 0,0,0), 0.25)' : '0 0 10px rgba(var(--error-color-rgb, 200,50,50), 0.15)',
-                  }}>
-                    {minion.word.split('').map((ch, i) => (
-                      <span key={i} style={{
-                        color: i < typedLen ? 'var(--main-color)' : 'var(--error-color)',
-                        fontWeight: i < typedLen ? 700 : 600,
-                      }}>{ch}</span>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', width: '100%' }}>
-                    <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(128,128,128,0.15)', overflow: 'hidden' }}>
-                      <div style={{
-                        height: '100%', width: `${(1 - timeProgress) * 100}%`,
-                        backgroundColor: isUrgent ? '#f44336' : '#ff6b6b', borderRadius: '2px', transition: 'width 0.2s linear',
-                      }} />
-                    </div>
-                    <span style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'monospace', color: isUrgent ? '#f44336' : 'rgba(255,255,255,0.5)', minWidth: '28px', textAlign: 'right' }}>
-                      {remainSec.toFixed(1)}s
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+            {bossWordMinions.map(minion => (
+              <MinionWord
+                key={minion.id}
+                minion={minion}
+                isMatched={minion.id === state.matchedMinionId}
+                typedLen={minion.id === state.matchedMinionId ? state.currentInput.length : 0}
+                now={now}
+                isMobile={isMobile}
+                emoji={stageConfig.enemyConfig.emoji}
+                isBossWord={true}
+                dimmed={bossShielded}
+              />
+            ))}
 
             {/* SHIELD MINIONS */}
-            {shieldMinions.map(minion => {
-              const isMatched = minion.id === state.matchedMinionId;
-              const typedLen = isMatched ? state.currentInput.length : 0;
-              const elapsed = now - minion.spawnedAt;
-              const timeProgress = Math.min(1, elapsed / minion.timeoutMs);
-              const remainSec = Math.max(0, (minion.timeoutMs - elapsed) / 1000);
-              const isUrgent = timeProgress > 0.7;
-              const minionEmoji = isBoss && stageConfig.bossConfig ? stageConfig.bossConfig.minionEmoji : stageConfig.enemyConfig.emoji;
-
-              return (
-                <div key={minion.id} style={{
-                  position: 'absolute', left: `${minion.x}%`, top: `${minion.y}%`,
-                  transform: 'translate(-50%, -50%)', zIndex: isMatched ? 10 : 3,
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px',
-                  animation: 'fadeIn 0.3s ease-out',
-                }}>
-                  <div style={{
-                    filter: isMatched ? 'drop-shadow(0 0 6px var(--main-color))' : undefined,
-                    transition: 'filter 0.15s',
-                  }}>
-                    <SpriteIcon src={minionEmoji} size={isMobile ? 40 : 48} />
-                  </div>
-                  <div style={{
-                    padding: '3px 10px', borderRadius: '6px',
-                    backgroundColor: isMatched ? 'rgba(var(--main-color-rgb, 0,0,0), 0.1)' : isUrgent ? 'rgba(var(--error-color-rgb, 200,50,50), 0.06)' : 'var(--bg-color)',
-                    border: isMatched ? '2px solid var(--main-color)' : isUrgent ? '2px solid var(--error-color)' : '1px solid var(--sub-alt-color)',
-                    fontSize: isMobile ? '13px' : '16px', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap',
-                    boxShadow: isMatched ? '0 0 10px rgba(var(--main-color-rgb, 0,0,0), 0.2)' : '0 2px 6px rgba(0,0,0,0.08)',
-                  }}>
-                    {minion.word.split('').map((ch, i) => (
-                      <span key={i} style={{
-                        color: i < typedLen ? 'var(--main-color)' : isUrgent ? 'var(--error-color)' : 'var(--text-color)',
-                        fontWeight: i < typedLen ? 700 : 600,
-                      }}>{ch}</span>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', width: '100%' }}>
-                    <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(128,128,128,0.15)', overflow: 'hidden' }}>
-                      <div style={{
-                        height: '100%', width: `${(1 - timeProgress) * 100}%`,
-                        backgroundColor: isUrgent ? '#f44336' : 'var(--main-color)', borderRadius: '2px', transition: 'width 0.2s linear',
-                      }} />
-                    </div>
-                    <span style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'monospace', color: isUrgent ? '#f44336' : 'rgba(255,255,255,0.5)', minWidth: '28px', textAlign: 'right' }}>
-                      {remainSec.toFixed(1)}s
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+            {shieldMinions.map(minion => (
+              <MinionWord
+                key={minion.id}
+                minion={minion}
+                isMatched={minion.id === state.matchedMinionId}
+                typedLen={minion.id === state.matchedMinionId ? state.currentInput.length : 0}
+                now={now}
+                isMobile={isMobile}
+                emoji={isBoss && stageConfig.bossConfig ? stageConfig.bossConfig.minionEmoji : stageConfig.enemyConfig.emoji}
+                isBossWord={false}
+              />
+            ))}
 
             {/* Kill effects */}
             {state.killEffects.map(k => {

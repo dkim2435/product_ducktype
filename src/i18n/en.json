@@ -264,6 +264,12 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v250": {
+      "title": "Performance & Code Refactoring",
+      "item1": "Lazy Loading — Heavy page components now load on demand, reducing initial bundle size for faster startup.",
+      "item2": "Code Splitting — CombatScene, App.tsx, and shared logic reorganized into smaller, focused modules.",
+      "item3": "Custom Hooks — Font loading and URL parsing extracted into reusable hooks for cleaner architecture."
+    },
     "v240": {
       "title": "DuckType Blog",
       "item1": "Typing Blog — 20 expert articles covering typing tips, keyboard guides, WPM explained, ergonomics, and more.",
