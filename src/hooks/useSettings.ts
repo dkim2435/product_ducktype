@@ -4,7 +4,7 @@ import { DEFAULT_SETTINGS } from '../constants/defaults';
 import { getItem, setItem, removeItem } from '../utils/storage';
 
 // Bump this whenever defaults change to force a reset
-const SETTINGS_VERSION = 4;
+const SETTINGS_VERSION = 5;
 
 function loadSettings(): Settings {
   const savedVersion = getItem<number>('settings_version', 0);
