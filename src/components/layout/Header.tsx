@@ -46,7 +46,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
         setShowSettingsHint(true);
         localStorage.setItem('ducktype_settings_hint_seen', '1');
       }
-    }, 8000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
