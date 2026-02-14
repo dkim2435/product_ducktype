@@ -213,12 +213,11 @@ export function useTypingTest({ settings, onFinish, customWords }: UseTypingTest
       newWords[prev.currentWordIndex] = currentWord;
       newState.words = newWords;
 
-      // Auto-finish in words mode: last char of last word typed correctly
+      // Auto-finish in words mode: last char of last word typed
       if (
         !isTimeMode &&
         prev.currentWordIndex === prev.words.length - 1 &&
-        newState.currentLetterIndex === letters.length &&
-        letters.every(l => l.state === 'correct')
+        newState.currentLetterIndex === letters.length
       ) {
         currentWord.isActive = false;
         currentWord.isCompleted = true;
