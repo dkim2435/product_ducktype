@@ -40,11 +40,12 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
     { emoji: '👑', level: 95 },
   ];
 
-  const soundUnlocks = [
-    { name: 'Typewriter', level: 3 },
-    { name: 'Mechanical', level: 7 },
-    { name: 'Piano', level: 25 },
-    { name: 'Crystal', level: 50 },
+  const unlockCategories = [
+    { emoji: '🎨', label: 'Themes', count: 16, range: 'Lv.3–65' },
+    { emoji: '🔊', label: 'Sounds', count: 8, range: 'Lv.3–50' },
+    { emoji: '🖼️', label: 'Frames', count: 5, range: 'Lv.5–70' },
+    { emoji: '▌', label: 'Carets', count: 3, range: 'Lv.5–22' },
+    { emoji: 'Aa', label: 'Fonts', count: 3, range: 'Lv.8–35' },
   ];
 
   return (
@@ -190,7 +191,7 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
             </div>
           </div>
 
-          {/* Sound theme unlocks */}
+          {/* Unlock categories */}
           <div style={{
             padding: '12px 14px',
             backgroundColor: 'var(--sub-alt-color)',
@@ -200,33 +201,32 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
               fontSize: '12px',
               fontWeight: 600,
               color: 'var(--text-color)',
-              marginBottom: '6px',
+              marginBottom: '8px',
             }}>
-              {t('onboarding.soundUnlocks')}
+              {t('onboarding.unlockItems')}
             </div>
             <div style={{
               display: 'flex',
               flexWrap: 'wrap',
               gap: '6px',
             }}>
-              {soundUnlocks.map((s, i) => (
+              {unlockCategories.map((c, i) => (
                 <span key={i} style={{
                   fontSize: '11px',
                   color: 'var(--sub-color)',
-                  padding: '2px 8px',
+                  padding: '3px 10px',
                   backgroundColor: 'var(--bg-color)',
                   borderRadius: '999px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
                 }}>
-                  🔊 {s.name} · Lv.{s.level}
+                  <span>{c.emoji}</span>
+                  <span>{c.label}</span>
+                  <span style={{ opacity: 0.5 }}>·</span>
+                  <span style={{ fontSize: '10px', opacity: 0.7 }}>{c.range}</span>
                 </span>
               ))}
-              <span style={{
-                fontSize: '11px',
-                color: 'var(--sub-color)',
-                padding: '2px 8px',
-              }}>
-                +4 more...
-              </span>
             </div>
           </div>
         </div>
