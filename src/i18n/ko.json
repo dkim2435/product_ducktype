@@ -176,6 +176,10 @@
     "won": "친구의 {{wpm}} WPM을 이겼어요!",
     "lost": "친구가 {{wpm}} WPM을 기록했어요. 다시 도전!"
   },
+  "header": {
+    "settingsHint": "나만의 스타일로 꾸며보세요!",
+    "settingsHintSub": "테마, 사운드, 캐럿, 폰트 등"
+  },
   "nav": {
     "profile": "프로필",
     "achievements": "업적",

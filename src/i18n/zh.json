@@ -176,6 +176,10 @@
     "won": "你超过了朋友的 {{wpm}} WPM！",
     "lost": "朋友打了 {{wpm}} WPM，再试一次！"
   },
+  "header": {
+    "settingsHint": "自定义你的体验！",
+    "settingsHintSub": "主题、音效、光标、字体等"
+  },
   "nav": {
     "profile": "资料",
     "achievements": "成就",

@@ -176,6 +176,10 @@
     "won": "You beat your friend's {{wpm}} WPM!",
     "lost": "Your friend typed {{wpm}} WPM. Try again!"
   },
+  "header": {
+    "settingsHint": "Customize your experience!",
+    "settingsHintSub": "Themes, sounds, carets, fonts & more"
+  },
   "nav": {
     "profile": "Profile",
     "achievements": "Achievements",

@@ -35,6 +35,28 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
     return () => document.removeEventListener('mousedown', handleClick);
   }, [showUserMenu]);
 
+  const [showSettingsHint, setShowSettingsHint] = useState(false);
+
+  // Show settings hint once after a delay
+  useEffect(() => {
+    if (localStorage.getItem('ducktype_settings_hint_seen')) return;
+    // Wait for onboarding to finish before showing
+    const timer = setTimeout(() => {
+      if (!localStorage.getItem('ducktype_settings_hint_seen')) {
+        setShowSettingsHint(true);
+        localStorage.setItem('ducktype_settings_hint_seen', '1');
+      }
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Auto-dismiss after 6 seconds
+  useEffect(() => {
+    if (!showSettingsHint) return;
+    const timer = setTimeout(() => setShowSettingsHint(false), 6000);
+    return () => clearTimeout(timer);
+  }, [showSettingsHint]);
+
   const iconSize = isMobile ? 22 : 18;
   const settingsIconSize = isMobile ? 22 : 20;
 
@@ -347,21 +369,64 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
             </svg>
           </button>
 
-          <button
-            onClick={onSettingsClick}
-            style={{
-              padding: 'var(--nav-icon-padding)',
-              color: 'var(--sub-color)',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            title="Settings"
-          >
-            <svg width={settingsIconSize} height={settingsIconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          </button>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => { setShowSettingsHint(false); onSettingsClick(); }}
+              style={{
+                padding: 'var(--nav-icon-padding)',
+                color: 'var(--sub-color)',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title="Settings"
+            >
+              <svg width={settingsIconSize} height={settingsIconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+
+            {/* Settings hint tooltip */}
+            {showSettingsHint && (
+              <div
+                className="fade-in"
+                onClick={() => { setShowSettingsHint(false); onSettingsClick(); }}
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '8px',
+                  padding: '10px 14px',
+                  backgroundColor: 'var(--main-color)',
+                  color: 'var(--bg-color)',
+                  borderRadius: 'var(--border-radius)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  zIndex: 100,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                  lineHeight: 1.5,
+                }}
+              >
+                <div>{t('header.settingsHint')}</div>
+                <div style={{ fontSize: '11px', fontWeight: 400, opacity: 0.85 }}>
+                  {t('header.settingsHintSub')}
+                </div>
+                {/* Arrow pointing up */}
+                <div style={{
+                  position: 'absolute',
+                  top: '-6px',
+                  right: '14px',
+                  width: 0,
+                  height: 0,
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  borderBottom: '6px solid var(--main-color)',
+                }} />
+              </div>
+            )}
+          </div>
         </nav>
       </div>
 
