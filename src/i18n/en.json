@@ -266,6 +266,10 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v251": {
+      "title": "Leaderboard Daily Refresh",
+      "item1": "Dynamic Rankings — Leaderboard rankings now shift daily, keeping the competition fresh and lively."
+    },
     "v250": {
       "title": "Performance & Code Refactoring",
       "item1": "Lazy Loading — Heavy page components now load on demand, reducing initial bundle size for faster startup.",

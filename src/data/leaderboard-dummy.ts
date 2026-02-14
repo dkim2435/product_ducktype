@@ -90,7 +90,9 @@ const MODE_BASE_MULT: Record<number, number> = {
 
 export function getDummyLeaderboard(modeValue: number): DummyLeaderboardEntry[] {
   const baseMult = MODE_BASE_MULT[modeValue] ?? 1.0;
-  const rand = seedRand(modeValue * 7919);
+  // Rotate seed daily so dummy rankings shift each day
+  const daySeed = Math.floor(Date.now() / 86_400_000);
+  const rand = seedRand(modeValue * 7919 + daySeed);
 
   return DUMMY_POOL.map((d) => {
     // Use peakWpm in specialty mode, baseWpm otherwise
