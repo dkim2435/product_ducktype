@@ -41,7 +41,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
   const lineHeight = Math.round(effectiveFontSize * 1.65);
   const lineStride = lineHeight + 4; // includes word margin-bottom (4px)
-  const visibleLines = isMobile ? 3 : 4;
+  const visibleLines = 3;
 
   const {
     state,

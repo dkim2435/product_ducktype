@@ -2,7 +2,7 @@
   --bg-color: #1a1b2e;
   --main-color: #ffb347;
   --caret-color: #ffb347;
-  --sub-color: #6b6893;
+  --sub-color: #8882b0;
   --sub-alt-color: #141525;
   --text-color: #e8e2d6;
   --error-color: #ff6b6b;
@@ -11,7 +11,7 @@
   --colorful-error-extra-color: #a34444;
 
   --font-family: 'Roboto Mono', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', monospace;
-  --font-size: 24px;
+  --font-size: 28px;
   --border-radius: 8px;
   --transition-speed: 0.15s;
 

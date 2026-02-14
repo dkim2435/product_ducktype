@@ -9,7 +9,7 @@ export const themes: Theme[] = [
       bg: '#1a1b2e',
       main: '#ffb347',
       caret: '#ffb347',
-      sub: '#6b6893',
+      sub: '#8882b0',
       subAlt: '#141525',
       text: '#e8e2d6',
       error: '#ff6b6b',

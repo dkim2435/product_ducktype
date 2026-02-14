@@ -7,7 +7,7 @@ export const DEFAULT_SETTINGS: Settings = {
   timeLimit: 45,
   wordCount: 25,
   fontFamily: 'default',
-  fontSize: 24,
+  fontSize: 28,
   caretStyle: 'line',
   smoothCaret: true,
   soundEnabled: true,
