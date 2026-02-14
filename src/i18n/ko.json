@@ -11,7 +11,8 @@
     "nextTest": "다음 테스트",
     "tapToStart": "탭하여 시작",
     "tapToResume": "탭하여 계속",
-    "inputMismatch": "입력 방식이 다릅니다 — 테스트 언어에 맞게 키보드를 전환해주세요"
+    "inputMismatch": "입력 방식이 다릅니다 — 테스트 언어에 맞게 키보드를 전환해주세요",
+    "typingHint": "여기서 타이핑을 시작하세요!"
   },
   "mode": {
     "time": "시간",

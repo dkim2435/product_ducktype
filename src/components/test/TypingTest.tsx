@@ -34,6 +34,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   const [liveWpm, setLiveWpm] = useState(0);
   const [scrollOffset, setScrollOffset] = useState(0);
   const [inputMismatch, setInputMismatch] = useState(false);
+  const [showTypingHint, setShowTypingHint] = useState(false);
   const isTypingRef = useRef(false);
 
   // Change 1: Mobile font size cap (max 20px on mobile)
@@ -146,6 +147,24 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
       requestAnimationFrame(updatePosition);
     });
   }, [scrollOffset, updatePosition]);
+
+  // "Start typing here" hint — show after 3s on first visit, hide on type
+  useEffect(() => {
+    if (localStorage.getItem('ducktype_typing_hint_seen')) return;
+    const timer = setTimeout(() => {
+      if (!localStorage.getItem('ducktype_typing_hint_seen')) {
+        setShowTypingHint(true);
+      }
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (state.phase === 'running' && showTypingHint) {
+      setShowTypingHint(false);
+      localStorage.setItem('ducktype_typing_hint_seen', '1');
+    }
+  }, [state.phase, showTypingHint]);
 
   const hasParticles = (leaderboardRank && leaderboardRank <= 20) || (settings.particleTier && settings.particleTier !== 'none');
   const triggerParticle = useCallback(() => {
@@ -335,18 +354,55 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
       )}
 
       {/* ===== WORDS AREA ===== */}
+      <div style={{ position: 'relative' }}>
+        {/* "Start typing here" hint tooltip */}
+        {showTypingHint && state.phase === 'waiting' && (
+          <div
+            className="fade-in"
+            style={{
+              position: 'absolute',
+              top: '-36px',
+              left: '0',
+              padding: '6px 16px',
+              backgroundColor: 'var(--main-color)',
+              color: 'var(--bg-color)',
+              borderRadius: '999px',
+              fontSize: '12px',
+              fontWeight: 600,
+              whiteSpace: 'nowrap',
+              zIndex: 10,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+              pointerEvents: 'none',
+              animation: 'typing-hint-bounce 2s ease-in-out infinite',
+            }}
+          >
+            {t('test.typingHint')}
+            {/* Arrow pointing down */}
+            <div style={{
+              position: 'absolute',
+              bottom: '-5px',
+              left: '16px',
+              width: 0,
+              height: 0,
+              borderLeft: '5px solid transparent',
+              borderRight: '5px solid transparent',
+              borderTop: '5px solid var(--main-color)',
+            }} />
+          </div>
+        )}
+
       {/* Outer clip container: fixed line height, overflow hidden */}
-      <div
-        onClick={handleContainerClick}
-        style={{
-          position: 'relative',
-          fontSize: `${effectiveFontSize}px`,
-          lineHeight: '1.65',
-          cursor: 'text',
-          overflow: 'hidden',
-          height: `${lineStride * visibleLines}px`,
-        }}
-      >
+        <div
+          onClick={handleContainerClick}
+          style={{
+            position: 'relative',
+            fontSize: `${effectiveFontSize}px`,
+            lineHeight: '1.65',
+            cursor: 'text',
+            overflow: 'hidden',
+            height: `${lineStride * visibleLines}px`,
+          }}
+        >
         {/* Typing particles for top 20 leaderboard users or settings-based tier */}
         <TypingParticles
           visible={!!hasParticles && state.phase === 'running'}
@@ -451,6 +507,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
           </button>
         )}
       </div>
+      </div>{/* end words area wrapper */}
 
       {/* Restart button */}
       <div style={{

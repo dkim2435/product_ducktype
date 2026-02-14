@@ -124,6 +124,12 @@ button:hover {
 .letter--extra { color: var(--error-extra-color); }
 .letter--pending { color: var(--sub-color); }
 
+/* Typing hint bounce */
+@keyframes typing-hint-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
 /* Boss death animations */
 @keyframes boss-shake {
   0% { transform: translateX(-50%) rotate(0deg); opacity: 1; }

@@ -11,7 +11,8 @@
     "nextTest": "Next test",
     "tapToStart": "Tap to start",
     "tapToResume": "Tap to continue",
-    "inputMismatch": "Wrong input method — please switch your keyboard to match the test language"
+    "inputMismatch": "Wrong input method — please switch your keyboard to match the test language",
+    "typingHint": "Start typing here!"
   },
   "mode": {
     "time": "time",
