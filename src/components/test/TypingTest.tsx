@@ -126,7 +126,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
       // Start scrolling only after the current word passes a threshold
       // (keep completed lines visible, scroll when entering next line)
-      const scrollThreshold = lineStride * (isMobile ? 1 : 2);
+      const scrollThreshold = lineStride * 1;
       if (wordTop >= scrollThreshold + scrollOffset) {
         setScrollOffset(wordTop - scrollThreshold);
       }
