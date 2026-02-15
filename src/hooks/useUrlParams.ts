@@ -26,7 +26,10 @@ export function useUrlParams() {
         setInitialScreen('adventure');
         setAdventureWorldId(worldId);
       }
-      history.replaceState(null, '', window.location.pathname.replace('/adventure', '/'));
+      // Clean up query params only, keep the path (URL is managed by App.tsx)
+      if (worldParam) {
+        history.replaceState(null, '', window.location.pathname);
+      }
     }
   }, []);
 

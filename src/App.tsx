@@ -68,7 +68,22 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       sessionStorage.removeItem('ducktype_return_screen');
       return saved as Screen;
     }
-    return 'test';
+    // URL-based routing: read path to show correct screen on initial load
+    const pathToScreen: Record<string, Screen> = {
+      '/': 'test',
+      '/adventure': 'adventure',
+      '/daily-challenge': 'daily-challenge',
+      '/practice': 'practice',
+      '/leaderboard': 'leaderboard',
+      '/about': 'about',
+      '/achievements': 'achievements',
+      '/profile': 'profile',
+      '/contact': 'contact',
+      '/privacy': 'privacy',
+      '/terms': 'terms',
+    };
+    const path = window.location.pathname.replace(/\/$/, '') || '/';
+    return pathToScreen[path] || 'test';
   });
   const [showSettings, setShowSettings] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -142,6 +157,36 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
   useEffect(() => {
     if (adventureWorldId !== undefined) setScreen('adventure');
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update canonical tag and URL path when screen changes (SEO)
+  useEffect(() => {
+    const screenToPath: Record<Screen, string> = {
+      'test': '/',
+      'results': '/',
+      'about': '/about',
+      'contact': '/contact',
+      'privacy': '/privacy',
+      'terms': '/terms',
+      'achievements': '/achievements',
+      'profile': '/profile',
+      'daily-challenge': '/daily-challenge',
+      'practice': '/practice',
+      'lesson': '/practice',
+      'leaderboard': '/leaderboard',
+      'adventure': '/adventure',
+    };
+    const path = screenToPath[screen] || '/';
+    const canonicalUrl = `https://ducktype.xyz${path}`;
+
+    // Update <link rel="canonical">
+    const link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (link) link.href = canonicalUrl;
+
+    // Sync URL bar (replaceState to avoid breaking back button)
+    if (window.location.pathname !== path) {
+      window.history.replaceState(null, '', path);
+    }
+  }, [screen]);
 
   // Sync UI language
   useEffect(() => {
