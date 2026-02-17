@@ -15,6 +15,8 @@
 - **Challenge Friends**: Share a link with your WPM score and challenge friends to beat it.
 - **Cloud Sync**: Sign up to save progress across devices, or use locally with no account.
 - **17+ Themes**: DuckType Dark, Duck Pond, Dracula, Nord, Tokyo Night, Solarized, and more.
+- **Accessibility**: Supports prefers-reduced-motion, 44px minimum touch targets on mobile, aria-labels on all icon buttons, keyboard-navigable interactive elements.
+- **PWA Support**: Installable as a Progressive Web App with manifest.json, offline-capable meta tags, and theme-color support.
 
 ## Typing Speed Reference
 

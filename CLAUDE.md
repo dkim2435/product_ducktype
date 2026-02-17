@@ -56,19 +56,22 @@ npm run lint     # eslint
 ```
 index.html              # 메인 HTML, Schema.org 구조화 데이터, 메타태그
 package.json            # 버전, 의존성
-vercel.json             # 라우팅, 헤더, 리다이렉트
+vercel.json             # 라우팅, 헤더(보안+캐시), 리다이렉트
 public/
+  manifest.json         # PWA 웹 앱 매니페스트
   sitemap.xml           # 사이트맵
   robots.txt            # 크롤러 규칙
   llms.txt              # AI 크롤러용 사이트 요약
+  blog/                 # 정적 블로그 HTML (20편, 각각 BlogPosting 스키마 포함)
 src/
   App.tsx               # 메인 앱 컴포넌트, 라우팅, 폰트 로딩
-  styles/index.css      # 글로벌 스타일
+  styles/index.css      # 글로벌 스타일 (prefers-reduced-motion 포함)
   data/releaseNotes.ts  # 릴리즈 노트 데이터
   i18n/                 # 다국어 번역 (en, ko, zh, ja)
   components/
     adventure/          # 어드벤처 모드 (CombatScene, AdventurePage 등)
     results/            # 결과 화면 (ResultsScreen, WpmChart)
+    pages/NotFound.tsx  # 404 페이지
 ```
 
 ## 어드벤처 모드 — 디버프 아우라 시스템
@@ -95,6 +98,28 @@ src/
 - **흔들림 애니메이션**: `player-debuff` (±3° 회전, 2초 주기)
 
 새 월드 디버프 추가 시: `DEBUFF_AURA` 객체에 항목 추가하면 자동으로 아우라/오버레이/HUD 표시 적용됨.
+
+## 접근성 규칙
+- `prefers-reduced-motion: reduce` 미디어 쿼리가 `index.css` 하단에 존재 — 모든 애니메이션/트랜지션 비활성화
+- 모바일 터치 타겟 최소 44px 유지 (`--nav-icon-padding`, 버튼 min-height 등)
+- 아이콘만 있는 버튼에는 반드시 `aria-label` 추가
+- onClick이 있는 div에는 `role="button"`, `tabIndex={0}`, `onKeyDown` (Enter/Space) 추가
+- 모달 백드롭에는 `role="presentation"` 추가
+- 토글 버튼에는 `role="switch"`, `aria-checked` 사용
+- viewport에 `user-scalable=no` 사용 금지 (접근성 위반)
+
+## 블로그 SEO 규칙 (public/blog/)
+- 각 글에 `<meta property="og:image">` 필수
+- BlogPosting 스키마에 `datePublished` + `dateModified` 둘 다 포함
+- 글 수정 시 `dateModified`를 실제 수정일로 업데이트
+- 새 글 추가 시: `public/sitemap.xml`에 URL 추가 + `public/llms.txt` Blog Articles에 추가
+
+## 보안 헤더
+`vercel.json`에 아래 보안 헤더가 모든 경로(`/(.*)`)에 적용됨:
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: SAMEORIGIN`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
 
 ## 코딩 규칙
 - 한국어 커밋 메시지 OK, 단 커밋 본문은 영어
