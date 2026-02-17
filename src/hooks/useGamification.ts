@@ -113,8 +113,13 @@ export function useGamification() {
     };
 
     // 6b. Streak milestone bonus
+    // Reset claimed milestones when streak resets (so users can earn them again)
     const claimedRaw = localStorage.getItem(STREAK_MILESTONES_KEY);
-    const claimed: number[] = claimedRaw ? JSON.parse(claimedRaw) : [];
+    let claimed: number[] = claimedRaw ? JSON.parse(claimedRaw) : [];
+    if (newStreak.currentStreak <= 1) {
+      claimed = [];
+      localStorage.setItem(STREAK_MILESTONES_KEY, JSON.stringify(claimed));
+    }
     let milestoneBonus = 0;
     for (const m of STREAK_MILESTONES) {
       if (newStreak.currentStreak >= m.days && !claimed.includes(m.days)) {
