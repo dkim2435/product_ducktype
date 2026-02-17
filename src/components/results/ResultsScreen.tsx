@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TestResult, PersonalBest } from '../../types/stats';
 import type { XpGain, KeyStats } from '../../types/gamification';
+import type { NextAchievement } from '../../utils/achievementProgress';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { StatCard } from './StatCard';
 const WpmChart = lazy(() => import('./WpmChart').then(m => ({ default: m.WpmChart })));
@@ -31,6 +32,9 @@ interface ResultsScreenProps {
   testsCompleted?: number;
   totalXp?: number;
   playerLevel?: number;
+  unlockedCount?: number;
+  totalAchievements?: number;
+  nextAchievement?: NextAchievement | null;
 }
 
 function TipItem({ text }: { text: string }) {
@@ -49,7 +53,7 @@ function TipItem({ text }: { text: string }) {
   );
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick, onShareClick, hasCompletedDailyToday, dailyStreak, testsCompleted, totalXp, playerLevel }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick, onShareClick, hasCompletedDailyToday, dailyStreak, testsCompleted, totalXp, playerLevel, unlockedCount = 0, totalAchievements = 0, nextAchievement }: ResultsScreenProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
@@ -235,6 +239,116 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       {newAchievements && newAchievements.length > 0 && (
         <div style={{ marginBottom: '16px' }}>
           <AchievementUnlock achievementIds={newAchievements} />
+        </div>
+      )}
+
+      {/* Achievement Progress Card */}
+      {totalAchievements > 0 && (
+        <div style={{
+          marginBottom: '16px',
+          padding: isMobile ? '14px' : '14px 20px',
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+        }}>
+          {/* Overall progress */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '8px',
+          }}>
+            <span style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--text-color)',
+            }}>
+              🏆 {t('results.achievementProgress', { unlocked: unlockedCount, total: totalAchievements })}
+            </span>
+            <span style={{
+              fontSize: '11px',
+              color: 'var(--sub-color)',
+            }}>
+              {Math.round((unlockedCount / totalAchievements) * 100)}%
+            </span>
+          </div>
+          {/* Overall progress bar */}
+          <div style={{
+            height: '4px',
+            backgroundColor: 'var(--bg-color)',
+            borderRadius: '2px',
+            overflow: 'hidden',
+            marginBottom: nextAchievement ? '12px' : '0',
+          }}>
+            <div style={{
+              height: '100%',
+              width: `${(unlockedCount / totalAchievements) * 100}%`,
+              backgroundColor: 'var(--main-color)',
+              borderRadius: '2px',
+              transition: 'width 0.5s ease',
+            }} />
+          </div>
+
+          {/* Next goal */}
+          {nextAchievement && (
+            <>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '6px',
+              }}>
+                <span style={{
+                  fontSize: '12px',
+                  color: 'var(--sub-color)',
+                }}>
+                  {t('results.nextGoal')}: {nextAchievement.icon} {nextAchievement.name}
+                  {nextAchievement.unit
+                    ? ` (${nextAchievement.current}/${nextAchievement.target} ${nextAchievement.unit})`
+                    : ` (${nextAchievement.current}/${nextAchievement.target})`}
+                </span>
+                <span style={{
+                  fontSize: '11px',
+                  color: 'var(--main-color)',
+                  fontWeight: 600,
+                }}>
+                  {Math.round(nextAchievement.progress * 100)}%
+                </span>
+              </div>
+              {/* Next goal progress bar */}
+              <div style={{
+                height: '6px',
+                backgroundColor: 'var(--bg-color)',
+                borderRadius: '3px',
+                overflow: 'hidden',
+              }}>
+                <div style={{
+                  height: '100%',
+                  width: `${nextAchievement.progress * 100}%`,
+                  backgroundColor: 'var(--main-color)',
+                  borderRadius: '3px',
+                  transition: 'width 0.5s ease',
+                }} />
+              </div>
+            </>
+          )}
+
+          {/* View achievements link */}
+          {onNavigate && (
+            <div style={{ textAlign: 'right', marginTop: '8px' }}>
+              <button
+                onClick={() => onNavigate('achievements')}
+                style={{
+                  fontSize: '11px',
+                  color: 'var(--main-color)',
+                  cursor: 'pointer',
+                  padding: 0,
+                  fontWeight: 600,
+                }}
+              >
+                {t('results.viewAchievements')} →
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -460,6 +574,49 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
             flexShrink: 0,
           }}>
             {hasCompletedDailyToday ? '→' : `1.5x XP →`}
+          </span>
+        </div>
+      )}
+
+      {/* Leaderboard prompt */}
+      {onNavigate && (
+        <div style={{
+          marginTop: '12px',
+          padding: isMobile ? '14px' : '12px 20px',
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+          display: 'flex',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? '10px' : '16px',
+          cursor: 'pointer',
+        }}
+          onClick={() => onNavigate('leaderboard')}
+        >
+          <span style={{ fontSize: '20px', flexShrink: 0 }}>🏅</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--text-color)',
+              marginBottom: '2px',
+            }}>
+              {t('results.leaderboardHook', { wpm: result.wpm, percent: topPercent })}
+            </div>
+            <div style={{
+              fontSize: '11px',
+              color: 'var(--sub-color)',
+            }}>
+              {t('results.leaderboardHookDesc')}
+            </div>
+          </div>
+          <span style={{
+            fontSize: '12px',
+            color: 'var(--main-color)',
+            fontWeight: 600,
+            flexShrink: 0,
+          }}>
+            {t('results.viewLeaderboard')} →
           </span>
         </div>
       )}

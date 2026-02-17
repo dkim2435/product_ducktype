@@ -56,7 +56,13 @@
     "adventureBanner": "{{wpm}} WPM으로 몬스터를 처치하세요! 타이핑 RPG에 도전.",
     "dailyHookNotDone": "오늘의 데일리 챌린지 완료하면 1.5x XP!",
     "dailyHookDone": "내일 새로운 챌린지가 기다려! 스트릭을 이어가세요.",
-    "dailyHookStart": "데일리 챌린지를 시작하고 스트릭을 쌓아보세요!"
+    "dailyHookStart": "데일리 챌린지를 시작하고 스트릭을 쌓아보세요!",
+    "achievementProgress": "업적 {{unlocked}}/{{total}} 달성",
+    "nextGoal": "다음 목표",
+    "viewAchievements": "업적 보기",
+    "leaderboardHook": "당신의 {{wpm}} WPM은 상위 {{percent}}%!",
+    "leaderboardHookDesc": "다른 타이피스트와 순위를 비교해 보세요",
+    "viewLeaderboard": "리더보드"
   },
   "settings": {
     "title": "설정",
@@ -277,6 +283,11 @@
   "whatsNew": {
     "title": "새로운 소식",
     "gotIt": "확인!",
+    "v261": {
+      "title": "결과 화면 업그레이드",
+      "item1": "업적 진행도 — 결과 화면에서 전체 업적 진행 상황과 다음 목표를 확인할 수 있습니다.",
+      "item2": "리더보드 유도 — 결과 화면에서 퍼센타일 순위를 확인하고 바로 리더보드로 이동할 수 있습니다."
+    },
     "v260": {
       "title": "리텐션 & 참여도 강화",
       "item1": "데일리 챌린지 후킹 — 결과 화면에서 데일리 챌린지 상태와 스트릭을 바로 확인할 수 있습니다.",

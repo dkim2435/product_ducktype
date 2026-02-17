@@ -56,7 +56,13 @@
     "adventureBanner": "あなたの {{wpm}} WPM でモンスターを倒そう！タイピングRPGに挑戦。",
     "dailyHookNotDone": "今日のデイリーチャレンジをクリアして1.5倍XPをゲット！",
     "dailyHookDone": "明日また新しいチャレンジが待ってる！ストリークを続けよう。",
-    "dailyHookStart": "デイリーチャレンジを始めてストリークを積み上げよう！"
+    "dailyHookStart": "デイリーチャレンジを始めてストリークを積み上げよう！",
+    "achievementProgress": "実績 {{unlocked}}/{{total}}",
+    "nextGoal": "次の目標",
+    "viewAchievements": "実績を見る",
+    "leaderboardHook": "あなたの {{wpm}} WPM は上位 {{percent}}%！",
+    "leaderboardHookDesc": "他のタイピストとランキングを比べてみよう",
+    "viewLeaderboard": "ランキング"
   },
   "settings": {
     "title": "設定",
@@ -277,6 +283,11 @@
   "whatsNew": {
     "title": "新機能のお知らせ",
     "gotIt": "OK!",
+    "v261": {
+      "title": "結果画面アップグレード",
+      "item1": "実績進捗 — 結果画面で全体の実績進捗と次の目標を確認できるようになりました。",
+      "item2": "ランキング案内 — パーセンタイル順位を確認して、結果画面からランキングへ直接移動できます。"
+    },
     "v260": {
       "title": "リテンション＆エンゲージメント強化",
       "item1": "デイリーチャレンジフック — 結果画面でデイリーチャレンジの状況とストリークを表示。",

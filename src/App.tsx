@@ -44,6 +44,8 @@ import { useFontLoader } from './hooks/useFontLoader';
 import { useUrlParams } from './hooks/useUrlParams';
 import { setPersistProgress, clearProgressData } from './utils/storage';
 import { validateSettings } from './utils/settingsValidation';
+import { getNextAchievement } from './utils/achievementProgress';
+import { ACHIEVEMENTS } from './constants/achievements';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard'
@@ -514,6 +516,14 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             testsCompleted={gamification.profile.testsCompleted}
             totalXp={gamification.profile.totalXp}
             playerLevel={gamification.profile.level}
+            unlockedCount={gamification.achievements.unlocked.length}
+            totalAchievements={ACHIEVEMENTS.length}
+            nextAchievement={getNextAchievement(
+              lastResult,
+              gamification.profile.testsCompleted,
+              gamification.streak,
+              gamification.achievements.unlocked.map(a => a.id),
+            )}
           />
         )}
 

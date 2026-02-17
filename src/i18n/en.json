@@ -56,7 +56,13 @@
     "adventureBanner": "Your {{wpm}} WPM can slay monsters! Try the typing RPG.",
     "dailyHookNotDone": "Complete today's Daily Challenge for 1.5x XP!",
     "dailyHookDone": "New challenge tomorrow! Keep your streak alive.",
-    "dailyHookStart": "Start the Daily Challenge and build your streak!"
+    "dailyHookStart": "Start the Daily Challenge and build your streak!",
+    "achievementProgress": "Achievements {{unlocked}}/{{total}}",
+    "nextGoal": "Next goal",
+    "viewAchievements": "View achievements",
+    "leaderboardHook": "Your {{wpm}} WPM is Top {{percent}}%!",
+    "leaderboardHookDesc": "See how you rank against other typists",
+    "viewLeaderboard": "Leaderboard"
   },
   "settings": {
     "title": "Settings",
@@ -277,6 +283,11 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v261": {
+      "title": "Results Screen Upgrades",
+      "item1": "Achievement Progress — Results screen now shows your overall achievement progress and next goal.",
+      "item2": "Leaderboard Prompt — See your percentile ranking and jump to the leaderboard from results."
+    },
     "v260": {
       "title": "Retention & Engagement Boost",
       "item1": "Daily Challenge Hook — Results screen now shows your Daily Challenge status and streak to keep you coming back.",

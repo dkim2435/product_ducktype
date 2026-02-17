@@ -56,7 +56,13 @@
     "adventureBanner": "用你的 {{wpm}} WPM 消灭怪物吧！试试打字RPG。",
     "dailyHookNotDone": "完成今天的每日挑战获得1.5倍XP！",
     "dailyHookDone": "明天有新挑战等着你！保持连续记录。",
-    "dailyHookStart": "开始每日挑战，积累你的连续记录！"
+    "dailyHookStart": "开始每日挑战，积累你的连续记录！",
+    "achievementProgress": "成就 {{unlocked}}/{{total}}",
+    "nextGoal": "下一个目标",
+    "viewAchievements": "查看成就",
+    "leaderboardHook": "你的 {{wpm}} WPM 位列前 {{percent}}%！",
+    "leaderboardHookDesc": "看看你在其他打字者中的排名",
+    "viewLeaderboard": "排行榜"
   },
   "settings": {
     "title": "设置",
@@ -277,6 +283,11 @@
   "whatsNew": {
     "title": "更新内容",
     "gotIt": "知道了!",
+    "v261": {
+      "title": "结果页面升级",
+      "item1": "成就进度 — 结果页面现在显示整体成就进度和下一个目标。",
+      "item2": "排行榜提示 — 查看你的百分位排名，从结果页面直接跳转到排行榜。"
+    },
     "v260": {
       "title": "留存与参与度提升",
       "item1": "每日挑战提示 — 结果页面现在显示每日挑战状态和连续记录，让你持续回来。",
