@@ -283,6 +283,12 @@
   "whatsNew": {
     "title": "更新内容",
     "gotIt": "知道了!",
+    "v262": {
+      "title": "SEO与无障碍改进",
+      "item1": "无障碍 — 支持减少动画、扩大触摸区域、屏幕阅读器标签和键盘导航。",
+      "item2": "安全 — 添加安全头（X-Content-Type-Options、X-Frame-Options、Referrer-Policy）和PWA清单。",
+      "item3": "SEO — 404页面、博客Open Graph图片、站点地图更新和结构化数据改进。"
+    },
     "v261": {
       "title": "结果页面升级",
       "item1": "成就进度 — 结果页面现在显示整体成就进度和下一个目标。",

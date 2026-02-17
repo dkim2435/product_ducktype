@@ -30,6 +30,7 @@ import { TermsOfService } from './components/pages/TermsOfService';
 import { WhatsNewModal } from './components/layout/WhatsNewModal';
 import { OnboardingModal } from './components/layout/OnboardingModal';
 import { TypingInfo } from './components/content/TypingInfo';
+import { NotFound } from './components/pages/NotFound';
 
 // Lazy-loaded pages (code-split for smaller initial bundle)
 const Profile = lazy(() => import('./components/pages/Profile').then(m => ({ default: m.Profile })));
@@ -49,7 +50,7 @@ import { ACHIEVEMENTS } from './constants/achievements';
 
 type Screen = 'test' | 'results' | 'about' | 'contact' | 'privacy' | 'terms'
   | 'achievements' | 'profile' | 'daily-challenge' | 'practice' | 'lesson' | 'leaderboard'
-  | 'adventure';
+  | 'adventure' | 'not-found';
 
 interface AppContentProps {
   user: User | null;
@@ -85,7 +86,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       '/terms': 'terms',
     };
     const path = window.location.pathname.replace(/\/$/, '') || '/';
-    return pathToScreen[path] || 'test';
+    return pathToScreen[path] || 'not-found';
   });
   const [showSettings, setShowSettings] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -176,6 +177,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
       'lesson': '/practice',
       'leaderboard': '/leaderboard',
       'adventure': '/adventure',
+      'not-found': '/404',
     };
     const path = screenToPath[screen] || '/';
     const canonicalUrl = `https://ducktype.xyz${path}`;
@@ -623,6 +625,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
         {screen === 'contact' && <Contact onBack={() => handleNavigate('test')} />}
         {screen === 'privacy' && <PrivacyPolicy onBack={() => handleNavigate('test')} />}
         {screen === 'terms' && <TermsOfService onBack={() => handleNavigate('test')} />}
+        {screen === 'not-found' && <NotFound onBack={() => handleNavigate('test')} />}
       </main>
 
       <Footer onNavigate={handleNavigate} hidden={isTypingActive} />

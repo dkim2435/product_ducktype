@@ -283,6 +283,12 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v262": {
+      "title": "SEO & Accessibility Improvements",
+      "item1": "Accessibility — Reduced motion support, larger touch targets, screen reader labels, and keyboard navigation for all interactive elements.",
+      "item2": "Security — Added security headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy) and PWA manifest.",
+      "item3": "SEO — 404 page, blog Open Graph images, updated sitemap, and improved structured data."
+    },
     "v261": {
       "title": "Results Screen Upgrades",
       "item1": "Achievement Progress — Results screen now shows your overall achievement progress and next goal.",
