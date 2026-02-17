@@ -182,8 +182,8 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
               <button
                 onClick={() => setShowUserMenu((v) => !v)}
                 style={{
-                  width: isMobile ? 28 : 26,
-                  height: isMobile ? 28 : 26,
+                  width: isMobile ? 36 : 26,
+                  height: isMobile ? 36 : 26,
                   borderRadius: '50%',
                   backgroundColor: 'var(--main-color)',
                   color: 'var(--bg-color)',
@@ -196,6 +196,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
+                aria-label={t('nav.profile')}
                 title={user.email ?? ''}
               >
                 {(user.email ?? '?')[0].toUpperCase()}
@@ -271,6 +272,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
                 display: 'flex',
                 alignItems: 'center',
               }}
+              aria-label={t('nav.profile')}
               title={t('nav.profile')}
             >
               {/* User icon */}
@@ -289,6 +291,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
               display: 'flex',
               alignItems: 'center',
             }}
+            aria-label={t('leaderboard.title')}
             title={t('leaderboard.title')}
           >
             {/* Leaderboard / bar-chart icon */}
@@ -307,6 +310,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
               display: 'flex',
               alignItems: 'center',
             }}
+            aria-label={t('nav.achievements')}
             title={t('nav.achievements')}
           >
             {/* Trophy icon */}
@@ -328,6 +332,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
               display: 'flex',
               alignItems: 'center',
             }}
+            aria-label={t('nav.practice')}
             title={t('nav.practice')}
           >
             {/* Book icon */}
@@ -346,6 +351,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
               alignItems: 'center',
               position: 'relative',
             }}
+            aria-label={t('nav.adventure')}
             title={t('nav.adventure')}
           >
             <sup style={{
@@ -378,6 +384,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
                 display: 'flex',
                 alignItems: 'center',
               }}
+              aria-label="Settings"
               title="Settings"
             >
               <svg width={settingsIconSize} height={settingsIconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

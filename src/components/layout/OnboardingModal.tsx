@@ -50,6 +50,7 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
 
   return (
     <div
+      role="presentation"
       onClick={onClose}
       style={{
         position: 'fixed',

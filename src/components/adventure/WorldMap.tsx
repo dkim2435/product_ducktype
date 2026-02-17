@@ -197,7 +197,7 @@ export function WorldMap({
           onClick={() => onChangeWorld(prevWorld.id)}
           style={{
             position: 'fixed', left: isMobile ? '8px' : '32px', top: '50%', transform: 'translateY(-50%)',
-            width: isMobile ? '36px' : '44px', height: isMobile ? '36px' : '44px',
+            width: isMobile ? '40px' : '44px', height: isMobile ? '40px' : '44px',
             borderRadius: '50%', backgroundColor: 'var(--sub-alt-color)', border: '1px solid var(--sub-color)',
             color: 'var(--text-color)', fontSize: '18px', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -241,7 +241,7 @@ export function WorldMap({
             <button
               onClick={() => onChangeWorld(nextWorld.id)}
               style={{
-                width: isMobile ? '36px' : '44px', height: isMobile ? '36px' : '44px',
+                width: isMobile ? '40px' : '44px', height: isMobile ? '40px' : '44px',
                 borderRadius: '50%', backgroundColor: 'var(--sub-alt-color)',
                 border: nextWorldLocked ? '1px solid var(--sub-color)' : '1.5px solid var(--text-color)',
                 color: nextWorldLocked ? 'var(--text-color)' : '#fff',

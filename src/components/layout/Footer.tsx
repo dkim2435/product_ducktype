@@ -14,6 +14,7 @@ export function Footer({ onNavigate, hidden }: FooterProps) {
     cursor: 'pointer',
     fontSize: '12px',
     transition: 'color 0.15s',
+    ...(isMobile ? { minHeight: '44px', padding: '8px 4px', display: 'inline-flex', alignItems: 'center' } : {}),
   };
 
   const sepStyle: React.CSSProperties = {

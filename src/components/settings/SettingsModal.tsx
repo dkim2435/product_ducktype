@@ -44,7 +44,18 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
   return (
     <button
       onClick={() => onChange(!value)}
+      aria-checked={value}
+      role="switch"
       style={{
+        padding: '11px 0',
+        display: 'inline-flex',
+        alignItems: 'center',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+      }}
+    >
+      <div style={{
         width: '40px',
         height: '22px',
         borderRadius: '11px',
@@ -52,18 +63,18 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
         position: 'relative',
         transition: 'background-color 0.2s',
         border: '1px solid var(--sub-color)',
-      }}
-    >
-      <div style={{
-        width: '16px',
-        height: '16px',
-        borderRadius: '50%',
-        backgroundColor: value ? 'var(--bg-color)' : 'var(--sub-color)',
-        position: 'absolute',
-        top: '2px',
-        left: value ? '20px' : '2px',
-        transition: 'left 0.2s, background-color 0.2s',
-      }} />
+      }}>
+        <div style={{
+          width: '16px',
+          height: '16px',
+          borderRadius: '50%',
+          backgroundColor: value ? 'var(--bg-color)' : 'var(--sub-color)',
+          position: 'absolute',
+          top: '2px',
+          left: value ? '20px' : '2px',
+          transition: 'left 0.2s, background-color 0.2s',
+        }} />
+      </div>
     </button>
   );
 }
@@ -215,6 +226,7 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
 
   return (
     <div
+      role="presentation"
       style={{
         position: 'fixed',
         inset: 0,

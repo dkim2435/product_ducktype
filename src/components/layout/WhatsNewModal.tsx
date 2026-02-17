@@ -34,6 +34,7 @@ export function WhatsNewModal({ visible, onClose }: WhatsNewModalProps) {
 
   return (
     <div
+      role="presentation"
       onClick={onClose}
       style={{
         position: 'fixed',

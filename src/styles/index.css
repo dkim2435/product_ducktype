@@ -33,7 +33,7 @@
     --stat-value-large: 40px;
     --stat-value-normal: 24px;
     --mode-selector-font: 12px;
-    --nav-icon-padding: 6px;
+    --nav-icon-padding: 10px;
     --page-vertical-padding: 20px;
   }
 }
@@ -233,4 +233,14 @@ button:hover {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Reduced motion: disable animations for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

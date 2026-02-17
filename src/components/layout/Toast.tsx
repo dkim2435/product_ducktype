@@ -19,7 +19,10 @@ export function Toast({ toast, onDismiss }: ToastProps) {
   return (
     <div
       className="toast-slide-in"
+      role="button"
+      tabIndex={0}
       onClick={() => onDismiss(toast.id)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onDismiss(toast.id); } }}
       style={{
         display: 'flex',
         alignItems: 'center',
