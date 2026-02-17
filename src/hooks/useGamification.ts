@@ -10,7 +10,7 @@ import type {
   ToastNotification,
 } from '../types/gamification';
 import { getItem, setItem } from '../utils/storage';
-import { createDefaultProfile, levelFromXp, getRank, XP_SHARE_BONUS } from '../constants/gamification';
+import { createDefaultProfile, levelFromXp, getRank, XP_SHARE_BONUS, STREAK_MILESTONES } from '../constants/gamification';
 import { getAchievementDef } from '../constants/achievements';
 import { calculateXpGain } from '../utils/xp';
 import { checkNewAchievements } from '../utils/achievements';
@@ -22,6 +22,7 @@ const ACHIEVEMENTS_KEY = 'achievements';
 const STREAK_KEY = 'streak';
 const KEY_STATS_KEY = 'key_stats';
 const LAST_SHARE_DATE_KEY = 'ducktype_last_share_date';
+const STREAK_MILESTONES_KEY = 'ducktype_streak_milestones_claimed';
 
 export function useGamification() {
   const [profile, setProfile] = useState<PlayerProfile>(() =>
@@ -110,6 +111,28 @@ export function useGamification() {
         ...newAchievementIds.map(id => ({ id, unlockedAt: Date.now() })),
       ],
     };
+
+    // 6b. Streak milestone bonus
+    const claimedRaw = localStorage.getItem(STREAK_MILESTONES_KEY);
+    const claimed: number[] = claimedRaw ? JSON.parse(claimedRaw) : [];
+    let milestoneBonus = 0;
+    for (const m of STREAK_MILESTONES) {
+      if (newStreak.currentStreak >= m.days && !claimed.includes(m.days)) {
+        milestoneBonus += m.bonus;
+        claimed.push(m.days);
+        addToast({
+          type: 'xp',
+          title: `+${m.bonus} XP`,
+          message: `🔥 ${m.days} day streak bonus!`,
+          icon: '🔥',
+        });
+      }
+    }
+    if (milestoneBonus > 0) {
+      newProfile.totalXp += milestoneBonus;
+      newProfile.level = levelFromXp(newProfile.totalXp);
+      localStorage.setItem(STREAK_MILESTONES_KEY, JSON.stringify(claimed));
+    }
 
     // 7. Adventure promo toast (first test only)
     if (profile.testsCompleted === 0 && !localStorage.getItem('ducktype_adventure_promo_shown')) {

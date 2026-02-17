@@ -26,6 +26,11 @@ interface ResultsScreenProps {
   isSupabaseConfigured?: boolean;
   onLoginClick?: () => void;
   onShareClick?: () => void;
+  hasCompletedDailyToday?: boolean;
+  dailyStreak?: number;
+  testsCompleted?: number;
+  totalXp?: number;
+  playerLevel?: number;
 }
 
 function TipItem({ text }: { text: string }) {
@@ -44,7 +49,7 @@ function TipItem({ text }: { text: string }) {
   );
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick, onShareClick }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick, onShareClick, hasCompletedDailyToday, dailyStreak, testsCompleted, totalXp, playerLevel }: ResultsScreenProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
@@ -408,6 +413,57 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         </div>
       </div>
 
+      {/* Daily Challenge hook card */}
+      {onNavigate && (
+        <div style={{
+          marginTop: '16px',
+          padding: isMobile ? '14px' : '12px 20px',
+          backgroundColor: 'var(--sub-alt-color)',
+          borderRadius: 'var(--border-radius)',
+          border: '1px solid var(--main-color)',
+          display: 'flex',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? '10px' : '16px',
+          cursor: 'pointer',
+        }}
+          onClick={() => onNavigate('daily-challenge')}
+        >
+          <span style={{ fontSize: '20px', flexShrink: 0 }}>📅</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: 'var(--text-color)',
+              marginBottom: '2px',
+            }}>
+              {hasCompletedDailyToday
+                ? t('results.dailyHookDone', { days: dailyStreak || 0 })
+                : (dailyStreak && dailyStreak > 0)
+                  ? t('results.dailyHookNotDone')
+                  : t('results.dailyHookStart')}
+            </div>
+            {hasCompletedDailyToday && (dailyStreak || 0) > 0 && (
+              <div style={{
+                fontSize: '11px',
+                color: 'var(--main-color)',
+                fontWeight: 600,
+              }}>
+                🔥 {dailyStreak} {t('gamification.days')} {t('gamification.streak')}
+              </div>
+            )}
+          </div>
+          <span style={{
+            fontSize: '12px',
+            color: 'var(--main-color)',
+            fontWeight: 600,
+            flexShrink: 0,
+          }}>
+            {hasCompletedDailyToday ? '→' : `1.5x XP →`}
+          </span>
+        </div>
+      )}
+
       {/* Cloud save prompt for non-logged-in users */}
       {isSupabaseConfigured && !isLoggedIn && (
         <div style={{
@@ -415,11 +471,12 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           padding: isMobile ? '16px' : '14px 20px',
           backgroundColor: 'var(--sub-alt-color)',
           borderRadius: 'var(--border-radius)',
-          border: '1px solid var(--main-color)',
+          border: `1px solid ${testsCompleted === 1 ? 'var(--main-color)' : 'var(--main-color)'}`,
           display: 'flex',
           alignItems: isMobile ? 'flex-start' : 'center',
           flexDirection: isMobile ? 'column' : 'row',
           gap: isMobile ? '12px' : '16px',
+          ...(testsCompleted === 1 ? { boxShadow: '0 0 12px rgba(255, 179, 71, 0.15)' } : {}),
         }}>
           <div style={{ flex: 1 }}>
             <div style={{
@@ -428,14 +485,16 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
               color: 'var(--text-color)',
               marginBottom: '4px',
             }}>
-              {t('auth.savePromptTitle')}
+              {testsCompleted === 1 ? t('auth.firstTestTitle') : t('auth.savePromptTitle')}
             </div>
             <div style={{
               fontSize: '12px',
               color: 'var(--sub-color)',
               lineHeight: 1.5,
             }}>
-              {t('auth.savePromptDesc')}
+              {testsCompleted === 1
+                ? t('auth.firstTestDesc', { xp: totalXp || 0, level: playerLevel || 1 })
+                : t('auth.savePromptDesc')}
             </div>
           </div>
           <button

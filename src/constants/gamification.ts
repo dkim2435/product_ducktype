@@ -72,6 +72,14 @@ export function getRank(level: number, isAdmin?: boolean): { name: DuckRank; emo
   return { name: rank.name, emoji: rank.emoji };
 }
 
+// ---- Streak Milestones ----
+export const STREAK_MILESTONES = [
+  { days: 3, bonus: 100 },
+  { days: 7, bonus: 250 },
+  { days: 14, bonus: 500 },
+  { days: 30, bonus: 1000 },
+];
+
 // ---- Default Profile ----
 export function createDefaultProfile(): import('../types/gamification').PlayerProfile {
   return {

@@ -53,7 +53,10 @@
     "weakKeys": "이번 테스트에서 약한 키",
     "practiceWeakKeys": "이 키들을 연습해 보는 건 어떨까요?",
     "emailReport": "이메일 리포트",
-    "adventureBanner": "{{wpm}} WPM으로 몬스터를 처치하세요! 타이핑 RPG에 도전."
+    "adventureBanner": "{{wpm}} WPM으로 몬스터를 처치하세요! 타이핑 RPG에 도전.",
+    "dailyHookNotDone": "오늘의 데일리 챌린지 완료하면 1.5x XP!",
+    "dailyHookDone": "내일 새로운 챌린지가 기다려! 스트릭을 이어가세요.",
+    "dailyHookStart": "데일리 챌린지를 시작하고 스트릭을 쌓아보세요!"
   },
   "settings": {
     "title": "설정",
@@ -113,7 +116,8 @@
     "currentStreak": "현재 스트릭",
     "longestStreak": "최장 스트릭",
     "days": "일",
-    "noStreak": "아직 스트릭이 없습니다"
+    "noStreak": "아직 스트릭이 없습니다",
+    "streakMilestone": "🔥 {{days}}일 연속 달성! +{{bonus}} XP 보너스!"
   },
   "achievements": {
     "title": "업적",
@@ -204,6 +208,8 @@
     "syncedToCloud": "클라우드에 동기화됨",
     "savePromptTitle": "다른 기기에서도 기록을 이어가세요",
     "savePromptDesc": "회원가입하면 통계, 업적, 스트릭이 클라우드에 저장됩니다. 어디서든 접속할 수 있어요.",
+    "firstTestTitle": "기록을 잃지 마세요!",
+    "firstTestDesc": "방금 {{xp}} XP를 획득했어요 (레벨 {{level}}). 무료 가입으로 모든 기기에서 안전하게 보관하세요.",
     "username": "사용자 이름",
     "usernameHint": "이 이름이 리더보드에 표시됩니다",
     "errorUsernameLength": "사용자 이름은 3~16자여야 합니다",
@@ -271,6 +277,13 @@
   "whatsNew": {
     "title": "새로운 소식",
     "gotIt": "확인!",
+    "v260": {
+      "title": "리텐션 & 참여도 강화",
+      "item1": "데일리 챌린지 후킹 — 결과 화면에서 데일리 챌린지 상태와 스트릭을 바로 확인할 수 있습니다.",
+      "item2": "스트릭 마일스톤 — 3일, 7일, 14일, 30일 연속 달성 시 보너스 XP! 끊기면 아깝잖아.",
+      "item3": "첫 테스트 유도 — 새 사용자에게 획득한 XP를 보여주며 가입을 유도합니다.",
+      "item4": "어드벤처 글로우 — 어드벤처 모드 버튼이 은은하게 빛나는 애니메이션으로 눈길을 끕니다."
+    },
     "v251": {
       "title": "리더보드 일별 갱신",
       "item1": "동적 순위 — 리더보드 순위가 매일 변동되어 더 생동감 있는 경쟁 환경을 제공합니다."

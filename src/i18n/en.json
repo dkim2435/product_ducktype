@@ -53,7 +53,10 @@
     "weakKeys": "Weak keys in this test",
     "practiceWeakKeys": "How about practicing these keys?",
     "emailReport": "Email report",
-    "adventureBanner": "Your {{wpm}} WPM can slay monsters! Try the typing RPG."
+    "adventureBanner": "Your {{wpm}} WPM can slay monsters! Try the typing RPG.",
+    "dailyHookNotDone": "Complete today's Daily Challenge for 1.5x XP!",
+    "dailyHookDone": "New challenge tomorrow! Keep your streak alive.",
+    "dailyHookStart": "Start the Daily Challenge and build your streak!"
   },
   "settings": {
     "title": "Settings",
@@ -113,7 +116,8 @@
     "currentStreak": "Current Streak",
     "longestStreak": "Longest Streak",
     "days": "days",
-    "noStreak": "No streak yet"
+    "noStreak": "No streak yet",
+    "streakMilestone": "🔥 {{days}} day streak! +{{bonus}} XP bonus!"
   },
   "achievements": {
     "title": "Achievements",
@@ -204,6 +208,8 @@
     "syncedToCloud": "Synced to cloud",
     "savePromptTitle": "Keep your progress across devices",
     "savePromptDesc": "Sign up to save your stats, achievements, and streaks to the cloud. Access them from any device.",
+    "firstTestTitle": "Don't lose your progress!",
+    "firstTestDesc": "You just earned {{xp}} XP (Level {{level}}). Sign up free to keep it safe across all your devices.",
     "username": "Username",
     "usernameHint": "This name will appear on the leaderboard",
     "errorUsernameLength": "Username must be 3-16 characters",
@@ -271,6 +277,13 @@
   "whatsNew": {
     "title": "What's New",
     "gotIt": "Got it!",
+    "v260": {
+      "title": "Retention & Engagement Boost",
+      "item1": "Daily Challenge Hook — Results screen now shows your Daily Challenge status and streak to keep you coming back.",
+      "item2": "Streak Milestones — Earn bonus XP at 3, 7, 14, and 30-day streaks! Don't break the chain.",
+      "item3": "First Test Nudge — New players see a personalized sign-up prompt showing their earned XP.",
+      "item4": "Adventure Glow — The Adventure Mode button now pulses with an inviting glow animation."
+    },
     "v251": {
       "title": "Leaderboard Daily Refresh",
       "item1": "Dynamic Rankings — Leaderboard rankings now shift daily, keeping the competition fresh and lively."

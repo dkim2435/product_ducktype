@@ -354,6 +354,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
                   flex: 1,
                   minWidth: 0,
                   textAlign: 'left',
+                  animation: 'adventure-glow 3s ease-in-out infinite',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(1.15)')}
                 onMouseLeave={(e) => (e.currentTarget.style.filter = 'none')}
@@ -361,7 +362,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
                 <span style={{ fontSize: '20px', flexShrink: 0 }}>⚔️</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: 600, fontSize: '13px' }}>Adventure</div>
-                  <div style={{ fontSize: '11px', color: 'var(--sub-color)', marginTop: '1px' }}>Type to fight monsters!</div>
+                  <div style={{ fontSize: '11px', color: 'var(--sub-color)', marginTop: '1px' }}>Battle monsters with your keyboard!</div>
                 </div>
                 <span style={{
                   fontSize: '9px',
@@ -373,7 +374,7 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
                   letterSpacing: '0.5px',
                   flexShrink: 0,
                 }}>
-                  NEW
+                  PLAY
                 </span>
               </button>
               <button
@@ -508,6 +509,11 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
             isSupabaseConfigured={isSupabaseConfigured}
             onLoginClick={handleLoginClick}
             onShareClick={() => gamification.awardShareBonus(addToast)}
+            hasCompletedDailyToday={dailyChallenge.hasCompletedToday}
+            dailyStreak={dailyChallenge.dailyChallengeState.currentStreak}
+            testsCompleted={gamification.profile.testsCompleted}
+            totalXp={gamification.profile.totalXp}
+            playerLevel={gamification.profile.level}
           />
         )}
 

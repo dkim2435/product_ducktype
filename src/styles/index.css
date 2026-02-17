@@ -220,6 +220,12 @@ button:hover {
   100% { box-shadow: 0 0 12px rgba(255,79,129,0.6), 0 0 30px rgba(255,170,0,0.25); }
 }
 
+/* Adventure button glow */
+@keyframes adventure-glow {
+  0%, 100% { border-color: #4caf50; box-shadow: none; }
+  50% { border-color: #81c784; box-shadow: 0 0 8px rgba(76, 175, 80, 0.3); }
+}
+
 /* Hide scrollbar utility */
 .hide-scrollbar {
   -ms-overflow-style: none;
