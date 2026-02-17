@@ -125,11 +125,14 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
       const wordTop = currentWordEl.offsetTop;
 
-      // Start scrolling only after the current word passes a threshold
-      // (keep completed lines visible, scroll when entering next line)
+      // Scroll when the current word would be on or past the 3rd visible line.
+      // tolerance of 2px handles subpixel rendering differences on mobile.
       const scrollThreshold = lineStride * 1;
-      if (wordTop >= scrollThreshold + scrollOffset) {
-        setScrollOffset(wordTop - scrollThreshold);
+      if (wordTop + 2 >= scrollThreshold + scrollOffset) {
+        const newOffset = wordTop - scrollThreshold;
+        if (newOffset > scrollOffset) {
+          setScrollOffset(newOffset);
+        }
       }
     });
   }, [state.currentWordIndex, wordsContainerRef, scrollOffset, lineStride]);

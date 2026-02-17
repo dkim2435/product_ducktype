@@ -159,7 +159,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           </div>
         </div>
 
-        <nav style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '4px' : '12px' }}>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '2px' : '12px' }}>
           {/* XP Bar - desktop only in nav row */}
           {profile && !isMobile && (
             <div
@@ -283,46 +283,51 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
             </button>
           )}
 
-          <button
-            onClick={() => onNavigate('leaderboard')}
-            style={{
-              padding: 'var(--nav-icon-padding)',
-              color: 'var(--sub-color)',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            aria-label={t('leaderboard.title')}
-            title={t('leaderboard.title')}
-          >
-            {/* Leaderboard / bar-chart icon */}
-            <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="12" width="4" height="9" rx="1" />
-              <rect x="10" y="3" width="4" height="18" rx="1" />
-              <rect x="17" y="8" width="4" height="13" rx="1" />
-            </svg>
-          </button>
+          {/* Leaderboard & Achievements — desktop only (accessible via profile on mobile) */}
+          {!isMobile && (
+            <button
+              onClick={() => onNavigate('leaderboard')}
+              style={{
+                padding: 'var(--nav-icon-padding)',
+                color: 'var(--sub-color)',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              aria-label={t('leaderboard.title')}
+              title={t('leaderboard.title')}
+            >
+              {/* Leaderboard / bar-chart icon */}
+              <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="12" width="4" height="9" rx="1" />
+                <rect x="10" y="3" width="4" height="18" rx="1" />
+                <rect x="17" y="8" width="4" height="13" rx="1" />
+              </svg>
+            </button>
+          )}
 
-          <button
-            onClick={() => onNavigate('achievements')}
-            style={{
-              padding: 'var(--nav-icon-padding)',
-              color: 'var(--sub-color)',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            aria-label={t('nav.achievements')}
-            title={t('nav.achievements')}
-          >
-            {/* Trophy icon */}
-            <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-              <path d="M4 22h16" />
-              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-            </svg>
-          </button>
+          {!isMobile && (
+            <button
+              onClick={() => onNavigate('achievements')}
+              style={{
+                padding: 'var(--nav-icon-padding)',
+                color: 'var(--sub-color)',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              aria-label={t('nav.achievements')}
+              title={t('nav.achievements')}
+            >
+              {/* Trophy icon */}
+              <svg width={iconSize} height={iconSize} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                <path d="M4 22h16" />
+                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+              </svg>
+            </button>
+          )}
 
           <button
             onClick={() => onNavigate('practice')}

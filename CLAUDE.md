@@ -16,6 +16,7 @@
 
 ## 빌드 & 검증
 ```bash
+npm run test     # vitest run (유틸 함수 유닛 테스트)
 npm run build    # tsc -b && vite build
 npm run lint     # eslint
 ```
@@ -24,7 +25,8 @@ npm run lint     # eslint
 
 코드 변경 후 커밋하기 전에 아래 항목을 자동으로 확인한다. 사용자가 별도로 요청하지 않아도 매번 수행할 것.
 
-### 1. 빌드 검증
+### 1. 테스트 & 빌드 검증
+- [ ] `npm run test` 성공 확인 (유틸 함수 유닛 테스트)
 - [ ] `npm run build` 성공 확인
 
 ### 2. 버전 & 릴리즈 노트 (기능 추가/변경 시)
@@ -68,10 +70,13 @@ src/
   styles/index.css      # 글로벌 스타일 (prefers-reduced-motion 포함)
   data/releaseNotes.ts  # 릴리즈 노트 데이터
   i18n/                 # 다국어 번역 (en, ko, zh, ja)
+  utils/__tests__/      # 유닛 테스트 (Vitest, 131 tests)
   components/
     adventure/          # 어드벤처 모드 (CombatScene, AdventurePage 등)
     results/            # 결과 화면 (ResultsScreen, WpmChart)
     pages/NotFound.tsx  # 404 페이지
+.github/workflows/
+  test.yml              # CI: push/PR 시 테스트+빌드 자동 실행
 ```
 
 ## 어드벤처 모드 — 디버프 아우라 시스템
@@ -121,9 +126,17 @@ src/
 - `Referrer-Policy: strict-origin-when-cross-origin`
 - `Permissions-Policy: camera=(), microphone=(), geolocation=()`
 
+## 테스트 규칙
+- **CI**: `.github/workflows/test.yml` — main 브랜치 push/PR 시 자동으로 `npm run test` + `npm run build` 실행
+- **테스트 위치**: `src/utils/__tests__/*.test.ts` (Vitest)
+- **유틸 함수 수정 시**: 해당 테스트 파일도 함께 업데이트
+- **새 유틸 함수 추가 시**: 테스트 파일 생성 필수
+- `npm run test` — 1회 실행, `npm run test:watch` — 감시 모드
+
 ## 코딩 규칙
 - 한국어 커밋 메시지 OK, 단 커밋 본문은 영어
 - 모바일 변경은 반드시 `isMobile` 조건부로 — 데스크톱 영향 금지
+- 모바일 헤더: 리더보드/업적 아이콘은 데스크톱 전용 (모바일에서 공간 부족)
 - 폰트는 lazy-load: 기본 Roboto Mono만 즉시 로드, 나머지는 선택 시 동적 로드
 - chart.js는 React.lazy로 코드 스플릿 유지
 - i18n 키 추가 시 4개 언어 모두 동시 업데이트
