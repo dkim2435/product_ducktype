@@ -460,13 +460,13 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
                 <span style={{
                   fontSize: '9px',
                   fontWeight: 700,
-                  backgroundColor: '#4caf50',
+                  backgroundColor: '#ff5722',
                   color: '#fff',
                   padding: '2px 6px',
                   borderRadius: '999px',
                   letterSpacing: '0.5px',
                 }}>
-                  NEW
+                  HOT
                 </span>
               </div>
               <div style={{ fontSize: '11px', color: 'var(--sub-color)', lineHeight: 1.4 }}>

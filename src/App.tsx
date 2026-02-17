@@ -369,14 +369,14 @@ function AppContent({ user, onLoginClick, onLogout, isSupabaseConfigured, reques
                 <span style={{
                   fontSize: '9px',
                   fontWeight: 700,
-                  backgroundColor: '#4caf50',
+                  backgroundColor: '#ff5722',
                   color: '#fff',
                   padding: '2px 6px',
                   borderRadius: '999px',
                   letterSpacing: '0.5px',
                   flexShrink: 0,
                 }}>
-                  PLAY
+                  HOT
                 </span>
               </button>
               <button
