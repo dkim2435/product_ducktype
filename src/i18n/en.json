@@ -287,7 +287,8 @@
       "title": "Accuracy & Language Bug Fixes",
       "item1": "Accuracy Fix — Spaces are now counted as correct keystrokes, fixing inaccurate accuracy percentages.",
       "item2": "German Capitalization — German nouns are now properly capitalized (Nacht, Boden, Luft, etc.).",
-      "item3": "Time Mode Fix — Untyped characters in the last word are no longer counted as errors when time runs out."
+      "item3": "Time Mode Fix — Untyped characters in the last word are no longer counted as errors when time runs out.",
+      "thanks": "Special thanks to noti for reporting these bugs! 🦆"
     },
     "v262": {
       "title": "SEO & Accessibility Improvements",

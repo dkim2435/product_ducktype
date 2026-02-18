@@ -20,6 +20,7 @@ export const releaseNotes: ReleaseNote[] = [
       { emoji: '🔧', text: 'whatsNew.v263.item1' },
       { emoji: '🇩🇪', text: 'whatsNew.v263.item2' },
       { emoji: '⏱️', text: 'whatsNew.v263.item3' },
+      { emoji: '🙏', text: 'whatsNew.v263.thanks' },
     ],
   },
   {
