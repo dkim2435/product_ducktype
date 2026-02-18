@@ -89,20 +89,12 @@ export function useTypingTest({ settings, onFinish, customWords }: UseTypingTest
     const now = Date.now();
     setState(prev => {
       if (prev.phase !== 'running') return prev;
-      let missed = prev.missedChars;
-      const currentWord = prev.words[prev.currentWordIndex];
-      if (currentWord) {
-        for (let i = prev.currentLetterIndex; i < currentWord.letters.length; i++) {
-          if (currentWord.letters[i].state === 'pending') {
-            missed++;
-          }
-        }
-      }
+      // Don't count untyped characters of the current word as missed
+      // when time runs out — only evaluate what was actually typed
       const finished: TestState = {
         ...prev,
         phase: 'finished',
         endTime: now,
-        missedChars: missed,
       };
       setTimeout(() => onFinishRef.current?.(finished), 0);
       return finished;
@@ -276,6 +268,7 @@ export function useTypingTest({ settings, onFinish, customWords }: UseTypingTest
           currentLetterIndex: 0,
           missedChars: missed,
           totalKeystrokes: prev.totalKeystrokes + 1,
+          correctKeystrokes: prev.correctKeystrokes + 1,
           phase: 'finished',
           endTime: Date.now(),
         };
@@ -295,6 +288,7 @@ export function useTypingTest({ settings, onFinish, customWords }: UseTypingTest
         currentLetterIndex: 0,
         missedChars: missed,
         totalKeystrokes: prev.totalKeystrokes + 1,
+        correctKeystrokes: prev.correctKeystrokes + 1,
       };
     });
   }, [isTimeMode]);
