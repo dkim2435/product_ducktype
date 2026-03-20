@@ -53,91 +53,93 @@
   }
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
 
-html, body {
-  touch-action: manipulation;
-}
+  html, body {
+    touch-action: manipulation;
+  }
 
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-}
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+  }
 
-body {
-  font-family: var(--font-family);
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-}
+  body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+  }
 
-#root {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-a {
-  color: var(--sub-color);
-  text-decoration: none;
-  transition: color var(--transition-speed);
-}
+  a {
+    color: var(--sub-color);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+  }
 
-a:hover {
-  color: var(--text-color);
-}
+  a:hover {
+    color: var(--text-color);
+  }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: var(--sub-color);
-  transition: color var(--transition-speed);
-}
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--sub-color);
+    transition: color var(--transition-speed);
+  }
 
-button:hover {
-  color: var(--text-color);
-}
+  button:hover {
+    color: var(--text-color);
+  }
 
-::selection {
-  background-color: var(--main-color);
-  color: var(--bg-color);
-}
+  ::selection {
+    background-color: var(--main-color);
+    color: var(--bg-color);
+  }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-color);
-}
+  ::-webkit-scrollbar-track {
+    background: var(--bg-color);
+  }
 
-::-webkit-scrollbar-thumb {
-  background: var(--sub-color);
-  border-radius: 3px;
-}
+  ::-webkit-scrollbar-thumb {
+    background: var(--sub-color);
+    border-radius: 3px;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-color);
-}
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-color);
+  }
 
-/* Letter state colors (typing test) */
-.letter { color: var(--sub-color); }
-.letter--correct { color: var(--text-color); }
-.letter--incorrect { color: var(--error-color); }
-.letter--extra { color: var(--error-extra-color); }
-.letter--pending { color: var(--sub-color); }
+  /* Letter state colors (typing test) */
+  .letter { color: var(--sub-color); }
+  .letter--correct { color: var(--text-color); }
+  .letter--incorrect { color: var(--error-color); }
+  .letter--extra { color: var(--error-extra-color); }
+  .letter--pending { color: var(--sub-color); }
+}
 
 /* Typing hint bounce */
 @keyframes typing-hint-bounce {
