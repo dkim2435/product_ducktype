@@ -105,23 +105,11 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
   const tableEntries = entries.slice(3);
 
   return (
-    <div className="fade-in" style={{
-      width: '100%',
-      maxWidth: '700px',
-      margin: '0 auto',
-      padding: 'var(--page-vertical-padding) 0',
-    }}>
+    <div className="fade-in w-full max-w-[700px] mx-auto" style={{ padding: 'var(--page-vertical-padding) 0' }}>
       {/* Back button */}
       <button
         onClick={onBack}
-        style={{
-          color: 'var(--sub-color)',
-          fontSize: '13px',
-          marginBottom: '24px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-        }}
+        className="text-sub text-[13px] mb-6 flex items-center gap-[6px]"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -130,27 +118,16 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
       </button>
 
       {/* Time filter tabs */}
-      <div style={{
-        display: 'flex',
-        gap: '4px',
-        marginBottom: '24px',
-        flexWrap: 'wrap',
-      }}>
+      <div className="flex gap-1 mb-6 flex-wrap">
         {TIME_OPTIONS.map((tv) => (
           <button
             key={tv}
             onClick={() => setSelectedTime(tv)}
+            className="rounded-[6px] border-none cursor-pointer text-[13px] font-semibold font-[inherit] transition-[background-color,color] duration-150"
             style={{
               padding: isMobile ? '6px 14px' : '6px 16px',
-              borderRadius: '6px',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '13px',
-              fontWeight: 600,
-              fontFamily: 'inherit',
               backgroundColor: selectedTime === tv ? 'var(--main-color)' : 'var(--sub-alt-color)',
               color: selectedTime === tv ? 'var(--bg-color)' : 'var(--sub-color)',
-              transition: 'background-color 0.15s, color 0.15s',
             }}
           >
             {tv}s
@@ -159,25 +136,18 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--sub-color)', fontSize: '14px' }}>
+        <div className="text-center py-[60px] text-sub text-sm">
           {t('leaderboard.loading')}
         </div>
       ) : entries.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--sub-color)', fontSize: '14px' }}>
+        <div className="text-center py-[60px] text-sub text-sm">
           {t('leaderboard.empty')}
         </div>
       ) : (
         <>
           {/* Podium — Top 3 */}
           {top3.length >= 3 && (
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-              gap: isMobile ? '8px' : '12px',
-              marginBottom: '28px',
-              padding: '0 8px',
-            }}>
+            <div className="flex justify-center items-end mb-7 px-2" style={{ gap: isMobile ? '8px' : '12px' }}>
               {podiumOrder.map((entry, i) => {
                 const rank = podiumRanks[i];
                 const heights = isMobile ? PODIUM_HEIGHTS_MOBILE : PODIUM_HEIGHTS;
@@ -189,11 +159,8 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                 return (
                   <div
                     key={entry.username}
+                    className="flex flex-col items-center flex-1"
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      flex: 1,
                       maxWidth: isMobile ? '110px' : '150px',
                       opacity: animatedCount >= 3 ? 1 : 0,
                       transform: animatedCount >= 3 ? 'translateY(0)' : 'translateY(20px)',
@@ -201,29 +168,18 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                     }}
                   >
                     {/* Medal */}
-                    <div style={{
-                      fontSize: rank === 1 ? (isMobile ? '28px' : '36px') : (isMobile ? '22px' : '28px'),
-                      marginBottom: '4px',
-                    }}>
+                    <div className="mb-1" style={{ fontSize: rank === 1 ? (isMobile ? '28px' : '36px') : (isMobile ? '22px' : '28px') }}>
                       {rank === 1 ? '🥇' : rank === 2 ? '🥈' : '🥉'}
                     </div>
 
                     {/* Username */}
-                    <div style={{
-                      fontSize: isMobile ? '11px' : '13px',
-                      fontWeight: 600,
-                      color: isUser ? 'var(--main-color)' : 'var(--text-color)',
-                      marginBottom: '4px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      maxWidth: '100%',
-                      textAlign: 'center',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '3px',
-                    }}>
+                    <div
+                      className="font-semibold mb-1 overflow-hidden text-ellipsis whitespace-nowrap max-w-full text-center flex items-center justify-center gap-[3px]"
+                      style={{
+                        fontSize: isMobile ? '11px' : '13px',
+                        color: isUser ? 'var(--main-color)' : 'var(--text-color)',
+                      }}
+                    >
                       {getEntryRankEmoji(entry) && (
                         <span style={{ fontSize: isMobile ? '10px' : '12px' }}>{getEntryRankEmoji(entry)}</span>
                       )}
@@ -232,51 +188,30 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                     </div>
 
                     {/* Podium block */}
-                    <div style={{
-                      width: '100%',
-                      height: `${podiumH}px`,
-                      backgroundColor: 'var(--sub-alt-color)',
-                      borderRadius: '8px 8px 0 0',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '2px',
-                      border: isUser ? '1.5px solid var(--main-color)' : '1px solid transparent',
-                      position: 'relative',
-                      overflow: 'hidden',
-                    }}>
+                    <div
+                      className="w-full bg-sub-alt rounded-t-[8px] flex flex-col items-center justify-center gap-[2px] relative overflow-hidden"
+                      style={{
+                        height: `${podiumH}px`,
+                        border: isUser ? '1.5px solid var(--main-color)' : '1px solid transparent',
+                      }}
+                    >
                       {/* Subtle gradient overlay for 1st place */}
                       {rank === 1 && (
-                        <div style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background: `linear-gradient(180deg, ${MEDAL_COLORS[0]}15 0%, transparent 60%)`,
-                          borderRadius: 'inherit',
-                        }} />
+                        <div className="absolute inset-0 rounded-[inherit]" style={{ background: `linear-gradient(180deg, ${MEDAL_COLORS[0]}15 0%, transparent 60%)` }} />
                       )}
-                      <div style={{
-                        fontSize: rank === 1 ? (isMobile ? '24px' : '32px') : (isMobile ? '20px' : '26px'),
-                        fontWeight: 700,
-                        color: MEDAL_COLORS[rank - 1],
-                        fontVariantNumeric: 'tabular-nums',
-                        position: 'relative',
-                      }}>
+                      <div
+                        className="font-bold tabular-nums relative"
+                        style={{
+                          fontSize: rank === 1 ? (isMobile ? '24px' : '32px') : (isMobile ? '20px' : '26px'),
+                          color: MEDAL_COLORS[rank - 1],
+                        }}
+                      >
                         {entry.wpm}
                       </div>
-                      <div style={{
-                        fontSize: isMobile ? '10px' : '11px',
-                        color: 'var(--sub-color)',
-                        position: 'relative',
-                      }}>
+                      <div className="text-sub relative" style={{ fontSize: isMobile ? '10px' : '11px' }}>
                         {t('stats.wpm')}
                       </div>
-                      <div style={{
-                        fontSize: isMobile ? '9px' : '10px',
-                        color: 'var(--sub-color)',
-                        opacity: 0.7,
-                        position: 'relative',
-                      }}>
+                      <div className="text-sub opacity-70 relative" style={{ fontSize: isMobile ? '9px' : '10px' }}>
                         {entry.accuracy}% acc
                       </div>
                     </div>
@@ -288,62 +223,32 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
 
           {/* User rank card with percentile */}
           {effectiveRank > 0 && effectiveEntry && (
-            <div style={{
-              marginBottom: '20px',
-              padding: '16px 20px',
-              backgroundColor: 'var(--sub-alt-color)',
-              borderRadius: 'var(--border-radius)',
-              border: '1.5px solid var(--main-color)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '16px',
-            }}>
-              <div style={{
-                fontSize: '28px',
-                fontWeight: 700,
-                color: 'var(--main-color)',
-                fontVariantNumeric: 'tabular-nums',
-                minWidth: '50px',
-              }}>
+            <div className="mb-5 px-5 py-4 bg-sub-alt rounded-default border-[1.5px] border-main flex items-center gap-4">
+              <div className="text-[28px] font-bold text-main tabular-nums min-w-[50px]">
                 #{effectiveRank}
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: 'var(--text-color)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}>
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-text flex items-center gap-1">
                   {currentUserLevel && (
-                    <span style={{ fontSize: '14px' }}>{getRank(currentUserLevel, isAdminUser(currentUserId)).emoji}</span>
+                    <span className="text-sm">{getRank(currentUserLevel, isAdminUser(currentUserId)).emoji}</span>
                   )}
                   {effectiveEntry.username}
                   {isAdminUser(currentUserId) && <span style={{ ...devBadgeStyle, marginLeft: '6px' }}>DEV</span>}
                 </div>
-                <div style={{
-                  fontSize: '12px',
-                  color: 'var(--sub-color)',
-                }}>
+                <div className="text-xs text-sub">
                   {t('leaderboard.yourRank')}
                   {percentile !== null && (
-                    <span style={{ marginLeft: '8px', color: 'var(--main-color)', fontWeight: 600 }}>
+                    <span className="ml-2 text-main font-semibold">
                       — {t('leaderboard.topPercent', { percent: percentile > 0 ? percentile : '<1' })}
                     </span>
                   )}
                 </div>
               </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{
-                  fontSize: '20px',
-                  fontWeight: 700,
-                  color: 'var(--main-color)',
-                  fontVariantNumeric: 'tabular-nums',
-                }}>
+              <div className="text-right">
+                <div className="text-xl font-bold text-main tabular-nums">
                   {effectiveEntry.wpm}
                 </div>
-                <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>
+                <div className="text-[11px] text-sub">
                   {effectiveEntry.accuracy}% acc
                 </div>
               </div>
@@ -352,27 +257,19 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
 
           {/* Leaderboard table (rank 4+) */}
           {tableEntries.length > 0 && (
-            <div style={{
-              backgroundColor: 'var(--sub-alt-color)',
-              borderRadius: 'var(--border-radius)',
-              overflow: 'hidden',
-            }}>
+            <div className="bg-sub-alt rounded-default overflow-hidden">
               {/* Header row */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: isMobile ? '36px 1fr 60px' : '44px 1fr 1fr 70px',
-                padding: '10px 16px',
-                fontSize: '11px',
-                fontWeight: 600,
-                color: 'var(--sub-color)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-                borderBottom: '1px solid var(--bg-color)',
-              }}>
+              <div
+                className="px-4 py-[10px] text-[11px] font-semibold text-sub uppercase tracking-[0.5px] border-b border-bg"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: isMobile ? '36px 1fr 60px' : '44px 1fr 1fr 70px',
+                }}
+              >
                 <span>#</span>
                 <span>{t('leaderboard.name')}</span>
                 {!isMobile && <span>{t('stats.wpm')}</span>}
-                <span style={{ textAlign: 'right' }}>{isMobile ? t('stats.wpm') : t('stats.accuracy')}</span>
+                <span className="text-right">{isMobile ? t('stats.wpm') : t('stats.accuracy')}</span>
               </div>
 
               {/* Entries with WPM bar */}
@@ -387,94 +284,66 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
                 return (
                   <div
                     key={`${entry.username}-${i}`}
+                    className="px-4 py-[10px] text-[13px] relative transition-[opacity,transform,background-color] duration-[250ms] ease-[ease]"
                     style={{
                       display: 'grid',
                       gridTemplateColumns: isMobile ? '36px 1fr 60px' : '44px 1fr 1fr 70px',
-                      padding: '10px 16px',
-                      fontSize: '13px',
                       borderBottom: i < tableEntries.length - 1 ? '1px solid var(--bg-color)' : undefined,
                       backgroundColor: isCurrentUser ? 'rgba(var(--main-color-rgb, 226,183,20), 0.1)' : undefined,
                       opacity: isVisible ? 1 : 0,
                       transform: isVisible ? 'translateX(0)' : 'translateX(-12px)',
-                      transition: 'opacity 0.25s ease, transform 0.25s ease, background-color 0.15s',
-                      position: 'relative',
                     }}
                   >
-                    <span style={{
-                      fontWeight: 700,
-                      fontVariantNumeric: 'tabular-nums',
-                      color: 'var(--sub-color)',
-                    }}>
+                    <span className="font-bold tabular-nums text-sub">
                       {rank}
                     </span>
-                    <span style={{
-                      color: isCurrentUser ? 'var(--main-color)' : 'var(--text-color)',
-                      fontWeight: isCurrentUser ? 600 : 400,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '3px',
-                    }}>
+                    <span
+                      className="overflow-hidden text-ellipsis whitespace-nowrap flex items-center gap-[3px]"
+                      style={{
+                        color: isCurrentUser ? 'var(--main-color)' : 'var(--text-color)',
+                        fontWeight: isCurrentUser ? 600 : 400,
+                      }}
+                    >
                       {getEntryRankEmoji(entry) && (
-                        <span style={{ fontSize: '11px', flexShrink: 0 }}>{getEntryRankEmoji(entry)}</span>
+                        <span className="text-[11px] shrink-0">{getEntryRankEmoji(entry)}</span>
                       )}
-                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{entry.username}</span>
+                      <span className="overflow-hidden text-ellipsis">{entry.username}</span>
                       {isAdminUser(entry.user_id) && <span style={devBadgeStyle}>DEV</span>}
                       {isCurrentUser && (
-                        <span style={{
-                          marginLeft: '6px',
-                          fontSize: '10px',
-                          color: 'var(--main-color)',
-                          fontWeight: 600,
-                        }}>
+                        <span className="ml-[6px] text-[10px] text-main font-semibold">
                           ({t('leaderboard.you')})
                         </span>
                       )}
                     </span>
                     {/* WPM with bar (desktop) */}
                     {!isMobile && (
-                      <span style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                      }}>
-                        <span style={{
-                          fontWeight: 600,
-                          fontVariantNumeric: 'tabular-nums',
-                          color: isCurrentUser ? 'var(--main-color)' : 'var(--text-color)',
-                          minWidth: '36px',
-                        }}>
+                      <span className="flex items-center gap-2">
+                        <span
+                          className="font-semibold tabular-nums min-w-[36px]"
+                          style={{ color: isCurrentUser ? 'var(--main-color)' : 'var(--text-color)' }}
+                        >
                           {entry.wpm}
                         </span>
-                        <div style={{
-                          flex: 1,
-                          height: '6px',
-                          backgroundColor: 'var(--bg-color)',
-                          borderRadius: '3px',
-                          overflow: 'hidden',
-                        }}>
-                          <div style={{
-                            width: isVisible ? `${barWidth}%` : '0%',
-                            height: '100%',
-                            backgroundColor: isCurrentUser ? 'var(--main-color)' : 'var(--sub-color)',
-                            borderRadius: '3px',
-                            opacity: isCurrentUser ? 0.8 : 0.4,
-                            transition: 'width 0.6s ease',
-                          }} />
+                        <div className="flex-1 h-[6px] bg-bg rounded-[3px] overflow-hidden">
+                          <div
+                            className="h-full rounded-[3px] transition-[width] duration-[600ms] ease-[ease]"
+                            style={{
+                              width: isVisible ? `${barWidth}%` : '0%',
+                              backgroundColor: isCurrentUser ? 'var(--main-color)' : 'var(--sub-color)',
+                              opacity: isCurrentUser ? 0.8 : 0.4,
+                            }}
+                          />
                         </div>
                       </span>
                     )}
                     {/* WPM (mobile) or Accuracy (desktop) */}
-                    <span style={{
-                      textAlign: 'right',
-                      fontVariantNumeric: 'tabular-nums',
-                      ...(isMobile
+                    <span
+                      className="text-right tabular-nums"
+                      style={isMobile
                         ? { fontWeight: 600, color: isCurrentUser ? 'var(--main-color)' : 'var(--text-color)' }
                         : { color: 'var(--sub-color)' }
-                      ),
-                    }}>
+                      }
+                    >
                       {isMobile ? entry.wpm : `${entry.accuracy}%`}
                     </span>
                   </div>

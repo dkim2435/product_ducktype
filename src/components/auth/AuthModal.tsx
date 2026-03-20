@@ -105,84 +105,36 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
     }
   };
 
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '10px 12px',
-    backgroundColor: 'var(--sub-alt-color)',
-    color: 'var(--text-color)',
-    border: '1px solid transparent',
-    borderRadius: '6px',
-    fontSize: '14px',
-    fontFamily: 'inherit',
-    outline: 'none',
-    boxSizing: 'border-box',
-  };
+  const inputClasses = "w-full bg-sub-alt text-text border border-transparent rounded-[6px] text-sm font-[inherit] outline-none box-border";
 
   return (
     <div
       onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0,0,0,0.6)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 100,
-        padding: '16px',
-      }}
+      className="fixed inset-0 flex items-center justify-center z-[100] p-4"
+      style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
     >
       <div
-        className="slide-up"
+        className="slide-up bg-bg rounded-[12px] w-full max-w-[420px] border border-sub-alt relative"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          backgroundColor: 'var(--bg-color)',
-          borderRadius: '12px',
-          padding: '28px 24px',
-          width: '100%',
-          maxWidth: '420px',
-          border: '1px solid var(--sub-alt-color)',
-          position: 'relative',
-        }}
+        style={{ padding: '28px 24px' }}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '12px',
-            right: '12px',
-            padding: '4px',
-            color: 'var(--sub-color)',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '18px',
-            lineHeight: 1,
-          }}
+          className="absolute top-3 right-3 p-1 text-sub bg-none border-0 cursor-pointer text-lg leading-none"
         >
           ✕
         </button>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
+        <div className="flex gap-1 mb-5">
           {(['login', 'signup'] as Tab[]).map((t_) => (
             <button
               key={t_}
               onClick={() => { setTab(t_); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '8px',
-                borderRadius: '6px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: 600,
-                fontFamily: 'inherit',
-                backgroundColor: tab === t_ ? 'var(--main-color)' : 'var(--sub-alt-color)',
-                color: tab === t_ ? 'var(--bg-color)' : 'var(--sub-color)',
-                transition: 'background-color 0.15s, color 0.15s',
-              }}
+              className={`flex-1 p-2 rounded-[6px] border-0 cursor-pointer text-sm font-semibold font-[inherit] transition-[background-color,color] duration-150 ${
+                tab === t_ ? 'bg-main text-bg' : 'bg-sub-alt text-sub'
+              }`}
             >
               {t_ === 'login' ? t('auth.login') : t('auth.signup')}
             </button>
@@ -192,21 +144,7 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
         {/* Google OAuth */}
         <button
           onClick={handleGoogle}
-          style={{
-            width: '100%',
-            padding: '10px',
-            borderRadius: '6px',
-            border: '1px solid var(--sub-alt-color)',
-            background: 'none',
-            color: 'var(--text-color)',
-            fontSize: '14px',
-            fontFamily: 'inherit',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-          }}
+          className="w-full p-2.5 rounded-[6px] border border-sub-alt bg-none text-text text-sm font-[inherit] cursor-pointer flex items-center justify-center gap-2"
         >
           {/* Google icon */}
           <svg width="18" height="18" viewBox="0 0 24 24">
@@ -219,19 +157,14 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
         </button>
 
         {/* Divider */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          margin: '16px 0',
-        }}>
-          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--sub-alt-color)' }} />
-          <span style={{ color: 'var(--sub-color)', fontSize: '12px' }}>{t('auth.or')}</span>
-          <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--sub-alt-color)' }} />
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-sub-alt" />
+          <span className="text-sub text-xs">{t('auth.or')}</span>
+          <div className="flex-1 h-px bg-sub-alt" />
         </div>
 
         {/* Email/Password form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           {tab === 'signup' && (
             <div>
               <input
@@ -241,14 +174,10 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="username"
                 maxLength={16}
-                style={inputStyle}
+                className={inputClasses}
+                style={{ padding: '10px 12px' }}
               />
-              <div style={{
-                fontSize: '11px',
-                color: 'var(--sub-color)',
-                marginTop: '4px',
-                paddingLeft: '2px',
-              }}>
+              <div className="text-[11px] text-sub mt-1 pl-0.5">
                 {t('auth.usernameHint')}
               </div>
             </div>
@@ -260,7 +189,8 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
-            style={inputStyle}
+            className={inputClasses}
+            style={{ padding: '10px 12px' }}
           />
           <input
             type="password"
@@ -268,25 +198,19 @@ export function AuthModal({ visible, onClose, onSignUp, onSignIn, onGoogleSignIn
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete={tab === 'signup' ? 'new-password' : 'current-password'}
-            style={inputStyle}
+            className={inputClasses}
+            style={{ padding: '10px 12px' }}
           />
 
           {error && (
-            <div style={{ color: '#e74c3c', fontSize: '13px' }}>{error}</div>
+            <div className="text-[13px]" style={{ color: '#e74c3c' }}>{error}</div>
           )}
 
           <button
             type="submit"
             disabled={loading}
+            className="p-2.5 rounded-[6px] border-0 bg-main text-bg text-sm font-semibold font-[inherit]"
             style={{
-              padding: '10px',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: 'var(--main-color)',
-              color: 'var(--bg-color)',
-              fontSize: '14px',
-              fontWeight: 600,
-              fontFamily: 'inherit',
               cursor: loading ? 'wait' : 'pointer',
               opacity: loading ? 0.7 : 1,
             }}

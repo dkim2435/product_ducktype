@@ -13,20 +13,9 @@ export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   if (toasts.length === 0) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: '70px',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '8px',
-      zIndex: 1000,
-      pointerEvents: 'none',
-    }}>
+    <div className="fixed top-[70px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-[1000] pointer-events-none">
       {toasts.map(toast => (
-        <div key={toast.id} style={{ pointerEvents: 'auto' }}>
+        <div key={toast.id} className="pointer-events-auto">
           <Toast toast={toast} onDismiss={onDismiss} />
         </div>
       ))}

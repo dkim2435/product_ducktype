@@ -25,12 +25,9 @@ export function ThemePicker({ currentTheme, onThemeChange, playerLevel = 1, user
         key={theme.id}
         onClick={() => unlocked && onThemeChange(theme.id)}
         disabled={!unlocked}
+        className="flex items-center gap-2 rounded-[6px] relative transition-[border-color] duration-150"
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
           padding: '8px 12px',
-          borderRadius: '6px',
           backgroundColor: theme.colors.bg,
           border: isSelected
             ? `2px solid ${theme.colors.main}`
@@ -38,82 +35,46 @@ export function ThemePicker({ currentTheme, onThemeChange, playerLevel = 1, user
               ? `1px solid ${theme.colors.main}40`
               : '2px solid transparent',
           cursor: unlocked ? 'pointer' : 'not-allowed',
-          transition: 'border-color 0.15s',
           opacity: !isPremium && !unlocked ? 0.4 : isPremium && !unlocked ? 0.75 : 1,
-          position: 'relative',
           boxShadow: isPremium ? `0 0 10px ${theme.colors.main}25` : undefined,
         }}
       >
         {/* Badge: unlocked ✓ */}
         {unlocked && (
-          <span style={{
-            position: 'absolute',
-            top: '2px',
-            right: '4px',
-            fontSize: '9px',
+          <span className="absolute top-0.5 right-1 text-[9px]" style={{
             color: isPremium ? theme.colors.main : '#4ade80',
             textShadow: isPremium ? `0 0 4px ${theme.colors.main}` : undefined,
           }}>✓</span>
         )}
         {/* Badge: locked level */}
         {!isPremium && !unlocked && (
-          <span style={{
-            position: 'absolute',
-            top: '2px',
-            right: '4px',
-            fontSize: '9px',
-            color: theme.colors.sub,
-          }}>
+          <span className="absolute top-0.5 right-1 text-[9px]" style={{ color: theme.colors.sub }}>
             🔒 Lv.{theme.unlockLevel}
           </span>
         )}
         {/* Badge: premium COMING SOON */}
         {isPremium && !unlocked && (
-          <span style={{
-            position: 'absolute',
-            top: '2px',
-            right: '4px',
-            fontSize: '7px',
+          <span className="absolute top-0.5 right-1 text-[7px] rounded-[3px] font-semibold tracking-[0.5px]" style={{
             padding: '1px 4px',
-            borderRadius: '3px',
             backgroundColor: 'rgba(0,0,0,0.7)',
             color: theme.colors.main,
             textShadow: `0 0 6px ${theme.colors.main}`,
-            letterSpacing: '0.5px',
-            fontWeight: 600,
           }}>COMING SOON</span>
         )}
 
         {/* Color palette dots */}
-        <div style={{ display: 'flex', gap: '3px' }}>
-          <div style={{
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
+        <div className="flex gap-[3px]">
+          <div className="w-2.5 h-2.5 rounded-full" style={{
             backgroundColor: theme.colors.main,
             boxShadow: isPremium ? `0 0 6px ${theme.colors.main}` : undefined,
           }} />
-          <div style={{
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
-            backgroundColor: theme.colors.text,
-          }} />
-          <div style={{
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
-            backgroundColor: theme.colors.sub,
-          }} />
+          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: theme.colors.text }} />
+          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: theme.colors.sub }} />
         </div>
 
         {/* Theme name */}
-        <span style={{
-          fontSize: '11px',
+        <span className="text-[11px] whitespace-nowrap overflow-hidden text-ellipsis" style={{
           color: theme.colors.text,
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
           textShadow: isPremium
             ? `0 0 8px ${theme.colors.main}, 0 0 20px ${theme.colors.main}50`
             : undefined,
@@ -141,25 +102,11 @@ export function ThemePicker({ currentTheme, onThemeChange, playerLevel = 1, user
       {/* Premium themes section */}
       {premiumThemes.length > 0 && (
         <>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            margin: '16px 0 8px 4px',
-          }}>
-            <span style={{
-              fontSize: '11px',
-              color: 'var(--sub-color)',
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase',
-            }}>
+          <div className="flex items-center gap-2" style={{ margin: '16px 0 8px 4px' }}>
+            <span className="text-[11px] text-sub tracking-[1.5px] uppercase">
               Premium Sets
             </span>
-            <div style={{
-              flex: 1,
-              height: '1px',
-              background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)',
-            }} />
+            <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)' }} />
           </div>
           <div style={{
             display: 'grid',

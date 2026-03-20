@@ -9,25 +9,15 @@ export function StreakBadge({ streak }: StreakBadgeProps) {
 
   return (
     <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-        cursor: 'default',
-      }}
+      className="flex items-center gap-1 cursor-default"
       title={`Current streak: ${streak.currentStreak} days\nLongest: ${streak.longestStreak} days`}
     >
       <span
-        className={streak.currentStreak >= 7 ? 'streak-flame' : ''}
-        style={{ fontSize: '14px' }}
+        className={`text-sm ${streak.currentStreak >= 7 ? 'streak-flame' : ''}`}
       >
         🔥
       </span>
-      <span style={{
-        fontSize: '12px',
-        fontWeight: 600,
-        color: streak.currentStreak >= 7 ? 'var(--main-color)' : 'var(--sub-color)',
-      }}>
+      <span className={`text-xs font-semibold ${streak.currentStreak >= 7 ? 'text-main' : 'text-sub'}`}>
         {streak.currentStreak}
       </span>
     </div>

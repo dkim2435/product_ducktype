@@ -40,30 +40,20 @@ export function KeyboardHeatmap({ keyStats }: KeyboardHeatmapProps) {
 
   if (!hasData) {
     return (
-      <div style={{
-        textAlign: 'center',
-        color: 'var(--sub-color)',
-        fontSize: '13px',
-        padding: '40px 0',
-      }}>
+      <div className="text-center text-sub text-[13px] py-10">
         {t('profile.noKeyData')}
       </div>
     );
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: `${keyGap}px`,
-        alignItems: 'center',
-      }}>
+    <div className="relative">
+      <div className="flex flex-col items-center" style={{ gap: `${keyGap}px` }}>
         {ROWS.map((row, rowIdx) => (
           <div
             key={rowIdx}
+            className="flex"
             style={{
-              display: 'flex',
               gap: `${keyGap}px`,
               paddingLeft: `${rowOffsets[rowIdx]}px`,
             }}
@@ -81,19 +71,12 @@ export function KeyboardHeatmap({ keyStats }: KeyboardHeatmapProps) {
                   key={key}
                   onMouseEnter={() => setHoveredKey(key)}
                   onMouseLeave={() => setHoveredKey(null)}
+                  className="flex items-center justify-center rounded-[6px] text-[13px] font-semibold cursor-default transition-transform duration-100"
                   style={{
                     width: `${keySize}px`,
                     height: `${keySize}px`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '6px',
                     backgroundColor: bgColor,
                     color: hasKeyData ? 'var(--bg-color)' : 'var(--sub-color)',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    cursor: 'default',
-                    transition: 'transform 0.1s',
                     transform: hoveredKey === key ? 'scale(1.15)' : 'scale(1)',
                     opacity: hasKeyData ? 1 : 0.4,
                   }}
@@ -108,21 +91,7 @@ export function KeyboardHeatmap({ keyStats }: KeyboardHeatmapProps) {
 
       {/* Tooltip */}
       {hoveredKey && keyStats[hoveredKey] && (
-        <div style={{
-          position: 'absolute',
-          top: '-50px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          padding: '8px 12px',
-          backgroundColor: 'var(--bg-color)',
-          border: '1px solid var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          fontSize: '12px',
-          color: 'var(--text-color)',
-          whiteSpace: 'nowrap',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-          zIndex: 10,
-        }}>
+        <div className="absolute -top-[50px] left-1/2 -translate-x-1/2 px-3 py-2 bg-bg border border-sub-alt rounded-default text-xs text-text whitespace-nowrap z-10" style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
           <strong>{hoveredKey.toUpperCase()}</strong>
           {' - '}
           {t('stats.accuracy')}: {((1 - keyStats[hoveredKey].errorRate) * 100).toFixed(1)}%

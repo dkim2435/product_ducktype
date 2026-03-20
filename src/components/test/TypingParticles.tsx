@@ -178,12 +178,7 @@ export function TypingParticles({ visible, rank, particleTier = 'none', themeMai
     <canvas
       ref={canvasRef}
       data-particles="true"
-      style={{
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
-        zIndex: 3,
-      }}
+      className="absolute inset-0 pointer-events-none z-[3]"
     />
   );
 }

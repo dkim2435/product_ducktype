@@ -1,3 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: var(--bg-color);
+  --color-main: var(--main-color);
+  --color-caret: var(--caret-color);
+  --color-sub: var(--sub-color);
+  --color-sub-alt: var(--sub-alt-color);
+  --color-text: var(--text-color);
+  --color-error: var(--error-color);
+  --color-error-extra: var(--error-extra-color);
+  --radius-default: 8px;
+  --font-mono: 'Roboto Mono', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', monospace;
+}
+
 :root {
   --bg-color: #1a1b2e;
   --main-color: #ffb347;

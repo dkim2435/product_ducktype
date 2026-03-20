@@ -18,23 +18,11 @@ export function Practice({ lessonProgress, isLessonUnlocked, keyStats, onStartLe
   const weakKeys = getWeakKeys(keyStats, 5);
 
   return (
-    <div className="fade-in" style={{
-      width: '100%',
-      maxWidth: '600px',
-      margin: '0 auto',
-      padding: 'var(--page-vertical-padding) 0',
-    }}>
+    <div className="fade-in w-full max-w-[600px] mx-auto" style={{ padding: 'var(--page-vertical-padding) 0' }}>
       {/* Back button */}
       <button
         onClick={onBack}
-        style={{
-          color: 'var(--sub-color)',
-          fontSize: '13px',
-          marginBottom: '24px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-        }}
+        className="text-sub text-[13px] mb-6 flex items-center gap-[6px]"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -43,21 +31,11 @@ export function Practice({ lessonProgress, isLessonUnlocked, keyStats, onStartLe
       </button>
 
       {/* Lessons section */}
-      <div style={{
-        fontSize: '15px',
-        fontWeight: 600,
-        color: 'var(--text-color)',
-        marginBottom: '16px',
-      }}>
+      <div className="text-[15px] font-semibold text-text mb-4">
         {t('practice.lessons')}
       </div>
 
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
-        marginBottom: '32px',
-      }}>
+      <div className="flex flex-col gap-2 mb-8">
         {mainLessons.map((lesson, idx) => {
           const unlocked = isLessonUnlocked(lesson.id);
           const progress = lessonProgress[lesson.id];
@@ -66,58 +44,26 @@ export function Practice({ lessonProgress, isLessonUnlocked, keyStats, onStartLe
           return (
             <div
               key={lesson.id}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '14px 16px',
-                backgroundColor: 'var(--sub-alt-color)',
-                borderRadius: 'var(--border-radius)',
-                opacity: unlocked ? 1 : 0.4,
-                borderLeft: isCompleted ? '3px solid var(--main-color)' : '3px solid transparent',
-              }}
+              className={`flex items-center gap-3 px-4 py-[14px] bg-sub-alt rounded-default ${isCompleted ? 'border-l-[3px] border-main' : 'border-l-[3px] border-transparent'}`}
+              style={{ opacity: unlocked ? 1 : 0.4 }}
             >
               {/* Number */}
-              <div style={{
-                width: '28px',
-                height: '28px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '12px',
-                fontWeight: 700,
-                backgroundColor: isCompleted ? 'var(--main-color)' : 'transparent',
-                color: isCompleted ? 'var(--bg-color)' : 'var(--sub-color)',
-                border: isCompleted ? 'none' : '2px solid var(--sub-color)',
-                flexShrink: 0,
-              }}>
+              <div
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${isCompleted ? 'bg-main text-bg border-none' : 'bg-transparent text-sub border-2 border-sub'}`}
+              >
                 {isCompleted ? '✓' : idx + 1}
               </div>
 
               {/* Info */}
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  color: unlocked ? 'var(--text-color)' : 'var(--sub-color)',
-                  marginBottom: '2px',
-                }}>
+              <div className="flex-1">
+                <div className={`text-sm font-semibold mb-[2px] ${unlocked ? 'text-text' : 'text-sub'}`}>
                   {lesson.name}
                 </div>
-                <div style={{
-                  fontSize: '11px',
-                  color: 'var(--sub-color)',
-                }}>
+                <div className="text-[11px] text-sub">
                   {unlocked ? lesson.description : t('practice.locked')}
                 </div>
                 {unlocked && lesson.targetKeys.length > 0 && (
-                  <div style={{
-                    fontSize: '10px',
-                    color: 'var(--sub-color)',
-                    marginTop: '4px',
-                    fontFamily: 'monospace',
-                  }}>
+                  <div className="text-[10px] text-sub mt-1 font-mono">
                     {lesson.targetKeys.slice(0, 12).join(' ')}
                     {lesson.targetKeys.length > 12 ? ' ...' : ''}
                   </div>
@@ -126,13 +72,8 @@ export function Practice({ lessonProgress, isLessonUnlocked, keyStats, onStartLe
 
               {/* Stats */}
               {progress && (
-                <div style={{
-                  textAlign: 'right',
-                  fontSize: '11px',
-                  color: 'var(--sub-color)',
-                  flexShrink: 0,
-                }}>
-                  <div>{t('practice.bestWpm')}: <span style={{ color: 'var(--text-color)', fontWeight: 600 }}>{progress.bestWpm}</span></div>
+                <div className="text-right text-[11px] text-sub shrink-0">
+                  <div>{t('practice.bestWpm')}: <span className="text-text font-semibold">{progress.bestWpm}</span></div>
                   <div>{t('practice.attempts')}: {progress.attempts}</div>
                 </div>
               )}
@@ -141,15 +82,7 @@ export function Practice({ lessonProgress, isLessonUnlocked, keyStats, onStartLe
               {unlocked && (
                 <button
                   onClick={() => onStartLesson(lesson.id)}
-                  style={{
-                    padding: '6px 14px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: 'var(--bg-color)',
-                    backgroundColor: 'var(--main-color)',
-                    borderRadius: 'var(--border-radius)',
-                    flexShrink: 0,
-                  }}
+                  className="px-[14px] py-[6px] text-xs font-semibold text-bg bg-main rounded-default shrink-0"
                 >
                   {t('practice.startLesson')}
                 </button>
@@ -157,7 +90,7 @@ export function Practice({ lessonProgress, isLessonUnlocked, keyStats, onStartLe
 
               {/* Lock icon */}
               {!unlocked && (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sub-color)" strokeWidth="2" style={{ flexShrink: 0 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sub-color)" strokeWidth="2" className="shrink-0">
                   <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
@@ -168,82 +101,39 @@ export function Practice({ lessonProgress, isLessonUnlocked, keyStats, onStartLe
       </div>
 
       {/* Weak Keys section */}
-      <div style={{
-        fontSize: '15px',
-        fontWeight: 600,
-        color: 'var(--text-color)',
-        marginBottom: '8px',
-      }}>
+      <div className="text-[15px] font-semibold text-text mb-2">
         {t('practice.weakKeys')}
       </div>
-      <div style={{
-        fontSize: '12px',
-        color: 'var(--sub-color)',
-        marginBottom: '16px',
-      }}>
+      <div className="text-xs text-sub mb-4">
         {t('practice.weakKeysDesc')}
       </div>
 
       {weakKeys.length > 0 ? (
-        <div style={{
-          padding: '16px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
+        <div className="p-4 bg-sub-alt rounded-default flex items-center justify-between">
           <div>
-            <div style={{
-              display: 'flex',
-              gap: '6px',
-              marginBottom: '8px',
-            }}>
+            <div className="flex gap-[6px] mb-2">
               {weakKeys.map(k => (
                 <span
                   key={k.key}
-                  style={{
-                    padding: '4px 10px',
-                    backgroundColor: 'var(--error-color)',
-                    color: 'var(--bg-color)',
-                    borderRadius: '4px',
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    fontFamily: 'monospace',
-                  }}
+                  className="px-[10px] py-1 bg-error text-bg rounded-[4px] text-[13px] font-semibold font-mono"
                 >
                   {k.key.toUpperCase()}
                 </span>
               ))}
             </div>
-            <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>
+            <div className="text-[11px] text-sub">
               {weakKeys.map(k => `${k.key.toUpperCase()}: ${(k.errorRate * 100).toFixed(0)}% error`).join(', ')}
             </div>
           </div>
           <button
             onClick={() => onStartLesson('weak-keys')}
-            style={{
-              padding: '8px 18px',
-              fontSize: '12px',
-              fontWeight: 600,
-              color: 'var(--bg-color)',
-              backgroundColor: 'var(--main-color)',
-              borderRadius: 'var(--border-radius)',
-              flexShrink: 0,
-            }}
+            className="px-[18px] py-2 text-xs font-semibold text-bg bg-main rounded-default shrink-0"
           >
             {t('practice.startLesson')}
           </button>
         </div>
       ) : (
-        <div style={{
-          padding: '20px',
-          textAlign: 'center',
-          color: 'var(--sub-color)',
-          fontSize: '13px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-        }}>
+        <div className="p-5 text-center text-sub text-[13px] bg-sub-alt rounded-default">
           {t('practice.noData')}
         </div>
       )}

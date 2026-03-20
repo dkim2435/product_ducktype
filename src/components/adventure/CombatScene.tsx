@@ -178,53 +178,38 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
   const isPoisoned = debuff === 'poison';
 
   return (
-    <div className="fade-in" style={{
-      width: '100%',
-      maxWidth: '860px',
-      margin: '0 auto',
+    <div className="fade-in w-full max-w-[860px] mx-auto" style={{
       padding: isMobile && state.phase === 'fighting' ? '0' : 'var(--page-vertical-padding) 0',
     }}>
       <textarea
         ref={inputRef}
-        style={{
-          position: 'fixed', top: 0, left: 0,
-          opacity: 0, width: '1px', height: '1px',
-          padding: 0, border: 'none', outline: 'none', resize: 'none',
-          fontSize: '16px', overflow: 'hidden', pointerEvents: 'none',
-        }}
+        className="fixed top-0 left-0 opacity-0 w-px h-px p-0 border-0 outline-none resize-none text-base overflow-hidden pointer-events-none"
         autoCapitalize="none" autoCorrect="off" autoComplete="off" spellCheck={false}
         tabIndex={-1}
       />
 
       {/* INTRO */}
       {state.phase === 'intro' && (
-        <div style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          gap: '20px', padding: '40px 20px',
-        }}>
+        <div className="flex flex-col items-center gap-5" style={{ padding: '40px 20px' }}>
           <SpriteIcon src={stageConfig.enemyConfig.emoji} size={80} />
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-color)' }}>
+          <h2 className="text-2xl font-bold text-text">
             {stageConfig.name}
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--sub-color)', textAlign: 'center', maxWidth: '400px', lineHeight: 1.6 }}>
+          <p className="text-sm text-sub text-center max-w-[400px] leading-[1.6]">
             {stageConfig.subtitle}
           </p>
-          <div style={{
-            display: 'flex', gap: '16px', alignItems: 'center',
-            padding: '12px 20px', backgroundColor: 'var(--sub-alt-color)',
-            borderRadius: 'var(--border-radius)', fontSize: '13px', color: 'var(--sub-color)',
-          }}>
+          <div className="flex gap-4 items-center bg-sub-alt rounded-default text-[13px] text-sub" style={{ padding: '12px 20px' }}>
             <span>{stageConfig.enemyConfig.name}</span>
             {isBoss && <span>HP: {stageConfig.enemyConfig.hp}</span>}
-            {isBoss && <span style={{ color: 'var(--error-color)', fontWeight: 700 }}>BOSS</span>}
+            {isBoss && <span className="text-error font-bold">BOSS</span>}
           </div>
 
           {/* Difficulty selector */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', width: '100%', maxWidth: '400px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--sub-color)', textTransform: 'uppercase', letterSpacing: '1px' }}>
+          <div className="flex flex-col items-center gap-2 w-full max-w-[400px]">
+            <span className="text-xs font-semibold text-sub uppercase tracking-[1px]">
               Difficulty
             </span>
-            <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+            <div className="flex gap-2 w-full">
               {(['beginner', 'intermediate', 'expert'] as DifficultyLevel[]).map(d => {
                 const cfg = DIFFICULTY_CONFIGS[d];
                 const unlocked = isDiffUnlocked(d);
@@ -234,28 +219,26 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                     key={d}
                     onClick={() => unlocked && onDifficultyChange(d)}
                     disabled={!unlocked}
+                    className="flex-1 rounded-[8px] flex flex-col items-center gap-1 transition-all duration-150"
                     style={{
-                      flex: 1, padding: '10px 8px', borderRadius: '8px',
+                      padding: '10px 8px',
                       backgroundColor: isSelected ? `${cfg.color}18` : 'var(--sub-alt-color)',
                       border: isSelected ? `2px solid ${cfg.color}` : '2px solid transparent',
                       cursor: unlocked ? 'pointer' : 'default',
                       opacity: unlocked ? 1 : 0.4,
-                      transition: 'all 0.15s',
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
                     }}
                   >
-                    <div style={{ fontSize: '14px', letterSpacing: '2px' }}>
+                    <div className="text-sm tracking-[2px]">
                       {unlocked
                         ? <>{'★'.repeat(cfg.maxStars)}{'☆'.repeat(3 - cfg.maxStars)}</>
                         : '🔒'}
                     </div>
-                    <div style={{
-                      fontSize: '12px', fontWeight: 700,
+                    <div className="text-xs font-bold" style={{
                       color: isSelected ? cfg.color : 'var(--sub-color)',
                     }}>
                       {cfg.label}
                     </div>
-                    <div style={{ fontSize: '10px', color: 'var(--sub-color)', lineHeight: 1.3 }}>
+                    <div className="text-[10px] text-sub leading-tight">
                       {unlocked
                         ? <>{cfg.mistypeDamage === 0 ? 'No penalty' : `Mistype: -${cfg.mistypeDamage} HP`}{' · '}{cfg.xpMultiplier}x XP</>
                         : d === 'expert' && effectiveLevel < 15
@@ -270,14 +253,13 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
           {/* Debuff warning */}
           {debuffAura && (
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: '8px',
-              padding: '8px 18px', borderRadius: '8px',
+            <div className="flex items-center gap-2 rounded-[8px] text-[13px] font-bold" style={{
+              padding: '8px 18px',
               backgroundColor: `${debuffAura.color}18`,
               border: `1px solid ${debuffAura.color}4d`,
-              fontSize: '13px', fontWeight: 700, color: debuffAura.color,
+              color: debuffAura.color,
             }}>
-              <span style={{ fontSize: '18px' }}>{debuffAura.label.split(' ')[0]}</span>
+              <span className="text-lg">{debuffAura.label.split(' ')[0]}</span>
               {debuff === 'poison' && 'POISON: -0.3 HP per second during combat'}
               {debuff === 'fog' && 'FOG: Words fade into mist over time. Type to clear the fog'}
               {debuff === 'freeze' && 'FREEZE: Mistypes freeze the word for 1.5 seconds'}
@@ -285,25 +267,21 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
             </div>
           )}
 
-          <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-            <button onClick={onBack} style={{
-              padding: '10px 24px', fontSize: '13px', fontWeight: 600,
-              color: 'var(--sub-color)', backgroundColor: 'var(--sub-alt-color)',
-              borderRadius: 'var(--border-radius)', cursor: 'pointer',
-            }}>{t('adventure.back')}</button>
-            <button onClick={() => { focusInput(); startCountdown(); }} style={{
-              padding: '12px 36px', fontSize: '15px', fontWeight: 700,
-              color: 'var(--bg-color)', backgroundColor: 'var(--main-color)',
-              borderRadius: 'var(--border-radius)', cursor: 'pointer',
-            }}>{t('adventure.fight')}</button>
+          <div className="flex gap-3 mt-2">
+            <button onClick={onBack} className="text-[13px] font-semibold text-sub bg-sub-alt rounded-default cursor-pointer" style={{ padding: '10px 24px' }}>
+              {t('adventure.back')}
+            </button>
+            <button onClick={() => { focusInput(); startCountdown(); }} className="text-[15px] font-bold text-bg bg-main rounded-default cursor-pointer" style={{ padding: '12px 36px' }}>
+              {t('adventure.fight')}
+            </button>
           </div>
         </div>
       )}
 
       {/* COUNTDOWN */}
       {state.phase === 'countdown' && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: `${GAME_HEIGHT}px` }}>
-          <span style={{ fontSize: '96px', fontWeight: 700, color: 'var(--main-color)', animation: 'pulse 0.5s ease-in-out' }}>
+        <div className="flex items-center justify-center" style={{ height: `${GAME_HEIGHT}px` }}>
+          <span className="text-[96px] font-bold text-main" style={{ animation: 'pulse 0.5s ease-in-out' }}>
             {countdown}
           </span>
         </div>
@@ -311,51 +289,46 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
       {/* FIGHTING / WAVE-CLEAR / BOSS-TRANSITION / BOSS-DEATH */}
       {(state.phase === 'fighting' || state.phase === 'wave-clear' || state.phase === 'boss-transition' || state.phase === 'boss-death') && (
-        <div onClick={focusInput} style={{ cursor: 'text' }}>
+        <div onClick={focusInput} className="cursor-text">
           {/* HUD */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile && keyboardOpen ? '4px' : '8px', gap: '12px' }}>
+          <div className="flex justify-between items-center gap-3" style={{ marginBottom: isMobile && keyboardOpen ? '4px' : '8px' }}>
             {/* Player HP */}
-            <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: isMobile && keyboardOpen ? '10px' : '12px', color: 'var(--sub-color)', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
+            <div className="flex-1">
+              <div className="flex justify-between text-sub" style={{ fontSize: isMobile && keyboardOpen ? '10px' : '12px', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
                 <span><SpriteIcon src={PLAYER_IMG} size={20} style={{ verticalAlign: 'middle', marginRight: '4px' }} />{t('adventure.player')}</span>
                 <span>{Math.max(0, Math.round(state.playerHp))}/{state.playerMaxHp}</span>
               </div>
-              <div style={{ height: isMobile && keyboardOpen ? '6px' : '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{
-                  height: '100%', width: `${playerHpPercent}%`,
+              <div className="rounded-[4px] overflow-hidden bg-sub-alt" style={{ height: isMobile && keyboardOpen ? '6px' : '8px' }}>
+                <div className="h-full rounded-[4px] transition-[width,background-color] duration-300" style={{
+                  width: `${playerHpPercent}%`,
                   backgroundColor: playerHpPercent > 50 ? '#4caf50' : playerHpPercent > 25 ? '#ff9800' : '#f44336',
-                  borderRadius: '4px', transition: 'width 0.3s, background-color 0.3s',
                 }} />
               </div>
             </div>
 
             {/* Wave / Combo + Poison HUD */}
-            <div style={{ textAlign: 'center', minWidth: isMobile ? '80px' : '100px' }}>
+            <div className="text-center" style={{ minWidth: isMobile ? '80px' : '100px' }}>
               {!isBoss && (
-                <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>
+                <div className="text-[11px] text-sub">
                   {t('adventure.wave')} {state.currentWave + 1}/{stageConfig.waves.length}
                 </div>
               )}
               {isBoss && stageConfig.bossConfig && (
-                <div style={{ fontSize: '11px', color: 'var(--error-color)', fontWeight: 700 }}>
+                <div className="text-[11px] text-error font-bold">
                   Phase {state.bossPhase + 1}/{stageConfig.bossConfig.phases.length}
                 </div>
               )}
-              <div style={{
-                fontSize: '14px', fontWeight: 700,
+              <div className="text-sm font-bold" style={{
                 color: state.combo >= 10 ? 'var(--main-color)' : 'var(--text-color)',
                 visibility: state.combo > 0 ? 'visible' : 'hidden',
               }}>
                 x{state.combo || 1} {state.combo >= 5 ? '🔥' : ''}
               </div>
-              <div style={{
-                fontSize: '10px', fontWeight: 700, marginTop: '2px',
-                color: DIFFICULTY_CONFIGS[effectiveDifficulty].color,
-              }}>
+              <div className="text-[10px] font-bold mt-0.5" style={{ color: DIFFICULTY_CONFIGS[effectiveDifficulty].color }}>
                 {'★'.repeat(DIFFICULTY_CONFIGS[effectiveDifficulty].maxStars)} {DIFFICULTY_CONFIGS[effectiveDifficulty].label}
               </div>
               {debuffAura && (
-                <div style={{ fontSize: '10px', fontWeight: 700, color: debuffAura.color, marginTop: '2px' }}>
+                <div className="text-[10px] font-bold mt-0.5" style={{ color: debuffAura.color }}>
                   {debuffAura.label}{isPoisoned ? ' -0.3/s' : ''}
                 </div>
               )}
@@ -363,81 +336,58 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
             {/* Boss HP or enemy info */}
             {isBoss ? (
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: isMobile && keyboardOpen ? '10px' : '12px', color: 'var(--sub-color)', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
+              <div className="flex-1">
+                <div className="flex justify-between text-sub" style={{ fontSize: isMobile && keyboardOpen ? '10px' : '12px', marginBottom: isMobile && keyboardOpen ? '2px' : '4px' }}>
                   <span>{Math.max(0, Math.round(state.bossHp))}/{state.bossMaxHp}</span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><SpriteIcon src={stageConfig.enemyConfig.emoji} size={20} />{stageConfig.enemyConfig.name}</span>
+                  <span className="inline-flex items-center gap-1"><SpriteIcon src={stageConfig.enemyConfig.emoji} size={20} />{stageConfig.enemyConfig.name}</span>
                 </div>
-                <div style={{ height: isMobile && keyboardOpen ? '6px' : '8px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{
-                    height: '100%', width: `${bossHpPercent}%`,
-                    backgroundColor: '#f44336', borderRadius: '4px',
-                    transition: 'width 0.3s', marginLeft: 'auto',
+                <div className="rounded-[4px] overflow-hidden bg-sub-alt" style={{ height: isMobile && keyboardOpen ? '6px' : '8px' }}>
+                  <div className="h-full rounded-[4px] transition-[width] duration-300 ml-auto" style={{
+                    width: `${bossHpPercent}%`,
+                    backgroundColor: '#f44336',
                   }} />
                 </div>
               </div>
             ) : (
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
+              <div className="flex-1 flex items-center justify-end gap-1.5">
                 <SpriteIcon src={stageConfig.enemyConfig.emoji} size={24} />
-                <span style={{ fontSize: '12px', color: 'var(--sub-color)' }}>{stageConfig.enemyConfig.name}</span>
+                <span className="text-xs text-sub">{stageConfig.enemyConfig.name}</span>
               </div>
             )}
           </div>
 
           {/* GAME FIELD */}
-          <div style={{
-            position: 'relative',
+          <div className="relative rounded-default overflow-hidden mx-auto border border-sub-alt" style={{
             width: containerWidth,
             height: `${gameFieldHeight}px`,
-            borderRadius: 'var(--border-radius)',
-            overflow: 'hidden',
-            margin: '0 auto',
             background: theme.bg,
-            border: '1px solid var(--sub-alt-color)',
           }}>
             {/* Decorations */}
             {theme.deco.map((d, i) => (
-              <div key={i} style={{
-                position: 'absolute', left: `${d.x}%`, top: `${d.y}%`,
+              <div key={i} className="absolute select-none pointer-events-none" style={{
+                left: `${d.x}%`, top: `${d.y}%`,
                 fontSize: `${d.s}px`, opacity: d.o,
-                userSelect: 'none', pointerEvents: 'none',
               }}>{d.e}</div>
             ))}
 
             {/* Ground */}
-            <div style={{
-              position: 'absolute', bottom: 0, left: 0, right: 0, height: '55px',
-              background: theme.ground, pointerEvents: 'none',
-            }} />
+            <div className="absolute bottom-0 left-0 right-0 h-[55px] pointer-events-none" style={{ background: theme.ground }} />
 
             {/* Debuff overlay */}
             {debuffAura && state.phase === 'fighting' && (
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                background: debuffAura.overlay,
-                pointerEvents: 'none', zIndex: 25,
-              }} />
+              <div className="absolute inset-0 pointer-events-none z-[25]" style={{ background: debuffAura.overlay }} />
             )}
 
             {/* BOSS */}
             {isBoss && state.bossHp > 0 && (
-              <div style={{
-                position: 'absolute', top: '2%', left: '50%', transform: 'translateX(-50%)',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px',
-                zIndex: 8,
-              }}>
-                <div style={{
+              <div className="absolute top-[2%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5 z-[8]">
+                <div className="transition-[filter] duration-300" style={{
                   filter: bossShielded ? 'brightness(0.8)' : undefined,
-                  transition: 'filter 0.3s',
                 }}>
                   <SpriteIcon src={stageConfig.enemyConfig.emoji} size={isMobile ? 117 : 155} />
                 </div>
                 {bossShielded && (
-                  <div style={{
-                    fontSize: '11px', fontWeight: 700, color: 'var(--sub-color)',
-                    backgroundColor: 'var(--sub-alt-color)', padding: '2px 10px',
-                    borderRadius: '4px', opacity: 0.8,
-                  }}>
+                  <div className="text-[11px] font-bold text-sub bg-sub-alt rounded-[4px] opacity-80" style={{ padding: '2px 10px' }}>
                     🛡️ SHIELDED
                   </div>
                 )}
@@ -480,10 +430,10 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               const age = now - k.createdAt;
               const progress = Math.min(1, age / KILL_EFFECT_DURATION_MS);
               return (
-                <div key={k.id} style={{
-                  position: 'absolute', left: `${k.x}%`, top: `${k.y}%`,
+                <div key={k.id} className="absolute text-[28px] pointer-events-none z-[15]" style={{
+                  left: `${k.x}%`, top: `${k.y}%`,
                   transform: `translate(-50%, -50%) scale(${1 + progress * 0.5})`,
-                  fontSize: '28px', opacity: 1 - progress, pointerEvents: 'none', zIndex: 15,
+                  opacity: 1 - progress,
                 }}>💥</div>
               );
             })}
@@ -493,20 +443,18 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               const age = now - dmg.createdAt;
               const progress = Math.min(1, age / DAMAGE_NUMBER_DURATION_MS);
               return (
-                <div key={dmg.id} style={{
-                  position: 'absolute', left: `${dmg.x}%`, top: `${dmg.y - progress * 15}%`,
-                  fontSize: dmg.isPlayer ? '16px' : '22px', fontWeight: 700,
+                <div key={dmg.id} className="absolute font-bold pointer-events-none z-[20]" style={{
+                  left: `${dmg.x}%`, top: `${dmg.y - progress * 15}%`,
+                  fontSize: dmg.isPlayer ? '16px' : '22px',
                   color: dmg.isPlayer ? '#f44336' : 'var(--main-color)',
-                  opacity: 1 - progress, pointerEvents: 'none', transform: 'translateX(-50%)',
-                  textShadow: '0 1px 4px rgba(0,0,0,0.3)', zIndex: 20,
+                  opacity: 1 - progress, transform: 'translateX(-50%)',
+                  textShadow: '0 1px 4px rgba(0,0,0,0.3)',
                 }}>-{dmg.value}</div>
               );
             })}
 
             {/* Player duck */}
-            <div style={{
-              position: 'absolute', bottom: '12px', left: '50%', transform: 'translateX(-50%)',
-              zIndex: 6,
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-[6] transition-[filter] duration-500" style={{
               animation: state.phase === 'wave-clear'
                 ? 'player-bounce 0.8s ease-out'
                 : debuffAura && state.phase === 'fighting'
@@ -515,32 +463,23 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
               filter: debuffAura && state.phase === 'fighting'
                 ? debuffAura.filter
                 : undefined,
-              transition: 'filter 0.5s',
             }}>
               <SpriteIcon src={PLAYER_IMG} size={isMobile ? 80 : 100} />
             </div>
 
             {/* Waiting for words */}
             {state.minions.length === 0 && state.phase === 'fighting' && !isBoss && (
-              <div style={{
-                position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)',
-                fontSize: '13px', color: 'var(--sub-color)', opacity: 0.5, pointerEvents: 'none',
-              }}>
+              <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[13px] text-sub opacity-50 pointer-events-none">
                 {t('adventure.waitingForWords')}
               </div>
             )}
 
             {/* Wave clear overlay */}
             {state.phase === 'wave-clear' && (
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundColor: 'rgba(0,0,0,0.12)', zIndex: 30,
-              }}>
-                <div style={{
-                  fontSize: '22px', fontWeight: 700, color: 'var(--main-color)',
-                  backgroundColor: 'var(--bg-color)', padding: '14px 36px',
-                  borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
+              <div className="absolute inset-0 flex items-center justify-center z-[30]" style={{ backgroundColor: 'rgba(0,0,0,0.12)' }}>
+                <div className="text-[22px] font-bold text-main bg-bg rounded-[12px]" style={{
+                  padding: '14px 36px',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
                   animation: 'pulse 0.5s',
                 }}>
                   {t('adventure.waveClear')}
@@ -550,18 +489,11 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
             {/* Boss dialogue overlay */}
             {state.bossDialogue && state.phase === 'boss-transition' && (
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundColor: 'rgba(0,0,0,0.25)', zIndex: 30,
-              }}>
-                <div style={{
-                  fontSize: '15px', fontStyle: 'italic', fontWeight: 600,
-                  color: 'var(--error-color)', backgroundColor: 'var(--bg-color)',
-                  padding: '16px 28px', borderRadius: '12px',
-                  border: '2px solid var(--error-color)',
+              <div className="absolute inset-0 flex items-center justify-center z-[30]" style={{ backgroundColor: 'rgba(0,0,0,0.25)' }}>
+                <div className="text-[15px] italic font-semibold text-error bg-bg rounded-[12px] border-2 border-error max-w-[80%] text-center" style={{
+                  padding: '16px 28px',
                   boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
-                  maxWidth: '80%', textAlign: 'center', animation: 'fadeIn 0.5s',
+                  animation: 'fadeIn 0.5s',
                 }}>
                   {state.bossDialogue}
                 </div>
@@ -570,28 +502,18 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
             {/* Boss death overlay */}
             {state.phase === 'boss-death' && (
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 35,
-                pointerEvents: 'none',
-              }}>
+              <div className="absolute inset-0 z-[35] pointer-events-none" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
                 {/* Boss sprite shaking and fading */}
-                <div style={{
-                  position: 'absolute', top: '2%', left: '50%',
-                  animation: 'boss-shake 2.5s ease-out forwards',
-                  zIndex: 36,
-                }}>
+                <div className="absolute top-[2%] left-1/2 z-[36]" style={{ animation: 'boss-shake 2.5s ease-out forwards' }}>
                   <SpriteIcon src={stageConfig.enemyConfig.emoji} size={isMobile ? 117 : 155} />
                 </div>
 
                 {/* "꾸엑!!" death cry text */}
-                <div style={{
-                  position: 'absolute', top: '25%', left: '50%',
-                  fontSize: isMobile ? '28px' : '36px', fontWeight: 900,
+                <div className="absolute top-[25%] left-1/2 font-black z-[37] whitespace-nowrap" style={{
+                  fontSize: isMobile ? '28px' : '36px',
                   color: '#f44336',
                   textShadow: '0 2px 8px rgba(244,67,54,0.5)',
                   animation: 'boss-death-text 2s ease-out forwards',
-                  zIndex: 37, whiteSpace: 'nowrap',
                 }}>
                   QUACK!!
                 </div>
@@ -604,11 +526,10 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
                   { x: 60, y: 15, delay: 0.6, size: 34 },
                   { x: 50, y: 5, delay: 0.8, size: 30 },
                 ].map((exp, i) => (
-                  <div key={i} style={{
-                    position: 'absolute', left: `${exp.x}%`, top: `${exp.y}%`,
+                  <div key={i} className="absolute z-[38]" style={{
+                    left: `${exp.x}%`, top: `${exp.y}%`,
                     fontSize: `${exp.size}px`,
                     animation: `boss-death-explosion 0.8s ease-out ${exp.delay}s both`,
-                    zIndex: 38,
                   }}>
                     💥
                   </div>
@@ -619,25 +540,18 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
           {/* Input display */}
           {state.phase === 'fighting' && (
-            <div ref={inputDisplayRef} style={{ display: 'flex', justifyContent: 'center', marginTop: isMobile ? '6px' : '12px' }}>
-              <div style={{
-                padding: '8px 24px', minWidth: '200px', textAlign: 'center',
-                backgroundColor: 'var(--sub-alt-color)', borderRadius: 'var(--border-radius)',
+            <div ref={inputDisplayRef} className="flex justify-center" style={{ marginTop: isMobile ? '6px' : '12px' }}>
+              <div className="bg-sub-alt rounded-default min-w-[200px] text-center text-lg font-semibold font-mono flex items-center justify-center min-h-[40px] transition-[border-color] duration-150" style={{
+                padding: '8px 24px',
                 border: state.currentInput ? '2px solid var(--main-color)' : '2px solid transparent',
-                fontSize: '18px', fontWeight: 600, fontFamily: 'monospace',
                 color: state.currentInput ? 'var(--main-color)' : 'var(--sub-color)',
-                transition: 'border-color 0.15s', minHeight: '40px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 {state.currentInput || (
-                  <span style={{ opacity: 0.4, fontSize: '13px', fontFamily: 'inherit' }}>
+                  <span className="opacity-40 text-[13px] font-[inherit]">
                     {t('adventure.typeToAttack')}
                   </span>
                 )}
-                <span className="caret-blink" style={{
-                  display: 'inline-block', width: '2px', height: '20px',
-                  backgroundColor: 'var(--main-color)', marginLeft: '2px',
-                }} />
+                <span className="caret-blink inline-block w-0.5 h-5 bg-main ml-0.5" />
               </div>
             </div>
           )}
@@ -648,65 +562,50 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
       {state.phase === 'victory' && (
         isBoss && !stageConfig.isMidBoss && WORLD_VICTORY_CINEMATICS[worldId] ? (
           /* Cinematic victory for boss stages */
-          <div style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            justifyContent: 'center', gap: '20px', padding: '40px 20px',
-            textAlign: 'center', minHeight: `${GAME_HEIGHT}px`,
-            backgroundColor: 'var(--bg-color)',
+          <div className="flex flex-col items-center justify-center gap-5 text-center bg-bg" style={{
+            padding: '40px 20px',
+            minHeight: `${GAME_HEIGHT}px`,
           }}>
             {/* World emoji */}
-            <div style={{
-              fontSize: '64px',
-              animation: 'cinematic-fade-in 1s ease-out both',
-            }}>
+            <div className="text-[64px]" style={{ animation: 'cinematic-fade-in 1s ease-out both' }}>
               {WORLD_PREVIEWS.find(w => w.id === worldId)?.emoji ?? '🎉'}
             </div>
 
             {/* Cinematic title */}
-            <h2 style={{
-              fontSize: isMobile ? '20px' : '26px', fontWeight: 700,
-              color: 'var(--text-color)',
+            <h2 className="font-bold text-text max-w-[500px] leading-[1.4]" style={{
+              fontSize: isMobile ? '20px' : '26px',
               animation: 'cinematic-fade-in 1.2s ease-out 0.5s both',
-              lineHeight: 1.4, maxWidth: '500px',
             }}>
               {WORLD_VICTORY_CINEMATICS[worldId].title}
             </h2>
 
             {/* Cinematic subtitle */}
-            <p style={{
-              fontSize: isMobile ? '13px' : '15px', fontStyle: 'italic',
-              color: 'var(--sub-color)',
+            <p className="italic text-sub max-w-[400px]" style={{
+              fontSize: isMobile ? '13px' : '15px',
               animation: 'cinematic-fade-in 1.2s ease-out 1.2s both',
-              maxWidth: '400px',
             }}>
               {WORLD_VICTORY_CINEMATICS[worldId].subtitle}
             </p>
 
             {/* Victory badge (delayed) */}
-            <div style={{
-              animation: 'cinematic-fade-in 0.8s ease-out 2s both',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-            }}>
-              <div style={{ fontSize: '40px' }}>🎉</div>
-              <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--main-color)' }}>
+            <div className="flex flex-col items-center gap-2" style={{ animation: 'cinematic-fade-in 0.8s ease-out 2s both' }}>
+              <div className="text-[40px]">🎉</div>
+              <h3 className="text-xl font-bold text-main">
                 {t('adventure.victory')}
               </h3>
-              <p style={{ fontSize: '13px', color: 'var(--sub-color)' }}>
+              <p className="text-[13px] text-sub">
                 {stageConfig.name} {t('adventure.cleared')}
               </p>
             </div>
           </div>
         ) : (
           /* Normal victory for regular stages */
-          <div className="slide-up" style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            gap: '16px', padding: '40px 20px', textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '56px' }}>🎉</div>
-            <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--main-color)' }}>
+          <div className="slide-up flex flex-col items-center gap-4 text-center" style={{ padding: '40px 20px' }}>
+            <div className="text-[56px]">🎉</div>
+            <h2 className="text-2xl font-bold text-main">
               {t('adventure.victory')}
             </h2>
-            <p style={{ fontSize: '14px', color: 'var(--sub-color)' }}>
+            <p className="text-sm text-sub">
               {stageConfig.name} {t('adventure.cleared')}
             </p>
           </div>
@@ -715,15 +614,12 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
       {/* DEFEAT */}
       {state.phase === 'defeat' && (
-        <div className="slide-up" style={{
-          display: 'flex', flexDirection: 'column', alignItems: 'center',
-          gap: '16px', padding: '40px 20px', textAlign: 'center',
-        }}>
-          <div style={{ fontSize: '56px' }}>💀</div>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--error-color)' }}>
+        <div className="slide-up flex flex-col items-center gap-4 text-center" style={{ padding: '40px 20px' }}>
+          <div className="text-[56px]">💀</div>
+          <h2 className="text-2xl font-bold text-error">
             {t('adventure.defeat')}
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--sub-color)' }}>
+          <p className="text-sm text-sub">
             {t('adventure.defeatMsg')}
           </p>
         </div>

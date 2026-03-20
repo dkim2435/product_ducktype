@@ -18,46 +18,29 @@ export function Toast({ toast, onDismiss }: ToastProps) {
 
   return (
     <div
-      className="toast-slide-in"
+      className="toast-slide-in flex items-center gap-3 py-3 px-4 rounded-default cursor-pointer min-w-[240px] max-w-[320px]"
       role="button"
       tabIndex={0}
       onClick={() => onDismiss(toast.id)}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onDismiss(toast.id); } }}
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '12px 16px',
         backgroundColor: style.bg,
         borderLeft: `3px solid ${style.border}`,
-        borderRadius: 'var(--border-radius)',
-        cursor: 'pointer',
-        minWidth: '240px',
-        maxWidth: '320px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
       }}
     >
       {toast.icon && (
-        <span style={{ fontSize: '20px', flexShrink: 0 }}>{toast.icon}</span>
+        <span className="text-xl shrink-0">{toast.icon}</span>
       )}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{
-          fontSize: '12px',
-          fontWeight: 600,
-          color: toast.type === 'achievement' || toast.type === 'levelup'
-            ? 'var(--main-color)'
-            : 'var(--text-color)',
-          marginBottom: '2px',
-        }}>
+      <div className="flex-1 min-w-0">
+        <div className={`text-xs font-semibold mb-[2px] ${
+          toast.type === 'achievement' || toast.type === 'levelup'
+            ? 'text-main'
+            : 'text-text'
+        }`}>
           {toast.title}
         </div>
-        <div style={{
-          fontSize: '11px',
-          color: 'var(--sub-color)',
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}>
+        <div className="text-[11px] text-sub whitespace-nowrap overflow-hidden text-ellipsis">
           {toast.message}
         </div>
       </div>

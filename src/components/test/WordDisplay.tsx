@@ -9,8 +9,7 @@ interface WordDisplayProps {
 const Letter = memo(function Letter({ char, state }: { char: string; state: string }) {
   return (
     <span
-      className={`letter letter--${state}`}
-      style={{ transition: 'color 0.1s' }}
+      className={`letter letter--${state} transition-colors duration-100`}
     >
       {char}
     </span>
@@ -30,11 +29,7 @@ const Word = memo(function Word({
   return (
     <span
       data-word={wordIdx}
-      style={{
-        display: 'inline-block',
-        margin: '0 8px 4px 0',
-        borderBottom: hasError ? '2px solid var(--error-color)' : 'none',
-      }}
+      className={`inline-block mr-2 mb-1 ${hasError ? 'border-b-2 border-error' : ''}`}
     >
       {word.letters.map((letter, letterIdx) => (
         <Letter

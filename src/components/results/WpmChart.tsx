@@ -142,20 +142,14 @@ export function WpmChart({ wpmHistory, rawWpmHistory, errorHistory }: WpmChartPr
 
   if (wpmHistory.length < 2) {
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '200px',
-        color: 'var(--sub-color)',
-      }}>
+      <div className="flex items-center justify-center h-[200px] text-sub">
         Not enough data for chart
       </div>
     );
   }
 
   return (
-    <div style={{ height: '200px', width: '100%' }}>
+    <div className="h-[200px] w-full">
       <Line data={data} options={options} />
     </div>
   );

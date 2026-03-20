@@ -83,6 +83,8 @@
     "difficulty": "난이도",
     "freedomMode": "자유 모드",
     "freedomModeDesc": "이전 단어로 돌아갈 수 있습니다",
+    "zenMode": "젠 모드",
+    "zenModeDesc": "타이핑 중 모든 실시간 통계를 숨깁니다",
     "soundTheme": "사운드 테마",
     "profileFrame": "프로필 프레임",
     "particleTier": "타이핑 파티클",
@@ -377,5 +379,28 @@
     "toMap": "월드맵",
     "retry": "재도전",
     "nextStage": "다음 스테이지"
+  },
+  "coach": {
+    "title": "타이핑 코치",
+    "speedBeginner": "기초를 다지세요",
+    "speedBeginnerMsg": "정확도에 먼저 집중하세요. 속도는 자연스럽게 따라옵니다. 키보드를 보지 않고 정확하게 입력해보세요.",
+    "slowDown": "조금 천천히",
+    "slowDownMsg": "속도는 좋지만 정확도가 떨어지고 있어요. 속도를 10-15% 줄여서 근육 기억을 쌓아보세요.",
+    "accuracyGreat": "정확도 훌륭!",
+    "accuracyGreatMsg": "정확도가 뛰어나요. 이제 속도를 더 올려볼 때입니다.",
+    "accuracyLow": "정확도에 집중",
+    "accuracyLowMsg": "더 신중하게 입력해보세요. 빠르게 치고 많이 틀리는 것보다 천천히 정확하게 치는 게 좋아요.",
+    "consistencyLow": "리듬을 연습하세요",
+    "consistencyLowMsg": "테스트 중 속도 변화가 커요. 처음부터 끝까지 일정한 속도를 유지해보세요.",
+    "consistencyGreat": "안정적인 리듬!",
+    "consistencyGreatMsg": "타이핑 리듬이 매우 일관되어요. 근육 기억이 잘 발달한 증거입니다.",
+    "weakKeys": "이 키들을 연습하세요",
+    "weakKeysMsg": "자주 틀리는 키: {{keys}}. 연습 모드에서 집중 훈련해보세요.",
+    "improving": "실력이 늘고 있어요!",
+    "improvingMsg": "최근 평균보다 빠른 속도예요. 이 기세를 유지하세요!",
+    "takeBreak": "잠깐 쉬어가세요",
+    "takeBreakMsg": "최근 평균보다 속도가 떨어졌어요. 짧은 휴식이 도움이 될 수 있어요.",
+    "tooManyErrors": "수정이 너무 많아요",
+    "tooManyErrorsMsg": "Raw WPM과 실제 WPM 차이가 커요. 처음부터 정확하게 입력하는 데 집중해보세요."
   }
 }

@@ -11,22 +11,8 @@ export function AchievementUnlock({ achievementIds }: AchievementUnlockProps) {
   if (achievementIds.length === 0) return null;
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-      padding: '16px',
-      backgroundColor: 'var(--sub-alt-color)',
-      borderRadius: 'var(--border-radius)',
-      borderLeft: '3px solid var(--main-color)',
-    }}>
-      <div style={{
-        fontSize: '12px',
-        fontWeight: 600,
-        color: 'var(--main-color)',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-      }}>
+    <div className="flex flex-col gap-2 p-4 bg-sub-alt rounded-default border-l-[3px] border-l-main">
+      <div className="text-xs font-semibold text-main uppercase tracking-[0.5px]">
         {t('gamification.achievementUnlocked')}
       </div>
       {achievementIds.map(id => {
@@ -35,19 +21,14 @@ export function AchievementUnlock({ achievementIds }: AchievementUnlockProps) {
         return (
           <div
             key={id}
-            className="achievement-pop"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-            }}
+            className="achievement-pop flex items-center gap-[10px]"
           >
-            <span style={{ fontSize: '24px' }}>{def.icon}</span>
+            <span className="text-2xl">{def.icon}</span>
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-color)' }}>
+              <div className="text-sm font-semibold text-text">
                 {def.name}
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>
+              <div className="text-[11px] text-sub">
                 {def.description}
               </div>
             </div>

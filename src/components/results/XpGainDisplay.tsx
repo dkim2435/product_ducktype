@@ -39,33 +39,13 @@ export function XpGainDisplay({ xpGain }: XpGainDisplayProps) {
   ].filter(Boolean) as { label: string; value: number }[];
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '8px',
-      padding: '16px',
-      backgroundColor: 'var(--sub-alt-color)',
-      borderRadius: 'var(--border-radius)',
-    }}>
-      <div style={{
-        fontSize: '24px',
-        fontWeight: 700,
-        color: 'var(--main-color)',
-      }}>
+    <div className="flex flex-col items-center gap-2 p-4 bg-sub-alt rounded-default">
+      <div className="text-2xl font-bold text-main">
         +{displayXp} XP
       </div>
-      <div style={{
-        display: 'flex',
-        gap: '12px',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-      }}>
+      <div className="flex gap-3 flex-wrap justify-center">
         {breakdownItems.map(item => (
-          <span key={item.label} style={{
-            fontSize: '11px',
-            color: 'var(--sub-color)',
-          }}>
+          <span key={item.label} className="text-[11px] text-sub">
             {item.label}: +{item.value}
           </span>
         ))}

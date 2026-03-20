@@ -17,7 +17,7 @@ function isImagePath(s: string) { return s.startsWith('/'); }
 
 function SpriteIcon({ src, size, style }: { src: string; size: number; style?: React.CSSProperties }) {
   return isImagePath(src)
-    ? <img src={src} alt="" width={size} height={size} style={{ objectFit: 'contain', background: 'transparent', display: 'block', ...style }} />
+    ? <img src={src} alt="" width={size} height={size} className="object-contain bg-transparent block" style={style} />
     : <span style={{ fontSize: `${size}px`, ...style }}>{src}</span>;
 }
 
@@ -44,18 +44,17 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
 
   if (isBossWord) {
     return (
-      <div style={{
-        position: 'absolute', left: `${minion.x}%`, top: `${minion.y}%`,
+      <div className="absolute flex flex-col items-center gap-[3px]" style={{
+        left: `${minion.x}%`, top: `${minion.y}%`,
         transform: 'translate(-50%, -50%)', zIndex: isMatched ? 12 : 9,
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
         animation: 'fadeIn 0.3s ease-out',
         opacity: dimmed ? 0.4 : 1, transition: 'opacity 0.3s',
       }}>
-        <div style={{
-          padding: '5px 14px', borderRadius: '8px',
+        <div className="rounded-[8px] whitespace-nowrap font-semibold font-mono" style={{
+          padding: '5px 14px',
+          fontSize: isMobile ? '15px' : '18px',
           backgroundColor: isMatched ? 'rgba(var(--main-color-rgb, 0,0,0), 0.12)' : isUrgent ? 'rgba(var(--error-color-rgb, 200,50,50), 0.08)' : 'var(--bg-color)',
           border: isMatched ? '2px solid var(--main-color)' : '2px solid var(--error-color)',
-          fontSize: isMobile ? '15px' : '18px', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap',
           boxShadow: isMatched ? '0 0 14px rgba(var(--main-color-rgb, 0,0,0), 0.25)' : '0 0 10px rgba(var(--error-color-rgb, 200,50,50), 0.15)',
         }}>
           {minion.word.split('').map((ch, i) => (
@@ -71,26 +70,24 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
   }
 
   return (
-    <div style={{
-      position: 'absolute', left: `${minion.x}%`, top: `${minion.y}%`,
+    <div className="absolute flex flex-col items-center gap-0.5" style={{
+      left: `${minion.x}%`, top: `${minion.y}%`,
       transform: 'translate(-50%, -50%)', zIndex: isMatched ? 10 : 3,
-      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px',
       animation: 'fadeIn 0.3s ease-out',
       opacity: isDarknessHidden ? 0 : fogOpacity,
       filter: fogBlur > 0 ? `blur(${fogBlur}px)` : undefined,
       transition: isMatched ? 'opacity 0.2s, filter 0.2s' : isDarknessHidden !== undefined ? 'opacity 0.15s' : undefined,
     }}>
-      <div style={{
+      <div className="transition-[filter] duration-150" style={{
         filter: isFrozen ? 'drop-shadow(0 0 8px #00c8ff) brightness(1.2)' : isMatched ? 'drop-shadow(0 0 6px var(--main-color))' : undefined,
-        transition: 'filter 0.15s',
       }}>
         <SpriteIcon src={emoji} size={isMobile ? 60 : 72} />
       </div>
-      <div style={{
-        padding: '3px 10px', borderRadius: '6px',
+      <div className="rounded-[6px] whitespace-nowrap font-semibold font-mono" style={{
+        padding: '3px 10px',
+        fontSize: isMobile ? '12px' : '15px',
         backgroundColor: isFrozen ? 'rgba(0, 200, 255, 0.12)' : isMatched ? 'rgba(var(--main-color-rgb, 0,0,0), 0.1)' : isUrgent ? 'rgba(var(--error-color-rgb, 200,50,50), 0.06)' : 'var(--bg-color)',
         border: isFrozen ? '2px solid #00c8ff' : isMatched ? '2px solid var(--main-color)' : isUrgent ? '2px solid var(--error-color)' : '1px solid var(--sub-alt-color)',
-        fontSize: isMobile ? '12px' : '15px', fontWeight: 600, fontFamily: 'monospace', whiteSpace: 'nowrap',
         boxShadow: isFrozen ? '0 0 12px rgba(0, 200, 255, 0.3)' : isMatched ? '0 0 10px rgba(var(--main-color-rgb, 0,0,0), 0.2)' : '0 2px 6px rgba(0,0,0,0.08)',
       }}>
         {minion.word.split('').map((ch, i) => (
@@ -107,14 +104,15 @@ export const MinionWord = memo(function MinionWord({ minion, isMatched, typedLen
 
 function TimerBar({ timeProgress, remainSec, isUrgent, barColor }: { timeProgress: number; remainSec: number; isUrgent: boolean; barColor: string }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', width: '100%' }}>
-      <div style={{ flex: 1, height: '3px', borderRadius: '2px', backgroundColor: 'rgba(128,128,128,0.15)', overflow: 'hidden' }}>
-        <div style={{
-          height: '100%', width: `${(1 - timeProgress) * 100}%`,
-          backgroundColor: barColor, borderRadius: '2px', transition: 'width 0.2s linear',
+    <div className="flex items-center gap-1 w-full">
+      <div className="flex-1 h-[3px] rounded-sm overflow-hidden" style={{ backgroundColor: 'rgba(128,128,128,0.15)' }}>
+        <div className="h-full rounded-sm transition-[width] duration-200" style={{
+          width: `${(1 - timeProgress) * 100}%`,
+          backgroundColor: barColor,
+          transitionTimingFunction: 'linear',
         }} />
       </div>
-      <span style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'monospace', color: isUrgent ? '#f44336' : 'rgba(255,255,255,0.5)', minWidth: '28px', textAlign: 'right' }}>
+      <span className="text-[10px] font-bold font-mono min-w-[28px] text-right" style={{ color: isUrgent ? '#f44336' : 'rgba(255,255,255,0.5)' }}>
         {remainSec.toFixed(1)}s
       </span>
     </div>

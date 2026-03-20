@@ -43,14 +43,7 @@ export function DailyChallenge({
 
   if (started && !hasCompletedToday) {
     return (
-      <div style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: 'calc(100vh - 240px)',
-      }}>
+      <div className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-240px)]">
         <TypingTest
           key="daily-challenge"
           settings={dailySettings}
@@ -67,23 +60,11 @@ export function DailyChallenge({
   const recentResults = dailyChallengeState.results.slice(-7).reverse();
 
   return (
-    <div className="fade-in" style={{
-      width: '100%',
-      maxWidth: '600px',
-      margin: '0 auto',
-      padding: 'var(--page-vertical-padding) 0',
-    }}>
+    <div className="fade-in w-full max-w-[600px] mx-auto" style={{ padding: 'var(--page-vertical-padding) 0' }}>
       {/* Back button */}
       <button
         onClick={onBack}
-        style={{
-          color: 'var(--sub-color)',
-          fontSize: '13px',
-          marginBottom: '24px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-        }}
+        className="text-sub text-[13px] mb-6 flex items-center gap-[6px]"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -92,62 +73,33 @@ export function DailyChallenge({
       </button>
 
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <div style={{ fontSize: '36px', marginBottom: '8px' }}>📋</div>
-        <h2 style={{
-          fontSize: '20px',
-          fontWeight: 700,
-          color: 'var(--text-color)',
-          marginBottom: '8px',
-        }}>
+      <div className="text-center mb-8">
+        <div className="text-[36px] mb-2">📋</div>
+        <h2 className="text-xl font-bold text-text mb-2">
           {t('daily.title')}
         </h2>
-        <p style={{
-          fontSize: '13px',
-          color: 'var(--sub-color)',
-        }}>
+        <p className="text-[13px] text-sub">
           {t('daily.description')}
         </p>
         {hasCompletedToday ? (
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            marginTop: '10px',
-            padding: '4px 12px',
-            fontSize: '12px',
-            fontWeight: 600,
-            color: 'var(--main-color)',
-            backgroundColor: 'color-mix(in srgb, var(--main-color) 12%, transparent)',
-            borderRadius: '999px',
-          }}>
+          <div className="inline-flex items-center gap-[6px] mt-[10px] px-3 py-1 text-xs font-semibold text-main rounded-full" style={{ backgroundColor: 'color-mix(in srgb, var(--main-color) 12%, transparent)' }}>
             <span>⚡</span>
             {t('daily.boostActive')}
           </div>
         ) : (
-          <p style={{
-            fontSize: '12px',
-            color: 'var(--main-color)',
-            marginTop: '6px',
-            fontWeight: 500,
-          }}>
+          <p className="text-xs text-main mt-[6px] font-medium">
             ⚡ {t('daily.boostDescription')}
           </p>
         )}
       </div>
 
       {/* Streak */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '24px',
-        marginBottom: '32px',
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--main-color)' }}>
+      <div className="flex justify-center gap-6 mb-8">
+        <div className="text-center">
+          <div className="text-[28px] font-bold text-main">
             {dailyChallengeState.currentStreak}
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>
+          <div className="text-[11px] text-sub">
             {t('daily.streak')}
           </div>
         </div>
@@ -155,72 +107,37 @@ export function DailyChallenge({
 
       {/* Today's status */}
       {hasCompletedToday && todayResult ? (
-        <div style={{
-          textAlign: 'center',
-          padding: '24px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          marginBottom: '24px',
-          borderLeft: '3px solid var(--main-color)',
-        }}>
-          <div style={{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: 'var(--main-color)',
-            marginBottom: '12px',
-          }}>
+        <div className="text-center p-6 bg-sub-alt rounded-default mb-6 border-l-[3px] border-main">
+          <div className="text-sm font-semibold text-main mb-3">
             {t('daily.completed')}
           </div>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '24px',
-            marginBottom: '12px',
-          }}>
+          <div className="flex justify-center gap-6 mb-3">
             <div>
-              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-color)' }}>
+              <div className="text-xl font-bold text-text">
                 {todayResult.wpm}
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>WPM</div>
+              <div className="text-[11px] text-sub">WPM</div>
             </div>
             <div>
-              <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-color)' }}>
+              <div className="text-xl font-bold text-text">
                 {todayResult.accuracy}%
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--sub-color)' }}>ACC</div>
+              <div className="text-[11px] text-sub">ACC</div>
             </div>
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginBottom: '8px' }}>
+          <div className="text-xs text-sub mb-2">
             {t('daily.comeBack')}
           </div>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '4px 12px',
-            fontSize: '11px',
-            fontWeight: 600,
-            color: 'var(--main-color)',
-            backgroundColor: 'color-mix(in srgb, var(--main-color) 12%, transparent)',
-            borderRadius: '999px',
-          }}>
+          <div className="inline-flex items-center gap-[6px] px-3 py-1 text-[11px] font-semibold text-main rounded-full" style={{ backgroundColor: 'color-mix(in srgb, var(--main-color) 12%, transparent)' }}>
             <span>⚡</span>
             {t('daily.boostActive')}
           </div>
         </div>
       ) : (
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <div className="text-center mb-6">
           <button
             onClick={() => setStarted(true)}
-            style={{
-              padding: '12px 32px',
-              fontSize: '15px',
-              fontWeight: 600,
-              color: 'var(--bg-color)',
-              backgroundColor: 'var(--main-color)',
-              borderRadius: 'var(--border-radius)',
-              cursor: 'pointer',
-            }}
+            className="px-8 py-3 text-[15px] font-semibold text-bg bg-main rounded-default cursor-pointer"
           >
             {t('daily.start')}
           </button>
@@ -230,34 +147,21 @@ export function DailyChallenge({
       {/* Recent results */}
       {recentResults.length > 0 && (
         <div>
-          <div style={{
-            fontSize: '13px',
-            fontWeight: 600,
-            color: 'var(--sub-color)',
-            marginBottom: '12px',
-          }}>
+          <div className="text-[13px] font-semibold text-sub mb-3">
             {t('daily.recentActivity')}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div className="flex flex-col gap-[6px]">
             {recentResults.map(r => (
               <div
                 key={r.date}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '10px 14px',
-                  backgroundColor: 'var(--sub-alt-color)',
-                  borderRadius: 'var(--border-radius)',
-                  fontSize: '13px',
-                }}
+                className="flex justify-between items-center px-[14px] py-[10px] bg-sub-alt rounded-default text-[13px]"
               >
-                <span style={{ color: 'var(--sub-color)' }}>{r.date}</span>
-                <div style={{ display: 'flex', gap: '16px' }}>
-                  <span style={{ color: 'var(--text-color)', fontWeight: 600 }}>
+                <span className="text-sub">{r.date}</span>
+                <div className="flex gap-4">
+                  <span className="text-text font-semibold">
                     {r.wpm} WPM
                   </span>
-                  <span style={{ color: 'var(--sub-color)' }}>
+                  <span className="text-sub">
                     {r.accuracy}%
                   </span>
                 </div>

@@ -83,6 +83,8 @@
     "difficulty": "難易度",
     "freedomMode": "フリーモード",
     "freedomModeDesc": "前の単語に戻ることができます",
+    "zenMode": "禅モード",
+    "zenModeDesc": "タイピング中のすべてのリアルタイム統計を非表示",
     "soundTheme": "サウンドテーマ",
     "profileFrame": "プロフィールフレーム",
     "particleTier": "タイピングパーティクル",
@@ -377,5 +379,28 @@
     "toMap": "ワールドマップ",
     "retry": "リトライ",
     "nextStage": "次のステージ"
+  },
+  "coach": {
+    "title": "タイピングコーチ",
+    "speedBeginner": "基礎を固めよう",
+    "speedBeginnerMsg": "まず正確さに集中しましょう。スピードは自然についてきます。キーボードを見ずに正確に入力してみてください。",
+    "slowDown": "少しペースダウン",
+    "slowDownMsg": "スピードは良いですが、正確さが落ちています。10-15%速度を落として筋肉記憶を鍛えましょう。",
+    "accuracyGreat": "素晴らしい正確さ！",
+    "accuracyGreatMsg": "正確さが抜群です。もっとスピードを上げてみましょう。",
+    "accuracyLow": "正確さに集中",
+    "accuracyLowMsg": "もっと慎重に入力してみてください。速くて間違いが多いより、ゆっくり正確な方が良いです。",
+    "consistencyLow": "リズムを練習しよう",
+    "consistencyLowMsg": "テスト中の速度変動が大きいです。最初から最後まで一定のペースを保ちましょう。",
+    "consistencyGreat": "安定したリズム！",
+    "consistencyGreatMsg": "タイピングリズムがとても安定しています。筋肉記憶が発達している証拠です。",
+    "weakKeys": "これらのキーを練習",
+    "weakKeysMsg": "よく間違えるキー：{{keys}}。練習モードで集中トレーニングしましょう。",
+    "improving": "上達しています！",
+    "improvingMsg": "最近の平均より速いスピードです。この調子を維持しましょう！",
+    "takeBreak": "少し休憩を",
+    "takeBreakMsg": "最近の平均よりスピードが落ちています。短い休憩がリセットに役立ちます。",
+    "tooManyErrors": "修正が多すぎます",
+    "tooManyErrorsMsg": "Raw WPMと実際のWPMの差が大きいです。一発で正確に入力することに集中しましょう。"
   }
 }

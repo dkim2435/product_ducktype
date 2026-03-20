@@ -27,14 +27,8 @@ interface SettingsModalProps {
 
 function SettingRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '10px 0',
-      borderBottom: '1px solid var(--sub-alt-color)',
-    }}>
-      <span style={{ color: 'var(--sub-color)', fontSize: '14px' }}>{label}</span>
+    <div className="flex justify-between items-center py-2.5 border-b border-sub-alt">
+      <span className="text-sub text-sm">{label}</span>
       <div>{children}</div>
     </div>
   );
@@ -46,33 +40,15 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
       onClick={() => onChange(!value)}
       aria-checked={value}
       role="switch"
-      style={{
-        padding: '11px 0',
-        display: 'inline-flex',
-        alignItems: 'center',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-      }}
+      className="inline-flex items-center bg-none border-0 cursor-pointer"
+      style={{ padding: '11px 0' }}
     >
-      <div style={{
-        width: '40px',
-        height: '22px',
-        borderRadius: '11px',
+      <div className="w-10 h-[22px] rounded-[11px] relative transition-[background-color] duration-200 border border-sub" style={{
         backgroundColor: value ? 'var(--main-color)' : 'var(--sub-alt-color)',
-        position: 'relative',
-        transition: 'background-color 0.2s',
-        border: '1px solid var(--sub-color)',
       }}>
-        <div style={{
-          width: '16px',
-          height: '16px',
-          borderRadius: '50%',
+        <div className="w-4 h-4 rounded-full absolute top-0.5 transition-[left,background-color] duration-200" style={{
           backgroundColor: value ? 'var(--bg-color)' : 'var(--sub-color)',
-          position: 'absolute',
-          top: '2px',
           left: value ? '20px' : '2px',
-          transition: 'left 0.2s, background-color 0.2s',
         }} />
       </div>
     </button>
@@ -90,24 +66,19 @@ function UnlockButton({ label, unlocked, unlockLevel, isActive, onClick }: {
     <button
       onClick={() => unlocked && onClick()}
       disabled={!unlocked}
+      className="flex items-center gap-[3px] whitespace-nowrap text-xs rounded-[4px]"
       style={{
         padding: '4px 10px',
-        fontSize: '12px',
-        borderRadius: '4px',
         color: !unlocked ? 'var(--sub-color)' : isActive ? 'var(--main-color)' : 'var(--sub-color)',
         backgroundColor: isActive && unlocked ? 'var(--sub-alt-color)' : 'transparent',
         opacity: unlocked ? 1 : 0.4,
         cursor: unlocked ? 'pointer' : 'not-allowed',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '3px',
-        whiteSpace: 'nowrap',
       }}
     >
-      {unlocked && <span style={{ fontSize: '10px', color: '#4ade80' }}>✓</span>}
-      {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+      {unlocked && <span className="text-[10px]" style={{ color: '#4ade80' }}>✓</span>}
+      {!unlocked && <span className="text-[10px]">🔒</span>}
       {label}
-      {!unlocked && <span style={{ fontSize: '9px' }}>Lv.{unlockLevel}</span>}
+      {!unlocked && <span className="text-[9px]">Lv.{unlockLevel}</span>}
     </button>
   );
 }
@@ -153,10 +124,9 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         key={id}
         onClick={() => unlocked && onClick()}
         disabled={!unlocked}
+        className="flex items-center gap-1 rounded-[6px] text-xs relative"
         style={{
           padding: '6px 12px',
-          fontSize: '12px',
-          borderRadius: '6px',
           border: isActive
             ? `1.5px solid ${isPremium && neonColor ? neonColor : 'var(--main-color)'}`
             : isPremium && neonColor
@@ -170,10 +140,6 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
           backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
           opacity: !isPremium && !unlocked ? 0.4 : isPremium && !unlocked ? 0.75 : 1,
           cursor: unlocked ? 'pointer' : 'not-allowed',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-          position: 'relative',
           textShadow: isPremium && neonColor
             ? `0 0 8px ${neonColor}, 0 0 16px ${neonColor}50`
             : undefined,
@@ -182,18 +148,16 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
       >
         {/* Unlocked badge */}
         {unlocked && (
-          <span style={{
-            fontSize: '10px',
+          <span className="text-[10px]" style={{
             color: isPremium && neonColor ? neonColor : '#4ade80',
             textShadow: isPremium && neonColor ? `0 0 4px ${neonColor}` : undefined,
           }}>✓</span>
         )}
         {/* Locked (level) badge */}
-        {!isPremium && !unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+        {!isPremium && !unlocked && <span className="text-[10px]">🔒</span>}
         {/* Locked (premium) badge */}
         {isPremium && !unlocked && (
-          <span style={{
-            fontSize: '10px',
+          <span className="text-[10px]" style={{
             color: neonColor,
             textShadow: neonColor ? `0 0 4px ${neonColor}` : undefined,
           }}>🔒</span>
@@ -203,21 +167,17 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
 
         {/* Level requirement */}
         {!isPremium && !unlocked && (
-          <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
+          <span className="text-[10px] text-sub">
             Lv.{unlockLevel}
           </span>
         )}
         {/* COMING SOON badge */}
         {isPremium && !unlocked && (
-          <span style={{
-            fontSize: '8px',
+          <span className="text-[8px] rounded-[3px] font-semibold tracking-[0.5px]" style={{
             padding: '1px 4px',
-            borderRadius: '3px',
             backgroundColor: 'rgba(0,0,0,0.5)',
             color: neonColor || 'var(--sub-color)',
             textShadow: neonColor ? `0 0 4px ${neonColor}` : undefined,
-            letterSpacing: '0.5px',
-            fontWeight: 600,
           }}>SOON</span>
         )}
       </button>
@@ -227,59 +187,37 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
   return (
     <div
       role="presentation"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.6)',
-        zIndex: 100,
-      }}
+      className="fixed inset-0 flex items-center justify-center z-[100]"
+      style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className="slide-up"
+        className="slide-up bg-bg rounded-[12px] p-6 overflow-y-auto overflow-x-hidden border border-sub-alt"
         style={{
-          backgroundColor: 'var(--bg-color)',
-          borderRadius: '12px',
-          padding: '24px',
           width: '90%',
           maxWidth: '550px',
           maxHeight: '85vh',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          border: '1px solid var(--sub-alt-color)',
           touchAction: 'pan-y',
           WebkitOverflowScrolling: 'touch',
         }}
       >
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '20px',
-        }}>
-          <h2 style={{
-            color: 'var(--main-color)',
-            fontSize: '20px',
-            fontWeight: 400,
-          }}>
+        <div className="flex justify-between items-center mb-5">
+          <h2 className="text-main text-xl font-normal">
             {t('settings.title')}
           </h2>
           <button
             onClick={onClose}
-            style={{ color: 'var(--sub-color)', fontSize: '20px', padding: '4px' }}
+            className="text-sub text-xl p-1"
           >
             ×
           </button>
         </div>
 
         {/* Theme */}
-        <div style={{ marginBottom: '16px' }}>
-          <div style={{ color: 'var(--sub-color)', fontSize: '14px', marginBottom: '8px' }}>
+        <div className="mb-4">
+          <div className="text-sub text-sm mb-2">
             {t('settings.theme')}
           </div>
           <ThemePicker
@@ -307,11 +245,11 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         </SettingRow>
 
         {/* Font */}
-        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
-          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+        <div className="py-2.5 border-b border-sub-alt">
+          <span className="text-sub text-sm block mb-2">
             {t('settings.font')}
           </span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+          <div className="flex flex-wrap gap-1">
             {FONT_OPTIONS.map(opt => {
               const unlockLv = FONT_UNLOCK[opt.value as keyof typeof FONT_UNLOCK];
               const unlocked = effectiveLevel >= unlockLv;
@@ -332,27 +270,29 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
 
         {/* Font Size */}
         <SettingRow label={t('settings.fontSize')}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="flex items-center gap-2">
             <button
               onClick={() => onSettingChange('fontSize', Math.max(16, settings.fontSize - 2))}
-              style={{ color: 'var(--sub-color)', fontSize: '16px', padding: '2px 8px' }}
+              className="text-sub text-base"
+              style={{ padding: '2px 8px' }}
             >-</button>
-            <span style={{ color: 'var(--text-color)', fontSize: '14px', minWidth: '24px', textAlign: 'center' }}>
+            <span className="text-text text-sm min-w-[24px] text-center">
               {settings.fontSize}
             </span>
             <button
               onClick={() => onSettingChange('fontSize', Math.min(40, settings.fontSize + 2))}
-              style={{ color: 'var(--sub-color)', fontSize: '16px', padding: '2px 8px' }}
+              className="text-sub text-base"
+              style={{ padding: '2px 8px' }}
             >+</button>
           </div>
         </SettingRow>
 
         {/* Caret Style */}
-        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
-          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+        <div className="py-2.5 border-b border-sub-alt">
+          <span className="text-sub text-sm block mb-2">
             {t('settings.caretStyle')}
           </span>
-          <div style={{ display: 'flex', gap: '4px' }}>
+          <div className="flex gap-1">
             {(['line', 'block', 'underline', 'outline'] as CaretStyle[]).map(style => {
               const unlockLv = CARET_UNLOCK[style];
               const unlocked = effectiveLevel >= unlockLv;
@@ -377,11 +317,11 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         </SettingRow>
 
         {/* Profile Frame */}
-        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
-          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+        <div className="py-2.5 border-b border-sub-alt">
+          <span className="text-sub text-sm block mb-2">
             {t('settings.profileFrame')}
           </span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+          <div className="flex flex-wrap gap-1.5">
             {regularFrames.map(frame => {
               const unlocked = effectiveLevel >= frame.unlockLevel;
               const isActive = settings.profileFrame === frame.id;
@@ -393,24 +333,11 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
           </div>
           {premiumFrames.length > 0 && (
             <>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                margin: '10px 0 6px 0',
-              }}>
-                <span style={{
-                  fontSize: '10px',
-                  color: 'var(--sub-color)',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
-                }}>Premium</span>
-                <div style={{
-                  flex: 1, height: '1px',
-                  background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)',
-                }} />
+              <div className="flex items-center gap-2" style={{ margin: '10px 0 6px 0' }}>
+                <span className="text-[10px] text-sub tracking-[1.5px] uppercase">Premium</span>
+                <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)' }} />
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+              <div className="flex flex-wrap gap-1.5">
                 {premiumFrames.map(frame => {
                   const unlocked = isAdmin;
                   const isActive = settings.profileFrame === frame.id;
@@ -425,11 +352,11 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         </div>
 
         {/* Typing Particles */}
-        <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
-          <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+        <div className="py-2.5 border-b border-sub-alt">
+          <span className="text-sub text-sm block mb-2">
             {t('settings.particleTier')}
           </span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+          <div className="flex flex-wrap gap-1.5">
             {regularParticles.map(tier => {
               const unlocked = effectiveLevel >= tier.unlockLevel;
               const isActive = settings.particleTier === tier.id;
@@ -441,24 +368,11 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
           </div>
           {premiumParticles.length > 0 && (
             <>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                margin: '10px 0 6px 0',
-              }}>
-                <span style={{
-                  fontSize: '10px',
-                  color: 'var(--sub-color)',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
-                }}>Premium</span>
-                <div style={{
-                  flex: 1, height: '1px',
-                  background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)',
-                }} />
+              <div className="flex items-center gap-2" style={{ margin: '10px 0 6px 0' }}>
+                <span className="text-[10px] text-sub tracking-[1.5px] uppercase">Premium</span>
+                <div className="flex-1 h-px" style={{ background: 'linear-gradient(90deg, var(--sub-alt-color), transparent)' }} />
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+              <div className="flex flex-wrap gap-1.5">
                 {premiumParticles.map(tier => {
                   const unlocked = isAdmin;
                   const isActive = settings.particleTier === tier.id;
@@ -479,15 +393,14 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
 
         {settings.soundEnabled && (
           <SettingRow label={t('settings.soundVolume')}>
-            <div style={{ display: 'flex', gap: '4px' }}>
+            <div className="flex gap-1">
               {([0.25, 0.5, 0.75, 1] as SoundVolume[]).map(vol => (
                 <button
                   key={vol}
                   onClick={() => onSettingChange('soundVolume', vol)}
+                  className="text-xs rounded-[4px]"
                   style={{
                     padding: '4px 8px',
-                    fontSize: '12px',
-                    borderRadius: '4px',
                     color: settings.soundVolume === vol ? 'var(--main-color)' : 'var(--sub-color)',
                     backgroundColor: settings.soundVolume === vol ? 'var(--sub-alt-color)' : 'transparent',
                   }}
@@ -500,11 +413,11 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         )}
 
         {settings.soundEnabled && (
-          <div style={{ padding: '10px 0', borderBottom: '1px solid var(--sub-alt-color)' }}>
-            <span style={{ color: 'var(--sub-color)', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+          <div className="py-2.5 border-b border-sub-alt">
+            <span className="text-sub text-sm block mb-2">
               {t('settings.soundTheme')}
             </span>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+            <div className="flex flex-wrap gap-1.5">
               {SOUND_THEMES.map(themeDef => {
                 const unlocked = effectiveLevel >= themeDef.unlockLevel;
                 const isActive = settings.soundTheme === themeDef.id;
@@ -517,25 +430,21 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
                       setTimeout(() => previewSound(), 50);
                     }}
                     disabled={!unlocked}
+                    className="flex items-center gap-1 rounded-[6px] text-xs"
                     style={{
                       padding: '6px 12px',
-                      fontSize: '12px',
-                      borderRadius: '6px',
                       border: isActive ? '1.5px solid var(--main-color)' : '1px solid var(--sub-alt-color)',
                       color: isActive ? 'var(--main-color)' : unlocked ? 'var(--text-color)' : 'var(--sub-color)',
                       backgroundColor: isActive ? 'var(--sub-alt-color)' : 'transparent',
                       opacity: unlocked ? 1 : 0.4,
                       cursor: unlocked ? 'pointer' : 'not-allowed',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
                     }}
                   >
-                    {unlocked && <span style={{ fontSize: '10px', color: '#4ade80' }}>✓</span>}
-                    {!unlocked && <span style={{ fontSize: '10px' }}>🔒</span>}
+                    {unlocked && <span className="text-[10px]" style={{ color: '#4ade80' }}>✓</span>}
+                    {!unlocked && <span className="text-[10px]">🔒</span>}
                     {themeDef.name}
                     {!unlocked && (
-                      <span style={{ fontSize: '10px', color: 'var(--sub-color)' }}>
+                      <span className="text-[10px] text-sub">
                         Lv.{themeDef.unlockLevel}
                       </span>
                     )}
@@ -564,6 +473,11 @@ export function SettingsModal({ settings, onSettingChange, onClose, visible, pla
         {/* Freedom Mode */}
         <SettingRow label={t('settings.freedomMode')}>
           <Toggle value={settings.freedomMode} onChange={(v) => onSettingChange('freedomMode', v)} />
+        </SettingRow>
+
+        {/* Zen Mode */}
+        <SettingRow label={t('settings.zenMode')}>
+          <Toggle value={settings.zenMode} onChange={(v) => onSettingChange('zenMode', v)} />
         </SettingRow>
       </div>
     </div>

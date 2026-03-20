@@ -72,33 +72,23 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
     }
   };
 
+  const navIconClass = "flex items-center text-sub" as const;
+
   return (
-    <header style={{
-      display: 'flex',
-      flexDirection: isMobile ? 'column' : 'row',
-      justifyContent: isMobile ? undefined : 'space-between',
-      alignItems: isMobile ? undefined : 'center',
-      padding: mobileHidden ? '0 12px' : 'var(--header-padding)',
-      flexShrink: 0,
-      maxHeight: mobileHidden ? 0 : '200px',
-      overflow: mobileHidden ? 'hidden' : undefined,
-      opacity: mobileHidden ? 0 : 1,
-      transition: 'max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease',
-      gap: isMobile ? '6px' : undefined,
-    }}>
+    <header
+      className={`flex shrink-0 ${isMobile ? 'flex-col gap-[6px]' : 'flex-row justify-between items-center'}`}
+      style={{
+        padding: mobileHidden ? '0 12px' : 'var(--header-padding)',
+        maxHeight: mobileHidden ? 0 : '200px',
+        overflow: mobileHidden ? 'hidden' : undefined,
+        opacity: mobileHidden ? 0 : 1,
+        transition: 'max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease',
+      }}
+    >
       {/* Top row: logo + nav icons */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          cursor: 'pointer',
-        }}
+      <div className="flex justify-between items-center w-full">
+        <div
+          className="flex items-center gap-[10px] cursor-pointer"
           onClick={() => onNavigate('test')}
         >
           {/* Cute duck icon */}
@@ -121,49 +111,31 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
             <circle cx="38" cy="36" r="3" fill="#ff8c42" opacity="0.3" />
             <circle cx="62" cy="36" r="3" fill="#ff8c42" opacity="0.3" />
           </svg>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{
-              fontSize: isMobile ? '16px' : '22px',
-              fontWeight: 700,
-              color: 'var(--main-color)',
-              letterSpacing: '0.5px',
-              lineHeight: 1,
-            }}>
+          <div className="flex flex-col">
+            <span className={`${isMobile ? 'text-base' : 'text-[22px]'} font-bold text-main tracking-[0.5px] leading-none`}>
               duck
-              <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>type</span>
-              <span style={{ color: 'var(--main-color)' }}>.</span>
-              <span style={{ color: 'var(--text-color)', fontWeight: 300 }}>xyz</span>
+              <span className="text-text font-light">type</span>
+              <span className="text-main">.</span>
+              <span className="text-text font-light">xyz</span>
               {!isMobile && (
-                <sup style={{
-                  fontSize: '9px',
-                  color: '#4caf50',
-                  fontWeight: 500,
-                  opacity: 0.85,
-                  marginLeft: '2px',
-                }}>
+                <sup className="text-[9px] text-[#4caf50] font-medium opacity-85 ml-[2px]">
                   v{__APP_VERSION__}
                 </sup>
               )}
             </span>
             {isMobile && (
-              <span style={{
-                fontSize: '9px',
-                color: '#4caf50',
-                fontWeight: 500,
-                opacity: 0.85,
-                marginTop: '2px',
-              }}>
+              <span className="text-[9px] text-[#4caf50] font-medium opacity-85 mt-[2px]">
                 v{__APP_VERSION__}
               </span>
             )}
           </div>
         </div>
 
-        <nav style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '2px' : '12px' }}>
+        <nav className={`flex items-center ${isMobile ? 'gap-[2px]' : 'gap-3'}`}>
           {/* XP Bar - desktop only in nav row */}
           {profile && !isMobile && (
             <div
-              style={{ cursor: 'pointer' }}
+              className="cursor-pointer"
               onClick={() => onNavigate('profile')}
             >
               <XpBar profile={profile} userId={user?.id} />
@@ -178,23 +150,13 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           {/* Profile / Login — unified icon */}
           {isSupabaseConfigured && user ? (
             // Logged in: avatar with dropdown
-            <div ref={menuRef} style={{ position: 'relative' }}>
+            <div ref={menuRef} className="relative">
               <button
                 onClick={() => setShowUserMenu((v) => !v)}
+                className="rounded-full bg-main text-bg border-none cursor-pointer text-xs font-bold font-[inherit] flex items-center justify-center"
                 style={{
                   width: isMobile ? 36 : 26,
                   height: isMobile ? 36 : 26,
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--main-color)',
-                  color: 'var(--bg-color)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  fontFamily: 'inherit',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                 }}
                 aria-label={t('nav.profile')}
                 title={user.email ?? ''}
@@ -202,60 +164,21 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
                 {(user.email ?? '?')[0].toUpperCase()}
               </button>
               {showUserMenu && (
-                <div style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: '110%',
-                  backgroundColor: 'var(--bg-color)',
-                  border: '1px solid var(--sub-alt-color)',
-                  borderRadius: '8px',
-                  padding: '8px 0',
-                  minWidth: '180px',
-                  zIndex: 200,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-                }}>
-                  <div style={{
-                    padding: '8px 14px',
-                    fontSize: '12px',
-                    color: 'var(--sub-color)',
-                    borderBottom: '1px solid var(--sub-alt-color)',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}>
+                <div className="absolute right-0 top-[110%] bg-bg border border-sub-alt rounded-[8px] py-2 min-w-[180px] z-[200]"
+                  style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}
+                >
+                  <div className="py-2 px-[14px] text-xs text-sub border-b border-sub-alt overflow-hidden text-ellipsis whitespace-nowrap">
                     {user.email}
                   </div>
                   <button
                     onClick={() => { setShowUserMenu(false); onNavigate('profile'); }}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '8px 14px',
-                      border: 'none',
-                      background: 'none',
-                      color: 'var(--text-color)',
-                      fontSize: '13px',
-                      fontFamily: 'inherit',
-                      cursor: 'pointer',
-                    }}
+                    className="block w-full text-left py-2 px-[14px] border-none bg-transparent text-text text-[13px] font-[inherit] cursor-pointer"
                   >
                     {t('nav.profile')}
                   </button>
                   <button
                     onClick={() => { setShowUserMenu(false); onLogout?.(); }}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '8px 14px',
-                      border: 'none',
-                      background: 'none',
-                      color: 'var(--text-color)',
-                      fontSize: '13px',
-                      fontFamily: 'inherit',
-                      cursor: 'pointer',
-                    }}
+                    className="block w-full text-left py-2 px-[14px] border-none bg-transparent text-text text-[13px] font-[inherit] cursor-pointer"
                   >
                     {t('auth.logout')}
                   </button>
@@ -266,12 +189,8 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
             // Not logged in (or supabase not configured): profile icon
             <button
               onClick={handleProfileClick}
-              style={{
-                padding: 'var(--nav-icon-padding)',
-                color: 'var(--sub-color)',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+              className={navIconClass}
+              style={{ padding: 'var(--nav-icon-padding)' }}
               aria-label={t('nav.profile')}
               title={t('nav.profile')}
             >
@@ -287,12 +206,8 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           {!isMobile && (
             <button
               onClick={() => onNavigate('leaderboard')}
-              style={{
-                padding: 'var(--nav-icon-padding)',
-                color: 'var(--sub-color)',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+              className={navIconClass}
+              style={{ padding: 'var(--nav-icon-padding)' }}
               aria-label={t('leaderboard.title')}
               title={t('leaderboard.title')}
             >
@@ -308,12 +223,8 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
           {!isMobile && (
             <button
               onClick={() => onNavigate('achievements')}
-              style={{
-                padding: 'var(--nav-icon-padding)',
-                color: 'var(--sub-color)',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+              className={navIconClass}
+              style={{ padding: 'var(--nav-icon-padding)' }}
               aria-label={t('nav.achievements')}
               title={t('nav.achievements')}
             >
@@ -331,12 +242,8 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
 
           <button
             onClick={() => onNavigate('practice')}
-            style={{
-              padding: 'var(--nav-icon-padding)',
-              color: 'var(--sub-color)',
-              display: 'flex',
-              alignItems: 'center',
-            }}
+            className={navIconClass}
+            style={{ padding: 'var(--nav-icon-padding)' }}
             aria-label={t('nav.practice')}
             title={t('nav.practice')}
           >
@@ -349,26 +256,18 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
 
           <button
             onClick={() => onNavigate('adventure')}
-            style={{
-              padding: 'var(--nav-icon-padding)',
-              color: 'var(--sub-color)',
-              display: 'flex',
-              alignItems: 'center',
-              position: 'relative',
-            }}
+            className={`${navIconClass} relative`}
+            style={{ padding: 'var(--nav-icon-padding)' }}
             aria-label={t('nav.adventure')}
             title={t('nav.adventure')}
           >
-            <sup style={{
-              position: 'absolute',
-              top: isMobile ? -4 : -3,
-              right: isMobile ? -8 : -6,
-              fontSize: '9px',
-              fontWeight: 700,
-              color: '#ff5722',
-              letterSpacing: '0.3px',
-              pointerEvents: 'none',
-            }}>
+            <sup
+              className="absolute text-[9px] font-bold text-[#ff5722] tracking-[0.3px] pointer-events-none"
+              style={{
+                top: isMobile ? -4 : -3,
+                right: isMobile ? -8 : -6,
+              }}
+            >
               HOT
             </sup>
             {/* Sword icon */}
@@ -380,15 +279,11 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
             </svg>
           </button>
 
-          <div style={{ position: 'relative' }}>
+          <div className="relative">
             <button
               onClick={() => { setShowSettingsHint(false); onSettingsClick(); }}
-              style={{
-                padding: 'var(--nav-icon-padding)',
-                color: 'var(--sub-color)',
-                display: 'flex',
-                alignItems: 'center',
-              }}
+              className={navIconClass}
+              style={{ padding: 'var(--nav-icon-padding)' }}
               aria-label="Settings"
               title="Settings"
             >
@@ -401,41 +296,23 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
             {/* Settings hint tooltip */}
             {showSettingsHint && (
               <div
-                className="fade-in"
+                className="fade-in absolute top-full right-0 mt-2 py-[10px] px-[14px] bg-main text-bg rounded-default text-xs font-semibold whitespace-nowrap cursor-pointer z-[100] leading-[1.5]"
                 onClick={() => { setShowSettingsHint(false); onSettingsClick(); }}
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '8px',
-                  padding: '10px 14px',
-                  backgroundColor: 'var(--main-color)',
-                  color: 'var(--bg-color)',
-                  borderRadius: 'var(--border-radius)',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                  zIndex: 100,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                  lineHeight: 1.5,
-                }}
+                style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.3)' }}
               >
                 <div>{t('header.settingsHint')}</div>
-                <div style={{ fontSize: '11px', fontWeight: 400, opacity: 0.85 }}>
+                <div className="text-[11px] font-normal opacity-85">
                   {t('header.settingsHintSub')}
                 </div>
                 {/* Arrow pointing up */}
-                <div style={{
-                  position: 'absolute',
-                  top: '-6px',
-                  right: '14px',
-                  width: 0,
-                  height: 0,
-                  borderLeft: '6px solid transparent',
-                  borderRight: '6px solid transparent',
-                  borderBottom: '6px solid var(--main-color)',
-                }} />
+                <div
+                  className="absolute top-[-6px] right-[14px] w-0 h-0"
+                  style={{
+                    borderLeft: '6px solid transparent',
+                    borderRight: '6px solid transparent',
+                    borderBottom: '6px solid var(--main-color)',
+                  }}
+                />
               </div>
             )}
           </div>
@@ -445,12 +322,7 @@ export function Header({ onSettingsClick, onNavigate, profile, streak, hidden, u
       {/* Mobile second row: XP bar + Streak badge */}
       {isMobile && hasGamification && (
         <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            gap: '12px',
-          }}
+          className="flex items-center justify-end gap-3"
           onClick={() => profile && onNavigate('profile')}
         >
           {profile && <XpBar profile={profile} userId={user?.id} />}

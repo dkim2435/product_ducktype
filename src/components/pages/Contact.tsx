@@ -4,48 +4,36 @@ interface ContactProps {
 
 export function Contact({ onBack }: ContactProps) {
   return (
-    <article style={{
-      maxWidth: '700px',
-      margin: '0 auto',
-      padding: '40px 24px',
-      color: 'var(--text-color)',
-      lineHeight: 1.8,
-      fontSize: '15px',
-    }}>
-      <button onClick={onBack} style={{ marginBottom: '24px', fontSize: '14px' }}>
+    <article className="max-w-[700px] mx-auto px-6 py-10 text-text leading-[1.8] text-[15px]">
+      <button onClick={onBack} className="mb-6 text-sm">
         &larr; Back
       </button>
-      <h1 style={{ color: 'var(--main-color)', fontSize: '28px', marginBottom: '24px' }}>
+      <h1 className="text-main text-[28px] mb-6">
         Contact Us
       </h1>
 
-      <section style={{ marginBottom: '28px' }}>
-        <p style={{ marginBottom: '20px' }}>
+      <section className="mb-7">
+        <p className="mb-5">
           We'd love to hear from you! Whether you have a question, feedback, bug report,
           or just want to say hello, feel free to reach out.
         </p>
 
-        <div style={{
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: '12px',
-          padding: '24px',
-          marginBottom: '24px',
-        }}>
-          <h2 style={{ fontSize: '16px', color: 'var(--main-color)', marginBottom: '16px' }}>
+        <div className="bg-sub-alt rounded-[12px] p-6 mb-6">
+          <h2 className="text-base text-main mb-4">
             Feedback Widget
           </h2>
           <p>
             Click the feedback button at the bottom-right corner of the screen to send us
             your questions, bug reports, or suggestions. No email or sign-up required.
           </p>
-          <p style={{ color: 'var(--sub-color)', fontSize: '13px', marginTop: '8px' }}>
+          <p className="text-sub text-[13px] mt-2">
             Powered by Userback — your feedback is completely anonymous.
           </p>
         </div>
       </section>
 
       <section>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>
+        <h2 className="text-lg text-main mb-3">
           Frequently Asked Questions
         </h2>
 
@@ -71,9 +59,9 @@ export function Contact({ onBack }: ContactProps) {
             a: 'DuckType is optimized for desktop use with a physical keyboard. Mobile support is limited as typing tests require a full keyboard for accurate measurements.',
           },
         ].map(({ q, a }) => (
-          <div key={q} style={{ marginBottom: '20px' }}>
-            <h3 style={{ fontSize: '15px', color: 'var(--text-color)', marginBottom: '6px' }}>{q}</h3>
-            <p style={{ color: 'var(--sub-color)', fontSize: '14px' }}>{a}</p>
+          <div key={q} className="mb-5">
+            <h3 className="text-[15px] text-text mb-[6px]">{q}</h3>
+            <p className="text-sub text-sm">{a}</p>
           </div>
         ))}
       </section>

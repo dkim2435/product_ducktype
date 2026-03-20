@@ -85,23 +85,11 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
   }, [editName, currentUsername, onUpdateUsername, t]);
 
   return (
-    <div className="fade-in" style={{
-      width: '100%',
-      maxWidth: '700px',
-      margin: '0 auto',
-      padding: 'var(--page-vertical-padding) 0',
-    }}>
+    <div className="fade-in w-full max-w-[700px] mx-auto" style={{ padding: 'var(--page-vertical-padding) 0' }}>
       {/* Back button */}
       <button
         onClick={onBack}
-        style={{
-          color: 'var(--sub-color)',
-          fontSize: '13px',
-          marginBottom: '24px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-        }}
+        className="text-sub text-[13px] mb-6 flex items-center gap-[6px]"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -111,41 +99,21 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
 
       {/* Account section */}
       {isSupabaseConfigured && (
-        <div style={{
-          marginBottom: '24px',
-          padding: '16px 20px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '12px',
-        }}>
+        <div className="mb-6 px-5 py-4 bg-sub-alt rounded-default flex items-center justify-between gap-3">
           {user ? (
             <>
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div style={{
-                  fontSize: '12px',
-                  color: 'var(--sub-color)',
-                  marginBottom: '2px',
-                }}>
+              <div className="min-w-0 flex-1">
+                <div className="text-xs text-sub mb-[2px]">
                   {t('auth.syncedToCloud')}
                 </div>
-                <div style={{
-                  fontSize: '13px',
-                  color: 'var(--text-color)',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  marginBottom: '6px',
-                }}>
+                <div className="text-[13px] text-text overflow-hidden text-ellipsis whitespace-nowrap mb-[6px]">
                   {user.email}
                 </div>
 
                 {/* Username display / edit */}
                 {isEditingName ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex gap-[6px] items-center">
                       <input
                         type="text"
                         value={editName}
@@ -153,81 +121,41 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
                         onKeyDown={e => { if (e.key === 'Enter') handleSaveName(); if (e.key === 'Escape') setIsEditingName(false); }}
                         autoFocus
                         maxLength={16}
+                        className="px-2 py-1 text-[13px] font-semibold font-[inherit] text-text bg-bg rounded-[4px] outline-none w-[140px]"
                         style={{
-                          padding: '4px 8px',
-                          fontSize: '13px',
-                          fontWeight: 600,
-                          fontFamily: 'inherit',
-                          color: 'var(--text-color)',
-                          backgroundColor: 'var(--bg-color)',
                           border: `1.5px solid ${nameError ? 'var(--error-color)' : 'var(--main-color)'}`,
-                          borderRadius: '4px',
-                          outline: 'none',
-                          width: '140px',
                         }}
                       />
                       <button
                         onClick={handleSaveName}
                         disabled={nameSaving}
-                        style={{
-                          padding: '4px 10px',
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          fontFamily: 'inherit',
-                          color: 'var(--bg-color)',
-                          backgroundColor: 'var(--main-color)',
-                          borderRadius: '4px',
-                          cursor: nameSaving ? 'default' : 'pointer',
-                          opacity: nameSaving ? 0.6 : 1,
-                        }}
+                        className={`px-[10px] py-1 text-[11px] font-semibold font-[inherit] text-bg bg-main rounded-[4px] ${nameSaving ? 'cursor-default opacity-60' : 'cursor-pointer opacity-100'}`}
                       >
                         {nameSaving ? '...' : t('profile.save')}
                       </button>
                       <button
                         onClick={() => setIsEditingName(false)}
-                        style={{
-                          padding: '4px 8px',
-                          fontSize: '11px',
-                          fontFamily: 'inherit',
-                          color: 'var(--sub-color)',
-                          background: 'none',
-                          cursor: 'pointer',
-                        }}
+                        className="px-2 py-1 text-[11px] font-[inherit] text-sub bg-none cursor-pointer"
                       >
                         {t('profile.cancel')}
                       </button>
                     </div>
                     {nameError && (
-                      <div style={{ fontSize: '11px', color: 'var(--error-color)' }}>
+                      <div className="text-[11px] text-error">
                         {nameError}
                       </div>
                     )}
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      color: 'var(--main-color)',
-                    }}>
+                  <div className="flex items-center gap-[6px]">
+                    <span className="text-sm font-semibold text-main">
                       {currentUsername || user.email?.split('@')[0]}
                     </span>
                     {onUpdateUsername && (
                       <button
                         onClick={handleStartEdit}
                         title={t('profile.editUsername')}
-                        style={{
-                          padding: '2px',
-                          background: 'none',
-                          color: 'var(--sub-color)',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          opacity: 0.6,
-                          transition: 'opacity 0.15s',
-                        }}
-                        onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-                        onMouseLeave={e => (e.currentTarget.style.opacity = '0.6')}
+                        className="p-[2px] bg-none text-sub cursor-pointer flex items-center opacity-60 transition-opacity duration-150 hover:opacity-100"
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -240,18 +168,7 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
               </div>
               <button
                 onClick={onLogout}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: '6px',
-                  border: '1px solid var(--sub-alt-color)',
-                  background: 'none',
-                  color: 'var(--sub-color)',
-                  fontSize: '12px',
-                  fontFamily: 'inherit',
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  alignSelf: 'flex-start',
-                }}
+                className="px-[14px] py-[6px] rounded-[6px] border border-sub-alt bg-none text-sub text-xs font-[inherit] cursor-pointer shrink-0 self-start"
               >
                 {t('auth.logout')}
               </button>
@@ -259,36 +176,16 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
           ) : (
             <>
               <div>
-                <div style={{
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  color: 'var(--text-color)',
-                  marginBottom: '2px',
-                }}>
+                <div className="text-[13px] font-semibold text-text mb-[2px]">
                   {t('auth.savePromptTitle')}
                 </div>
-                <div style={{
-                  fontSize: '12px',
-                  color: 'var(--sub-color)',
-                }}>
+                <div className="text-xs text-sub">
                   {t('auth.savePromptDesc')}
                 </div>
               </div>
               <button
                 onClick={onLoginClick}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  backgroundColor: 'var(--main-color)',
-                  color: 'var(--bg-color)',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  fontFamily: 'inherit',
-                  cursor: 'pointer',
-                  flexShrink: 0,
-                  whiteSpace: 'nowrap',
-                }}
+                className="px-[18px] py-2 rounded-[6px] border-none bg-main text-bg text-[13px] font-semibold font-[inherit] cursor-pointer shrink-0 whitespace-nowrap"
               >
                 {t('auth.login')}
               </button>
@@ -298,86 +195,49 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
       )}
 
       {/* Level + Rank header */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px',
-        marginBottom: '24px',
-      }}>
+      <div className="flex items-center gap-4 mb-6">
         {(() => {
           const frameConfig = PROFILE_FRAMES.find(f => f.id === profileFrame);
           const hasFrame = frameConfig && frameConfig.id !== 'none';
           return (
-            <div style={{
-              fontSize: '48px',
-              width: '72px',
-              height: '72px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: '50%',
-              border: hasFrame ? frameConfig.border : 'none',
-              boxShadow: hasFrame && frameConfig.glow ? frameConfig.glow : 'none',
-              animation: hasFrame && frameConfig.animation ? frameConfig.animation : 'none',
-              flexShrink: 0,
-            }}>
+            <div
+              className="text-[48px] w-[72px] h-[72px] flex items-center justify-center rounded-full shrink-0"
+              style={{
+                border: hasFrame ? frameConfig.border : 'none',
+                boxShadow: hasFrame && frameConfig.glow ? frameConfig.glow : 'none',
+                animation: hasFrame && frameConfig.animation ? frameConfig.animation : 'none',
+              }}
+            >
               {rank.emoji}
             </div>
           );
         })()}
         <div>
-          <div style={{
-            fontSize: '24px',
-            fontWeight: 700,
-            color: 'var(--main-color)',
-          }}>
+          <div className="text-2xl font-bold text-main">
             {t('gamification.level')} {isAdmin ? 'MAX' : profile.level}
           </div>
-          <div style={{
-            fontSize: '14px',
-            color: 'var(--sub-color)',
-          }}>
+          <div className="text-sm text-sub">
             {rank.name}
           </div>
         </div>
       </div>
 
       {/* XP Progress bar */}
-      <div style={{ marginBottom: '32px' }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          fontSize: '12px',
-          color: 'var(--sub-color)',
-          marginBottom: '4px',
-        }}>
+      <div className="mb-8">
+        <div className="flex justify-between text-xs text-sub mb-1">
           <span>{isAdmin ? 'MAX' : `${current} / ${needed} XP`}</span>
           <span>{t('gamification.totalXp')}: {profile.totalXp}</span>
         </div>
-        <div style={{
-          width: '100%',
-          height: '8px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: '4px',
-          overflow: 'hidden',
-        }}>
-          <div style={{
-            width: isAdmin ? '100%' : `${Math.round(progress * 100)}%`,
-            height: '100%',
-            backgroundColor: 'var(--main-color)',
-            borderRadius: '4px',
-            transition: 'width 0.5s ease-out',
-          }} />
+        <div className="w-full h-2 bg-sub-alt rounded-[4px] overflow-hidden">
+          <div
+            className="h-full bg-main rounded-[4px] transition-[width] duration-500 ease-out"
+            style={{ width: isAdmin ? '100%' : `${Math.round(progress * 100)}%` }}
+          />
         </div>
       </div>
 
       {/* Stats grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-        gap: '12px',
-        marginBottom: '32px',
-      }}>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3 mb-8">
         <StatItem label={t('gamification.testsCompleted')} value={profile.testsCompleted.toString()} />
         <StatItem label={t('gamification.totalTime')} value={formatTime(profile.totalTimeTyping)} />
         <StatItem
@@ -392,72 +252,32 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
       </div>
 
       {/* Keyboard Heatmap */}
-      <div style={{
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-        padding: '24px',
-        marginBottom: '24px',
-      }}>
-        <div style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          color: 'var(--text-color)',
-          marginBottom: '4px',
-        }}>
+      <div className="bg-sub-alt rounded-default p-6 mb-6">
+        <div className="text-sm font-semibold text-text mb-1">
           {t('profile.keyboardHeatmap')}
         </div>
-        <div style={{
-          fontSize: '11px',
-          color: 'var(--sub-color)',
-          marginBottom: '16px',
-        }}>
+        <div className="text-[11px] text-sub mb-4">
           {t('profile.heatmapDesc')}
         </div>
         <KeyboardHeatmap keyStats={keyStats} />
       </div>
 
       {/* Streak Calendar */}
-      <div style={{
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-        padding: '24px',
-        marginBottom: '24px',
-      }}>
+      <div className="bg-sub-alt rounded-default p-6 mb-6">
         <StreakCalendar streak={streak} />
       </div>
 
       {/* WPM Trend Chart */}
       {history && history.length > 0 && (
-        <div style={{
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          padding: '24px',
-          marginBottom: '24px',
-        }}>
-          <div style={{
-            fontSize: '14px',
-            fontWeight: 600,
-            color: 'var(--text-color)',
-            marginBottom: '4px',
-          }}>
+        <div className="bg-sub-alt rounded-default p-6 mb-6">
+          <div className="text-sm font-semibold text-text mb-1">
             {t('profile.wpmTrend')}
           </div>
-          <div style={{
-            fontSize: '11px',
-            color: 'var(--sub-color)',
-            marginBottom: '16px',
-          }}>
+          <div className="text-[11px] text-sub mb-4">
             {t('profile.wpmTrendDesc')}
           </div>
           <Suspense fallback={
-            <div style={{
-              height: '220px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--sub-color)',
-              fontSize: '13px',
-            }}>
+            <div className="h-[220px] flex items-center justify-center text-sub text-[13px]">
               Loading...
             </div>
           }>
@@ -467,41 +287,19 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
       )}
 
       {/* Rank Roadmap */}
-      <div style={{
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-        padding: '24px',
-      }}>
-        <div style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          color: 'var(--text-color)',
-          marginBottom: '4px',
-        }}>
+      <div className="bg-sub-alt rounded-default p-6">
+        <div className="text-sm font-semibold text-text mb-1">
           {t('profile.rankRoadmap')}
         </div>
-        <div style={{
-          fontSize: '11px',
-          color: 'var(--sub-color)',
-          marginBottom: '20px',
-        }}>
+        <div className="text-[11px] text-sub mb-5">
           {t('profile.rankUnlocksAt')}
         </div>
 
-        <div style={{ position: 'relative', paddingLeft: '32px' }}>
+        <div className="relative pl-8">
           {/* Vertical line */}
-          <div style={{
-            position: 'absolute',
-            left: '11px',
-            top: '4px',
-            bottom: '4px',
-            width: '2px',
-            backgroundColor: 'var(--sub-alt-color)',
-            borderLeft: '2px solid var(--sub-color)',
-            opacity: 0.3,
-          }} />
+          <div className="absolute left-[11px] top-1 bottom-1 w-[2px] bg-sub-alt border-l-2 border-sub opacity-30" />
 
-          {(isAdmin ? [...RANKS, CREATOR_RANK] : RANKS).map((r, i) => {
+          {(isAdmin ? [...RANKS, CREATOR_RANK] : RANKS).map((r) => {
             const isCurrent = rank.name === r.name;
             const isPast = profile.level >= r.minLevel && !isCurrent;
             const isFuture = profile.level < r.minLevel;
@@ -509,67 +307,40 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
             return (
               <div
                 key={r.name}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '8px 0',
-                  opacity: isFuture ? 0.5 : 1,
-                  position: 'relative',
-                }}
+                className={`flex items-center gap-3 py-2 relative ${isFuture ? 'opacity-50' : 'opacity-100'}`}
               >
                 {/* Timeline dot */}
-                <div style={{
-                  position: 'absolute',
-                  left: '-25px',
-                  width: '12px',
-                  height: '12px',
-                  borderRadius: '50%',
-                  backgroundColor: isCurrent ? 'var(--main-color)' : isPast ? 'var(--main-color)' : 'var(--sub-alt-color)',
-                  border: isCurrent ? '2px solid var(--main-color)' : '2px solid var(--sub-color)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }} />
+                <div
+                  className="absolute -left-[25px] w-3 h-3 rounded-full flex items-center justify-center"
+                  style={{
+                    backgroundColor: isCurrent || isPast ? 'var(--main-color)' : 'var(--sub-alt-color)',
+                    border: isCurrent ? '2px solid var(--main-color)' : '2px solid var(--sub-color)',
+                  }}
+                />
 
                 {/* Emoji */}
-                <span style={{ fontSize: '20px', minWidth: '28px', textAlign: 'center' }}>
+                <span className="text-xl min-w-7 text-center">
                   {r.emoji}
                 </span>
 
                 {/* Name + level */}
-                <div style={{ flex: 1 }}>
-                  <span style={{
-                    fontSize: '13px',
-                    fontWeight: isCurrent ? 700 : 400,
-                    color: isCurrent ? 'var(--main-color)' : 'var(--text-color)',
-                  }}>
+                <div className="flex-1">
+                  <span className={`text-[13px] ${isCurrent ? 'font-bold text-main' : 'font-normal text-text'}`}>
                     {r.name}
                   </span>
-                  <span style={{
-                    fontSize: '11px',
-                    color: 'var(--sub-color)',
-                    marginLeft: '8px',
-                  }}>
+                  <span className="text-[11px] text-sub ml-2">
                     Lv.{r.minLevel}
                   </span>
                 </div>
 
                 {/* Status */}
                 {isCurrent && (
-                  <span style={{
-                    fontSize: '10px',
-                    padding: '2px 8px',
-                    borderRadius: '999px',
-                    backgroundColor: 'var(--main-color)',
-                    color: 'var(--bg-color)',
-                    fontWeight: 600,
-                  }}>
+                  <span className="text-[10px] px-2 py-[2px] rounded-full bg-main text-bg font-semibold">
                     {t('profile.currentRank')}
                   </span>
                 )}
                 {isPast && (
-                  <span style={{ fontSize: '14px', color: 'var(--main-color)' }}>✓</span>
+                  <span className="text-sm text-main">✓</span>
                 )}
               </div>
             );
@@ -582,15 +353,11 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
 
 function StatItem({ label, value }: { label: string; value: string }) {
   return (
-    <div style={{
-      padding: '12px',
-      backgroundColor: 'var(--sub-alt-color)',
-      borderRadius: 'var(--border-radius)',
-    }}>
-      <div style={{ fontSize: '11px', color: 'var(--sub-color)', marginBottom: '4px' }}>
+    <div className="p-3 bg-sub-alt rounded-default">
+      <div className="text-[11px] text-sub mb-1">
         {label}
       </div>
-      <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-color)' }}>
+      <div className="text-base font-semibold text-text">
         {value}
       </div>
     </div>

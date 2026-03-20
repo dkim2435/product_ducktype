@@ -8,7 +8,7 @@ interface LanguageSelectorProps {
 
 export function LanguageSelector({ currentLanguage, onChange, disabled }: LanguageSelectorProps) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <div className="flex items-center gap-2">
       <svg
         width="16"
         height="16"
@@ -27,17 +27,7 @@ export function LanguageSelector({ currentLanguage, onChange, disabled }: Langua
         value={currentLanguage}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        style={{
-          background: 'var(--sub-alt-color)',
-          color: 'var(--sub-color)',
-          border: 'none',
-          padding: '4px 8px',
-          borderRadius: '4px',
-          fontFamily: 'inherit',
-          fontSize: '14px',
-          cursor: disabled ? 'default' : 'pointer',
-          outline: 'none',
-        }}
+        className={`bg-sub-alt text-sub border-none py-1 px-2 rounded-[4px] font-[inherit] text-sm outline-none ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
       >
         {LANGUAGE_OPTIONS.map(opt => (
           <option key={opt.value} value={opt.value}>

@@ -83,6 +83,8 @@
     "difficulty": "Difficulty",
     "freedomMode": "Freedom mode",
     "freedomModeDesc": "Allow going back to previous words",
+    "zenMode": "Zen mode",
+    "zenModeDesc": "Hide all live stats during typing",
     "soundTheme": "Sound Theme",
     "profileFrame": "Profile Frame",
     "particleTier": "Typing Particles",
@@ -377,5 +379,28 @@
     "toMap": "World Map",
     "retry": "Retry",
     "nextStage": "Next Stage"
+  },
+  "coach": {
+    "title": "Typing Coach",
+    "speedBeginner": "Build your foundation",
+    "speedBeginnerMsg": "Focus on accuracy first, speed will come naturally. Try to hit each key correctly without looking at the keyboard.",
+    "slowDown": "Slow down a bit",
+    "slowDownMsg": "Your speed is great, but accuracy is suffering. Try reducing your speed by 10-15% to build muscle memory.",
+    "accuracyGreat": "Excellent accuracy!",
+    "accuracyGreatMsg": "Your accuracy is outstanding. You can start pushing for more speed now.",
+    "accuracyLow": "Focus on accuracy",
+    "accuracyLowMsg": "Try to type more carefully. It's better to type slowly and correctly than fast with many errors.",
+    "consistencyLow": "Work on rhythm",
+    "consistencyLowMsg": "Your speed varies a lot during the test. Try to maintain a steady pace throughout.",
+    "consistencyGreat": "Steady rhythm!",
+    "consistencyGreatMsg": "Your typing rhythm is very consistent. This is a sign of well-developed muscle memory.",
+    "weakKeys": "Practice these keys",
+    "weakKeysMsg": "You tend to miss these keys: {{keys}}. Try the Practice mode to strengthen them.",
+    "improving": "You're improving!",
+    "improvingMsg": "Your speed is above your recent average. Keep up the momentum!",
+    "takeBreak": "Consider a break",
+    "takeBreakMsg": "Your speed has dropped below your recent average. A short break can help you reset.",
+    "tooManyErrors": "Too many corrections",
+    "tooManyErrorsMsg": "There's a big gap between your raw and net WPM. Focus on getting it right the first time."
   }
 }

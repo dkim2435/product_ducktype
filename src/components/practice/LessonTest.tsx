@@ -56,59 +56,26 @@ export function LessonTest({
 
   if (finished) {
     return (
-      <div className="fade-in" style={{
-        width: '100%',
-        maxWidth: '500px',
-        margin: '0 auto',
-        padding: 'var(--page-vertical-padding) 0',
-        textAlign: 'center',
-      }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎉</div>
-        <h2 style={{
-          fontSize: '20px',
-          fontWeight: 700,
-          color: 'var(--main-color)',
-          marginBottom: '8px',
-        }}>
+      <div className="fade-in w-full max-w-[500px] mx-auto text-center" style={{ padding: 'var(--page-vertical-padding) 0' }}>
+        <div className="text-[48px] mb-4">🎉</div>
+        <h2 className="text-xl font-bold text-main mb-2">
           {t('practice.lessonComplete')}
         </h2>
-        <div style={{
-          fontSize: '14px',
-          color: 'var(--sub-color)',
-          marginBottom: '32px',
-        }}>
+        <div className="text-sm text-sub mb-8">
           {lesson?.name}
         </div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '12px',
-          flexWrap: 'wrap',
-        }}>
+        <div className="flex justify-center gap-3 flex-wrap">
           <button
             onClick={onBack}
-            style={{
-              padding: '10px 20px',
-              fontSize: '13px',
-              color: 'var(--sub-color)',
-              backgroundColor: 'var(--sub-alt-color)',
-              borderRadius: 'var(--border-radius)',
-            }}
+            className="px-5 py-[10px] text-[13px] text-sub bg-sub-alt rounded-default"
           >
             {t('practice.backToLessons')}
           </button>
           {nextLesson && (
             <button
               onClick={() => onStartLesson(nextLesson)}
-              style={{
-                padding: '10px 20px',
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--bg-color)',
-                backgroundColor: 'var(--main-color)',
-                borderRadius: 'var(--border-radius)',
-              }}
+              className="px-5 py-[10px] text-[13px] font-semibold text-bg bg-main rounded-default"
             >
               {t('practice.nextLesson')}
             </button>
@@ -119,48 +86,23 @@ export function LessonTest({
   }
 
   return (
-    <div style={{
-      width: '100%',
-      maxWidth: '900px',
-      margin: '0 auto',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      minHeight: 'calc(100vh - 240px)',
-    }}>
+    <div className="w-full max-w-[900px] mx-auto flex flex-col justify-center min-h-[calc(100vh-240px)]">
       {/* Lesson header */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        marginBottom: '16px',
-      }}>
+      <div className="flex items-center gap-3 mb-4">
         <button
           onClick={onBack}
-          style={{
-            color: 'var(--sub-color)',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '4px',
-          }}
+          className="text-sub flex items-center p-1"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>
         <div>
-          <div style={{
-            fontSize: '15px',
-            fontWeight: 600,
-            color: 'var(--text-color)',
-          }}>
+          <div className="text-[15px] font-semibold text-text">
             {lesson?.name || lessonId}
           </div>
           {lesson && lesson.targetKeys.length > 0 && (
-            <div style={{
-              fontSize: '11px',
-              color: 'var(--sub-color)',
-            }}>
+            <div className="text-[11px] text-sub">
               {t('practice.targetKeys')}: {lesson.targetKeys.join(' ')}
             </div>
           )}

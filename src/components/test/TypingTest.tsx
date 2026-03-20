@@ -255,15 +255,10 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   const showRefocusOverlay = !isFocused && isRunning;
 
   return (
-    <div style={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
+    <div className="w-full max-w-[900px] mx-auto">
       {/* Mode selector - fades out while typing (Monkeytype) */}
       {!hideModeSwitcher && (
-        <div style={{
-          marginBottom: '24px',
-          opacity: showControls ? 1 : 0,
-          pointerEvents: showControls ? 'auto' : 'none',
-          transition: 'opacity 0.25s ease',
-        }}>
+        <div className={`mb-6 transition-opacity duration-[250ms] ease-in-out ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <ModeSelector
             settings={settings}
             onModeChange={(mode) => { onSettingChange('mode', mode); handleRestart(); }}
@@ -278,16 +273,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
       {/* Language selector - fades out */}
       {!hideModeSwitcher && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '8px',
-          opacity: showControls ? 1 : 0,
-          pointerEvents: showControls ? 'auto' : 'none',
-          transition: 'opacity 0.25s ease',
-          minHeight: '32px',
-        }}>
+        <div className={`flex justify-between items-center mb-2 min-h-8 transition-opacity duration-[250ms] ease-in-out ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <LanguageSelector
             currentLanguage={settings.language}
             onChange={(lang) => { onSettingChange('language', lang); }}
@@ -297,35 +283,24 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
       )}
 
       {/* Live counter - Monkeytype style: single number above words */}
-      <div style={{
-        height: '40px',
-        marginBottom: '4px',
-        display: 'flex',
-        alignItems: 'flex-end',
-        gap: '16px',
-      }}>
+      <div className="h-10 mb-1 flex items-end gap-4">
         {isRunning && (
           <>
-            <span style={{
-              fontSize: '28px',
-              fontWeight: 300,
-              color: settings.mode === 'time' && timer.time <= 5
-                ? 'var(--error-color)'
-                : settings.mode === 'time' && timer.time <= 10
-                  ? '#ff8c00'
-                  : 'var(--main-color)',
-              fontVariantNumeric: 'tabular-nums',
-              transition: 'color 0.3s',
-            }}>
+            {settings.showTimer && !settings.zenMode && (
+            <span
+              className={`text-[28px] font-light tabular-nums transition-colors duration-300 ${
+                settings.mode === 'time' && timer.time <= 5
+                  ? 'text-error'
+                  : settings.mode === 'time' && timer.time <= 10
+                    ? 'text-[#ff8c00]'
+                    : 'text-main'
+              }`}
+            >
               {timer.time}
             </span>
-            {settings.showLiveWpm && (
-              <span style={{
-                fontSize: '20px',
-                fontWeight: 300,
-                color: 'var(--sub-color)',
-                fontVariantNumeric: 'tabular-nums',
-              }}>
+            )}
+            {settings.showLiveWpm && !settings.zenMode && (
+              <span className="text-xl font-light text-sub tabular-nums">
                 {liveWpm}
               </span>
             )}
@@ -335,18 +310,10 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
       {/* Input method mismatch warning */}
       {inputMismatch && state.phase !== 'finished' && (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          padding: '6px 12px',
-          marginBottom: '8px',
-          fontSize: '13px',
-          color: 'var(--error-color)',
-          backgroundColor: 'color-mix(in srgb, var(--error-color) 10%, transparent)',
-          borderRadius: 'var(--border-radius)',
-        }}>
+        <div
+          className="flex items-center justify-center gap-2 py-[6px] px-3 mb-2 text-[13px] text-error rounded-default"
+          style={{ backgroundColor: 'color-mix(in srgb, var(--error-color) 10%, transparent)' }}
+        >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
             <line x1="12" y1="9" x2="12" y2="13" />
@@ -357,54 +324,31 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
       )}
 
       {/* ===== WORDS AREA ===== */}
-      <div style={{ position: 'relative' }}>
+      <div className="relative">
         {/* "Start typing here" hint tooltip */}
         {showTypingHint && state.phase === 'waiting' && (
           <div
-            className="fade-in"
-            style={{
-              position: 'absolute',
-              top: '-36px',
-              left: '0',
-              padding: '6px 16px',
-              backgroundColor: 'var(--main-color)',
-              color: 'var(--bg-color)',
-              borderRadius: '999px',
-              fontSize: '12px',
-              fontWeight: 600,
-              whiteSpace: 'nowrap',
-              zIndex: 10,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
-              pointerEvents: 'none',
-              animation: 'typing-hint-bounce 2s ease-in-out infinite',
-            }}
+            className="fade-in absolute -top-9 left-0 py-[6px] px-4 bg-main text-bg rounded-full text-xs font-semibold whitespace-nowrap z-10 shadow-[0_2px_8px_rgba(0,0,0,0.25)] pointer-events-none"
+            style={{ animation: 'typing-hint-bounce 2s ease-in-out infinite' }}
           >
             {t('test.typingHint')}
             {/* Arrow pointing down */}
-            <div style={{
-              position: 'absolute',
-              bottom: '-5px',
-              left: '16px',
-              width: 0,
-              height: 0,
-              borderLeft: '5px solid transparent',
-              borderRight: '5px solid transparent',
-              borderTop: '5px solid var(--main-color)',
-            }} />
+            <div
+              className="absolute -bottom-[5px] left-4 w-0 h-0"
+              style={{
+                borderLeft: '5px solid transparent',
+                borderRight: '5px solid transparent',
+                borderTop: '5px solid var(--main-color)',
+              }}
+            />
           </div>
         )}
 
       {/* Outer clip container: fixed line height, overflow hidden */}
         <div
           onClick={handleContainerClick}
-          style={{
-            position: 'relative',
-            fontSize: `${effectiveFontSize}px`,
-            lineHeight: '1.65',
-            cursor: 'text',
-            overflow: 'hidden',
-            height: `${lineStride * visibleLines}px`,
-          }}
+          className="relative leading-[1.65] cursor-text overflow-hidden"
+          style={{ fontSize: `${effectiveFontSize}px`, height: `${lineStride * visibleLines}px` }}
         >
         {/* Typing particles for top 20 leaderboard users or settings-based tier */}
         <TypingParticles
@@ -433,15 +377,10 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
         {/* Top fade gradient for completed lines */}
         {scrollOffset > 0 && (
           <div
+            className="absolute top-0 left-0 right-0 z-[2] pointer-events-none"
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
               height: `${lineStride * (isMobile ? 1 : 2)}px`,
               background: 'linear-gradient(to bottom, var(--bg-color) 0%, transparent 100%)',
-              zIndex: 2,
-              pointerEvents: 'none',
             }}
           />
         )}
@@ -449,11 +388,10 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
         {/* Inner scrolling div: margin-top scrolls, caret is inside here */}
         <div
           ref={wordsContainerRef}
+          className="relative transition-[margin-top] duration-200 ease-out"
           style={{
-            position: 'relative',
             marginTop: `-${scrollOffset}px`,
-            transition: 'margin-top 0.2s ease-out',
-            filter: (showRefocusOverlay) ? 'blur(4px)' : 'none',
+            filter: showRefocusOverlay ? 'blur(4px)' : 'none',
           }}
         >
           <Caret
@@ -484,23 +422,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
               e.stopPropagation();
               handleRestart();
             }}
-            style={{
-              position: 'absolute',
-              bottom: '4px',
-              right: '4px',
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
-              color: 'var(--sub-color)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 10,
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-            }}
+            className="absolute bottom-1 right-1 w-9 h-9 rounded-full bg-black/40 text-sub flex items-center justify-center z-10 border-none cursor-pointer p-0"
             tabIndex={-1}
             title={t('test.restart')}
           >
@@ -513,21 +435,10 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
       </div>{/* end words area wrapper */}
 
       {/* Restart button */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: '32px',
-      }}>
+      <div className="flex justify-center mt-8">
         <button
           onClick={handleRestart}
-          style={{
-            padding: '8px 16px',
-            fontSize: '14px',
-            color: 'var(--sub-color)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}
+          className="py-2 px-4 text-sm text-sub flex items-center gap-2"
           tabIndex={-1}
           title={t('test.restartHint')}
         >

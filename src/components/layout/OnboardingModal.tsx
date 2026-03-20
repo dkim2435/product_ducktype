@@ -52,93 +52,46 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
     <div
       role="presentation"
       onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: isMobile ? 'flex-end' : 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      }}
+      className={`fixed inset-0 z-[1000] flex justify-center ${isMobile ? 'items-end' : 'items-center'}`}
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
     >
       <div
-        className="slide-up"
+        className={`slide-up flex flex-col gap-6 overflow-y-auto bg-bg ${
+          isMobile ? 'w-full rounded-t-[16px]' : 'w-[480px] rounded-default'
+        }`}
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: isMobile ? '100%' : '480px',
           maxHeight: '85vh',
-          overflowY: 'auto',
-          backgroundColor: 'var(--bg-color)',
-          borderRadius: isMobile ? '16px 16px 0 0' : 'var(--border-radius)',
           padding: '28px 24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '24px',
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '32px', marginBottom: '6px' }}>🦆</div>
-          <div style={{
-            fontSize: '22px',
-            fontWeight: 700,
-            color: 'var(--main-color)',
-            marginBottom: '4px',
-          }}>
+        <div className="text-center">
+          <div className="text-[32px] mb-[6px]">🦆</div>
+          <div className="text-[22px] font-bold text-main mb-1">
             {t('onboarding.title')}
           </div>
-          <div style={{
-            fontSize: '13px',
-            color: 'var(--sub-color)',
-          }}>
+          <div className="text-[13px] text-sub">
             {t('onboarding.subtitle')}
           </div>
         </div>
 
         {/* Features */}
         <div>
-          <div style={{
-            fontSize: '13px',
-            fontWeight: 700,
-            color: 'var(--sub-color)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            marginBottom: '10px',
-          }}>
+          <div className="text-[13px] font-bold text-sub uppercase tracking-[0.5px] mb-[10px]">
             {t('onboarding.featuresTitle')}
           </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '8px',
-          }}>
+          <div className="grid grid-cols-2 gap-2">
             {features.map((f, i) => (
-              <div key={i} style={{
-                padding: '12px',
-                backgroundColor: 'var(--sub-alt-color)',
-                borderRadius: 'var(--border-radius)',
-                ...(f.highlight ? {
-                  gridColumn: '1 / -1',
-                  border: '1.5px solid var(--main-color)',
-                  background: 'linear-gradient(135deg, var(--sub-alt-color) 0%, rgba(255,179,71,0.08) 100%)',
-                } : {}),
-              }}>
-                <div style={{ fontSize: f.highlight ? '22px' : '18px', marginBottom: '6px' }}>{f.emoji}</div>
-                <div style={{
-                  fontSize: f.highlight ? '14px' : '13px',
-                  fontWeight: f.highlight ? 700 : 600,
-                  color: f.highlight ? 'var(--main-color)' : 'var(--text-color)',
-                  marginBottom: '2px',
-                }}>
+              <div key={i} className={`p-3 bg-sub-alt rounded-default ${f.highlight ? 'col-span-2 border-[1.5px] border-main' : ''}`}
+                style={f.highlight ? { background: 'linear-gradient(135deg, var(--sub-alt-color) 0%, rgba(255,179,71,0.08) 100%)' } : undefined}
+              >
+                <div className={`mb-[6px] ${f.highlight ? 'text-[22px]' : 'text-lg'}`}>{f.emoji}</div>
+                <div className={`mb-[2px] ${f.highlight ? 'text-sm font-bold text-main' : 'text-[13px] font-semibold text-text'}`}>
                   {f.title}
-                  {f.highlight && <span style={{ fontSize: '10px', marginLeft: '8px', padding: '1px 6px', borderRadius: '4px', backgroundColor: 'var(--main-color)', color: 'var(--bg-color)', fontWeight: 800 }}>NEW</span>}
+                  {f.highlight && <span className="text-[10px] ml-2 py-[1px] px-[6px] rounded-[4px] bg-main text-bg font-extrabold">NEW</span>}
                 </div>
-                <div style={{
-                  fontSize: '11px',
-                  color: 'var(--sub-color)',
-                  lineHeight: 1.4,
-                }}>
+                <div className="text-[11px] text-sub leading-[1.4]">
                   {f.desc}
                 </div>
               </div>
@@ -148,84 +101,38 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
 
         {/* Level Up Unlocks */}
         <div>
-          <div style={{
-            fontSize: '13px',
-            fontWeight: 700,
-            color: 'var(--sub-color)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            marginBottom: '10px',
-          }}>
+          <div className="text-[13px] font-bold text-sub uppercase tracking-[0.5px] mb-[10px]">
             {t('onboarding.levelTitle')}
           </div>
 
           {/* Rank progression */}
-          <div style={{
-            padding: '12px 14px',
-            backgroundColor: 'var(--sub-alt-color)',
-            borderRadius: 'var(--border-radius)',
-            marginBottom: '8px',
-          }}>
-            <div style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: 'var(--text-color)',
-              marginBottom: '8px',
-            }}>
+          <div className="py-3 px-[14px] bg-sub-alt rounded-default mb-2">
+            <div className="text-xs font-semibold text-text mb-2">
               {t('onboarding.rankEvolution')}
             </div>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              flexWrap: 'wrap',
-              fontSize: '11px',
-              color: 'var(--sub-color)',
-            }}>
+            <div className="flex items-center gap-1 flex-wrap text-[11px] text-sub">
               {ranks.map((r, i) => (
-                <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-                  <span style={{ fontSize: '16px' }}>{r.emoji}</span>
-                  <span style={{ fontSize: '10px' }}>Lv.{r.level}</span>
-                  {i < ranks.length - 1 && <span style={{ margin: '0 2px', opacity: 0.4 }}>→</span>}
+                <span key={i} className="inline-flex items-center gap-[2px]">
+                  <span className="text-base">{r.emoji}</span>
+                  <span className="text-[10px]">Lv.{r.level}</span>
+                  {i < ranks.length - 1 && <span className="mx-[2px] opacity-40">→</span>}
                 </span>
               ))}
             </div>
           </div>
 
           {/* Unlock categories */}
-          <div style={{
-            padding: '12px 14px',
-            backgroundColor: 'var(--sub-alt-color)',
-            borderRadius: 'var(--border-radius)',
-          }}>
-            <div style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: 'var(--text-color)',
-              marginBottom: '8px',
-            }}>
+          <div className="py-3 px-[14px] bg-sub-alt rounded-default">
+            <div className="text-xs font-semibold text-text mb-2">
               {t('onboarding.unlockItems')}
             </div>
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '6px',
-            }}>
+            <div className="flex flex-wrap gap-[6px]">
               {unlockCategories.map((c, i) => (
-                <span key={i} style={{
-                  fontSize: '11px',
-                  color: 'var(--sub-color)',
-                  padding: '3px 10px',
-                  backgroundColor: 'var(--bg-color)',
-                  borderRadius: '999px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}>
+                <span key={i} className="text-[11px] text-sub py-[3px] px-[10px] bg-bg rounded-full inline-flex items-center gap-1">
                   <span>{c.emoji}</span>
                   <span>{c.label}</span>
-                  <span style={{ opacity: 0.5 }}>·</span>
-                  <span style={{ fontSize: '10px', opacity: 0.7 }}>{c.range}</span>
+                  <span className="opacity-50">·</span>
+                  <span className="text-[10px] opacity-70">{c.range}</span>
                 </span>
               ))}
             </div>
@@ -234,37 +141,14 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
 
         {/* Login perks */}
         <div>
-          <div style={{
-            fontSize: '13px',
-            fontWeight: 700,
-            color: 'var(--sub-color)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            marginBottom: '10px',
-          }}>
+          <div className="text-[13px] font-bold text-sub uppercase tracking-[0.5px] mb-[10px]">
             {t('onboarding.loginTitle')}
           </div>
-          <div style={{
-            padding: '12px 14px',
-            backgroundColor: 'var(--sub-alt-color)',
-            borderRadius: 'var(--border-radius)',
-            border: '1px solid var(--main-color)',
-          }}>
-            <div style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: 'var(--main-color)',
-              marginBottom: '8px',
-            }}>
+          <div className="py-3 px-[14px] bg-sub-alt rounded-default border border-main">
+            <div className="text-xs font-semibold text-main mb-2">
               {t('onboarding.loginFree')}
             </div>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px',
-              fontSize: '12px',
-              color: 'var(--sub-color)',
-            }}>
+            <div className="flex flex-col gap-1 text-xs text-sub">
               <span>✓ {t('onboarding.loginPerk1')}</span>
               <span>✓ {t('onboarding.loginPerk2')}</span>
               <span>✓ {t('onboarding.loginPerk3')}</span>
@@ -276,17 +160,7 @@ export function OnboardingModal({ visible, onClose }: OnboardingModalProps) {
         {/* Close button */}
         <button
           onClick={onClose}
-          style={{
-            alignSelf: 'center',
-            padding: '10px 36px',
-            backgroundColor: 'var(--main-color)',
-            color: 'var(--bg-color)',
-            border: 'none',
-            borderRadius: 'var(--border-radius)',
-            fontSize: '15px',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          className="self-center py-[10px] px-9 bg-main text-bg border-none rounded-default text-[15px] font-semibold cursor-pointer"
         >
           {t('onboarding.gotIt')}
         </button>

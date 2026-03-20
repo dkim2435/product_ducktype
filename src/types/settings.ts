@@ -29,6 +29,7 @@ export interface Settings {
   numbers: boolean;
   difficulty: Difficulty;
   freedomMode: boolean;
+  zenMode: boolean;
   uiLanguage: string;
   profileFrame: ProfileFrame;
   particleTier: ParticleTier;

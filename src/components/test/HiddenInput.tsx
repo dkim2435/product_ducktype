@@ -10,22 +10,8 @@ export const HiddenInput = forwardRef<HTMLTextAreaElement, HiddenInputProps>(
     return (
       <textarea
         ref={ref}
-        style={{
-          position: 'absolute',
-          opacity: 0,
-          width: '1px',
-          height: '1px',
-          top: 0,
-          left: 0,
-          padding: 0,
-          border: 'none',
-          outline: 'none',
-          resize: 'none',
-          overflow: 'hidden',
-          fontSize: '16px', // Prevents iOS auto-zoom on focus
-          // Must NOT be display:none — that prevents IME from working
-          pointerEvents: 'none',
-        }}
+        className="absolute opacity-0 w-px h-px top-0 left-0 p-0 border-none outline-none resize-none overflow-hidden text-base pointer-events-none"
+        // Must NOT be display:none — that prevents IME from working
         autoCapitalize="off"
         autoComplete="off"
         autoCorrect="off"

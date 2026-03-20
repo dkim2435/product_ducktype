@@ -149,26 +149,17 @@ export function WorldMap({
     ?? (isComingSoon ? 'repeating-linear-gradient(135deg, rgba(80, 70, 30, 0.08) 0px, rgba(80, 70, 30, 0.08) 20px, transparent 20px, transparent 40px), radial-gradient(ellipse at 50% 50%, rgba(60, 50, 20, 0.2) 0%, transparent 60%)' : undefined);
 
   return (
-    <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+    <div className="relative w-full overflow-hidden">
       {/* World-themed background overlay */}
       {worldBg && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: worldBg,
-          pointerEvents: 'none', zIndex: 0,
-          transition: 'opacity 0.5s',
-        }} />
+        <div className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500" style={{ background: worldBg }} />
       )}
       {/* Left ghost preview */}
       {prevWorld && (
-        <div style={{
-          position: 'fixed', left: 0, top: '50%', transform: 'translateY(-50%)',
-          width: isMobile ? '60px' : '120px', textAlign: 'center',
-          opacity: 0.12, pointerEvents: 'none', zIndex: 0,
-        }}>
-          <div style={{ fontSize: isMobile ? '28px' : '48px', marginBottom: '8px' }}>{prevWorld.emoji}</div>
+        <div className="fixed left-0 top-1/2 -translate-y-1/2 text-center opacity-[0.12] pointer-events-none z-0" style={{ width: isMobile ? '60px' : '120px' }}>
+          <div className="mb-2" style={{ fontSize: isMobile ? '28px' : '48px' }}>{prevWorld.emoji}</div>
           {!isMobile && (
-            <div style={{ fontSize: '12px', color: 'var(--text-color)', fontWeight: 700, lineHeight: 1.3 }}>
+            <div className="text-xs text-text font-bold leading-tight">
               {prevWorld.name}
             </div>
           )}
@@ -177,14 +168,10 @@ export function WorldMap({
 
       {/* Right ghost preview */}
       {nextWorld && (
-        <div style={{
-          position: 'fixed', right: 0, top: '50%', transform: 'translateY(-50%)',
-          width: isMobile ? '60px' : '120px', textAlign: 'center',
-          opacity: 0.12, pointerEvents: 'none', zIndex: 0,
-        }}>
-          <div style={{ fontSize: isMobile ? '28px' : '48px', marginBottom: '8px' }}>{nextWorld.emoji}</div>
+        <div className="fixed right-0 top-1/2 -translate-y-1/2 text-center opacity-[0.12] pointer-events-none z-0" style={{ width: isMobile ? '60px' : '120px' }}>
+          <div className="mb-2" style={{ fontSize: isMobile ? '28px' : '48px' }}>{nextWorld.emoji}</div>
           {!isMobile && (
-            <div style={{ fontSize: '12px', color: 'var(--text-color)', fontWeight: 700, lineHeight: 1.3 }}>
+            <div className="text-xs text-text font-bold leading-tight">
               {nextWorld.name}
             </div>
           )}
@@ -195,16 +182,11 @@ export function WorldMap({
       {prevWorld && (
         <button
           onClick={() => onChangeWorld(prevWorld.id)}
+          className="fixed top-1/2 -translate-y-1/2 rounded-full bg-sub-alt border border-sub text-text text-lg flex items-center justify-center z-10 opacity-60 transition-[opacity,background-color] duration-200 hover:opacity-100 hover:bg-main cursor-pointer"
           style={{
-            position: 'fixed', left: isMobile ? '8px' : '32px', top: '50%', transform: 'translateY(-50%)',
+            left: isMobile ? '8px' : '32px',
             width: isMobile ? '40px' : '44px', height: isMobile ? '40px' : '44px',
-            borderRadius: '50%', backgroundColor: 'var(--sub-alt-color)', border: '1px solid var(--sub-color)',
-            color: 'var(--text-color)', fontSize: '18px', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 10, opacity: 0.6, transition: 'opacity 0.2s, background-color 0.2s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.backgroundColor = 'var(--main-color)'; }}
-          onMouseLeave={e => { e.currentTarget.style.opacity = '0.6'; e.currentTarget.style.backgroundColor = 'var(--sub-alt-color)'; }}
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M15 18l-6-6 6-6" />
@@ -221,37 +203,25 @@ export function WorldMap({
           .reduce((sum, s) => sum + s.bestStars, 0);
 
         return (
-          <div style={{
-            position: 'fixed', right: isMobile ? '8px' : '32px', top: '50%', transform: 'translateY(-50%)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
-            zIndex: 10,
-          }}>
+          <div className="fixed top-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 z-10" style={{ right: isMobile ? '8px' : '32px' }}>
             {/* Unlock requirement text */}
             {nextWorldLocked && nextStarsRequired > 0 && (
-              <div style={{
-                padding: '3px 10px', borderRadius: '999px',
-                backgroundColor: 'var(--sub-alt-color)',
+              <div className="rounded-full bg-sub-alt text-[11px] font-bold text-text text-center whitespace-nowrap" style={{
+                padding: '3px 10px',
                 border: '1px solid rgba(251, 191, 36, 0.3)',
-                fontSize: '11px', fontWeight: 700, color: 'var(--text-color)',
-                textAlign: 'center', whiteSpace: 'nowrap',
               }}>
                 <span style={{ color: '#fbbf24' }}>★</span> {currentWorldStars}/{nextStarsRequired}
               </div>
             )}
             <button
               onClick={() => onChangeWorld(nextWorld.id)}
+              className="rounded-full bg-sub-alt text-lg flex items-center justify-center z-10 transition-[opacity,background-color] duration-200 hover:opacity-100 hover:bg-main cursor-pointer"
               style={{
                 width: isMobile ? '40px' : '44px', height: isMobile ? '40px' : '44px',
-                borderRadius: '50%', backgroundColor: 'var(--sub-alt-color)',
                 border: nextWorldLocked ? '1px solid var(--sub-color)' : '1.5px solid var(--text-color)',
                 color: nextWorldLocked ? 'var(--text-color)' : '#fff',
-                fontSize: '18px', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                zIndex: 10, opacity: nextWorldLocked ? 0.6 : 0.85,
-                transition: 'opacity 0.2s, background-color 0.2s',
+                opacity: nextWorldLocked ? 0.6 : 0.85,
               }}
-              onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.backgroundColor = 'var(--main-color)'; }}
-              onMouseLeave={e => { e.currentTarget.style.opacity = nextWorldLocked ? '0.6' : '0.85'; e.currentTarget.style.backgroundColor = 'var(--sub-alt-color)'; }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M9 18l6-6-6-6" />
@@ -262,15 +232,9 @@ export function WorldMap({
       })()}
 
       {/* Main content */}
-      <div className="fade-in" style={{
-        width: '100%', maxWidth: '700px', margin: '0 auto',
-        padding: 'var(--page-vertical-padding) 0', position: 'relative', zIndex: 1,
-      }}>
+      <div className="fade-in w-full max-w-[700px] mx-auto relative z-[1]" style={{ padding: 'var(--page-vertical-padding) 0' }}>
         {/* Back button */}
-        <button onClick={onBack} style={{
-          color: 'var(--sub-color)', fontSize: '13px', marginBottom: '24px',
-          display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer',
-        }}>
+        <button onClick={onBack} className="text-sub text-[13px] mb-6 flex items-center gap-1.5 cursor-pointer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
@@ -278,23 +242,21 @@ export function WorldMap({
         </button>
 
         {/* World title */}
-        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <div style={{ fontSize: '40px', marginBottom: '8px' }}>{currentPreview.emoji}</div>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-color)', marginBottom: '4px' }}>
+        <div className="text-center mb-9">
+          <div className="text-[40px] mb-2">{currentPreview.emoji}</div>
+          <h2 className="text-2xl font-bold text-text mb-1">
             {currentWorldId === 1 ? t('adventure.worldName') : currentPreview.name}
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--sub-color)' }}>
+          <p className="text-[13px] text-sub">
             {currentWorldId === 1 ? t('adventure.worldDesc') : currentPreview.desc}
           </p>
 
           {/* World debuff badge */}
           {worldDebuff && isPlayable && (
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '6px',
-              marginTop: '10px', padding: '5px 14px',
+            <div className="inline-flex items-center gap-1.5 mt-2.5 rounded-full text-xs font-bold" style={{
+              padding: '5px 14px',
               backgroundColor: 'rgba(76, 175, 80, 0.1)',
               border: '1px solid rgba(76, 175, 80, 0.3)',
-              borderRadius: '999px', fontSize: '12px', fontWeight: 700,
               color: '#4caf50',
             }}>
               <span>{worldDebuff.icon}</span>
@@ -303,20 +265,16 @@ export function WorldMap({
           )}
 
           {/* World indicator dots */}
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            gap: '8px', marginTop: '14px',
-          }}>
+          <div className="flex items-center justify-center gap-2 mt-3.5">
             {WORLD_PREVIEWS.map(w => (
               <button
                 key={w.id}
                 onClick={() => onChangeWorld(w.id)}
+                className="rounded-full border-0 cursor-pointer p-0 transition-all duration-200"
                 style={{
                   width: w.id === currentWorldId ? '10px' : '7px',
                   height: w.id === currentWorldId ? '10px' : '7px',
-                  borderRadius: '50%',
                   backgroundColor: w.id === currentWorldId ? 'var(--main-color)' : 'var(--sub-alt-color)',
-                  border: 'none', cursor: 'pointer', transition: 'all 0.2s', padding: 0,
                 }}
               />
             ))}
@@ -324,16 +282,8 @@ export function WorldMap({
 
           {/* Stars + Share */}
           {isPlayable && (
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              gap: '10px', marginTop: '12px',
-            }}>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '6px',
-                padding: '6px 14px',
-                backgroundColor: 'var(--sub-alt-color)', borderRadius: '999px',
-                fontSize: '13px', color: 'var(--sub-color)',
-              }}>
+            <div className="flex items-center justify-center gap-2.5 mt-3">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-sub-alt text-[13px] text-sub" style={{ padding: '6px 14px' }}>
                 <span style={{ color: '#fbbf24' }}>★</span>
                 {totalStars} / {maxStars}
               </div>
@@ -341,17 +291,11 @@ export function WorldMap({
               {/* Share button */}
               <button
                 onClick={handleShareClick}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '5px',
-                  padding: '6px 12px',
-                  backgroundColor: 'var(--sub-alt-color)', borderRadius: '999px',
-                  fontSize: '12px', color: 'var(--sub-color)',
-                  cursor: 'pointer', border: 'none', fontFamily: 'inherit',
-                  transition: 'color 0.2s',
-                }}
+                className="inline-flex items-center gap-[5px] rounded-full bg-sub-alt text-xs text-sub cursor-pointer border-0 font-[inherit] transition-colors duration-200"
+                style={{ padding: '6px 12px' }}
               >
                 {copiedWorldId === currentWorldId ? (
-                  <span style={{ color: 'var(--main-color)', fontWeight: 600 }}>Copied!</span>
+                  <span className="text-main font-semibold">Copied!</span>
                 ) : (
                   <>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -371,10 +315,7 @@ export function WorldMap({
 
         {/* Stage path or Coming Soon */}
         {isPlayable ? (
-          <div style={{
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            gap: '0px', position: 'relative', paddingBottom: '20px',
-          }}>
+          <div className="flex flex-col items-center relative pb-5" style={{ gap: '0px' }}>
             {stages.map((stage, idx) => {
               const unlocked = isStageUnlocked(currentWorldId, stage.id);
               const stageProgress = wp.stages[stage.id];
@@ -396,9 +337,7 @@ export function WorldMap({
               const offsetX = isLeft ? -zigzagOffset : zigzagOffset;
 
               return (
-                <div key={stage.id} style={{
-                  display: 'flex', flexDirection: 'column', alignItems: 'center',
-                }}>
+                <div key={stage.id} className="flex flex-col items-center">
                   {/* Z-shaped connector */}
                   {idx > 0 && (() => {
                     const prevIsLeft = (idx - 1) % 2 === 0;
@@ -408,7 +347,7 @@ export function WorldMap({
                     const d = `M ${prevX},0 V ${connMidY} H ${currX} V ${connH}`;
 
                     return (
-                      <svg width={connSvgW} height={connH} style={{ display: 'block' }}>
+                      <svg width={connSvgW} height={connH} className="block">
                         <path d={d} fill="none" style={{
                           stroke: isActive ? 'var(--main-color)' : 'var(--sub-alt-color)',
                           strokeWidth: 2,
@@ -419,19 +358,18 @@ export function WorldMap({
                   })()}
 
                   {/* Stage card — wrapper handles offset so pulse animation doesn't override translateX */}
-                  <div style={{ transform: `translateX(${offsetX}px)`, transition: 'transform 0.2s' }}>
+                  <div className="transition-transform duration-200" style={{ transform: `translateX(${offsetX}px)` }}>
                   <button
                     onClick={() => {
                       if (needsLogin) { onLoginClick(); return; }
                       if (unlocked) onSelectStage(stage.id);
                     }}
                     disabled={!unlocked && !needsLogin}
+                    className="relative rounded-[12px] overflow-hidden flex flex-col items-center justify-center gap-1 text-center"
                     style={{
-                      position: 'relative',
                       width: isBoss ? `${cardW + 20}px` : `${cardW}px`,
                       height: isBoss ? `${cardH + 10}px` : `${cardH}px`,
-                      borderRadius: '12px',
-                      overflow: 'hidden',
+                      padding: '8px 12px',
                       border: corruptionTier >= 2
                         ? '2px solid rgba(160, 0, 255, 0.6)'
                         : corruptionTier >= 1
@@ -456,32 +394,21 @@ export function WorldMap({
                             : isBoss && unlocked
                               ? '0 0 20px rgba(var(--error-color-rgb, 200,50,50), 0.2)'
                               : '0 2px 8px rgba(0,0,0,0.1)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '4px',
-                      padding: '8px 12px',
-                      textAlign: 'center',
                     }}
                   >
                     {/* Background gradient */}
-                    <div style={{
-                      position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                    <div className="absolute inset-0 pointer-events-none" style={{
                       background: unlocked ? thumb.bg : 'var(--sub-alt-color)',
                       opacity: cleared ? 0.7 : unlocked ? 0.5 : 0.3,
-                      pointerEvents: 'none',
                     }} />
 
                     {/* Corruption overlay — intermediate unlocked: visible cracks + tint */}
                     {corruptionTier === 1 && (
                       <>
-                        <div style={{
-                          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        <div className="absolute inset-0 pointer-events-none z-[1]" style={{
                           background: 'radial-gradient(ellipse at 25% 75%, rgba(128, 0, 255, 0.15) 0%, transparent 55%), radial-gradient(ellipse at 75% 25%, rgba(100, 0, 200, 0.1) 0%, transparent 50%)',
-                          pointerEvents: 'none', zIndex: 1,
                         }} />
-                        <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1, opacity: 0.45 }} viewBox="0 0 180 100" preserveAspectRatio="none">
+                        <svg className="absolute inset-0 w-full h-full pointer-events-none z-[1] opacity-45" viewBox="0 0 180 100" preserveAspectRatio="none">
                           {/* Main crack top-left to center */}
                           <path d="M 25,0 L 30,12 L 24,26 L 30,42 L 26,55" fill="none" stroke="rgba(200,150,255,0.9)" strokeWidth="1.2" />
                           <path d="M 24,26 L 14,30 L 6,26" fill="none" stroke="rgba(200,150,255,0.7)" strokeWidth="0.8" />
@@ -496,18 +423,13 @@ export function WorldMap({
                     {/* Corruption overlay — expert unlocked: shattered cracks + strong tint + glow */}
                     {corruptionTier >= 2 && (
                       <>
-                        <div style={{
-                          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        <div className="absolute inset-0 pointer-events-none z-[1]" style={{
                           background: 'radial-gradient(ellipse at 20% 75%, rgba(180, 0, 255, 0.22) 0%, transparent 50%), radial-gradient(ellipse at 80% 25%, rgba(140, 0, 220, 0.18) 0%, transparent 45%), radial-gradient(ellipse at 50% 50%, rgba(120, 0, 200, 0.08) 0%, transparent 60%)',
-                          pointerEvents: 'none', zIndex: 1,
                         }} />
-                        <div style={{
-                          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        <div className="absolute inset-0 rounded-[12px] pointer-events-none z-[1]" style={{
                           boxShadow: 'inset 0 0 18px rgba(140, 0, 255, 0.3)',
-                          borderRadius: '12px',
-                          pointerEvents: 'none', zIndex: 1,
                         }} />
-                        <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1, opacity: 0.75 }} viewBox="0 0 180 100" preserveAspectRatio="none">
+                        <svg className="absolute inset-0 w-full h-full pointer-events-none z-[1] opacity-75" viewBox="0 0 180 100" preserveAspectRatio="none">
                           {/* === Major crack 1 — left-center, top to bottom === */}
                           <path d="M 45,0 L 50,8 L 42,18 L 48,30 L 42,42 L 48,54 L 44,66 L 50,80 L 46,90 L 48,100" fill="none" stroke="rgba(220,170,255,1)" strokeWidth="1.6" />
                           <path d="M 42,18 L 30,22 L 18,18 L 8,22" fill="none" stroke="rgba(220,170,255,0.9)" strokeWidth="1.1" />
@@ -557,38 +479,33 @@ export function WorldMap({
 
                     {/* Boss badge */}
                     {(isBoss || stage.isMidBoss) && (
-                      <div style={{
-                        position: 'absolute', top: '5px', right: '6px', zIndex: 2,
-                        padding: '2px 7px', borderRadius: '4px',
+                      <div className="absolute top-[5px] right-1.5 z-[2] rounded-[4px] text-white text-[8px] font-extrabold tracking-[0.5px]" style={{
+                        padding: '2px 7px',
                         backgroundColor: stage.isMidBoss ? '#d97706' : '#dc2626',
-                        color: '#fff', fontSize: '8px', fontWeight: 800,
-                        letterSpacing: '0.5px', boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
                       }}>
                         {stage.isMidBoss ? 'MID BOSS' : 'BOSS'}
                       </div>
                     )}
 
                     {/* Content overlay */}
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                      <div style={{ fontSize: isBoss ? '28px' : '22px', marginBottom: '2px' }}>
+                    <div className="relative z-[1]">
+                      <div className="mb-0.5" style={{ fontSize: isBoss ? '28px' : '22px' }}>
                         {needsLogin ? '🔐' : !unlocked ? '🔒' : thumb.emoji}
                       </div>
 
-                      <div style={{
-                        fontSize: isMobile ? '12px' : '13px', fontWeight: 700,
+                      <div className="font-bold leading-tight flex items-center justify-center gap-1" style={{
+                        fontSize: isMobile ? '12px' : '13px',
                         color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.5)',
-                        lineHeight: 1.2, display: 'flex', alignItems: 'center',
-                        justifyContent: 'center', gap: '4px',
                       }}>
                         {stage.name}
-                        {cleared && <span style={{ fontSize: '12px' }}>✅</span>}
+                        {cleared && <span className="text-xs">✅</span>}
                       </div>
 
                       {cleared && (
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '2px', marginTop: '3px' }}>
+                        <div className="flex justify-center gap-0.5 mt-[3px]">
                           {[1, 2, 3].map(s => (
-                            <span key={s} style={{
-                              fontSize: '12px',
+                            <span key={s} className="text-xs" style={{
                               color: s <= stars ? '#fbbf24' : 'rgba(255,255,255,0.3)',
                             }}>★</span>
                           ))}
@@ -596,17 +513,17 @@ export function WorldMap({
                       )}
 
                       {needsLogin && (
-                        <div style={{
-                          fontSize: '9px', color: '#93c5fd', marginTop: '2px',
-                          textShadow: '0 1px 2px rgba(0,0,0,0.5)', fontWeight: 600,
+                        <div className="text-[9px] mt-0.5 font-semibold" style={{
+                          color: '#93c5fd',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.5)',
                         }}>
                           Login to play
                         </div>
                       )}
 
                       {isNext && (
-                        <div style={{
-                          fontSize: '10px', color: 'rgba(255,255,255,0.7)', marginTop: '2px',
+                        <div className="text-[10px] mt-0.5" style={{
+                          color: 'rgba(255,255,255,0.7)',
                           textShadow: '0 1px 2px rgba(0,0,0,0.5)',
                         }}>
                           +{stage.xpReward} XP
@@ -621,20 +538,14 @@ export function WorldMap({
           </div>
         ) : (
           /* Locked or Coming Soon */
-          <div style={{ textAlign: 'center', padding: '80px 20px' }}>
-            <div style={{ fontSize: '64px', marginBottom: '16px', opacity: 0.6 }}>
+          <div className="text-center" style={{ padding: '80px 20px' }}>
+            <div className="text-[64px] mb-4 opacity-60">
               {isComingSoon ? '🚧' : '🔒'}
             </div>
-            <div style={{
-              fontSize: '20px', fontWeight: 700,
-              color: 'var(--text-color)', marginBottom: '8px',
-            }}>
+            <div className="text-xl font-bold text-text mb-2">
               {isComingSoon ? 'Coming Soon' : 'Locked'}
             </div>
-            <p style={{
-              fontSize: '13px', color: 'var(--sub-color)',
-              maxWidth: '320px', margin: '0 auto', lineHeight: 1.6,
-            }}>
+            <p className="text-[13px] text-sub max-w-[320px] mx-auto leading-[1.6]">
               {isComingSoon
                 ? 'This world will be available in a future update.'
                 : !prevWorldLockInfo.bossCleared
@@ -642,14 +553,9 @@ export function WorldMap({
                   : `Need ${prevWorldLockInfo.starsRequired - prevWorldLockInfo.prevStars} more ★ from World ${currentWorldId - 1} (${prevWorldLockInfo.prevStars}/${prevWorldLockInfo.starsRequired})`}
             </p>
 
-            <div style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-              gap: '12px', marginTop: '40px', opacity: 0.08, pointerEvents: 'none',
-            }}>
+            <div className="flex flex-col items-center gap-3 mt-10 opacity-[0.08] pointer-events-none">
               {Array.from({ length: currentWorldId + 7 }, (_, i) => (
-                <div key={i} style={{
-                  width: '160px', height: '70px', borderRadius: '12px',
-                  backgroundColor: 'var(--text-color)',
+                <div key={i} className="w-[160px] h-[70px] rounded-[12px] bg-text" style={{
                   transform: `translateX(${i % 2 === 0 ? -60 : 60}px)`,
                 }} />
               ))}

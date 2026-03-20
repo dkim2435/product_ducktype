@@ -14,38 +14,18 @@ export function XpBar({ profile, userId }: XpBarProps) {
 
   return (
     <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        cursor: 'default',
-      }}
+      className="flex items-center gap-2 cursor-default"
       title={`${rank.name} - ${isAdmin ? 'MAX' : `Level ${profile.level}`} - ${profile.totalXp} XP`}
     >
-      <span style={{ fontSize: '16px' }}>{rank.emoji}</span>
-      <span style={{
-        fontSize: '12px',
-        fontWeight: 600,
-        color: 'var(--main-color)',
-        minWidth: '20px',
-      }}>
+      <span className="text-base">{rank.emoji}</span>
+      <span className="text-xs font-semibold text-main min-w-[20px]">
         {isAdmin ? 'MAX' : profile.level}
       </span>
-      <div style={{
-        width: '80px',
-        height: '6px',
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: '3px',
-        overflow: 'hidden',
-      }}>
+      <div className="w-[80px] h-[6px] bg-sub-alt rounded-[3px] overflow-hidden">
         <div
-          className="xp-fill"
+          className="xp-fill h-full bg-main rounded-[3px] transition-[width] duration-500 ease-out"
           style={{
             width: isAdmin ? '100%' : `${Math.round(progress * 100)}%`,
-            height: '100%',
-            backgroundColor: 'var(--main-color)',
-            borderRadius: '3px',
-            transition: 'width 0.5s ease-out',
           }}
         />
       </div>

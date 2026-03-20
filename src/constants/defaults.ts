@@ -20,6 +20,7 @@ export const DEFAULT_SETTINGS: Settings = {
   numbers: false,
   difficulty: 'normal',
   freedomMode: false,
+  zenMode: false,
   uiLanguage: 'en',
   profileFrame: 'none',
   particleTier: 'none',

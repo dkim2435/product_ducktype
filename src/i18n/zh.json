@@ -83,6 +83,8 @@
     "difficulty": "难度",
     "freedomMode": "自由模式",
     "freedomModeDesc": "允许返回之前的词",
+    "zenMode": "禅模式",
+    "zenModeDesc": "打字时隐藏所有实时统计",
     "soundTheme": "音效主题",
     "profileFrame": "头像框",
     "particleTier": "打字粒子",
@@ -377,5 +379,28 @@
     "toMap": "世界地图",
     "retry": "重试",
     "nextStage": "下一关"
+  },
+  "coach": {
+    "title": "打字教练",
+    "speedBeginner": "打好基础",
+    "speedBeginnerMsg": "先专注于准确率，速度会自然提升。试着不看键盘准确地输入每个键。",
+    "slowDown": "放慢一点",
+    "slowDownMsg": "速度不错，但准确率在下降。试着降低10-15%的速度来建立肌肉记忆。",
+    "accuracyGreat": "准确率优秀！",
+    "accuracyGreatMsg": "你的准确率非常出色，现在可以开始提升速度了。",
+    "accuracyLow": "专注于准确率",
+    "accuracyLowMsg": "试着更仔细地打字。慢而正确比快而多错要好。",
+    "consistencyLow": "练习节奏",
+    "consistencyLowMsg": "测试中速度变化很大。试着从头到尾保持稳定的节奏。",
+    "consistencyGreat": "节奏稳定！",
+    "consistencyGreatMsg": "你的打字节奏非常一致，这是肌肉记忆良好的表现。",
+    "weakKeys": "练习这些键",
+    "weakKeysMsg": "你容易按错这些键：{{keys}}。试试练习模式来加强训练。",
+    "improving": "你在进步！",
+    "improvingMsg": "你的速度超过了最近的平均水平，继续保持！",
+    "takeBreak": "考虑休息一下",
+    "takeBreakMsg": "你的速度低于最近平均水平。短暂休息可以帮助你恢复状态。",
+    "tooManyErrors": "修正太多",
+    "tooManyErrorsMsg": "原始WPM和实际WPM差距很大。专注于一次就打对。"
   }
 }

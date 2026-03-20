@@ -4,24 +4,17 @@ interface AboutProps {
 
 export function About({ onBack }: AboutProps) {
   return (
-    <article style={{
-      maxWidth: '700px',
-      margin: '0 auto',
-      padding: '40px 24px',
-      color: 'var(--text-color)',
-      lineHeight: 1.8,
-      fontSize: '15px',
-    }}>
-      <button onClick={onBack} style={{ marginBottom: '24px', fontSize: '14px' }}>
+    <article className="max-w-[700px] mx-auto px-6 py-10 text-text leading-[1.8] text-[15px]">
+      <button onClick={onBack} className="mb-6 text-sm">
         &larr; Back
       </button>
-      <h1 style={{ color: 'var(--main-color)', fontSize: '28px', marginBottom: '24px' }}>
+      <h1 className="text-main text-[28px] mb-6">
         About DuckType - Free Online Typing Speed Test
       </h1>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>What is DuckType?</h2>
-        <p style={{ marginBottom: '12px' }}>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">What is DuckType?</h2>
+        <p className="mb-3">
           DuckType is a free, open-source online typing test designed to help you measure and improve your
           typing speed and accuracy. Whether you want to check your WPM (words per minute), practice touch typing,
           or train with daily challenges, DuckType provides a clean, distraction-free environment with no sign-up required.
@@ -32,112 +25,99 @@ export function About({ onBack }: AboutProps) {
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px', padding: '20px', backgroundColor: 'var(--sub-alt-color)', borderRadius: '12px', border: '1.5px solid var(--main-color)' }}>
-        <h2 style={{ fontSize: '20px', color: 'var(--main-color)', marginBottom: '12px' }}>
+      <section className="mb-7 p-5 bg-sub-alt rounded-[12px] border-[1.5px] border-main">
+        <h2 className="text-xl text-main mb-3">
           ⚔️ Adventure Mode — Typing RPG
         </h2>
-        <p style={{ marginBottom: '12px' }}>
-          DuckType isn't just a typing test — it's a <strong style={{ color: 'var(--main-color)' }}>typing RPG</strong>.
+        <p className="mb-3">
+          DuckType isn't just a typing test — it's a <strong className="text-main">typing RPG</strong>.
           Battle monsters, defeat epic bosses, and conquer worlds by typing fast and accurately.
           Each world has unique enemies, debuffs, and a final boss with cinematic death animations.
         </p>
-        <ul style={{ paddingLeft: '20px', marginBottom: '12px' }}>
-          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>World 1: Duck Village</strong> — 8 stages + Shadow Wolf boss. Defend your home!</li>
-          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>World 2: Venom Jungle</strong> — 9 stages + Giant Viper boss. Survive the poison!</li>
-          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>3 Difficulty Tiers</strong> — Beginner, Intermediate, Expert. Beat the boss to unlock the next tier.</li>
-          <li style={{ marginBottom: '6px' }}><strong style={{ color: 'var(--text-color)' }}>More worlds coming soon</strong> — Fog, freeze, darkness, and more debuffs await.</li>
+        <ul className="pl-5 mb-3">
+          <li className="mb-[6px]"><strong className="text-text">World 1: Duck Village</strong> — 8 stages + Shadow Wolf boss. Defend your home!</li>
+          <li className="mb-[6px]"><strong className="text-text">World 2: Venom Jungle</strong> — 9 stages + Giant Viper boss. Survive the poison!</li>
+          <li className="mb-[6px]"><strong className="text-text">3 Difficulty Tiers</strong> — Beginner, Intermediate, Expert. Beat the boss to unlock the next tier.</li>
+          <li className="mb-[6px]"><strong className="text-text">More worlds coming soon</strong> — Fog, freeze, darkness, and more debuffs await.</li>
         </ul>
-        <p style={{ fontSize: '13px', color: 'var(--sub-color)' }}>
+        <p className="text-[13px] text-sub">
           Free to start. No account needed for World 1. Login to unlock World 2+ and sync progress across devices.
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>Features</h2>
-        <ul style={{ paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Multiple Languages:</strong> Practice typing in
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">Features</h2>
+        <ul className="pl-5">
+          <li className="mb-[10px]">
+            <strong className="text-text">Multiple Languages:</strong> Practice typing in
             English, Korean, Chinese, and Japanese with native word lists and full IME support.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Flexible Test Modes:</strong> Choose between timed
+          <li className="mb-[10px]">
+            <strong className="text-text">Flexible Test Modes:</strong> Choose between timed
             tests (15s, 30s, 60s, 120s) or word count tests (10, 25, 50, 100 words). Add punctuation and numbers for extra challenge.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Detailed Results:</strong> After each test, view your
+          <li className="mb-[10px]">
+            <strong className="text-text">Detailed Results:</strong> After each test, view your
             WPM, raw WPM, accuracy, and consistency. An interactive chart shows your performance over time.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Gamification:</strong> Earn XP, level up through 10 duck ranks
+          <li className="mb-[10px]">
+            <strong className="text-text">Gamification:</strong> Earn XP, level up through 10 duck ranks
             (from Egg to Duck King), unlock 30 achievements, and maintain daily streaks.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Daily Challenges:</strong> A new typing challenge every day
+          <li className="mb-[10px]">
+            <strong className="text-text">Daily Challenges:</strong> A new typing challenge every day
             with the same words for all users. Compete and maintain your daily streak.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Typing Lessons:</strong> Structured lessons from home row
+          <li className="mb-[10px]">
+            <strong className="text-text">Typing Lessons:</strong> Structured lessons from home row
             to full keyboard, plus weak key analysis that targets your specific problem areas.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Keyboard Heatmap:</strong> Visual analysis of your error
+          <li className="mb-[10px]">
+            <strong className="text-text">Keyboard Heatmap:</strong> Visual analysis of your error
             rate per key, so you know exactly which keys need more practice.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>17+ Themes:</strong> Personalize your experience with
+          <li className="mb-[10px]">
+            <strong className="text-text">17+ Themes:</strong> Personalize your experience with
             themes including DuckType Dark, Duck Pond, Dracula, Nord, Tokyo Night, and more.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Share Results:</strong> Generate and share a
+          <li className="mb-[10px]">
+            <strong className="text-text">Share Results:</strong> Generate and share a
             beautiful result image with your WPM score and statistics.
           </li>
         </ul>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>How WPM is Calculated</h2>
-        <p style={{ marginBottom: '12px' }}>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">How WPM is Calculated</h2>
+        <p className="mb-3">
           WPM (Words Per Minute) is the standard measurement of typing speed. DuckType uses the universally accepted formula:
         </p>
-        <div style={{
-          backgroundColor: 'var(--sub-alt-color)',
-          padding: '16px 20px',
-          borderRadius: '8px',
-          marginBottom: '12px',
-          fontFamily: 'monospace',
-          fontSize: '14px',
-          color: 'var(--main-color)',
-        }}>
+        <div className="bg-sub-alt px-5 py-4 rounded-[8px] mb-3 font-mono text-sm text-main">
           WPM = (correct characters / 5) / (elapsed time in minutes)
         </div>
-        <p style={{ marginBottom: '12px' }}>
+        <p className="mb-3">
           Each "word" is standardized to 5 characters, including spaces. This ensures fair
           comparison across different languages and word lengths.
         </p>
-        <ul style={{ paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '8px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Raw WPM:</strong> Includes all typed characters, both correct and incorrect.
+        <ul className="pl-5">
+          <li className="mb-2">
+            <strong className="text-text">Raw WPM:</strong> Includes all typed characters, both correct and incorrect.
           </li>
-          <li style={{ marginBottom: '8px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Accuracy:</strong> The percentage of correct keystrokes out of total keystrokes.
+          <li className="mb-2">
+            <strong className="text-text">Accuracy:</strong> The percentage of correct keystrokes out of total keystrokes.
           </li>
-          <li style={{ marginBottom: '8px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Consistency:</strong> How stable your typing speed is throughout the test, measured as 100 minus the coefficient of variation.
+          <li className="mb-2">
+            <strong className="text-text">Consistency:</strong> How stable your typing speed is throughout the test, measured as 100 minus the coefficient of variation.
           </li>
         </ul>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>What is a Good Typing Speed?</h2>
-        <p style={{ marginBottom: '12px' }}>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">What is a Good Typing Speed?</h2>
+        <p className="mb-3">
           Typing speed varies by experience. Here are general benchmarks:
         </p>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '8px',
-          marginBottom: '12px',
-        }}>
+        <div className="grid grid-cols-2 gap-2 mb-3">
           {[
             ['Beginner', '< 30 WPM'],
             ['Average', '40-50 WPM'],
@@ -146,16 +126,9 @@ export function About({ onBack }: AboutProps) {
             ['Professional', '100-130 WPM'],
             ['Expert', '130+ WPM'],
           ].map(([level, speed]) => (
-            <div key={level} style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              padding: '8px 12px',
-              backgroundColor: 'var(--sub-alt-color)',
-              borderRadius: '6px',
-              fontSize: '13px',
-            }}>
-              <span style={{ color: 'var(--text-color)' }}>{level}</span>
-              <span style={{ color: 'var(--main-color)', fontWeight: 600 }}>{speed}</span>
+            <div key={level} className="flex justify-between px-3 py-2 bg-sub-alt rounded-[6px] text-[13px]">
+              <span className="text-text">{level}</span>
+              <span className="text-main font-semibold">{speed}</span>
             </div>
           ))}
         </div>
@@ -164,35 +137,35 @@ export function About({ onBack }: AboutProps) {
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>How to Improve Your Typing Speed</h2>
-        <ol style={{ paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Focus on accuracy first.</strong> Speed
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">How to Improve Your Typing Speed</h2>
+        <ol className="pl-5">
+          <li className="mb-[10px]">
+            <strong className="text-text">Focus on accuracy first.</strong> Speed
             will naturally follow once you build muscle memory. Aim for 95%+ accuracy before trying to increase speed.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Use proper finger placement.</strong> Keep
+          <li className="mb-[10px]">
+            <strong className="text-text">Use proper finger placement.</strong> Keep
             your fingers on the home row (ASDF JKL;) and reach for other keys without looking. DuckType's lesson mode teaches this step by step.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Practice 10-15 minutes daily.</strong> Short,
+          <li className="mb-[10px]">
+            <strong className="text-text">Practice 10-15 minutes daily.</strong> Short,
             consistent sessions are more effective than occasional long ones. Use the daily challenge feature to stay motivated.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Don't look at the keyboard.</strong> Train
+          <li className="mb-[10px]">
+            <strong className="text-text">Don't look at the keyboard.</strong> Train
             yourself to type without looking down. Cover your hands if needed.
           </li>
-          <li style={{ marginBottom: '10px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Target your weak keys.</strong> Use DuckType's
+          <li className="mb-[10px]">
+            <strong className="text-text">Target your weak keys.</strong> Use DuckType's
             keyboard heatmap to identify problem keys and practice them with the weak keys lesson.
           </li>
         </ol>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>Frequently Asked Questions</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">Frequently Asked Questions</h2>
+        <div className="flex flex-col gap-4">
           {[
             { q: 'Is DuckType free?', a: 'Yes, DuckType is 100% free and open source. No account or sign-up needed.' },
             { q: 'Does DuckType store my data on a server?', a: 'If you create an account, your progress is securely synced to the cloud. Settings like theme and language are always saved locally in your browser.' },
@@ -201,38 +174,31 @@ export function About({ onBack }: AboutProps) {
             { q: 'What are the daily challenges?', a: 'Every day, all DuckType users get the same set of words. Complete it to maintain your daily streak and earn bonus XP.' },
           ].map(({ q, a }) => (
             <div key={q}>
-              <h3 style={{ fontSize: '14px', color: 'var(--text-color)', marginBottom: '4px' }}>{q}</h3>
-              <p style={{ fontSize: '13px', color: 'var(--sub-color)' }}>{a}</p>
+              <h3 className="text-sm text-text mb-1">{q}</h3>
+              <p className="text-[13px] text-sub">{a}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>Keyboard Shortcuts</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">Keyboard Shortcuts</h2>
+        <div className="flex flex-col gap-2">
           {[
             ['Tab + Enter', 'Restart the test with new words'],
             ['Escape', 'Restart the test'],
             ['Ctrl + Backspace', 'Delete entire current word'],
           ].map(([key, desc]) => (
-            <div key={key} style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <code style={{
-                backgroundColor: 'var(--sub-alt-color)',
-                padding: '4px 10px',
-                borderRadius: '4px',
-                fontSize: '13px',
-                color: 'var(--main-color)',
-                minWidth: '160px',
-              }}>{key}</code>
-              <span style={{ color: 'var(--sub-color)', fontSize: '14px' }}>{desc}</span>
+            <div key={key} className="flex gap-4 items-center">
+              <code className="bg-sub-alt px-[10px] py-1 rounded-[4px] text-[13px] text-main min-w-[160px]">{key}</code>
+              <span className="text-sub text-sm">{desc}</span>
             </div>
           ))}
         </div>
       </section>
 
       <section>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>Contact</h2>
+        <h2 className="text-lg text-main mb-3">Contact</h2>
         <p>
           Have feedback or suggestions? Use the feedback widget at the bottom-right corner
           of the screen to send us a message anytime.

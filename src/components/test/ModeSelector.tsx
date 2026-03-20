@@ -25,83 +25,55 @@ export function ModeSelector({
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
-  const btnStyle = (active: boolean): React.CSSProperties => ({
-    padding: isMobile ? '10px 14px' : '4px 12px',
-    minHeight: isMobile ? '44px' : undefined,
-    fontSize: 'var(--mode-selector-font)',
-    color: active ? 'var(--main-color)' : 'var(--sub-color)',
-    cursor: disabled ? 'default' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
-    transition: 'color 0.15s',
-    fontFamily: 'inherit',
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  });
+  const btnClass = (active: boolean) =>
+    `${isMobile ? 'py-[10px] px-[14px] min-h-[44px]' : 'py-1 px-3'} text-[length:var(--mode-selector-font)] ${active ? 'text-main' : 'text-sub'} ${disabled ? 'cursor-default opacity-50' : 'cursor-pointer'} transition-colors duration-150 font-[inherit] shrink-0 whitespace-nowrap`;
 
-  const separatorStyle: React.CSSProperties = {
-    width: '2px',
-    height: '16px',
-    backgroundColor: isMobile ? 'var(--sub-color)' : 'var(--sub-alt-color)',
-    margin: '0 4px',
-    alignSelf: 'center',
-    flexShrink: 0,
-  };
+  const separatorClass = `w-0.5 h-4 ${isMobile ? 'bg-sub' : 'bg-sub-alt'} mx-1 self-center shrink-0`;
 
   return (
     <div
-      className={isMobile ? 'hide-scrollbar' : undefined}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: isMobile ? 'flex-start' : 'center',
-        gap: '2px',
-        padding: '8px 16px',
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-        flexWrap: isMobile ? 'nowrap' : 'wrap',
-        overflowX: isMobile ? 'auto' : undefined,
-      }}
+      className={`flex items-center ${isMobile ? 'justify-start flex-nowrap overflow-x-auto' : 'justify-center flex-wrap'} gap-0.5 py-2 px-4 bg-sub-alt rounded-default ${isMobile ? 'hide-scrollbar' : ''}`}
     >
       {/* Punctuation & Numbers */}
       <button
-        style={btnStyle(settings.punctuation)}
+        className={btnClass(settings.punctuation)}
         onClick={() => !disabled && onPunctuationToggle()}
         title="Toggle punctuation"
       >
         @ {t('settings.punctuation').toLowerCase()}
       </button>
       <button
-        style={btnStyle(settings.numbers)}
+        className={btnClass(settings.numbers)}
         onClick={() => !disabled && onNumbersToggle()}
         title="Toggle numbers"
       >
         # {t('settings.numbers').toLowerCase()}
       </button>
 
-      <div style={separatorStyle} />
+      <div className={separatorClass} />
 
       {/* Mode selection */}
       <button
-        style={btnStyle(settings.mode === 'time')}
+        className={btnClass(settings.mode === 'time')}
         onClick={() => !disabled && onModeChange('time')}
       >
         {t('mode.time')}
       </button>
       <button
-        style={btnStyle(settings.mode === 'words')}
+        className={btnClass(settings.mode === 'words')}
         onClick={() => !disabled && onModeChange('words')}
       >
         {t('mode.words')}
       </button>
 
-      <div style={separatorStyle} />
+      <div className={separatorClass} />
 
       {/* Values */}
       {settings.mode === 'time'
         ? TIME_OPTIONS.map(time => (
             <button
               key={time}
-              style={btnStyle(settings.timeLimit === time)}
+              className={btnClass(settings.timeLimit === time)}
               onClick={() => !disabled && onTimeLimitChange(time)}
             >
               {time}
@@ -110,7 +82,7 @@ export function ModeSelector({
         : WORD_OPTIONS.map(count => (
             <button
               key={count}
-              style={btnStyle(settings.wordCount === count)}
+              className={btnClass(settings.wordCount === count)}
               onClick={() => !disabled && onWordCountChange(count)}
             >
               {count}

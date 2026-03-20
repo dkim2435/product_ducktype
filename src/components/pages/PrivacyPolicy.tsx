@@ -4,26 +4,19 @@ interface PrivacyPolicyProps {
 
 export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
   return (
-    <article style={{
-      maxWidth: '700px',
-      margin: '0 auto',
-      padding: '40px 24px',
-      color: 'var(--text-color)',
-      lineHeight: 1.8,
-      fontSize: '15px',
-    }}>
-      <button onClick={onBack} style={{ marginBottom: '24px', fontSize: '14px' }}>
+    <article className="max-w-[700px] mx-auto px-6 py-10 text-text leading-[1.8] text-[15px]">
+      <button onClick={onBack} className="mb-6 text-sm">
         &larr; Back
       </button>
-      <h1 style={{ color: 'var(--main-color)', fontSize: '28px', marginBottom: '8px' }}>
+      <h1 className="text-main text-[28px] mb-2">
         Privacy Policy
       </h1>
-      <p style={{ color: 'var(--sub-color)', marginBottom: '32px', fontSize: '13px' }}>
+      <p className="text-sub mb-8 text-[13px]">
         Last updated: February 2026
       </p>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>1. Introduction</h2>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">1. Introduction</h2>
         <p>
           DuckType ("we", "our", "us") is a free online typing test tool. We are committed to
           protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard
@@ -31,16 +24,16 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>2. Information We Collect</h2>
-        <p style={{ marginBottom: '12px' }}>
-          <strong style={{ color: 'var(--text-color)' }}>Local Data:</strong> We store your
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">2. Information We Collect</h2>
+        <p className="mb-3">
+          <strong className="text-text">Local Data:</strong> We store your
           preferences (theme, language, font settings) locally on your device. If you create an
           account, your typing progress (history, achievements, level) is securely synced to our
           cloud servers to enable cross-device access.
         </p>
         <p>
-          <strong style={{ color: 'var(--text-color)' }}>Cookies & Analytics:</strong> We use Google
+          <strong className="text-text">Cookies & Analytics:</strong> We use Google
           AdSense for advertising, which may use cookies to serve personalized ads based on your
           browsing history. Google Analytics may also collect anonymized usage data such as page
           views, session duration, and browser type. These services are operated by Google and are
@@ -48,37 +41,37 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>3. How We Use Information</h2>
-        <ul style={{ paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '8px' }}>To save your typing preferences and personal bests locally on your device</li>
-          <li style={{ marginBottom: '8px' }}>To display relevant advertisements through Google AdSense</li>
-          <li style={{ marginBottom: '8px' }}>To understand how visitors use our site and improve the user experience</li>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">3. How We Use Information</h2>
+        <ul className="pl-5">
+          <li className="mb-2">To save your typing preferences and personal bests locally on your device</li>
+          <li className="mb-2">To display relevant advertisements through Google AdSense</li>
+          <li className="mb-2">To understand how visitors use our site and improve the user experience</li>
         </ul>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>4. Third-Party Services</h2>
-        <p style={{ marginBottom: '12px' }}>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">4. Third-Party Services</h2>
+        <p className="mb-3">
           We use the following third-party services:
         </p>
-        <ul style={{ paddingLeft: '20px' }}>
-          <li style={{ marginBottom: '8px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Google AdSense:</strong> Displays
+        <ul className="pl-5">
+          <li className="mb-2">
+            <strong className="text-text">Google AdSense:</strong> Displays
             advertisements. Google may use cookies to serve ads based on your visit to this site
             and other sites on the Internet. You may opt out of personalized advertising by
             visiting Google Ads Settings.
           </li>
-          <li style={{ marginBottom: '8px' }}>
-            <strong style={{ color: 'var(--text-color)' }}>Google Fonts:</strong> We load fonts
+          <li className="mb-2">
+            <strong className="text-text">Google Fonts:</strong> We load fonts
             from Google Fonts for display purposes. Google may collect your IP address when
             loading these fonts.
           </li>
         </ul>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>5. Data Retention</h2>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">5. Data Retention</h2>
         <p>
           Settings are stored locally in your browser. If you have an account, your typing progress
           is stored on our secure cloud servers and can be deleted by contacting us. You can clear
@@ -86,24 +79,24 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>6. Children's Privacy</h2>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">6. Children's Privacy</h2>
         <p>
           Our service is available to users of all ages. We do not knowingly collect personal
           information from children. Account creation is optional and only requires an email address.
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>7. Changes to This Policy</h2>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">7. Changes to This Policy</h2>
         <p>
           We may update this Privacy Policy from time to time. Any changes will be reflected on this
           page with an updated revision date. We encourage you to review this page periodically.
         </p>
       </section>
 
-      <section style={{ marginBottom: '28px' }}>
-        <h2 style={{ fontSize: '18px', color: 'var(--main-color)', marginBottom: '12px' }}>8. Contact Us</h2>
+      <section className="mb-7">
+        <h2 className="text-lg text-main mb-3">8. Contact Us</h2>
         <p>
           If you have any questions about this Privacy Policy, please use the feedback
           widget at the bottom-right corner of the screen to contact us.

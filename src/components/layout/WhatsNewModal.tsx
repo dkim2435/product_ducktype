@@ -36,71 +36,40 @@ export function WhatsNewModal({ visible, onClose }: WhatsNewModalProps) {
     <div
       role="presentation"
       onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: isMobile ? 'flex-end' : 'center',
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      }}
+      className={`fixed inset-0 z-[1000] flex justify-center ${isMobile ? 'items-end' : 'items-center'}`}
+      style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
     >
       <div
-        className="slide-up"
+        className={`slide-up flex flex-col gap-5 overflow-y-auto bg-bg ${
+          isMobile ? 'w-full rounded-t-[16px]' : 'w-[420px] rounded-default'
+        }`}
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: isMobile ? '100%' : '420px',
           maxHeight: '80vh',
-          overflowY: 'auto',
-          backgroundColor: 'var(--bg-color)',
-          borderRadius: isMobile ? '16px 16px 0 0' : 'var(--border-radius)',
           padding: '32px 28px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            fontSize: '28px',
-            fontWeight: 700,
-            color: 'var(--main-color)',
-            marginBottom: '6px',
-          }}>
+        <div className="text-center">
+          <div className="text-[28px] font-bold text-main mb-[6px]">
             {t('whatsNew.title')}
           </div>
-          <div style={{
-            fontSize: '13px',
-            color: 'var(--sub-color)',
-          }}>
+          <div className="text-[13px] text-sub">
             v{latest.version} &middot; {dateStr}
           </div>
         </div>
 
         {/* Items */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div className="flex flex-col gap-[10px]">
           {latest.items.map((item, i) => (
             <div
               key={i}
-              style={{
-                display: 'flex',
-                gap: '14px',
-                alignItems: 'flex-start',
-                padding: '14px 16px',
-                backgroundColor: 'var(--sub-alt-color)',
-                borderRadius: 'var(--border-radius)',
-              }}
+              className="flex gap-[14px] items-start py-[14px] px-4 bg-sub-alt rounded-default"
             >
-              <span style={{ fontSize: '22px', lineHeight: 1.4, flexShrink: 0 }}>
+              <span className="text-[22px] leading-[1.4] shrink-0">
                 {item.emoji}
               </span>
-              <span style={{
-                fontSize: '14px',
-                color: 'var(--text-color)',
-                lineHeight: 1.5,
-              }}>
+              <span className="text-sm text-text leading-[1.5]">
                 {t(item.text)}
               </span>
             </div>
@@ -110,18 +79,7 @@ export function WhatsNewModal({ visible, onClose }: WhatsNewModalProps) {
         {/* Close button */}
         <button
           onClick={onClose}
-          style={{
-            alignSelf: 'center',
-            padding: '10px 36px',
-            backgroundColor: 'var(--main-color)',
-            color: 'var(--bg-color)',
-            border: 'none',
-            borderRadius: 'var(--border-radius)',
-            fontSize: '15px',
-            fontWeight: 600,
-            cursor: 'pointer',
-            marginTop: '4px',
-          }}
+          className="self-center py-[10px] px-9 bg-main text-bg border-none rounded-default text-[15px] font-semibold cursor-pointer mt-1"
         >
           {t('whatsNew.gotIt')}
         </button>

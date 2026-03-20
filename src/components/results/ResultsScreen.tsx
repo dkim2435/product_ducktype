@@ -11,7 +11,10 @@ import { XP_SHARE_BONUS } from '../../constants/gamification';
 import { XpGainDisplay } from './XpGainDisplay';
 import { AchievementUnlock } from './AchievementUnlock';
 import { HelpBadge } from './HelpBadge';
+import { CoachingCard } from './CoachingCard';
 import { getWpmPercentile } from '../../utils/percentile';
+import { generateCoachTips } from '../../utils/typingCoach';
+import type { TestResult as TestResultType } from '../../types/stats';
 
 interface ResultsScreenProps {
   result: TestResult;
@@ -35,25 +38,19 @@ interface ResultsScreenProps {
   unlockedCount?: number;
   totalAchievements?: number;
   nextAchievement?: NextAchievement | null;
+  recentHistory?: TestResultType[];
 }
 
 function TipItem({ text }: { text: string }) {
   return (
-    <div style={{
-      display: 'flex',
-      gap: '8px',
-      alignItems: 'flex-start',
-      fontSize: '12px',
-      color: 'var(--sub-color)',
-      lineHeight: 1.5,
-    }}>
-      <span style={{ color: 'var(--main-color)', flexShrink: 0, marginTop: '1px' }}>•</span>
+    <div className="flex gap-2 items-start text-xs text-sub leading-[1.5]">
+      <span className="text-main shrink-0 mt-px">•</span>
       <span>{text}</span>
     </div>
   );
 }
 
-export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick, onShareClick, hasCompletedDailyToday, dailyStreak, testsCompleted, totalXp, playerLevel, unlockedCount = 0, totalAchievements = 0, nextAchievement }: ResultsScreenProps) {
+export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, newAchievements, weakKeys, onNavigate, challengeWpm, isLoggedIn, isSupabaseConfigured, onLoginClick, onShareClick, hasCompletedDailyToday, dailyStreak, testsCompleted, totalXp, playerLevel, unlockedCount = 0, totalAchievements = 0, nextAchievement, recentHistory }: ResultsScreenProps) {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
 
@@ -65,80 +62,51 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
     : 0;
 
   return (
-    <div className="slide-up" style={{
-      width: '100%',
-      maxWidth: '900px',
-      margin: '0 auto',
-      padding: '20px 0',
-    }}>
+    <div className="slide-up w-full max-w-[900px] mx-auto py-5">
       {/* Personal best indicator */}
       {isNewPb && (
-        <div style={{
-          textAlign: 'center',
-          color: 'var(--main-color)',
-          fontSize: '14px',
-          marginBottom: '8px',
-          fontWeight: 500,
-        }}>
+        <div className="text-center text-main text-sm mb-2 font-medium">
           {t('stats.personalBest')}
         </div>
       )}
 
       {/* Challenge result */}
       {challengeWpm && (
-        <div style={{
-          textAlign: 'center',
-          marginBottom: '12px',
-          padding: isMobile ? '16px' : '10px 20px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          border: `1.5px solid ${result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)'}`,
-        }}>
+        <div
+          className="text-center mb-3 bg-sub-alt rounded-default"
+          style={{
+            padding: isMobile ? '16px' : '10px 20px',
+            border: `1.5px solid ${result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)'}`,
+          }}
+        >
           {isMobile ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginBottom: '4px' }}>
+            <div className="flex items-center justify-center gap-4">
+              <div className="text-center">
+                <div className="text-xs text-sub mb-1">
                   {t('stats.wpm')}
                 </div>
-                <div style={{
-                  fontSize: '32px',
-                  fontWeight: 700,
-                  color: result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)',
-                }}>
+                <div className={`text-[32px] font-bold ${result.wpm >= challengeWpm ? 'text-main' : 'text-error'}`}>
                   {result.wpm}
                 </div>
               </div>
-              <span style={{ fontSize: '20px', color: 'var(--sub-color)', fontWeight: 300 }}>vs</span>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginBottom: '4px' }}>
+              <span className="text-xl text-sub font-light">vs</span>
+              <div className="text-center">
+                <div className="text-xs text-sub mb-1">
                   {t('challenge.beatFriend', { wpm: '' }).split('{{wpm}}')[0].trim() || 'Friend'}
                 </div>
-                <div style={{
-                  fontSize: '32px',
-                  fontWeight: 700,
-                  color: 'var(--sub-color)',
-                }}>
+                <div className="text-[32px] font-bold text-sub">
                   {challengeWpm}
                 </div>
               </div>
             </div>
           ) : (
-            <span style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              color: result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)',
-            }}>
+            <span className={`text-base font-bold ${result.wpm >= challengeWpm ? 'text-main' : 'text-error'}`}>
               {result.wpm >= challengeWpm
                 ? t('challenge.won', { wpm: challengeWpm })
                 : t('challenge.lost', { wpm: challengeWpm })}
             </span>
           )}
-          <div style={{
-            marginTop: '8px',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: result.wpm >= challengeWpm ? 'var(--main-color)' : 'var(--error-color)',
-          }}>
+          <div className={`mt-2 text-sm font-semibold ${result.wpm >= challengeWpm ? 'text-main' : 'text-error'}`}>
             {result.wpm >= challengeWpm
               ? t('challenge.won', { wpm: challengeWpm })
               : t('challenge.lost', { wpm: challengeWpm })}
@@ -147,40 +115,32 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       )}
 
       {/* Percentile badge */}
-      <div style={{
-        textAlign: 'center',
-        marginBottom: '12px',
-      }}>
-        <span style={{
-          display: 'inline-block',
-          padding: '4px 14px',
-          borderRadius: '999px',
-          fontSize: '13px',
-          fontWeight: 600,
-          backgroundColor: topPercent <= 10 ? 'var(--main-color)' : 'var(--sub-alt-color)',
-          color: topPercent <= 10 ? 'var(--bg-color)' : 'var(--sub-color)',
-        }}>
+      <div className="text-center mb-3">
+        <span
+          className={`inline-block px-[14px] py-1 rounded-full text-[13px] font-semibold ${topPercent <= 10 ? 'bg-main text-bg' : 'bg-sub-alt text-sub'}`}
+        >
           {t('stats.topPercent', { percent: topPercent })}
         </span>
       </div>
 
       {/* Main stats row */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : 'auto 1fr',
-        gap: isMobile ? '16px' : '24px',
-        marginBottom: '24px',
-        alignItems: 'start',
-      }}>
+      <div
+        className="mb-6 items-start"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'auto 1fr',
+          gap: isMobile ? '16px' : '24px',
+        }}
+      >
         {/* Left: WPM + accuracy */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="flex flex-col gap-4">
           <StatCard label={t('stats.wpm')} value={result.wpm} large tooltip={t('stats.wpmDesc')} />
           <StatCard label={t('stats.accuracy')} value={`${result.accuracy}%`} tooltip={t('stats.accuracyDesc')} />
         </div>
 
         {/* Right: Chart */}
         <div>
-          <Suspense fallback={<div style={{ height: '200px' }} />}>
+          <Suspense fallback={<div className="h-[200px]" />}>
             <WpmChart
               wpmHistory={result.wpmHistory}
               rawWpmHistory={result.rawWpmHistory}
@@ -191,12 +151,13 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       </div>
 
       {/* Secondary stats row */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(auto-fit, minmax(${isMobile ? '100px' : '120px'}, 1fr))`,
-        gap: '16px',
-        marginBottom: '24px',
-      }}>
+      <div
+        className="gap-4 mb-6"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(auto-fit, minmax(${isMobile ? '100px' : '120px'}, 1fr))`,
+        }}
+      >
         <StatCard label={t('stats.testType')} value={`${result.mode} ${result.modeValue}`} />
         <StatCard label={t('stats.rawWpm')} value={result.rawWpm} tooltip={t('stats.rawWpmDesc')} />
         <StatCard label={t('stats.consistency')} value={`${result.consistency}%`} tooltip={t('stats.consistencyDesc')} />
@@ -211,139 +172,85 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       </div>
 
       {/* Character breakdown */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '4px',
-        fontSize: '14px',
-        color: 'var(--sub-color)',
-        marginBottom: '24px',
-      }}>
-        <span style={{ color: 'var(--text-color)' }}>{t('stats.characters')}: </span>
-        <span style={{ color: 'var(--main-color)' }}>{result.correctChars}</span>/
-        <span style={{ color: 'var(--error-color)' }}>{result.incorrectChars}</span>/
-        <span style={{ color: 'var(--error-extra-color)' }}>{result.extraChars}</span>/
+      <div className="flex justify-center items-center gap-1 text-sm text-sub mb-6">
+        <span className="text-text">{t('stats.characters')}: </span>
+        <span className="text-main">{result.correctChars}</span>/
+        <span className="text-error">{result.incorrectChars}</span>/
+        <span className="text-error-extra">{result.extraChars}</span>/
         <span>{result.missedChars}</span>
         <HelpBadge tooltip={t('stats.charactersDesc')} />
       </div>
 
       {/* XP Gain Display */}
       {xpGain && (
-        <div style={{ marginBottom: '16px' }}>
+        <div className="mb-4">
           <XpGainDisplay xpGain={xpGain} />
         </div>
       )}
 
       {/* Achievement Unlocks */}
       {newAchievements && newAchievements.length > 0 && (
-        <div style={{ marginBottom: '16px' }}>
+        <div className="mb-4">
           <AchievementUnlock achievementIds={newAchievements} />
         </div>
       )}
 
       {/* Achievement Progress Card */}
       {totalAchievements > 0 && (
-        <div style={{
-          marginBottom: '16px',
-          padding: isMobile ? '14px' : '14px 20px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-        }}>
+        <div
+          className="mb-4 bg-sub-alt rounded-default"
+          style={{ padding: isMobile ? '14px' : '14px 20px' }}
+        >
           {/* Overall progress */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '8px',
-          }}>
-            <span style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: 'var(--text-color)',
-            }}>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[13px] font-semibold text-text">
               🏆 {t('results.achievementProgress', { unlocked: unlockedCount, total: totalAchievements })}
             </span>
-            <span style={{
-              fontSize: '11px',
-              color: 'var(--sub-color)',
-            }}>
+            <span className="text-[11px] text-sub">
               {Math.round((unlockedCount / totalAchievements) * 100)}%
             </span>
           </div>
           {/* Overall progress bar */}
-          <div style={{
-            height: '4px',
-            backgroundColor: 'var(--bg-color)',
-            borderRadius: '2px',
-            overflow: 'hidden',
-            marginBottom: nextAchievement ? '12px' : '0',
-          }}>
-            <div style={{
-              height: '100%',
-              width: `${(unlockedCount / totalAchievements) * 100}%`,
-              backgroundColor: 'var(--main-color)',
-              borderRadius: '2px',
-              transition: 'width 0.5s ease',
-            }} />
+          <div
+            className="h-1 bg-bg rounded-sm overflow-hidden"
+            style={{ marginBottom: nextAchievement ? '12px' : '0' }}
+          >
+            <div
+              className="h-full bg-main rounded-sm transition-[width] duration-500 ease-out"
+              style={{ width: `${(unlockedCount / totalAchievements) * 100}%` }}
+            />
           </div>
 
           {/* Next goal */}
           {nextAchievement && (
             <>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: '6px',
-              }}>
-                <span style={{
-                  fontSize: '12px',
-                  color: 'var(--sub-color)',
-                }}>
+              <div className="flex items-center justify-between mb-[6px]">
+                <span className="text-xs text-sub">
                   {t('results.nextGoal')}: {nextAchievement.icon} {nextAchievement.name}
                   {nextAchievement.unit
                     ? ` (${nextAchievement.current}/${nextAchievement.target} ${nextAchievement.unit})`
                     : ` (${nextAchievement.current}/${nextAchievement.target})`}
                 </span>
-                <span style={{
-                  fontSize: '11px',
-                  color: 'var(--main-color)',
-                  fontWeight: 600,
-                }}>
+                <span className="text-[11px] text-main font-semibold">
                   {Math.round(nextAchievement.progress * 100)}%
                 </span>
               </div>
               {/* Next goal progress bar */}
-              <div style={{
-                height: '6px',
-                backgroundColor: 'var(--bg-color)',
-                borderRadius: '3px',
-                overflow: 'hidden',
-              }}>
-                <div style={{
-                  height: '100%',
-                  width: `${nextAchievement.progress * 100}%`,
-                  backgroundColor: 'var(--main-color)',
-                  borderRadius: '3px',
-                  transition: 'width 0.5s ease',
-                }} />
+              <div className="h-[6px] bg-bg rounded-[3px] overflow-hidden">
+                <div
+                  className="h-full bg-main rounded-[3px] transition-[width] duration-500 ease-out"
+                  style={{ width: `${nextAchievement.progress * 100}%` }}
+                />
               </div>
             </>
           )}
 
           {/* View achievements link */}
           {onNavigate && (
-            <div style={{ textAlign: 'right', marginTop: '8px' }}>
+            <div className="text-right mt-2">
               <button
                 onClick={() => onNavigate('achievements')}
-                style={{
-                  fontSize: '11px',
-                  color: 'var(--main-color)',
-                  cursor: 'pointer',
-                  padding: 0,
-                  fontWeight: 600,
-                }}
+                className="text-[11px] text-main cursor-pointer p-0 font-semibold"
               >
                 {t('results.viewAchievements')} →
               </button>
@@ -354,55 +261,21 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
 
       {/* Weak Keys */}
       {weakKeys && weakKeys.length > 0 && (
-        <div style={{
-          marginBottom: '24px',
-          padding: '16px 20px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            marginBottom: '12px',
-            fontSize: '13px',
-            color: 'var(--sub-color)',
-          }}>
+        <div className="mb-6 p-[16px_20px] bg-sub-alt rounded-default">
+          <div className="flex items-center gap-2 mb-3 text-[13px] text-sub">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 9v4M12 17h.01" />
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
             </svg>
             {t('results.weakKeys')}
           </div>
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '8px',
-            marginBottom: '12px',
-          }}>
+          <div className="flex flex-wrap gap-2 mb-3">
             {weakKeys.map(k => (
-              <span key={k.key} style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                backgroundColor: 'var(--bg-color)',
-                border: '1px solid var(--error-color)',
-                fontSize: '13px',
-              }}>
-                <span style={{
-                  fontWeight: 700,
-                  color: 'var(--error-color)',
-                  fontFamily: 'monospace',
-                  textTransform: 'uppercase',
-                }}>
+              <span key={k.key} className="inline-flex items-center gap-1 px-[10px] py-1 rounded-[6px] bg-bg border border-error text-[13px]">
+                <span className="font-bold text-error font-mono uppercase">
                   {k.key}
                 </span>
-                <span style={{
-                  fontSize: '11px',
-                  color: 'var(--sub-color)',
-                }}>
+                <span className="text-[11px] text-sub">
                   {k.errors}/{k.totalAttempts}
                 </span>
               </span>
@@ -411,12 +284,7 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           {onNavigate && (
             <button
               onClick={() => onNavigate('practice')}
-              style={{
-                fontSize: '12px',
-                color: 'var(--main-color)',
-                cursor: 'pointer',
-                padding: 0,
-              }}
+              className="text-xs text-main cursor-pointer p-0"
             >
               {t('results.practiceWeakKeys')} →
             </button>
@@ -425,51 +293,23 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
       )}
 
       {/* Actions + Adventure banner */}
-      <div style={{
-        display: 'flex',
-        gap: '10px',
-        alignItems: 'stretch',
-      }}>
+      <div className="flex gap-[10px] items-stretch">
         {/* Adventure banner — fills remaining space */}
         {onNavigate && (
           <button
             onClick={() => onNavigate('adventure')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              flex: 1,
-              minWidth: 0,
-              padding: '14px 16px',
-              border: '1.5px solid #4caf50',
-              borderRadius: 'var(--border-radius)',
-              background: 'var(--sub-alt-color)',
-              color: 'var(--text-color)',
-              fontSize: '13px',
-              cursor: 'pointer',
-              transition: 'filter 0.15s, border-color 0.15s',
-              textAlign: 'left',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(1.1)'; e.currentTarget.style.borderColor = '#66bb6a'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.borderColor = '#4caf50'; }}
+            className="flex items-center gap-3 flex-1 min-w-0 p-[14px_16px] rounded-default bg-sub-alt text-text text-[13px] cursor-pointer text-left transition-[filter,border-color] duration-150 hover:brightness-110"
+            style={{ border: '1.5px solid #4caf50' }}
           >
-            <span style={{ fontSize: '24px', flexShrink: 0 }}>⚔️</span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
-                <span style={{ fontWeight: 700, fontSize: '13px' }}>Adventure Mode</span>
-                <span style={{
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  backgroundColor: '#ff5722',
-                  color: '#fff',
-                  padding: '2px 6px',
-                  borderRadius: '999px',
-                  letterSpacing: '0.5px',
-                }}>
+            <span className="text-2xl shrink-0">⚔️</span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-[2px]">
+                <span className="font-bold text-[13px]">Adventure Mode</span>
+                <span className="text-[9px] font-bold bg-[#ff5722] text-white px-1.5 py-[2px] rounded-full tracking-[0.5px]">
                   HOT
                 </span>
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--sub-color)', lineHeight: 1.4 }}>
+              <div className="text-[11px] text-sub leading-[1.4]">
                 {t('results.adventureBanner', { wpm: result.wpm })}
               </div>
             </div>
@@ -477,49 +317,20 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
         )}
 
         {/* Next test + Share — right-aligned column */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '6px',
-          flexShrink: 0,
-        }}>
+        <div className="flex flex-col gap-[6px] shrink-0">
           <button
             onClick={onRestart}
-            style={{
-              padding: '8px 20px',
-              fontSize: '13px',
-              color: 'var(--text-color)',
-              backgroundColor: 'transparent',
-              border: '1px solid var(--sub-color)',
-              borderRadius: 'var(--border-radius)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              cursor: 'pointer',
-              flex: 1,
-            }}
+            className="p-[8px_20px] text-[13px] text-text bg-transparent border border-sub rounded-default flex items-center justify-center gap-[6px] cursor-pointer flex-1"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
             </svg>
             {t('test.nextTest')}
           </button>
-          <div style={{ position: 'relative' }}>
+          <div className="relative">
             <ShareButton result={result} onShareClick={onShareClick} fullWidth />
             {(!xpGain || xpGain.shareBonus === 0) && (
-              <span style={{
-                position: 'absolute',
-                right: '-28px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                fontSize: '10px',
-                color: 'var(--main-color)',
-                fontWeight: 600,
-                opacity: 0.8,
-                lineHeight: 1.2,
-                textAlign: 'center',
-              }}>
+              <span className="absolute -right-7 top-1/2 -translate-y-1/2 text-[10px] text-main font-semibold opacity-80 leading-[1.2] text-center">
                 +{XP_SHARE_BONUS}<br />XP
               </span>
             )}
@@ -529,28 +340,20 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
 
       {/* Daily Challenge hook card */}
       {onNavigate && (
-        <div style={{
-          marginTop: '16px',
-          padding: isMobile ? '14px' : '12px 20px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          border: '1px solid var(--main-color)',
-          display: 'flex',
-          alignItems: isMobile ? 'flex-start' : 'center',
-          flexDirection: isMobile ? 'column' : 'row',
-          gap: isMobile ? '10px' : '16px',
-          cursor: 'pointer',
-        }}
+        <div
+          className="mt-4 bg-sub-alt rounded-default border border-main cursor-pointer"
+          style={{
+            padding: isMobile ? '14px' : '12px 20px',
+            display: 'flex',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '10px' : '16px',
+          }}
           onClick={() => onNavigate('daily-challenge')}
         >
-          <span style={{ fontSize: '20px', flexShrink: 0 }}>📅</span>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: 'var(--text-color)',
-              marginBottom: '2px',
-            }}>
+          <span className="text-xl shrink-0">📅</span>
+          <div className="flex-1 min-w-0">
+            <div className="text-[13px] font-semibold text-text mb-[2px]">
               {hasCompletedDailyToday
                 ? t('results.dailyHookDone', { days: dailyStreak || 0 })
                 : (dailyStreak && dailyStreak > 0)
@@ -558,21 +361,12 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
                   : t('results.dailyHookStart')}
             </div>
             {hasCompletedDailyToday && (dailyStreak || 0) > 0 && (
-              <div style={{
-                fontSize: '11px',
-                color: 'var(--main-color)',
-                fontWeight: 600,
-              }}>
+              <div className="text-[11px] text-main font-semibold">
                 🔥 {dailyStreak} {t('gamification.days')} {t('gamification.streak')}
               </div>
             )}
           </div>
-          <span style={{
-            fontSize: '12px',
-            color: 'var(--main-color)',
-            fontWeight: 600,
-            flexShrink: 0,
-          }}>
+          <span className="text-xs text-main font-semibold shrink-0">
             {hasCompletedDailyToday ? '→' : `1.5x XP →`}
           </span>
         </div>
@@ -580,42 +374,27 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
 
       {/* Leaderboard prompt */}
       {onNavigate && (
-        <div style={{
-          marginTop: '12px',
-          padding: isMobile ? '14px' : '12px 20px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          display: 'flex',
-          alignItems: isMobile ? 'flex-start' : 'center',
-          flexDirection: isMobile ? 'column' : 'row',
-          gap: isMobile ? '10px' : '16px',
-          cursor: 'pointer',
-        }}
+        <div
+          className="mt-3 bg-sub-alt rounded-default cursor-pointer"
+          style={{
+            padding: isMobile ? '14px' : '12px 20px',
+            display: 'flex',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '10px' : '16px',
+          }}
           onClick={() => onNavigate('leaderboard')}
         >
-          <span style={{ fontSize: '20px', flexShrink: 0 }}>🏅</span>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: 'var(--text-color)',
-              marginBottom: '2px',
-            }}>
+          <span className="text-xl shrink-0">🏅</span>
+          <div className="flex-1 min-w-0">
+            <div className="text-[13px] font-semibold text-text mb-[2px]">
               {t('results.leaderboardHook', { wpm: result.wpm, percent: topPercent })}
             </div>
-            <div style={{
-              fontSize: '11px',
-              color: 'var(--sub-color)',
-            }}>
+            <div className="text-[11px] text-sub">
               {t('results.leaderboardHookDesc')}
             </div>
           </div>
-          <span style={{
-            fontSize: '12px',
-            color: 'var(--main-color)',
-            fontWeight: 600,
-            flexShrink: 0,
-          }}>
+          <span className="text-xs text-main font-semibold shrink-0">
             {t('results.viewLeaderboard')} →
           </span>
         </div>
@@ -623,32 +402,22 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
 
       {/* Cloud save prompt for non-logged-in users */}
       {isSupabaseConfigured && !isLoggedIn && (
-        <div style={{
-          marginTop: '24px',
-          padding: isMobile ? '16px' : '14px 20px',
-          backgroundColor: 'var(--sub-alt-color)',
-          borderRadius: 'var(--border-radius)',
-          border: `1px solid ${testsCompleted === 1 ? 'var(--main-color)' : 'var(--main-color)'}`,
-          display: 'flex',
-          alignItems: isMobile ? 'flex-start' : 'center',
-          flexDirection: isMobile ? 'column' : 'row',
-          gap: isMobile ? '12px' : '16px',
-          ...(testsCompleted === 1 ? { boxShadow: '0 0 12px rgba(255, 179, 71, 0.15)' } : {}),
-        }}>
-          <div style={{ flex: 1 }}>
-            <div style={{
-              fontSize: '13px',
-              fontWeight: 600,
-              color: 'var(--text-color)',
-              marginBottom: '4px',
-            }}>
+        <div
+          className="mt-6 bg-sub-alt rounded-default border border-main"
+          style={{
+            padding: isMobile ? '16px' : '14px 20px',
+            display: 'flex',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '12px' : '16px',
+            ...(testsCompleted === 1 ? { boxShadow: '0 0 12px rgba(255, 179, 71, 0.15)' } : {}),
+          }}
+        >
+          <div className="flex-1">
+            <div className="text-[13px] font-semibold text-text mb-1">
               {testsCompleted === 1 ? t('auth.firstTestTitle') : t('auth.savePromptTitle')}
             </div>
-            <div style={{
-              fontSize: '12px',
-              color: 'var(--sub-color)',
-              lineHeight: 1.5,
-            }}>
+            <div className="text-xs text-sub leading-[1.5]">
               {testsCompleted === 1
                 ? t('auth.firstTestDesc', { xp: totalXp || 0, level: playerLevel || 1 })
                 : t('auth.savePromptDesc')}
@@ -656,53 +425,37 @@ export function ResultsScreen({ result, personalBest, onRestart, isCjk, xpGain, 
           </div>
           <button
             onClick={onLoginClick}
-            style={{
-              padding: '8px 20px',
-              borderRadius: '6px',
-              border: 'none',
-              backgroundColor: 'var(--main-color)',
-              color: 'var(--bg-color)',
-              fontSize: '13px',
-              fontWeight: 600,
-              fontFamily: 'inherit',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-            }}
+            className="p-[8px_20px] rounded-[6px] border-none bg-main text-bg text-[13px] font-semibold font-[inherit] cursor-pointer whitespace-nowrap shrink-0"
           >
             {t('auth.login')} / {t('auth.signup')}
           </button>
         </div>
       )}
 
+      {/* AI Coaching tips */}
+      <CoachingCard
+        tips={generateCoachTips(result, weakKeys || [], recentHistory || [])}
+        weakKeys={weakKeys || []}
+      />
+
       {/* Typing improvement tips */}
-      <div style={{
-        marginTop: '32px',
-        padding: isMobile ? '20px 16px' : '24px 28px',
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-      }}>
-        <h3 style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          color: 'var(--main-color)',
-          marginBottom: '12px',
-        }}>
+      <div
+        className="mt-8 bg-sub-alt rounded-default"
+        style={{ padding: isMobile ? '20px 16px' : '24px 28px' }}
+      >
+        <h3 className="text-sm font-semibold text-main mb-3">
           {t('info.improveTitle')}
         </h3>
-        <p style={{
-          fontSize: '13px',
-          color: 'var(--sub-color)',
-          lineHeight: 1.6,
-          marginBottom: '12px',
-        }}>
+        <p className="text-[13px] text-sub leading-[1.6] mb-3">
           {t('info.improveDesc')}
         </p>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-          gap: '8px',
-        }}>
+        <div
+          className="gap-2"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          }}
+        >
           <TipItem text={t('info.tip1')} />
           <TipItem text={t('info.tip2')} />
           <TipItem text={t('info.tip3')} />

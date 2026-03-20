@@ -47,20 +47,12 @@ export function StreakCalendar({ streak: _streak }: StreakCalendarProps) {
 
   return (
     <div>
-      <div style={{
-        fontSize: '13px',
-        color: 'var(--sub-color)',
-        marginBottom: '12px',
-      }}>
+      <div className="text-[13px] text-sub mb-3">
         {t('profile.streakCalendar')}
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '3px',
-      }}>
+      <div className="flex flex-col gap-[3px]">
         {weeks.map((week, weekIdx) => (
-          <div key={weekIdx} style={{ display: 'flex', gap: '3px' }}>
+          <div key={weekIdx} className="flex gap-[3px]">
             {week.map(day => {
               const isActive = activeDates.has(day);
               const isToday = day === new Date().toISOString().slice(0, 10);
@@ -68,16 +60,10 @@ export function StreakCalendar({ streak: _streak }: StreakCalendarProps) {
                 <div
                   key={day}
                   title={`${day}${isActive ? ' (active)' : ''}`}
+                  className="w-7 h-7 rounded flex items-center justify-center text-[9px]"
                   style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '4px',
                     backgroundColor: isActive ? 'var(--main-color)' : 'var(--sub-alt-color)',
                     opacity: isActive ? 1 : 0.3,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '9px',
                     fontWeight: isToday ? 700 : 400,
                     color: isActive ? 'var(--bg-color)' : 'var(--sub-color)',
                     border: isToday ? '1px solid var(--text-color)' : 'none',

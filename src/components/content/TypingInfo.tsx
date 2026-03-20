@@ -29,75 +29,49 @@ export function TypingInfo({ hidden, onNavigate }: TypingInfoProps) {
   return (
     <section
       ref={sectionRef}
+      className="w-full flex flex-col items-center overflow-hidden transition-[opacity,max-height,padding] duration-[400ms] ease-in-out"
       style={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
         padding: hidden ? 0 : (isMobile ? '0 16px 40px' : '0 24px 48px'),
         opacity: hidden ? 0 : 1,
         maxHeight: hidden ? 0 : '9999px',
-        overflow: 'hidden',
-        transition: 'opacity 0.4s ease, max-height 0.4s ease, padding 0.4s ease',
         pointerEvents: hidden ? 'none' : 'auto',
         maskImage: showMask ? 'linear-gradient(to bottom, transparent 0%, black 20%)' : 'none',
         WebkitMaskImage: showMask ? 'linear-gradient(to bottom, transparent 0%, black 20%)' : 'none',
       }}
     >
-      <div style={{
-        width: '100%',
-        maxWidth: '700px',
-        textAlign: 'center' as const,
-      }}>
+      <div className="w-full max-w-[700px] text-center">
       {/* Adventure promo */}
       {onNavigate && (
         <button
           onClick={() => onNavigate('adventure')}
+          className="flex items-center gap-4 w-full mb-5 bg-sub-alt border-[1.5px] border-main rounded-default cursor-pointer text-left transition-[filter] duration-150 hover:brightness-[1.15]"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
-            width: '100%',
             padding: isMobile ? '16px' : '16px 24px',
-            marginBottom: '20px',
-            backgroundColor: 'var(--sub-alt-color)',
-            border: '1.5px solid var(--main-color)',
-            borderRadius: 'var(--border-radius)',
-            cursor: 'pointer',
-            textAlign: 'left',
-            transition: 'filter 0.15s',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(1.15)')}
-          onMouseLeave={(e) => (e.currentTarget.style.filter = 'none')}
         >
-          <span style={{ fontSize: '28px', flexShrink: 0 }}>🐤⚔️🐺</span>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--text-color)' }}>
+          <span className="text-[28px] shrink-0">🐤⚔️🐺</span>
+          <div className="flex-1 min-w-0">
+            <div className="text-[15px] font-semibold text-text">
               Adventure Mode
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--sub-color)', marginTop: '2px' }}>
+            <div className="text-xs text-sub mt-0.5">
               Type to fight monsters and explore worlds!
             </div>
           </div>
-          <span style={{
-            fontSize: '13px',
-            color: 'var(--main-color)',
-            fontWeight: 600,
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
-          }}>
+          <span className="text-[13px] text-main font-semibold shrink-0 whitespace-nowrap">
             Play Now →
           </span>
         </button>
       )}
 
       {/* Feature highlights */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-        gap: '16px',
-        marginBottom: '32px',
-      }}>
+      <div
+        className="gap-4 mb-8"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+        }}
+      >
         <FeatureCard
           icon="⚡"
           title={t('info.speedTitle')}
@@ -116,27 +90,20 @@ export function TypingInfo({ hidden, onNavigate }: TypingInfoProps) {
       </div>
 
       {/* Typing tips section */}
-      <div style={{
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-        padding: isMobile ? '20px 16px' : '24px 28px',
-        marginBottom: '24px',
-        textAlign: 'left',
-      }}>
-        <h2 style={{
-          fontSize: '16px',
-          fontWeight: 600,
-          color: 'var(--main-color)',
-          marginBottom: '16px',
-          textAlign: 'center',
-        }}>
+      <div
+        className="bg-sub-alt rounded-default mb-6 text-left"
+        style={{ padding: isMobile ? '20px 16px' : '24px 28px' }}
+      >
+        <h2 className="text-base font-semibold text-main mb-4 text-center">
           {t('info.tipsTitle')}
         </h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-          gap: '12px',
-        }}>
+        <div
+          className="gap-3"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          }}
+        >
           <TipItem text={t('info.tip1')} />
           <TipItem text={t('info.tip2')} />
           <TipItem text={t('info.tip3')} />
@@ -145,20 +112,11 @@ export function TypingInfo({ hidden, onNavigate }: TypingInfoProps) {
       </div>
 
       {/* WPM benchmarks */}
-      <div style={{
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-        padding: isMobile ? '20px 16px' : '24px 28px',
-        marginBottom: '24px',
-        textAlign: 'left',
-      }}>
-        <h2 style={{
-          fontSize: '16px',
-          fontWeight: 600,
-          color: 'var(--main-color)',
-          marginBottom: '16px',
-          textAlign: 'center',
-        }}>
+      <div
+        className="bg-sub-alt rounded-default mb-6 text-left"
+        style={{ padding: isMobile ? '20px 16px' : '24px 28px' }}
+      >
+        <h2 className="text-base font-semibold text-main mb-4 text-center">
           {t('info.benchmarkTitle')}
         </h2>
         <div style={{
@@ -174,61 +132,29 @@ export function TypingInfo({ hidden, onNavigate }: TypingInfoProps) {
             { label: t('info.pro'), wpm: '100–130' },
             { label: t('info.expert'), wpm: '130+' },
           ].map(({ label, wpm }) => (
-            <div key={label} style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              padding: '8px 12px',
-              backgroundColor: 'var(--bg-color)',
-              borderRadius: '6px',
-              fontSize: '13px',
-            }}>
-              <span style={{ color: 'var(--sub-color)' }}>{label}</span>
-              <span style={{ color: 'var(--main-color)', fontWeight: 600 }}>{wpm}</span>
+            <div key={label} className="flex justify-between rounded-[6px] bg-bg text-[13px]" style={{ padding: '8px 12px' }}>
+              <span className="text-sub">{label}</span>
+              <span className="text-main font-semibold">{wpm}</span>
             </div>
           ))}
         </div>
-        <p style={{
-          fontSize: '13px',
-          color: 'var(--sub-color)',
-          marginTop: '12px',
-          lineHeight: 1.6,
-        }}>
+        <p className="text-[13px] text-sub mt-3 leading-[1.6]">
           {t('info.benchmarkNote')}
         </p>
       </div>
 
       {/* How WPM is calculated */}
-      <div style={{
-        backgroundColor: 'var(--sub-alt-color)',
-        borderRadius: 'var(--border-radius)',
-        padding: isMobile ? '20px 16px' : '24px 28px',
-        textAlign: 'left',
-      }}>
-        <h2 style={{
-          fontSize: '16px',
-          fontWeight: 600,
-          color: 'var(--main-color)',
-          marginBottom: '12px',
-          textAlign: 'center',
-        }}>
+      <div
+        className="bg-sub-alt rounded-default text-left"
+        style={{ padding: isMobile ? '20px 16px' : '24px 28px' }}
+      >
+        <h2 className="text-base font-semibold text-main mb-3 text-center">
           {t('info.howWpmTitle')}
         </h2>
-        <p style={{
-          fontSize: '13px',
-          color: 'var(--sub-color)',
-          lineHeight: 1.7,
-          marginBottom: '12px',
-        }}>
+        <p className="text-[13px] text-sub leading-[1.7] mb-3">
           {t('info.howWpmDesc')}
         </p>
-        <div style={{
-          backgroundColor: 'var(--bg-color)',
-          padding: '10px 16px',
-          borderRadius: '6px',
-          fontFamily: 'monospace',
-          fontSize: '13px',
-          color: 'var(--main-color)',
-        }}>
+        <div className="bg-bg rounded-[6px] font-mono text-[13px] text-main" style={{ padding: '10px 16px' }}>
           WPM = (correct characters / 5) / (time in minutes)
         </div>
       </div>
@@ -239,26 +165,12 @@ export function TypingInfo({ hidden, onNavigate }: TypingInfoProps) {
 
 function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
   return (
-    <div style={{
-      padding: '20px',
-      backgroundColor: 'var(--sub-alt-color)',
-      borderRadius: 'var(--border-radius)',
-      textAlign: 'center',
-    }}>
-      <div style={{ fontSize: '24px', marginBottom: '8px' }}>{icon}</div>
-      <div style={{
-        fontSize: '14px',
-        fontWeight: 600,
-        color: 'var(--text-color)',
-        marginBottom: '6px',
-      }}>
+    <div className="p-5 bg-sub-alt rounded-default text-center">
+      <div className="text-2xl mb-2">{icon}</div>
+      <div className="text-sm font-semibold text-text mb-1.5">
         {title}
       </div>
-      <div style={{
-        fontSize: '12px',
-        color: 'var(--sub-color)',
-        lineHeight: 1.5,
-      }}>
+      <div className="text-xs text-sub leading-normal">
         {desc}
       </div>
     </div>
@@ -267,15 +179,8 @@ function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc:
 
 function TipItem({ text }: { text: string }) {
   return (
-    <div style={{
-      display: 'flex',
-      gap: '8px',
-      alignItems: 'flex-start',
-      fontSize: '13px',
-      color: 'var(--sub-color)',
-      lineHeight: 1.6,
-    }}>
-      <span style={{ color: 'var(--main-color)', flexShrink: 0, marginTop: '2px' }}>•</span>
+    <div className="flex gap-2 items-start text-[13px] text-sub leading-[1.6]">
+      <span className="text-main shrink-0 mt-0.5">•</span>
       <span>{text}</span>
     </div>
   );

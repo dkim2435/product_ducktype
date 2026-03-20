@@ -13,59 +13,46 @@ interface CaretProps {
 export function Caret({ left, top, height, style, smooth, isBlinking, visible }: CaretProps) {
   if (!visible) return null;
 
-  const getCaretStyles = (): React.CSSProperties => {
-    const base: React.CSSProperties = {
-      position: 'absolute',
-      pointerEvents: 'none',
-      zIndex: 10,
+  const baseClass = `absolute pointer-events-none z-10 bg-caret ${smooth ? 'transition-[left,top] duration-[80ms] ease-out' : ''}`;
+
+  const getCaretStyles = (): { className: string; style: React.CSSProperties } => {
+    const baseStyle: React.CSSProperties = {
       left: `${left}px`,
       top: `${top}px`,
-      transition: smooth ? 'left 80ms ease-out, top 80ms ease-out' : 'none',
-      backgroundColor: 'var(--caret-color)',
     };
 
     switch (style) {
       case 'line':
         return {
-          ...base,
-          width: '2px',
-          height: `${height}px`,
-          borderRadius: '1px',
+          className: `${baseClass} w-0.5 rounded-[1px]`,
+          style: { ...baseStyle, height: `${height}px` },
         };
       case 'block':
         return {
-          ...base,
-          width: '0.6em',
-          height: `${height}px`,
-          opacity: 0.5,
-          borderRadius: '2px',
+          className: `${baseClass} w-[0.6em] opacity-50 rounded-[2px]`,
+          style: { ...baseStyle, height: `${height}px` },
         };
       case 'underline':
         return {
-          ...base,
-          width: '0.6em',
-          height: '2px',
-          top: `${top + height - 2}px`,
-          borderRadius: '1px',
+          className: `${baseClass} w-[0.6em] h-0.5 rounded-[1px]`,
+          style: { ...baseStyle, top: `${top + height - 2}px` },
         };
       case 'outline':
         return {
-          ...base,
-          width: '0.6em',
-          height: `${height}px`,
-          backgroundColor: 'transparent',
-          border: '2px solid var(--caret-color)',
-          borderRadius: '2px',
+          className: `${baseClass} w-[0.6em] !bg-transparent border-2 border-caret rounded-[2px]`,
+          style: { ...baseStyle, height: `${height}px` },
         };
       default:
-        return base;
+        return { className: baseClass, style: baseStyle };
     }
   };
 
+  const caret = getCaretStyles();
+
   return (
     <div
-      className={isBlinking ? 'caret-blink' : ''}
-      style={getCaretStyles()}
+      className={`${caret.className} ${isBlinking ? 'caret-blink' : ''}`}
+      style={caret.style}
     />
   );
 }

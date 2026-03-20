@@ -13,70 +13,34 @@ export function StatCard({ label, value, unit, large, color, tooltip }: StatCard
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
-    <div style={{ textAlign: 'left' }}>
-      <div style={{
-        fontSize: '12px',
-        color: 'var(--sub-color)',
-        marginBottom: '4px',
-        textTransform: 'lowercase',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '4px',
-      }}>
+    <div className="text-left">
+      <div className="text-xs text-sub mb-1 lowercase inline-flex items-center gap-1">
         {label}
         {tooltip && (
           <span
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
-            style={{
-              position: 'relative',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '14px',
-              height: '14px',
-              borderRadius: '50%',
-              border: '1px solid var(--sub-color)',
-              fontSize: '9px',
-              fontWeight: 600,
-              cursor: 'help',
-              opacity: 0.6,
-              flexShrink: 0,
-            }}
+            className="relative inline-flex items-center justify-center w-[14px] h-[14px] rounded-full border border-sub text-[9px] font-semibold cursor-help opacity-60 shrink-0"
           >
             ?
             {showTooltip && (
-              <span style={{
-                position: 'absolute',
-                bottom: 'calc(100% + 6px)',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                padding: '6px 10px',
-                backgroundColor: 'var(--text-color)',
-                color: 'var(--bg-color)',
-                fontSize: '11px',
-                fontWeight: 400,
-                borderRadius: '6px',
-                whiteSpace: 'nowrap',
-                zIndex: 10,
-                pointerEvents: 'none',
-                textTransform: 'none',
-              }}>
+              <span className="absolute bottom-[calc(100%+6px)] left-1/2 -translate-x-1/2 px-[10px] py-1.5 bg-text text-bg text-[11px] font-normal rounded-[6px] whitespace-nowrap z-10 pointer-events-none normal-case">
                 {tooltip}
               </span>
             )}
           </span>
         )}
       </div>
-      <div style={{
-        fontSize: large ? 'var(--stat-value-large)' : 'var(--stat-value-normal)',
-        fontWeight: 300,
-        color: color || 'var(--main-color)',
-        lineHeight: 1.1,
-      }}>
+      <div
+        className="font-light leading-[1.1]"
+        style={{
+          fontSize: large ? 'var(--stat-value-large)' : 'var(--stat-value-normal)',
+          color: color || 'var(--main-color)',
+        }}
+      >
         {value}
         {unit && (
-          <span style={{ fontSize: '16px', marginLeft: '4px', color: 'var(--sub-color)' }}>
+          <span className="text-base ml-1 text-sub">
             {unit}
           </span>
         )}

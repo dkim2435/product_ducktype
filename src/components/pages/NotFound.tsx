@@ -4,42 +4,17 @@ interface NotFoundProps {
 
 export function NotFound({ onBack }: NotFoundProps) {
   return (
-    <div style={{
-      maxWidth: '500px',
-      margin: '0 auto',
-      padding: '80px 24px',
-      textAlign: 'center',
-    }}>
-      <div style={{ fontSize: '64px', marginBottom: '16px' }}>🦆</div>
-      <h1 style={{
-        color: 'var(--main-color)',
-        fontSize: '48px',
-        fontWeight: 700,
-        marginBottom: '8px',
-      }}>
+    <div className="max-w-[500px] mx-auto px-6 py-20 text-center">
+      <div className="text-[64px] mb-4">🦆</div>
+      <h1 className="text-main text-[48px] font-bold mb-2">
         404
       </h1>
-      <p style={{
-        color: 'var(--sub-color)',
-        fontSize: '16px',
-        marginBottom: '32px',
-        lineHeight: 1.6,
-      }}>
+      <p className="text-sub text-base mb-8 leading-[1.6]">
         This page doesn't exist. The duck couldn't find it either.
       </p>
       <button
         onClick={onBack}
-        style={{
-          padding: '12px 32px',
-          backgroundColor: 'var(--main-color)',
-          color: 'var(--bg-color)',
-          border: 'none',
-          borderRadius: 'var(--border-radius)',
-          fontSize: '15px',
-          fontWeight: 600,
-          cursor: 'pointer',
-          fontFamily: 'inherit',
-        }}
+        className="px-8 py-3 bg-main text-bg border-none rounded-default text-[15px] font-semibold cursor-pointer font-[inherit]"
       >
         Go Home
       </button>

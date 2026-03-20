@@ -38,14 +38,7 @@ export function WpmTrendChart({ history }: WpmTrendChartProps) {
 
   if (history.length < 2) {
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '200px',
-        color: 'var(--sub-color)',
-        fontSize: '13px',
-      }}>
+      <div className="flex items-center justify-center h-[200px] text-sub text-[13px]">
         {t('profile.noTrendData')}
       </div>
     );
@@ -156,7 +149,7 @@ export function WpmTrendChart({ history }: WpmTrendChartProps) {
   };
 
   return (
-    <div style={{ height: '220px', width: '100%' }}>
+    <div className="h-[220px] w-full">
       <Line data={data} options={options} />
     </div>
   );
