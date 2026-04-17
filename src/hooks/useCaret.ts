@@ -64,6 +64,8 @@ export function useCaret(
 
   useEffect(() => {
     if (isTyping) {
+      // Suspend blink while actively typing; resume after brief idle (500ms)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsBlinking(false);
       if (blinkTimeoutRef.current) clearTimeout(blinkTimeoutRef.current);
       blinkTimeoutRef.current = window.setTimeout(() => {

@@ -30,8 +30,10 @@ export function useTimer({
   const onTickRef = useRef(onTick);
   const onFinishRef = useRef(onFinish);
 
-  onTickRef.current = onTick;
-  onFinishRef.current = onFinish;
+  useEffect(() => {
+    onTickRef.current = onTick;
+    onFinishRef.current = onFinish;
+  });
 
   const stop = useCallback(() => {
     if (intervalRef.current !== null) {

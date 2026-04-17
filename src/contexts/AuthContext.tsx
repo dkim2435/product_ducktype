@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useCallback, useEffect, useRef, ty
 import type { User } from '@supabase/supabase-js';
 import { useAuth } from '../hooks/useAuth';
 import { useCloudSync } from '../hooks/useCloudSync';
-import { setPersistProgress, clearProgressData } from '../utils/storage';
+import { clearProgressData } from '../utils/storage';
 import { AuthModal } from '../components/auth/AuthModal';
 import { WhatsNewModal } from '../components/layout/WhatsNewModal';
 
@@ -18,6 +18,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuthContext() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuthContext must be used within AuthProvider');
@@ -43,8 +44,6 @@ export function AuthProvider({ children, onSyncReload }: AuthProviderProps) {
   useEffect(() => {
     if (loading) return;
     const userId = user?.id ?? null;
-
-    setPersistProgress(!!userId);
 
     if (userId === prevUserIdRef.current) return;
     prevUserIdRef.current = userId;

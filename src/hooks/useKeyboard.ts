@@ -51,14 +51,16 @@ export function useKeyboard({
   const onInputMismatchRef = useRef(onInputMismatch);
   const languageRef = useRef(language);
 
-  onCharRef.current = onChar;
-  onSpaceRef.current = onSpace;
-  onBackspaceRef.current = onBackspace;
-  onCjkInputRef.current = onCjkInput;
-  onTabRef.current = onTab;
-  onEscapeRef.current = onEscape;
-  onInputMismatchRef.current = onInputMismatch;
-  languageRef.current = language;
+  useEffect(() => {
+    onCharRef.current = onChar;
+    onSpaceRef.current = onSpace;
+    onBackspaceRef.current = onBackspace;
+    onCjkInputRef.current = onCjkInput;
+    onTabRef.current = onTab;
+    onEscapeRef.current = onEscape;
+    onInputMismatchRef.current = onInputMismatch;
+    languageRef.current = language;
+  });
 
   const focusInput = useCallback(() => {
     if (inputRef.current) {
@@ -205,5 +207,5 @@ export function useKeyboard({
     };
   }, [enabled]);
 
-  return { inputRef, focusInput, isComposing: isComposingRef.current };
+  return { inputRef, focusInput };
 }

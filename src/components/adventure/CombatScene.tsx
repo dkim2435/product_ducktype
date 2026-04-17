@@ -160,6 +160,8 @@ export function CombatScene({ stageConfig, settings, onComplete, onBack, worldId
 
   const playerHpPercent = (state.playerHp / state.playerMaxHp) * 100;
   const bossHpPercent = state.bossMaxHp > 0 ? (state.bossHp / state.bossMaxHp) * 100 : 0;
+  // useCombat ticks frequently via rAF; this reflects the current frame's timestamp
+  // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const theme = getStageTheme(worldId, stageConfig.id);
 

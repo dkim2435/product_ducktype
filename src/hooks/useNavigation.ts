@@ -35,7 +35,8 @@ const screenToPath: Record<Screen, string> = {
   'not-found': '/404',
 };
 
-function getInitialScreen(): Screen {
+function getInitialScreen(adventureWorldId?: number): Screen {
+  if (adventureWorldId !== undefined) return 'adventure';
   const saved = sessionStorage.getItem('ducktype_return_screen');
   if (saved) {
     sessionStorage.removeItem('ducktype_return_screen');
@@ -46,12 +47,7 @@ function getInitialScreen(): Screen {
 }
 
 export function useNavigation(adventureWorldId?: number) {
-  const [screen, setScreen] = useState<Screen>(getInitialScreen);
-
-  // Navigate to adventure if URL params indicate it
-  useEffect(() => {
-    if (adventureWorldId !== undefined) setScreen('adventure');
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [screen, setScreen] = useState<Screen>(() => getInitialScreen(adventureWorldId));
 
   // Update canonical tag and URL path when screen changes (SEO)
   useEffect(() => {

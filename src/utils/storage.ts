@@ -6,16 +6,6 @@ const PROGRESS_KEYS = new Set([
   'adventure_progress',
 ]);
 
-let _persistProgress = false;
-
-export function setPersistProgress(enabled: boolean): void {
-  _persistProgress = enabled;
-}
-
-function storageFor(_key: string): Storage {
-  return localStorage;
-}
-
 export function getItem<T>(key: string, defaultValue: T): T {
   try {
     // Migration: move data from sessionStorage to localStorage if present
@@ -31,7 +21,7 @@ export function getItem<T>(key: string, defaultValue: T): T {
       }
     }
 
-    const raw = storageFor(key).getItem(PREFIX + key);
+    const raw = localStorage.getItem(PREFIX + key);
     if (raw === null) return defaultValue;
     return JSON.parse(raw) as T;
   } catch {
@@ -41,7 +31,7 @@ export function getItem<T>(key: string, defaultValue: T): T {
 
 export function setItem<T>(key: string, value: T): void {
   try {
-    storageFor(key).setItem(PREFIX + key, JSON.stringify(value));
+    localStorage.setItem(PREFIX + key, JSON.stringify(value));
   } catch {
     // Storage full or unavailable
   }
@@ -49,14 +39,14 @@ export function setItem<T>(key: string, value: T): void {
 
 export function clearProgressData(): void {
   for (const key of PROGRESS_KEYS) {
-    try { sessionStorage.removeItem(PREFIX + key); } catch {}
-    try { localStorage.removeItem(PREFIX + key); } catch {}
+    try { sessionStorage.removeItem(PREFIX + key); } catch { /* ignore */ }
+    try { localStorage.removeItem(PREFIX + key); } catch { /* ignore */ }
   }
 }
 
 export function removeItem(key: string): void {
   try {
-    storageFor(key).removeItem(PREFIX + key);
+    localStorage.removeItem(PREFIX + key);
   } catch {
     // Ignore
   }

@@ -1,5 +1,4 @@
 import type { ToastNotification } from '../../types/gamification';
-import { useIsMobile } from '../../hooks/useIsMobile';
 import { Toast } from './Toast';
 
 interface ToastContainerProps {
@@ -8,8 +7,6 @@ interface ToastContainerProps {
 }
 
 export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
-  const isMobile = useIsMobile();
-
   if (toasts.length === 0) return null;
 
   return (

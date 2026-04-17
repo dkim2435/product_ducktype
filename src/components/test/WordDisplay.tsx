@@ -3,7 +3,6 @@ import type { WordData } from '../../types/test';
 
 interface WordDisplayProps {
   words: WordData[];
-  currentWordIndex: number;
 }
 
 const Letter = memo(function Letter({ char, state }: { char: string; state: string }) {
@@ -42,7 +41,7 @@ const Word = memo(function Word({
   );
 });
 
-export function WordDisplay({ words, currentWordIndex }: WordDisplayProps) {
+export function WordDisplay({ words }: WordDisplayProps) {
   return (
     <>
       {words.map((word, wordIdx) => (

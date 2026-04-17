@@ -1,4 +1,4 @@
-import type { Settings, CaretStyle, FontFamily, ProfileFrame, ParticleTier } from '../types/settings';
+import type { Settings, CaretStyle, FontFamily } from '../types/settings';
 import { DEFAULT_SETTINGS, CARET_UNLOCK, FONT_UNLOCK } from '../constants/defaults';
 import { themes } from '../constants/themes';
 import { PROFILE_FRAMES } from '../constants/profileFrames';
@@ -13,7 +13,7 @@ import { getEffectiveLevel, isAdminUser } from './admin';
 export function validateSettings(settings: Settings, level: number, userId?: string | null): Settings {
   const effectiveLevel = getEffectiveLevel(level, userId);
   const isAdmin = isAdminUser(userId);
-  let validated = { ...settings };
+  const validated: Settings = { ...settings };
 
   // Validate caret style
   const caretUnlock = CARET_UNLOCK[settings.caretStyle as CaretStyle];

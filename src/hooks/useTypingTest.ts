@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import type { TestState, WordData, WpmSample } from '../types/test';
+import type { TestState, WordData } from '../types/test';
 import type { Settings } from '../types/settings';
 import { generateWords, loadWordList } from '../utils/words';
 import { calculateWpm, calculateRawWpm } from '../utils/wpm';
@@ -56,13 +56,16 @@ export function useTypingTest({ settings, onFinish, customWords }: UseTypingTest
   const [state, setState] = useState<TestState>(() => createInitialState(words));
 
   const stateRef = useRef(state);
-  stateRef.current = state;
   const wordsRef = useRef(words);
-  wordsRef.current = words;
   const onFinishRef = useRef(onFinish);
-  onFinishRef.current = onFinish;
   const lastSampleTimeRef = useRef(0);
   const sampleIntervalRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    stateRef.current = state;
+    wordsRef.current = words;
+    onFinishRef.current = onFinish;
+  });
 
   // Load word list on language change
   useEffect(() => {
@@ -121,11 +124,13 @@ export function useTypingTest({ settings, onFinish, customWords }: UseTypingTest
     }));
   }, [settings.language, settings.punctuation, settings.numbers]);
 
-  // Check if we need more words (time mode)
+  // Check if we need more words (time mode): appendMoreWords dispatches setState
+  // during a reactive effect, which is intentional for the infinite-scroll buffer.
   useEffect(() => {
     if (!isTimeMode || state.phase !== 'running') return;
     const remaining = state.words.length - state.currentWordIndex;
     if (remaining < 30) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       appendMoreWords();
     }
   }, [isTimeMode, state.phase, state.currentWordIndex, state.words.length, appendMoreWords]);

@@ -137,7 +137,7 @@ function AppContent() {
     setScreen('results');
     triggerSync();
     return result;
-  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress, user?.id, triggerSync]);
+  }, [settings, saveResult, gamification, addToast, dailyChallenge.dailyChallengeState, lessons.lessonProgress, user?.id, triggerSync, setScreen]);
 
   const handleTestFinish = useCallback((testState: TestState) => {
     const result = processTestCompletion(testState, false, dailyChallenge.hasCompletedToday);
@@ -166,7 +166,7 @@ function AppContent() {
   const handleStartLesson = useCallback((lessonId: LessonId) => {
     setActiveLessonId(lessonId);
     setScreen('lesson');
-  }, []);
+  }, [setScreen]);
 
   const handleSettingChange = useCallback(<K extends keyof Settings>(key: K, value: Settings[K]) => {
     updateSetting(key, value);

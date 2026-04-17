@@ -264,7 +264,7 @@ export function Profile({ profile, streak, keyStats, history, onBack, user, isSu
 
       {/* Streak Calendar */}
       <div className="bg-sub-alt rounded-default p-6 mb-6">
-        <StreakCalendar streak={streak} />
+        <StreakCalendar />
       </div>
 
       {/* WPM Trend Chart */}

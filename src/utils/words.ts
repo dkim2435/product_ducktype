@@ -4,7 +4,7 @@ const wordLists: Record<string, string[]> = {
   en: wordsEn,
 };
 
-let loadedLists: Record<string, string[]> = {};
+const loadedLists: Record<string, string[]> = {};
 
 export async function loadWordList(language: string): Promise<string[]> {
   if (wordLists[language]) return wordLists[language];

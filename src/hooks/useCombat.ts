@@ -246,8 +246,9 @@ export function useCombat(
     setState(prev => {
       if (prev.phase !== 'fighting') return prev;
 
-      let { minions, playerHp, combo, maxCombo, damageNumbers, killEffects,
-            matchedMinionId, currentInput, bossHp } = prev;
+      let { minions, playerHp, combo, damageNumbers, killEffects,
+            matchedMinionId, currentInput } = prev;
+      const { maxCombo, bossHp } = prev;
       let changed = false;
 
       // Check minion timeouts (both boss words and shield minions)
@@ -469,7 +470,7 @@ export function useCombat(
             id: nextId++, x: matched.x, y: matched.y, createdAt: now,
           }];
 
-          let newState = {
+          const newState = {
             ...prev,
             minions: newMinions,
             currentInput: '',
@@ -669,7 +670,7 @@ export function useCombat(
         totalKeystrokes,
       };
     });
-  }, [spawnMinion, startMinionSpawner]);
+  }, []);
 
   // ---- Handle backspace ----
   const handleBackspace = useCallback(() => {
@@ -734,7 +735,7 @@ export function useCombat(
       });
     }
   }, [state.phase, state.endTime, state.startTime, state.totalKeystrokes, state.correctChars,
-      state.totalCharsTyped, state.playerHp, state.playerMaxHp, state.maxCombo, stageConfig, onComplete]);
+      state.totalCharsTyped, state.playerHp, state.playerMaxHp, state.maxCombo, stageConfig, onComplete, stageBestStars]);
 
   return {
     state,

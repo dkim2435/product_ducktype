@@ -35,7 +35,14 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   const [scrollOffset, setScrollOffset] = useState(0);
   const [inputMismatch, setInputMismatch] = useState(false);
   const [showTypingHint, setShowTypingHint] = useState(false);
-  const isTypingRef = useRef(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = useRef<number | null>(null);
+
+  const markTyping = useCallback(() => {
+    setIsTyping(true);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = window.setTimeout(() => setIsTyping(false), 100);
+  }, []);
 
   // Change 1: Mobile font size cap (max 20px on mobile)
   const effectiveFontSize = isMobile ? Math.min(settings.fontSize, 20) : settings.fontSize;
@@ -110,7 +117,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   const { position, isBlinking, wordsContainerRef, updatePosition } = useCaret(
     state.currentWordIndex,
     state.currentLetterIndex,
-    isTypingRef.current
+    isTyping
   );
 
   useEffect(() => {
@@ -140,6 +147,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   // Reset scroll on restart
   useEffect(() => {
     if (state.phase === 'waiting') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setScrollOffset(0);
     }
   }, [state.phase]);
@@ -164,6 +172,8 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
 
   useEffect(() => {
     if (state.phase === 'running' && showTypingHint) {
+      // Dismiss typing hint once user starts; persist to localStorage
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowTypingHint(false);
       localStorage.setItem('ducktype_typing_hint_seen', '1');
     }
@@ -183,7 +193,7 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
   }, [hasParticles, wordsContainerRef, position]);
 
   const handleCharWithSound = useCallback((char: string) => {
-    isTypingRef.current = true;
+    markTyping();
     const word = state.words[state.currentWordIndex];
     const letterIdx = state.currentLetterIndex;
     if (word && letterIdx < word.letters.length) {
@@ -197,21 +207,20 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
       playError();
     }
     handleChar(char);
-    setTimeout(() => { isTypingRef.current = false; }, 100);
-  }, [handleChar, playClick, playError, triggerParticle, state.words, state.currentWordIndex, state.currentLetterIndex]);
+  }, [handleChar, playClick, playError, triggerParticle, markTyping, state.words, state.currentWordIndex, state.currentLetterIndex]);
 
   const handleSpaceWithSound = useCallback(() => {
-    isTypingRef.current = true;
+    markTyping();
     playClick();
     handleSpace();
-    setTimeout(() => { isTypingRef.current = false; }, 100);
-  }, [handleSpace, playClick]);
+  }, [handleSpace, playClick, markTyping]);
 
   const handleBackspaceWithSound = useCallback((ctrlKey: boolean) => {
-    isTypingRef.current = true;
+    markTyping();
     handleBackspace(ctrlKey);
-    setTimeout(() => { isTypingRef.current = false; }, 100);
-  }, [handleBackspace]);
+  }, [handleBackspace, markTyping]);
+
+  const focusInputRef = useRef<() => void>(() => {});
 
   const handleRestart = useCallback(() => {
     restart();
@@ -219,10 +228,10 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     setLiveWpm(0);
     setScrollOffset(0);
     setInputMismatch(false);
-    setTimeout(() => inputKeyboard.focusInput(), 50);
+    setTimeout(() => focusInputRef.current(), 50);
   }, [restart, timer]);
 
-  const inputKeyboard = useKeyboard({
+  const { inputRef, focusInput } = useKeyboard({
     onChar: handleCharWithSound,
     onSpace: handleSpaceWithSound,
     onBackspace: handleBackspaceWithSound,
@@ -234,15 +243,19 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
     onInputMismatch: setInputMismatch,
   });
 
-  // Auto-focus
   useEffect(() => {
-    inputKeyboard.focusInput();
-  }, [inputKeyboard.focusInput]);
+    focusInputRef.current = focusInput;
+  });
+
+  // Auto-focus on mount
+  useEffect(() => {
+    focusInputRef.current();
+  }, []);
 
   const handleContainerClick = useCallback(() => {
-    inputKeyboard.focusInput();
+    focusInputRef.current();
     setIsFocused(true);
-  }, [inputKeyboard]);
+  }, []);
 
   const handleFocus = useCallback(() => setIsFocused(true), []);
   const handleBlur = useCallback(() => setIsFocused(false), []);
@@ -400,17 +413,14 @@ export function TypingTest({ settings, onSettingChange, onFinish, customWords, h
             height={position.height}
             style={settings.caretStyle}
             smooth={settings.smoothCaret}
-            isBlinking={isBlinking && !isTypingRef.current}
+            isBlinking={isBlinking && !isTyping}
             visible={isFocused && state.phase !== 'finished'}
           />
-          <WordDisplay
-            words={state.words}
-            currentWordIndex={state.currentWordIndex}
-          />
+          <WordDisplay words={state.words} />
         </div>
 
         <HiddenInput
-          ref={inputKeyboard.inputRef}
+          ref={inputRef}
           onFocus={handleFocus}
           onBlur={handleBlur}
         />

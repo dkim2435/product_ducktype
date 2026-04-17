@@ -40,12 +40,15 @@ export function Leaderboard({ entries, loading, onFetch, onBack, currentUserId, 
 
   useEffect(() => {
     onFetch(selectedTime);
+    // Reset row-reveal animation on time filter change
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAnimatedCount(0);
   }, [selectedTime, onFetch]);
 
   // Staggered animation: reveal rows one by one
   useEffect(() => {
     if (loading || entries.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAnimatedCount(0);
       return;
     }

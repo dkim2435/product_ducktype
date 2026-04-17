@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type {
   AdventureProgress,
   AdventureView,
@@ -54,7 +54,10 @@ function getWorldProgress(progress: AdventureProgress, worldId: number): WorldPr
 }
 
 export function useAdventure(userId?: string | null) {
-  const activeWorlds = isAdminUser(userId) ? [...WORLDS, ...PREMIUM_WORLDS] : WORLDS;
+  const activeWorlds = useMemo(
+    () => (isAdminUser(userId) ? [...WORLDS, ...PREMIUM_WORLDS] : WORLDS),
+    [userId]
+  );
 
   const [progress, setProgress] = useState<AdventureProgress>(() => {
     const raw = getItem<unknown>(STORAGE_KEY, null);
@@ -86,7 +89,7 @@ export function useAdventure(userId?: string | null) {
       if (prevStars < currentWorld.starsRequired) return false;
     }
     return true;
-  }, [progress, activeWorlds]);
+  }, [progress, activeWorlds, userId]);
 
   const isStageUnlocked = useCallback((worldId: number, stageId: number): boolean => {
     if (isAdminUser(userId)) return true;
@@ -100,7 +103,7 @@ export function useAdventure(userId?: string | null) {
     if (stageIdx <= 0) return stageIdx === 0;
     const prevStageId = world.stages[stageIdx - 1].id;
     return !!wp.stages[prevStageId]?.clearedAt;
-  }, [progress, isWorldUnlocked, activeWorlds]);
+  }, [progress, isWorldUnlocked, activeWorlds, userId]);
 
   const getStageProgress = useCallback((worldId: number, stageId: number): StageProgress | undefined => {
     return getWorldProgress(progress, worldId).stages[stageId];
@@ -188,7 +191,7 @@ export function useAdventure(userId?: string | null) {
     });
 
     setView('result');
-  }, [currentWorldId]);
+  }, [currentWorldId, activeWorlds]);
 
   const returnToMap = useCallback(() => {
     setView('map');

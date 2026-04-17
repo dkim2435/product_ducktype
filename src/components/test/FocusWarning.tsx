@@ -8,9 +8,9 @@ interface FocusWarningProps {
 }
 
 export function FocusWarning({ visible, onClick, mode = 'refocus', isMobile = false }: FocusWarningProps) {
-  if (!visible) return null;
-
   const { t } = useTranslation();
+
+  if (!visible) return null;
 
   const label = isMobile
     ? (mode === 'start' ? t('test.tapToStart') : t('test.tapToResume'))

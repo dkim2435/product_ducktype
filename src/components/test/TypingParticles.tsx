@@ -48,30 +48,26 @@ export function TypingParticles({ visible, rank, particleTier = 'none', themeMai
   const hasTierParticles = tierConfig && tierConfig.count > 0;
   const hasAnyParticles = hasLeaderboardParticles || hasTierParticles;
 
-  // Resolve final particle params
+  // Resolve final particle params (size is randomized per-particle in spawnParticles)
   let count: number;
   let colors: string[];
   let glow: boolean;
-  let particleSize: number;
 
   if (hasLeaderboardParticles) {
     // Leaderboard rank particles (original behavior, takes priority)
     count = getRankParticleCount(rank);
     colors = getRankColors(rank);
     glow = getRankGlow(rank);
-    particleSize = rank <= 3 ? 3 + Math.random() * 2 : 2 + Math.random() * 1.5;
   } else if (hasTierParticles && tierConfig) {
     count = tierConfig.count;
     colors = tierConfig.colors === 'theme'
       ? (themeMainColor ? [themeMainColor, themeMainColor + 'cc', themeMainColor + '99'] : ['#888', '#aaa', '#ccc'])
       : tierConfig.colors as string[];
     glow = tierConfig.glow;
-    particleSize = 2 + Math.random() * 1.5;
   } else {
     count = 0;
     colors = [];
     glow = false;
-    particleSize = 2;
   }
 
   const spawnParticles = useCallback((x: number, y: number) => {

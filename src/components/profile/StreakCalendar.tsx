@@ -1,12 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { StreakState } from '../../types/gamification';
 import type { TestResult } from '../../types/stats';
 import { getItem } from '../../utils/storage';
-
-interface StreakCalendarProps {
-  streak: StreakState;
-}
 
 function getLast30Days(): string[] {
   const days: string[] = [];
@@ -24,7 +19,7 @@ function getDayLabel(dateStr: string): string {
   return d.getDate().toString();
 }
 
-export function StreakCalendar({ streak: _streak }: StreakCalendarProps) {
+export function StreakCalendar() {
   const { t } = useTranslation();
 
   // Get activity dates from test history
